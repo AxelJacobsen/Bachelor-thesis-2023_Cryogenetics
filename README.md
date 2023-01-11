@@ -1,2 +1,2 @@
-# -Bachelor-oppgave-2023_Cryogenetics
-Bachelor project directory for the Cryogenetics task 
+# Bachelor-thesis-2023_Cryogenetics
+Bachelor thesis directory for the Cryogenetics task. 
