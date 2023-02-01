@@ -1,0 +1,41 @@
+Endpoints ADMIN:
+
+Locations / Affiliate:
+Retrieve existing customers
+GET:
+
+Header: Admin_ID / Authentication code ??
+Body: {}
+Response:
+{
+	JSONArray location
+}
+
+
+
+Add new Locations / Affiliate
+POST: 
+
+Header: Admin_ID / Authentication code ??
+Body:
+{
+	location_Name
+	location_isActive
+}
+Response:
+location "location_Name" is registered
+
+Edit Locations / Affiliate 
+PUT:
+
+Header: Admin_ID / Authentication code ??
+Body:
+{
+	location_ID
+	New_location_Name
+	New_location_isActive
+}
+Response:
+"New_location_Name" updated
+
+

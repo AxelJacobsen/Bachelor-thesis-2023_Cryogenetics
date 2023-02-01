@@ -1,0 +1,38 @@
+Endpoints:
+
+Customer:
+Retrieve existing customers
+GET:
+
+Header: Admin_ID / Authentication code ??
+Body: {}
+Response:
+{
+	JSONArray clients
+}
+
+
+
+Add new customer 
+POST: 
+
+Header: Admin_ID / Authentication code ??
+Body:
+{
+	Client_Name
+	Client_isActive
+}
+Response:
+Customer/Client "Client_Name" is registered
+
+Change customer name
+PUT:
+
+Header: Admin_ID / Authentication code ??
+Body:
+{
+	Client_ID
+	New_Client_Name
+}
+Response:
+"New_Client_Name" registered

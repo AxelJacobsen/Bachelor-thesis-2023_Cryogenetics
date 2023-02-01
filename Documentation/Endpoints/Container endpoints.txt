@@ -1,0 +1,52 @@
+Containers:
+
+Retrieve existing containers
+GET:
+
+Header: User_ID / Admin_ID / Authentication code ??
+Body: {}
+Response:
+{
+	JSONArray containers
+}
+
+
+
+Add new containers
+POST: 
+
+Header: User_ID / Admin_ID / Authentication code ??
+Body:
+{
+	#NR / SerialNR
+	Model
+	Country
+	Affiliate_ID (Location)
+	Client_ID (Owner of the container)
+	Last_Filled_Date
+	Invoice_Date (when does the invoice expire?)
+	Status 
+}
+Response:
+Container "#NR" Registered
+
+
+
+Edit container
+POST: 
+
+Header: User_ID / Admin_ID / Authentication code ??
+Body:
+{
+	
+	#NR / SerialNR
+	Model
+	Country
+	Affiliate_ID (Location)
+	Client_ID (Owner of the container)
+	Last_Filled_Date
+	Invoice_Date (when does the invoice expire?)
+	Status 
+}
+Response:
+Container "#NR" Updated
