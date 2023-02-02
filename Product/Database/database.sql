@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 29. Jan, 2023 22:10 PM
+-- Generation Time: 02. Feb, 2023 18:09 PM
 -- Tjener-versjon: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -47,21 +47,11 @@ CREATE TABLE `client` (
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur for tabell `comment_type`
---
-
-CREATE TABLE `comment_type` (
-  `comment_type` varchar(32) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
-
--- --------------------------------------------------------
-
---
 -- Tabellstruktur for tabell `container`
 --
 
 CREATE TABLE `container` (
-  `serial_number` int(11) NOT NULL,
+  `serial_number` varchar(32) NOT NULL,
   `model` varchar(32) NOT NULL,
   `country_iso3` varchar(3) NOT NULL,
   `last_filled` date DEFAULT NULL,
@@ -69,7 +59,8 @@ CREATE TABLE `container` (
   `at_client` int(11) DEFAULT NULL,
   `address` varchar(64) DEFAULT NULL,
   `at_inventory` int(11) DEFAULT NULL,
-  `invoice` date DEFAULT NULL
+  `invoice` date DEFAULT NULL,
+  `id` varchar(8) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 -- --------------------------------------------------------
@@ -127,9 +118,8 @@ CREATE TABLE `transaction` (
   `transaction_id` int(11) NOT NULL,
   `responsible_id` int(11) NOT NULL,
   `client_id` int(11) DEFAULT NULL,
-  `container` int(11) DEFAULT NULL,
+  `container` varchar(32) DEFAULT NULL,
   `comment` varchar(512) DEFAULT NULL,
-  `comment_type` varchar(32) DEFAULT NULL,
   `date` date NOT NULL,
   `action` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
@@ -159,12 +149,6 @@ ALTER TABLE `admin`
 --
 ALTER TABLE `client`
   ADD PRIMARY KEY (`client_id`);
-
---
--- Indexes for table `comment_type`
---
-ALTER TABLE `comment_type`
-  ADD PRIMARY KEY (`comment_type`);
 
 --
 -- Indexes for table `container`
@@ -209,8 +193,7 @@ ALTER TABLE `transaction`
   ADD KEY `transaction_fk1` (`action`),
   ADD KEY `transaction_fk2` (`responsible_id`),
   ADD KEY `transaction_fk3` (`client_id`),
-  ADD KEY `transaction_fk4` (`container`),
-  ADD KEY `transaction_fk5` (`comment_type`);
+  ADD KEY `transaction_fk4` (`container`);
 
 --
 -- Indexes for table `transaction_action`
@@ -277,9 +260,8 @@ ALTER TABLE `employee`
 ALTER TABLE `transaction`
   ADD CONSTRAINT `transaction_fk1` FOREIGN KEY (`action`) REFERENCES `transaction_action` (`action_name`) ON UPDATE CASCADE,
   ADD CONSTRAINT `transaction_fk2` FOREIGN KEY (`responsible_id`) REFERENCES `employee` (`employee_id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `transaction_fk3` FOREIGN KEY (`client_id`) REFERENCES `client` (`client_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `transaction_fk4` FOREIGN KEY (`container`) REFERENCES `container` (`serial_number`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `transaction_fk5` FOREIGN KEY (`comment_type`) REFERENCES `comment_type` (`comment_type`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `transaction_fk3` FOREIGN KEY (`client_id`) REFERENCES `client` (`client_id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `transaction_fk4` FOREIGN KEY (`container`) REFERENCES `container` (`serial_number`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
