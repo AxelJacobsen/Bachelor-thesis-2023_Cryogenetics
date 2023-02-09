@@ -1,0 +1,37 @@
+Endpoints ADMIN:
+
+Transaction:
+Retrieve existing Transactions
+GET:
+
+Header: User_ID / Admin_ID / Authentication code ??
+Body: 
+(How should we add restrictions to the amount of transactions we get)
+{
+	Date_Start ????
+	Date_End ????
+}
+Response:
+{
+	JSONArray Transactions
+}
+
+
+
+Add new Transaction
+POST: 
+
+Header: User_ID / Admin_ID / Authentication code ??
+Body:
+{
+	Date
+	ACT
+	User_ID (Operator / employee responsible)
+	Affiliate_ID (Location)
+	Client_ID (Owner of the container)
+	#NR ("Running number" for container)
+	Status 
+	Comment
+}
+Response:
+Transaction for #NR at "DATE" registered
