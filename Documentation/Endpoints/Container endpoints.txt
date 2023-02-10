@@ -1,7 +1,9 @@
 Containers:
 
+URL: CryoGeneticsTest/Containers
+
 Retrieve existing containers
-GET:
+METHOD: GET:
 
 Header: User_ID / Admin_ID / Authentication code ??
 Body: {}
