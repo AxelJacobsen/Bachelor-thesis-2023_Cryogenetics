@@ -1,4 +1,4 @@
-package gamedata
+package globals
 
 import (
 	"fmt"

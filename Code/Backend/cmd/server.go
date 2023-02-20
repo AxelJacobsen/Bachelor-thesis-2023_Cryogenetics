@@ -29,7 +29,7 @@ func main() {
 	//defer globals.Client.Disconnect(globals.Ctx)
 
 	// Start listening to socket connections (clients)
-	go endpoints.ListenForClients("0.0.0.0", "27015", "tcp")
+	go globals.ListenForClients("0.0.0.0", "27015", "tcp")
 
 	// Route
 	routes := map[string]func(http.ResponseWriter, *http.Request){
