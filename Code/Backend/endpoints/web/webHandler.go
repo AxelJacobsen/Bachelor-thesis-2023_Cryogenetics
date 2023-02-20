@@ -1,4 +1,4 @@
-package endpoints
+package web
 
 import (
 	paths "backend/constants"

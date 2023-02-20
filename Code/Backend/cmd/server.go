@@ -2,7 +2,9 @@ package main
 
 import (
 	"backend/constants"
-	"backend/endpoints"
+	"backend/endpoints/mobile"
+	"backend/endpoints/shared"
+	"backend/endpoints/web"
 	"backend/globals"
 	"backend/status"
 	"context"
@@ -29,17 +31,17 @@ func main() {
 	//defer globals.Client.Disconnect(globals.Ctx)
 
 	// Start listening to socket connections (clients)
-	go globals.ListenForClients("0.0.0.0", "27015", "tcp")
+	go ListenForClients("0.0.0.0", "27015", "tcp")
 
 	// Route
 	routes := map[string]func(http.ResponseWriter, *http.Request){
-		constants.MOBILE_LOGIN_PATH:       endpoints.HandlerMoblieLogin,
-		constants.WEB_LOGIN_PATH:          endpoints.HandlerWebLogin,
-		constants.WEB_PRIMARY_PATH:        endpoints.HandlerWebDashboard,
-		constants.PUBLIC_TRANSACTION_PATH: endpoints.HandlerTransactions,
-		constants.PUBLIC_INVENTORY_PATH:   endpoints.HandlerInventory,
-		constants.PUBLIC_CLIENTS_PATH:     endpoints.HandlerClients,
-		constants.PUBLIC_USERS_PATH:       endpoints.HandlerUsers,
+		constants.MOBILE_LOGIN_PATH:       mobile.HandlerMoblieLogin,
+		constants.WEB_LOGIN_PATH:          web.HandlerWebLogin,
+		constants.WEB_PRIMARY_PATH:        web.HandlerWebDashboard,
+		constants.PUBLIC_TRANSACTION_PATH: shared.HandlerTransactions,
+		constants.PUBLIC_INVENTORY_PATH:   shared.HandlerInventory,
+		constants.PUBLIC_CLIENTS_PATH:     shared.HandlerClients,
+		constants.PUBLIC_USERS_PATH:       shared.HandlerUsers,
 
 		constants.PUBLIC_STATUS_PATH: status.HandlerStatus,
 	}

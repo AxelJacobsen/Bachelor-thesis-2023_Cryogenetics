@@ -1,4 +1,4 @@
-package endpoints
+package mobile
 
 import (
 	paths "backend/constants"

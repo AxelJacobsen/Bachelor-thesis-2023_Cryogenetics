@@ -1,4 +1,4 @@
-package globals
+package main
 
 import (
 	"fmt"
@@ -56,11 +56,4 @@ func ProcessClient(connection net.Conn) {
 
 		fmt.Println("Received: ", string(buffer[:mLen]))
 	}
-}
-
-/**
- *	Gets the events in the area.
- */
-func GetEventsInArea(longitude float64, latitude float64, radius float64) {
-
 }
