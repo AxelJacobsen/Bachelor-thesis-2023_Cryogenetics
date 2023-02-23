@@ -1,6 +1,6 @@
 import React from 'react'
 
-function Transactions({ isLoggedIn }) {
+export default function Transactions({ isLoggedIn }) {
 
   console.log("isLoggedIn: "+ isLoggedIn)
   return (
@@ -13,4 +13,3 @@ function Transactions({ isLoggedIn }) {
   )
 }
 
-export default Transactions

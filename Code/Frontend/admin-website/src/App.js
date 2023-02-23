@@ -2,10 +2,14 @@ import React , { useState } from 'react'
 import {BrowserRouter as Router, Routes, Route, Navigate, Link} from 'react-router-dom'
 import Transactions from './components/Transactions'
 import LogIn from './components/LogIn'
-import Inventory from './components/Inventory'
+import Containers from './components/Containers'
 import ErrorPage from './components/ErrorPage'
+import Customers from './components/Customers'
+import Locations from './components/Locations'
+import QrCodes from './components/QrCodes'
 import './App.css'
 import Typography from '@mui/material/Typography';
+import Users from './components/Users'
 
 
 
@@ -16,7 +20,7 @@ function Copyright(props) {
       <Link color="inherit" href="https://cryogenetics.com/">
         Cryogenetics
       </Link>{' '}
-      {new Date().getFullYear()}
+      {new Date().getFullYear()} {/*NOT REAL COPYRIGHT*/}
       {'.'}
     </Typography>
   );
@@ -29,20 +33,32 @@ function App() {
     setIsLoggedIn(true);
   }
 
+  function handleLogOut() {
+    setIsLoggedIn(false);
+  }
+
   return (
     <Router>
     <nav>
       <Link to="/"> Transactions </Link>
-      <Link to="/login"> LogIn </Link>
-      <Link to="/inventory"> Inventory </Link>
+      <Link to="/customers"> Customers </Link>
+      <Link to="/containers"> Containers </Link>
+      <Link to="/users"> Users/Employees </Link>
+      <Link to="/locations"> Locations </Link>
+      <Link to="/qrcodes"> QR Codes </Link>
+      <button onClick={handleLogOut}> Log Out </button>
     </nav>
       
       <Routes>
         <Route path="/" element={isLoggedIn ? <Transactions isLoggedIn={isLoggedIn}/> : <Navigate to="/login" />} />
 
-        <Route path="/login" element={<LogIn onSignIn={handleLogIn} setIsLoggedIn={setIsLoggedIn}/>} />
+        <Route path="/login" element={<LogIn onLogIn={handleLogIn} setIsLoggedIn={setIsLoggedIn}/>} />
 
-        <Route path="/inventory" element={isLoggedIn ? <Inventory /> : <Navigate to="/login" />} />
+        <Route path="/containers" element={isLoggedIn ? <Containers /> : <Navigate to="/login" />} />
+        <Route path="/customers" element={isLoggedIn ? <Customers /> : <Navigate to="/login" />} />
+        <Route path="/users" element={isLoggedIn ? <Users /> : <Navigate to="/login" />} />
+        <Route path="/locations" element={isLoggedIn ? <Locations /> : <Navigate to="/login" />} />
+        <Route path="/qrcodes" element={isLoggedIn ? <QrCodes /> : <Navigate to="/login" />} />
 
 
         <Route path='*' element={<ErrorPage/>} /> {/* All deviations in URL lead to ErrorPage */}
