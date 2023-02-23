@@ -5,7 +5,22 @@ import LogIn from './components/LogIn'
 import Inventory from './components/Inventory'
 import ErrorPage from './components/ErrorPage'
 import './App.css'
+import Typography from '@mui/material/Typography';
 
+
+
+function Copyright(props) {
+  return (
+    <Typography variant="body2" color="text.secondary" align="left" {...props}>
+      {'Copyright © '}
+      <Link color="inherit" href="https://cryogenetics.com/">
+        Cryogenetics
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Replace with your authentication logic
@@ -26,11 +41,13 @@ function App() {
         <Route path="/" element={isLoggedIn ? <Transactions isLoggedIn={isLoggedIn}/> : <Navigate to="/login" />} />
 
         <Route path="/login" element={<LogIn onSignIn={handleLogIn} setIsLoggedIn={setIsLoggedIn}/>} />
+
         <Route path="/inventory" element={isLoggedIn ? <Inventory /> : <Navigate to="/login" />} />
 
-        <Route path='*' element={<ErrorPage/>}></Route> {/* All deviations in URL lead to ErrorPage */}
+
+        <Route path='*' element={<ErrorPage/>} /> {/* All deviations in URL lead to ErrorPage */}
       </Routes>
-      <div> Copyright for Cryogenetics </div>
+      <Copyright sx={{ mt: 8, mb: 4 }} />
     </Router>
   )
 }
