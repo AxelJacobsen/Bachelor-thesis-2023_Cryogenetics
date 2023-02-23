@@ -9,12 +9,14 @@ import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+//import CryogeneticLogo from '../Images/CryogeneticsLogoWhite.png'
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 
 const theme = createTheme();
+const CryogeneticLogo = require('../Images/CryogeneticsLogoWhite.png');
 
 export default function LogIn({setIsLoggedIn}) {
     const [email, setEmail] = useState('');
@@ -44,9 +46,7 @@ export default function LogIn({setIsLoggedIn}) {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
+            <img src={CryogeneticLogo} alt="Cryogenetics" width="30%"/>
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
