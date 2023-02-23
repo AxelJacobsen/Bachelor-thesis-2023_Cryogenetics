@@ -4,6 +4,7 @@ import Transactions from './components/Transactions'
 import LogIn from './components/LogIn'
 import Inventory from './components/Inventory'
 import ErrorPage from './components/ErrorPage'
+import './App.css'
 
 
 function App() {
@@ -29,7 +30,7 @@ function App() {
 
         <Route path='*' element={<ErrorPage/>}></Route> {/* All deviations in URL lead to ErrorPage */}
       </Routes>
-      <div> Footer </div>
+      <div> Copyright for Cryogenetics </div>
     </Router>
   )
 }
