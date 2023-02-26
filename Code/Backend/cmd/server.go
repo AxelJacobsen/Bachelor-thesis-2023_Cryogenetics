@@ -11,13 +11,73 @@ import (
 	"log"
 	"net/http"
 	"time"
+
+	"database/sql"
+
+	_ "github.com/go-sql-driver/mysql"
 )
+
+////////////////////////////////////////////////////
+/// USING https://github.com/go-sql-driver/mysql ///
+////////////////////////////////////////////////////
+
+/*
+Structs:
+	Admin
+	Client
+	Container
+	ContainerModel
+	ContainerStatus
+	Employee
+	Location
+	Transaction
+	TransactionAction
+
+Functions:
+	getAdmins(SC) ?
+	addAdmin(Admin)
+	getClients(SC)
+	addClient(Client)
+	getContainer(SC)
+	addContainer(Container)
+	getContainerModels()
+	addContainerModel(ContainerModel)
+	getContainerStatuses()
+	addContainerStatus(ContainerStatus)
+	getEmployees(SC)
+	addEmployee(Employee)
+	getLocations(SC)
+	addLocation(Location)
+	getTransactions(SC)
+	addTransaction(Transaction)
+	getTransactionActions()
+	addTransactionAction(TransactionAction)
+
+Glossary:
+	SC = Search Criteria
+*/
 
 /**
  *	The main function.
  * 	Starts the server.
  */
 func main() {
+	db, err := sql.Open("mysql", "root@tcp(127.0.0.1:3306)/database")
+	if err != nil {
+		panic(err.Error())
+	}
+	defer db.Close()
+
+	// perform a db.Query insert
+	insert, err := db.Query("INSERT INTO `admin` (`admin_id`, `email`, `password_hash`) VALUES ('1', 'test@testmail.test', '123')")
+
+	// if there is an error inserting, handle it
+	if err != nil {
+		panic(err.Error())
+	}
+	// be careful deferring Queries if you are using transactions
+	defer insert.Close()
+
 	// Start session timer
 	globals.StartTime = time.Now()
 	// Context initialization
