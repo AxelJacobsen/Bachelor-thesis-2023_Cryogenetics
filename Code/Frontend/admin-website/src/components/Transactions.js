@@ -18,6 +18,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
+import Button from '@mui/material/Button';
 
 function createData(id,date,act,operator,location,client,nr,serialnr,status,comment) {
   return {
@@ -288,6 +289,7 @@ export default function Transactions({ isLoggedIn }) {
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
       />
+      <Button variant='contained'> ACT Overview </Button>
     </Box>
     
   );

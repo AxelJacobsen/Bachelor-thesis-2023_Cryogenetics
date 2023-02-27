@@ -10,6 +10,9 @@ import QrCodes from './components/QrCodes'
 import './App.css'
 import Typography from '@mui/material/Typography';
 import Users from './components/Users'
+import Models from './components/Models'
+import Statuses from './components/Statuses'
+import Acts from './components/Acts'
 
 
 
@@ -17,10 +20,10 @@ function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="left" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://cryogenetics.com/">
+      <Link color="inherit" href="https://www.cryogenetics.com/">
         Cryogenetics
       </Link>{' '}
-      {new Date().getFullYear()} {/*NOT REAL COPYRIGHT*/}
+      {new Date().getFullYear()/*NOT REAL COPYRIGHT*/}
       {'.'}
     </Typography>
   );
@@ -59,7 +62,9 @@ function App() {
         <Route path="/users" element={isLoggedIn ? <Users /> : <Navigate to="/login" />} />
         <Route path="/locations" element={isLoggedIn ? <Locations /> : <Navigate to="/login" />} />
         <Route path="/qrcodes" element={isLoggedIn ? <QrCodes /> : <Navigate to="/login" />} />
-
+        <Route path="/models" element={ <Models />} />        
+        <Route path="/acts" element={ <Acts />} />
+        <Route path="/statuses" element={ <Statuses />} />
 
         <Route path='*' element={<ErrorPage/>} /> {/* All deviations in URL lead to ErrorPage */}
       </Routes>

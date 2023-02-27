@@ -22,16 +22,16 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import EditContainerModal from './popup/EditContainerModal';
 
-function createData(User_ID, User_Name, Login_Code, Location_Name, User_IsActive) {
+function createData(Model_Name, Refill_Interval,Liter_Capacity, Model_IsActive) {
   return {
-    User_ID, User_Name, Login_Code, Location_Name, User_IsActive
+    Model_Name, Refill_Interval, Liter_Capacity, Model_IsActive
   };
 }
 
 
 
 const rows = [
-  createData(1,"Håvard Bø",322,"Hamar", true),
+  createData("ET11",5, 8, true),
 
 ]; 
 
@@ -69,19 +69,16 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'User_ID', numeric: true, disablePadding: true, label: 'User_ID',
+    id: 'Model_Name', numeric: false, disablePadding: true, label: 'Model_Name',
   },
   {
-    id: 'User_Name', numeric: true, disablePadding: true, label: 'User_Name',
+    id: 'Refill_Interval', numeric: true, disablePadding: true, label: 'Refill_Interval',
   },
   {
-    id: 'Login_Code', numeric: true, disablePadding: true, label: 'Login_Code',
+    id: 'Liter_Capacity', numeric: true, disablePadding: true, label: 'Liter_Capacity', 
   },
   {
-    id: 'Location_Name', numeric: false, disablePadding: true, label: 'Location_Name',
-  },
-  {
-    id: 'User_IsActive', numeric: true, disablePadding: true, label: 'User_IsActive', 
+    id: 'Model_IsActive', numeric: true, disablePadding: true, label: 'Model_IsActive', 
   },
 ];
 
@@ -142,7 +139,7 @@ function EnhancedTableToolbar() {
           id="tableTitle"
           component="div"
         >
-          Users / Employees
+          Models
         </Typography>
 
         <Tooltip title="Filter list">
@@ -219,7 +216,7 @@ export default function Customers() {
                       hover
                       role="checkbox"
                       tabIndex={-1}
-                      key={row.User_ID}
+                      key={row.Model_Name}
                     >
                       
                       <TableCell
@@ -229,14 +226,13 @@ export default function Customers() {
                         padding="none"
                         align='center'
                       >
-                        {"#"+row.User_ID}
+                        {"#"+row.Model_Name}
                       </TableCell>
-                      <TableCell align='center'>{row.User_Name}</TableCell>
-                      <TableCell align='center'>{row.Login_Code}</TableCell>
-                      <TableCell align='center'>{row.Location_Name}</TableCell>
-                      <TableCell align="center">{row.User_IsActive ? "True" : "False"}</TableCell>
+                      <TableCell align='center'>{row.Refill_Interval}</TableCell>
+                      <TableCell align='center'>{row.Liter_Capacity}</TableCell>
+                      <TableCell align="center">{row.Model_IsActive ? "True" : "False"}</TableCell>
                       <TableCell onClick={() => handleRowClick(row)}> 
-                        <Button variant="outlined"> Edit </Button>
+                      <Button variant="outlined"> Edit </Button>
                     </TableCell> 
                     </TableRow>
                   );
@@ -273,7 +269,9 @@ export default function Customers() {
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
       />
-          <Button variant='contained' color='success'> Add user </Button>
+      <Button variant='contained' color='success'> Add Model </Button>
+      <Button variant='contained'> Back to Container screen </Button>
+
     </Box>
   );
 }

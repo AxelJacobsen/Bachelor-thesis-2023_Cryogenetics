@@ -22,16 +22,16 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import EditContainerModal from './popup/EditContainerModal';
 
-function createData(User_ID, User_Name, Login_Code, Location_Name, User_IsActive) {
+function createData(ACT_Name, ACT_Description, ACT_IsActive) {
   return {
-    User_ID, User_Name, Login_Code, Location_Name, User_IsActive
+    ACT_Name, ACT_Description, ACT_IsActive
   };
 }
 
 
 
 const rows = [
-  createData(1,"Håvard Bø",322,"Hamar", true),
+  createData(1,"Geir's Laks", true),
 
 ]; 
 
@@ -69,19 +69,13 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'User_ID', numeric: true, disablePadding: true, label: 'User_ID',
+    id: 'ACT_Name', numeric: true, disablePadding: true, label: 'ACT_Name',
   },
   {
-    id: 'User_Name', numeric: true, disablePadding: true, label: 'User_Name',
+    id: 'ACT_Description', numeric: false, disablePadding: true, label: 'ACT_Description',
   },
   {
-    id: 'Login_Code', numeric: true, disablePadding: true, label: 'Login_Code',
-  },
-  {
-    id: 'Location_Name', numeric: false, disablePadding: true, label: 'Location_Name',
-  },
-  {
-    id: 'User_IsActive', numeric: true, disablePadding: true, label: 'User_IsActive', 
+    id: 'ACT_IsActive', numeric: true, disablePadding: true, label: 'ACT_IsActive', 
   },
 ];
 
@@ -142,7 +136,7 @@ function EnhancedTableToolbar() {
           id="tableTitle"
           component="div"
         >
-          Users / Employees
+          Act's
         </Typography>
 
         <Tooltip title="Filter list">
@@ -219,7 +213,7 @@ export default function Customers() {
                       hover
                       role="checkbox"
                       tabIndex={-1}
-                      key={row.User_ID}
+                      key={row.ACT_Name}
                     >
                       
                       <TableCell
@@ -229,14 +223,12 @@ export default function Customers() {
                         padding="none"
                         align='center'
                       >
-                        {"#"+row.User_ID}
+                        {"#"+row.ACT_Name}
                       </TableCell>
-                      <TableCell align='center'>{row.User_Name}</TableCell>
-                      <TableCell align='center'>{row.Login_Code}</TableCell>
-                      <TableCell align='center'>{row.Location_Name}</TableCell>
-                      <TableCell align="center">{row.User_IsActive ? "True" : "False"}</TableCell>
+                      <TableCell align='center'>{row.ACT_Description}</TableCell>
+                      <TableCell align="center">{row.ACT_IsActive ? "True" : "False"}</TableCell>
                       <TableCell onClick={() => handleRowClick(row)}> 
-                        <Button variant="outlined"> Edit </Button>
+                      <Button variant="outlined"> Edit </Button>
                     </TableCell> 
                     </TableRow>
                   );
@@ -273,7 +265,9 @@ export default function Customers() {
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
       />
-          <Button variant='contained' color='success'> Add user </Button>
+      <Button variant='contained' color='success'> Add ACT </Button>
+      <Button variant='contained'> Back to Transaction screen </Button>
+
     </Box>
   );
 }

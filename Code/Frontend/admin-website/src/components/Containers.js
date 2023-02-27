@@ -252,7 +252,7 @@ export default function Containers() {
                       <TableCell align="center">{row.invoice}</TableCell>
                       <TableCell align="center">{row.status}</TableCell>
                       <TableCell onClick={() => handleRowClick(row)}> 
-                        <Button> Edit </Button>
+                      <Button variant="outlined"> Edit </Button>
                     </TableCell> 
                     </TableRow>
                   );
@@ -289,6 +289,9 @@ export default function Containers() {
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
       />
+      <Button variant='contained' color='success'> Add container </Button>
+      <Button variant='contained'> Model Overview </Button>
+      <Button variant='contained'> Status Overview </Button>
     </Box>
     
   );
