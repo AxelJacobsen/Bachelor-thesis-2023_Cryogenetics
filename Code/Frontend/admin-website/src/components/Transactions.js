@@ -19,6 +19,8 @@ import Switch from '@mui/material/Switch';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
+
 
 function createData(id,date,act,operator,location,client,nr,serialnr,status,comment) {
   return {
@@ -203,6 +205,11 @@ export default function Transactions({ isLoggedIn }) {
     setDense(event.target.checked);
   };
 
+  const navigate = useNavigate();
+  const handleActClick = () => {
+    navigate('/acts');
+  }
+
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
@@ -289,7 +296,7 @@ export default function Transactions({ isLoggedIn }) {
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
       />
-      <Button variant='contained'> ACT Overview </Button>
+      <Button variant='contained' onClick={handleActClick}> ACT Overview </Button>
     </Box>
     
   );

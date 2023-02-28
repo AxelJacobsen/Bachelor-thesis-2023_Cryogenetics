@@ -21,6 +21,8 @@ import Switch from '@mui/material/Switch';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import EditContainerModal from './popup/EditContainerModal';
+import { useNavigate } from 'react-router-dom';
+
 
 function createData(ACT_Name, ACT_Description, ACT_IsActive) {
   return {
@@ -180,6 +182,10 @@ export default function Customers() {
   const handleChangeDense = (event) => {
     setDense(event.target.checked);
   };
+  const navigate = useNavigate();
+  const handleTransactionClick = () =>{
+    navigate('/');
+  }
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -266,7 +272,7 @@ export default function Customers() {
         label="Dense padding"
       />
       <Button variant='contained' color='success'> Add ACT </Button>
-      <Button variant='contained'> Back to Transaction screen </Button>
+      <Button variant='contained' onClick={handleTransactionClick}> Back to Transaction screen </Button>
 
     </Box>
   );

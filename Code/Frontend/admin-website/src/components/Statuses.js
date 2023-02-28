@@ -21,14 +21,14 @@ import Switch from '@mui/material/Switch';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import EditContainerModal from './popup/EditContainerModal';
+import { useNavigate } from 'react-router-dom';
+
 
 function createData(Status_Name, Status_IsActive) {
   return {
     Status_Name, Status_IsActive
   };
 }
-
-
 
 const rows = [
   createData("Test", true),
@@ -70,9 +70,6 @@ function stableSort(array, comparator) {
 const headCells = [
   {
     id: 'Status_Name', numeric: true, disablePadding: true, label: 'Status_Name',
-  },
-  {
-    id: 'ACT_Description', numeric: false, disablePadding: true, label: 'ACT_Description',
   },
   {
     id: 'Status_IsActive', numeric: true, disablePadding: true, label: 'Status_IsActive', 
@@ -157,6 +154,7 @@ export default function Customers() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const [selectedRow, setSelectedRow] = useState(null);
+  
 
   function handleRowClick(rowData) {
     setSelectedRow(rowData);
@@ -180,6 +178,11 @@ export default function Customers() {
   const handleChangeDense = (event) => {
     setDense(event.target.checked);
   };
+
+  const navigate = useNavigate();
+  const handleContainerClick = () =>{
+    navigate('/containers');
+  }
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -265,7 +268,7 @@ export default function Customers() {
         label="Dense padding"
       />
       <Button variant='contained' color='success'> Add Status </Button>
-      <Button variant='contained'> Back to Container screen </Button>
+      <Button variant='contained' onClick={handleContainerClick}> Back to Container screen </Button>
 
     </Box>
   );

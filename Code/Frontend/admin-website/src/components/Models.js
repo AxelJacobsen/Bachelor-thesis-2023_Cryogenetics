@@ -21,6 +21,8 @@ import Switch from '@mui/material/Switch';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import EditContainerModal from './popup/EditContainerModal';
+import { useNavigate } from 'react-router-dom';
+
 
 function createData(Model_Name, Refill_Interval,Liter_Capacity, Model_IsActive) {
   return {
@@ -184,6 +186,11 @@ export default function Customers() {
     setDense(event.target.checked);
   };
 
+  const navigate = useNavigate();
+  const handleContainerClick = () =>{
+    navigate('/containers');
+  }
+
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
@@ -270,7 +277,7 @@ export default function Customers() {
         label="Dense padding"
       />
       <Button variant='contained' color='success'> Add Model </Button>
-      <Button variant='contained'> Back to Container screen </Button>
+      <Button variant='contained' onClick={handleContainerClick}> Back to Container screen </Button>
 
     </Box>
   );

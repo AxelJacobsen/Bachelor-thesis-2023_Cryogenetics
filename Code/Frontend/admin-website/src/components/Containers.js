@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -21,6 +22,7 @@ import Switch from '@mui/material/Switch';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import EditContainerModal from './popup/EditContainerModal';
+import AddContainerModal from './popup/AddContainerModal';
 
 function createData(serialnr, nr, model, location, customer, address, last_filled, invoice, status) {
   return {
@@ -175,10 +177,20 @@ export default function Containers() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const [selectedRow, setSelectedRow] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+
+  const navigate = useNavigate();
 
   function handleRowClick(rowData) {
     setSelectedRow(rowData);
   }
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+  
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -198,6 +210,14 @@ export default function Containers() {
   const handleChangeDense = (event) => {
     setDense(event.target.checked);
   };
+
+  const handleModelClick = () =>{
+    navigate('/models');
+  }
+
+  const handleStatusClick = () =>{
+    navigate('/statuses');
+  }
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -289,9 +309,10 @@ export default function Containers() {
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
       />
-      <Button variant='contained' color='success'> Add container </Button>
-      <Button variant='contained'> Model Overview </Button>
-      <Button variant='contained'> Status Overview </Button>
+      <Button variant='contained' color='success' onClick={handleOpenModal}> Add container </Button>
+      <AddContainerModal open={openModal} handleClose={handleCloseModal} />
+      <Button variant='contained' onClick={handleModelClick}> Model Overview </Button>
+      <Button variant='contained' onClick={handleStatusClick}> Status Overview </Button>
     </Box>
     
   );

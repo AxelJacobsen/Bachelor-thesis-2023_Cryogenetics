@@ -18,7 +18,7 @@ import Acts from './components/Acts'
 
 function Copyright(props) {
   return (
-    <Typography variant="body2" color="text.secondary" align="left" {...props}>
+    <Typography variant="body2" color="text.secondary" align="left" top="90" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://www.cryogenetics.com/">
         Cryogenetics
