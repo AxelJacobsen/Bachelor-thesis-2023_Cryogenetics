@@ -2,6 +2,8 @@ package shared
 
 import (
 	paths "backend/constants"
+	"backend/globals"
+	"encoding/json"
 	"net/http"
 	"strings"
 )
@@ -108,7 +110,7 @@ func HandlerClients(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("content-type", "application/json")
 
 	// Get escaped path without base URL and remove the first character if it's a "/"
-	escapedPath := r.URL.EscapedPath()[len(paths.MOBILE_LOGIN_PATH):]
+	escapedPath := r.URL.EscapedPath()[len(paths.PUBLIC_CLIENTS_PATH):]
 
 	if len(escapedPath) > 0 && escapedPath[0] == '/' {
 		escapedPath = escapedPath[1:]
@@ -126,10 +128,26 @@ func HandlerClients(w http.ResponseWriter, r *http.Request) {
 	// GET method
 	case http.MethodGet:
 		// If there's not enough args, return
-		if len(args) < 1 {
+		if len(args) < 0 { // TEMP
 			http.Error(w, "Not enough arguments, read the documentation for more information.", http.StatusUnprocessableEntity)
 			return
 		}
+
+		// --------- TEMP EXAMPLE ON HOW TO FETCH (ADMINS) FROM DB --------- //
+		res, err := globals.QueryJSON(globals.DB, "SELECT * FROM `admin`", w)
+		if err != nil {
+			http.Error(w, "Error fetching admins.", http.StatusInternalServerError)
+			return
+		}
+
+		// Set header and encode to writer
+		w.Header().Set("Content-Type", "application/json")
+		err = json.NewEncoder(w).Encode(res)
+		if err != nil {
+			http.Error(w, "Error encoding admins.", http.StatusInternalServerError)
+		}
+		// ----------------------------------------------------------------- //
+
 		// PUT method
 	case http.MethodPut:
 		// If there's not enough args, return

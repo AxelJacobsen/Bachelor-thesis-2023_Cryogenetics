@@ -62,21 +62,14 @@ Glossary:
  * 	Starts the server.
  */
 func main() {
+
+	// Connect to database
 	db, err := sql.Open("mysql", "root@tcp(127.0.0.1:3306)/database")
 	if err != nil {
 		panic(err.Error())
 	}
 	defer db.Close()
-
-	// perform a db.Query insert
-	insert, err := db.Query("INSERT INTO `admin` (`admin_id`, `email`, `password_hash`) VALUES ('1', 'test@testmail.test', '123')")
-
-	// if there is an error inserting, handle it
-	if err != nil {
-		panic(err.Error())
-	}
-	// be careful deferring Queries if you are using transactions
-	defer insert.Close()
+	globals.DB = db
 
 	// Start session timer
 	globals.StartTime = time.Now()
