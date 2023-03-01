@@ -13,6 +13,8 @@ import Users from './components/Users'
 import Models from './components/Models'
 import Statuses from './components/Statuses'
 import Acts from './components/Acts'
+import Button from '@mui/material/Button'
+import NavBar from './components/NavBar'
 
 
 
@@ -42,16 +44,14 @@ function App() {
 
   return (
     <Router>
+    
     <nav>
-      <Link to="/"> Transactions </Link>
-      <Link to="/customers"> Customers </Link>
-      <Link to="/containers"> Containers </Link>
-      <Link to="/users"> Users/Employees </Link>
-      <Link to="/locations"> Locations </Link>
-      <Link to="/qrcodes"> QR Codes </Link>
-      <button onClick={handleLogOut}> Log Out </button>
+    {isLoggedIn && //Hides navbar if not logged in
+      <><NavBar /><div className='navButtons'>
+            <Button onClick={handleLogOut} size='large' variant='contained' color='inherit'> Log Out </Button>
+          </div></>
+    }
     </nav>
-      
       <Routes>
         <Route path="/" element={isLoggedIn ? <Transactions isLoggedIn={isLoggedIn}/> : <Navigate to="/login" />} />
 

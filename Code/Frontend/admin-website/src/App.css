@@ -8,4 +8,12 @@ nav {
   padding-top: 2%;
   padding-bottom: 2%;
   font-size: xx-large;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.navButtons Button{
+  justify-content: space-evenly;
+  color: inherit;
+  font-size: 1vw;
 }

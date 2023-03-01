@@ -200,8 +200,8 @@ export default function Customers() {
   return (
     
     <Box sx={{ width: '100%' }}>
-      <div class = "grid-container">
-      <div class = "grid-child table"><Paper sx={{ width: '100%', mb: 2 }}>
+      <div className = "grid-container">
+      <div className = "grid-child table"><Paper sx={{ width: '100%', mb: 2 }}>
       <EnhancedTableToolbar />
         <TableContainer>
           <Table
@@ -276,7 +276,7 @@ export default function Customers() {
         />
       </Paper>
       </div>
-      <div class = "grid-child-buttons">
+      <div className = "grid-child-buttons">
         <Button variant='contained' color='success'> Add Model </Button>
         <Button variant='contained' onClick={handleContainerClick}> Back to Container screen </Button>
       </div>
