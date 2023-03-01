@@ -22,6 +22,8 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import EditContainerModal from './popup/EditContainerModal';
 import { useNavigate } from 'react-router-dom';
+import './TableLayout.css';
+
 
 
 function createData(Model_Name, Refill_Interval,Liter_Capacity, Model_IsActive) {
@@ -198,7 +200,8 @@ export default function Customers() {
   return (
     
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '85%', mb: 2 }}>
+      <div class = "grid-container">
+      <div class = "grid-child table"><Paper sx={{ width: '100%', mb: 2 }}>
       <EnhancedTableToolbar />
         <TableContainer>
           <Table
@@ -272,12 +275,18 @@ export default function Customers() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+      </div>
+      <div class = "grid-child-buttons">
+        <Button variant='contained' color='success'> Add Model </Button>
+        <Button variant='contained' onClick={handleContainerClick}> Back to Container screen </Button>
+      </div>
+    </div>
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
+        sx={{paddingLeft:"20px"}}
       />
-      <Button variant='contained' color='success'> Add Model </Button>
-      <Button variant='contained' onClick={handleContainerClick}> Back to Container screen </Button>
+      
 
     </Box>
   );

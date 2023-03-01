@@ -21,6 +21,7 @@ import Switch from '@mui/material/Switch';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import EditContainerModal from './popup/EditContainerModal';
+import './TableLayout.css';
 
 function createData(Location_ID, Location_Name, Location_IsActive) {
   return {
@@ -188,84 +189,92 @@ export default function Customers() {
   return (
     
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '85%', mb: 2 }}>
-      <EnhancedTableToolbar />
-        <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
-          >
-            <EnhancedTableHead
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-            />
-            <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const labelId = `enhanced-table-checkbox-${index}`;
+    <div class = "grid-container">
+      <div class = "grid-child table"><Paper sx={{ width: '100%', mb: 2 }}>
 
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={row.Location_ID}
-                    >
-                      
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                        align='center'
+        <EnhancedTableToolbar />
+          <TableContainer>
+            <Table
+              sx={{ minWidth: 750 }}
+              aria-labelledby="tableTitle"
+              size={dense ? 'small' : 'medium'}
+            >
+              <EnhancedTableHead
+                order={order}
+                orderBy={orderBy}
+                onRequestSort={handleRequestSort}
+                rowCount={rows.length}
+              />
+              <TableBody>
+                {stableSort(rows, getComparator(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    const labelId = `enhanced-table-checkbox-${index}`;
+
+                    return (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        tabIndex={-1}
+                        key={row.Location_ID}
                       >
-                        {"#"+row.Location_ID}
-                      </TableCell>
-                      <TableCell align='center'>{row.Location_Name}</TableCell>
-                      <TableCell align="center">{row.Location_IsActive ? "True" : "False"}</TableCell>
-                      <TableCell onClick={() => handleRowClick(row)}> 
-                      <Button variant="outlined"> Edit </Button>
-                    </TableCell> 
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-          {selectedRow && ( //Checks if there is a selected Row, If this line isnt here, you will get an "Error child is empty" console message.
-        <EditContainerModal
-          selectedRow={selectedRow}
-          setSelectedRow={setSelectedRow}
-        />
-      )} 
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 50]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
-      <Button variant='contained' color='success'> Add location </Button>
+                        
+                        <TableCell
+                          component="th"
+                          id={labelId}
+                          scope="row"
+                          padding="none"
+                          align='center'
+                        >
+                          {"#"+row.Location_ID}
+                        </TableCell>
+                        <TableCell align='center'>{row.Location_Name}</TableCell>
+                        <TableCell align="center">{row.Location_IsActive ? "True" : "False"}</TableCell>
+                        <TableCell onClick={() => handleRowClick(row)}> 
+                        <Button variant="outlined"> Edit </Button>
+                      </TableCell> 
+                      </TableRow>
+                    );
+                  })}
+                {emptyRows > 0 && (
+                  <TableRow
+                    style={{
+                      height: (dense ? 33 : 53) * emptyRows,
+                    }}
+                  >
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+            {selectedRow && ( //Checks if there is a selected Row, If this line isnt here, you will get an "Error child is empty" console message.
+          <EditContainerModal
+            selectedRow={selectedRow}
+            setSelectedRow={setSelectedRow}
+          />
+        )} 
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[10, 25, 50]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+      </div>
+      <div class = "grid-child-buttons">
+        <Button variant='contained' color='success'> Add location </Button>
+      </div>
+    </div>
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
+        sx={{paddingLeft:"20px"}}
       />
+    
     </Box>
     
   );

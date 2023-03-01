@@ -21,6 +21,7 @@ import Switch from '@mui/material/Switch';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import EditContainerModal from './popup/EditContainerModal';
+import './TableLayout.css';
 
 function createData(User_ID, User_Name, Login_Code, Location_Name, User_IsActive) {
   return {
@@ -194,7 +195,8 @@ export default function Customers() {
   return (
     
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '85%', mb: 2 }}>
+    <div class = "grid-container">
+      <div class = "grid-child table"><Paper sx={{ width: '100%', mb: 2 }}>
       <EnhancedTableToolbar />
         <TableContainer>
           <Table
@@ -269,11 +271,16 @@ export default function Customers() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+      </div>
+      <div class = "grid-child-buttons">
+        <Button variant='contained' color='success'> Add user </Button>
+      </div>
+    </div>
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
+        sx={{paddingLeft:"20px"}}
       />
-          <Button variant='contained' color='success'> Add user </Button>
     </Box>
   );
 }

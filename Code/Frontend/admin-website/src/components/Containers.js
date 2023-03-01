@@ -23,6 +23,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import EditContainerModal from './popup/EditContainerModal';
 import AddContainerModal from './popup/AddContainerModal';
+import './TableLayout.css';
 
 function createData(serialnr, nr, model, location, customer, address, last_filled, invoice, status) {
   return {
@@ -226,93 +227,100 @@ export default function Containers() {
   return (
     
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '85%', mb: 2 }}>
-      <EnhancedTableToolbar />
-        <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
-          >
-            <EnhancedTableHead
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-            />
-            <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const labelId = `enhanced-table-checkbox-${index}`;
+    <div class = "grid-container">
+      <div class = "grid-child table"><Paper sx={{ width: '100%', mb: 2 }}>
+        <EnhancedTableToolbar />
+          <TableContainer>
+            <Table
+              sx={{ minWidth: 750 }}
+              aria-labelledby="tableTitle"
+              size={dense ? 'small' : 'medium'}
+            >
+              <EnhancedTableHead
+                order={order}
+                orderBy={orderBy}
+                onRequestSort={handleRequestSort}
+                rowCount={rows.length}
+              />
+              <TableBody>
+                {stableSort(rows, getComparator(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={row.serialnr}
-                    >
-                      
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                        align='center'
+                    return (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        tabIndex={-1}
+                        key={row.serialnr}
                       >
-                        {row.nr}
-                      </TableCell>
-                      <TableCell align='center'>{row.serialnr}</TableCell>
-                      <TableCell align="center">{row.model}</TableCell>
-                      <TableCell align="center">{row.location}</TableCell>
-                      <TableCell align="center">{row.customer}</TableCell>
-                      <TableCell align="center">{row.address}</TableCell>
-                      <TableCell align="center">{row.last_filled}</TableCell>
-                      <TableCell align="center">{row.invoice}</TableCell>
-                      <TableCell align="center">{row.status}</TableCell>
-                      <TableCell onClick={() => handleRowClick(row)}> 
-                      <Button variant="outlined"> Edit </Button>
-                    </TableCell> 
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-          {selectedRow && ( //Checks if there is a selected Row, If this line isnt here, you will get an "Error child is empty" console message.
-        <EditContainerModal
-          selectedRow={selectedRow}
-          setSelectedRow={setSelectedRow}
-        />
-      )} 
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 50]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
+                        
+                        <TableCell
+                          component="th"
+                          id={labelId}
+                          scope="row"
+                          padding="none"
+                          align='center'
+                        >
+                          {row.nr}
+                        </TableCell>
+                        <TableCell align='center'>{row.serialnr}</TableCell>
+                        <TableCell align="center">{row.model}</TableCell>
+                        <TableCell align="center">{row.location}</TableCell>
+                        <TableCell align="center">{row.customer}</TableCell>
+                        <TableCell align="center">{row.address}</TableCell>
+                        <TableCell align="center">{row.last_filled}</TableCell>
+                        <TableCell align="center">{row.invoice}</TableCell>
+                        <TableCell align="center">{row.status}</TableCell>
+                        <TableCell onClick={() => handleRowClick(row)}> 
+                        <Button variant="outlined"> Edit </Button>
+                      </TableCell> 
+                      </TableRow>
+                    );
+                  })}
+                {emptyRows > 0 && (
+                  <TableRow
+                    style={{
+                      height: (dense ? 33 : 53) * emptyRows,
+                    }}
+                  >
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+            {selectedRow && ( //Checks if there is a selected Row, If this line isnt here, you will get an "Error child is empty" console message.
+          <EditContainerModal
+            selectedRow={selectedRow}
+            setSelectedRow={setSelectedRow}
+          />
+        )} 
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[10, 25, 50]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+      </div>
+      
+      <div class = "grid-child-buttons">
+        <Button variant='contained' color='success' onClick={handleOpenModal}> Add container </Button>
+        <AddContainerModal open={openModal} handleClose={handleCloseModal} />
+        <Button variant='contained' onClick={handleModelClick}> Model Overview </Button>
+        <Button variant='contained' onClick={handleStatusClick}> Status Overview </Button>
+      </div>
+    </div>
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
+        sx={{paddingLeft:"20px"}}
       />
-      <Button variant='contained' color='success' onClick={handleOpenModal}> Add container </Button>
-      <AddContainerModal open={openModal} handleClose={handleCloseModal} />
-      <Button variant='contained' onClick={handleModelClick}> Model Overview </Button>
-      <Button variant='contained' onClick={handleStatusClick}> Status Overview </Button>
     </Box>
     
   );

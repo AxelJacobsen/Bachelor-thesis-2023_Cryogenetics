@@ -20,6 +20,8 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
+import './TableLayout.css';
+
 
 
 function createData(id,date,act,operator,location,client,nr,serialnr,status,comment) {
@@ -216,87 +218,88 @@ export default function Transactions({ isLoggedIn }) {
 
   return (
     <Box sx={{ width: '100%' }}>
-    <div>
-      <h1>Welcome to the Transactions page!</h1>
-      <p>{isLoggedIn ? "You're logged in" : "You're not logged in"}</p>
-      
-      {/* Main content of your app goes here */}
-    </div>
-      <Paper sx={{ width: '85%', mb: 2 }}>
-      <EnhancedTableToolbar />
-        <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
-          >
-            <EnhancedTableHead
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-            />
-            <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const labelId = `enhanced-table-checkbox-${index}`;
+    <div class = "grid-container">
+      <div class = "grid-child table"><Paper sx={{ width: '100%', mb: 2 }}>
+        <EnhancedTableToolbar />
+          <TableContainer>
+            <Table
+              sx={{ minWidth: 750 }}
+              aria-labelledby="tableTitle"
+              size={dense ? 'small' : 'medium'}
+            >
+              <EnhancedTableHead
+                order={order}
+                orderBy={orderBy}
+                onRequestSort={handleRequestSort}
+                rowCount={rows.length}
+              />
+              <TableBody>
+                {stableSort(rows, getComparator(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={row.id}
-                    >
-                      
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                        align='center'
+                    return (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        tabIndex={-1}
+                        key={row.id}
                       >
-                        {row.date}
-                      </TableCell>
-                      <TableCell align='center'>{row.act}</TableCell>
-                      <TableCell align="center">{row.operator}</TableCell>
-                      <TableCell align="center">{row.location}</TableCell>
-                      <TableCell align="center">{row.client}</TableCell>
-                      <TableCell align="center">{row.nr}</TableCell>
-                      <TableCell align="center">{row.serialnr}</TableCell>
-                      <TableCell align="center">{row.status}</TableCell>
-                      <TableCell align="center">{row.comment}</TableCell>
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 50]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
+                        
+                        <TableCell
+                          component="th"
+                          id={labelId}
+                          scope="row"
+                          padding="none"
+                          align='center'
+                        >
+                          {row.date}
+                        </TableCell>
+                        <TableCell align='center'>{row.act}</TableCell>
+                        <TableCell align="center">{row.operator}</TableCell>
+                        <TableCell align="center">{row.location}</TableCell>
+                        <TableCell align="center">{row.client}</TableCell>
+                        <TableCell align="center">{row.nr}</TableCell>
+                        <TableCell align="center">{row.serialnr}</TableCell>
+                        <TableCell align="center">{row.status}</TableCell>
+                        <TableCell align="center">{row.comment}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                {emptyRows > 0 && (
+                  <TableRow
+                    style={{
+                      height: (dense ? 33 : 53) * emptyRows,
+                    }}
+                  >
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[10, 25, 50]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+        </div>
+        <div class = "grid-child-buttons">
+          <Button variant='contained' onClick={handleActClick}> ACT Overview </Button>
+        </div>
+      </div>
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
+        sx={{paddingLeft:"20px"}}
       />
-      <Button variant='contained' onClick={handleActClick}> ACT Overview </Button>
+      
     </Box>
     
   );
