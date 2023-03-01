@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 02. Feb, 2023 18:09 PM
+-- Generation Time: 26. Feb, 2023 04:37 AM
 -- Tjener-versjon: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -32,6 +32,13 @@ CREATE TABLE `admin` (
   `email` varchar(64) NOT NULL,
   `password_hash` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+
+--
+-- Dataark for tabell `admin`
+--
+
+INSERT INTO `admin` (`admin_id`, `email`, `password_hash`) VALUES
+(1, 'test@testmail.test', 123);
 
 -- --------------------------------------------------------
 
@@ -71,7 +78,8 @@ CREATE TABLE `container` (
 
 CREATE TABLE `container_model` (
   `model_name` varchar(32) NOT NULL,
-  `refill_interval` float DEFAULT NULL
+  `refill_interval` float DEFAULT NULL,
+  `liter_capacity` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 -- --------------------------------------------------------
@@ -118,6 +126,8 @@ CREATE TABLE `transaction` (
   `transaction_id` int(11) NOT NULL,
   `responsible_id` int(11) NOT NULL,
   `client_id` int(11) DEFAULT NULL,
+  `address` varchar(64) DEFAULT NULL,
+  `inventory` int(11) DEFAULT NULL,
   `container` varchar(32) DEFAULT NULL,
   `comment` varchar(512) DEFAULT NULL,
   `date` date NOT NULL,
@@ -131,7 +141,9 @@ CREATE TABLE `transaction` (
 --
 
 CREATE TABLE `transaction_action` (
-  `action_name` varchar(32) NOT NULL
+  `action_name` varchar(32) NOT NULL,
+  `description` varchar(64) DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
@@ -193,7 +205,8 @@ ALTER TABLE `transaction`
   ADD KEY `transaction_fk1` (`action`),
   ADD KEY `transaction_fk2` (`responsible_id`),
   ADD KEY `transaction_fk3` (`client_id`),
-  ADD KEY `transaction_fk4` (`container`);
+  ADD KEY `transaction_fk4` (`container`),
+  ADD KEY `transaction_fk5` (`inventory`);
 
 --
 -- Indexes for table `transaction_action`
@@ -209,7 +222,7 @@ ALTER TABLE `transaction_action`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `client`
@@ -261,7 +274,8 @@ ALTER TABLE `transaction`
   ADD CONSTRAINT `transaction_fk1` FOREIGN KEY (`action`) REFERENCES `transaction_action` (`action_name`) ON UPDATE CASCADE,
   ADD CONSTRAINT `transaction_fk2` FOREIGN KEY (`responsible_id`) REFERENCES `employee` (`employee_id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `transaction_fk3` FOREIGN KEY (`client_id`) REFERENCES `client` (`client_id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `transaction_fk4` FOREIGN KEY (`container`) REFERENCES `container` (`serial_number`);
+  ADD CONSTRAINT `transaction_fk4` FOREIGN KEY (`container`) REFERENCES `container` (`serial_number`),
+  ADD CONSTRAINT `transaction_fk5` FOREIGN KEY (`inventory`) REFERENCES `location` (`location_id`) ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

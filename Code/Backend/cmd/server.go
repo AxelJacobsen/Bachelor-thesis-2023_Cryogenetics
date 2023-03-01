@@ -11,13 +11,66 @@ import (
 	"log"
 	"net/http"
 	"time"
+
+	"database/sql"
+
+	_ "github.com/go-sql-driver/mysql"
 )
+
+////////////////////////////////////////////////////
+/// USING https://github.com/go-sql-driver/mysql ///
+////////////////////////////////////////////////////
+
+/*
+Structs:
+	Admin
+	Client
+	Container
+	ContainerModel
+	ContainerStatus
+	Employee
+	Location
+	Transaction
+	TransactionAction
+
+Functions:
+	getAdmins(SC) ?
+	addAdmin(Admin)
+	getClients(SC)
+	addClient(Client)
+	getContainer(SC)
+	addContainer(Container)
+	getContainerModels()
+	addContainerModel(ContainerModel)
+	getContainerStatuses()
+	addContainerStatus(ContainerStatus)
+	getEmployees(SC)
+	addEmployee(Employee)
+	getLocations(SC)
+	addLocation(Location)
+	getTransactions(SC)
+	addTransaction(Transaction)
+	getTransactionActions()
+	addTransactionAction(TransactionAction)
+
+Glossary:
+	SC = Search Criteria
+*/
 
 /**
  *	The main function.
  * 	Starts the server.
  */
 func main() {
+
+	// Connect to database
+	db, err := sql.Open("mysql", "root@tcp(127.0.0.1:3306)/database")
+	if err != nil {
+		panic(err.Error())
+	}
+	defer db.Close()
+	globals.DB = db
+
 	// Start session timer
 	globals.StartTime = time.Now()
 	// Context initialization
