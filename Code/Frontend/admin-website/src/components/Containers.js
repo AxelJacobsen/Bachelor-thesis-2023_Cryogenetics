@@ -189,9 +189,6 @@ export default function Containers() {
     setOpenModal(true);
   };
   
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -311,7 +308,7 @@ export default function Containers() {
       
       <div className = "grid-child-buttons">
         <Button variant='contained' color='success' onClick={handleOpenModal}> Add container </Button>
-        <AddContainerModal open={openModal} handleClose={handleCloseModal} />
+        <AddContainerModal open={openModal} setOpen={setOpenModal} />
         <Button variant='contained' onClick={handleModelClick}> Model Overview </Button>
         <Button variant='contained' onClick={handleStatusClick}> Status Overview </Button>
       </div>

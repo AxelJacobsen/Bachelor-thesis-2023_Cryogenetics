@@ -17,7 +17,7 @@ const style = {
 };
 
 
-export default function AddContainerModal({ open, setOpen }) {
+export default function AddModelModal({ open, setOpen }) {
 
 
   const handleCloseModal = () => {
@@ -29,7 +29,7 @@ export default function AddContainerModal({ open, setOpen }) {
       
       <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2" >
-            Add Container
+            Add Model
           </Typography>
           
 

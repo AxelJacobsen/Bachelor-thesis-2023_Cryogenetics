@@ -20,7 +20,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-import EditContainerModal from './popup/EditContainerModal';
+import EditLocationModal from './popup/EditLocationModal';
+import AddLocationModal from './popup/AddLocationModal';
 import './TableLayout.css';
 
 function createData(Location_ID, Location_Name, Location_IsActive) {
@@ -158,6 +159,11 @@ export default function Customers() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const [selectedRow, setSelectedRow] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
 
   function handleRowClick(rowData) {
     setSelectedRow(rowData);
@@ -248,7 +254,7 @@ export default function Customers() {
               </TableBody>
             </Table>
             {selectedRow && ( //Checks if there is a selected Row, If this line isnt here, you will get an "Error child is empty" console message.
-          <EditContainerModal
+          <EditLocationModal
             selectedRow={selectedRow}
             setSelectedRow={setSelectedRow}
           />
@@ -266,7 +272,8 @@ export default function Customers() {
         </Paper>
       </div>
       <div className = "grid-child-buttons">
-        <Button variant='contained' color='success'> Add location </Button>
+        <Button variant='contained' color='success' onClick={handleOpenModal}> Add customer </Button>
+        <AddLocationModal open={openModal} setOpen={setOpenModal} />
       </div>
     </div>
       <FormControlLabel

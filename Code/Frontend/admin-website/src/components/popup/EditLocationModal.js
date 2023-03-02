@@ -2,6 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 
 const style = {
@@ -17,20 +18,22 @@ const style = {
 };
 
 
-export default function AddContainerModal({ open, setOpen }) {
+export default function EditLocationModal(props) {
 
 
-  const handleCloseModal = () => {
-    setOpen(false);
+  function handleCloseModal() {
+    props.setSelectedRow(null);
   }
 
   return (
-    <Modal open={open} onClose={handleCloseModal}  aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+    <Modal open={Boolean(props.selectedRow)} onClose={handleCloseModal}  aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
       
       <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2" >
-            Add Container
+            Edit Location
           </Typography>
+          <TextField id="nrText" label={props.selectedRow.nr} variant="outlined" sx={{ m: 2 }}/>
+
           
 
         <Button variant="contained" sx={{ m: 2 }} color="error" onClick={handleCloseModal}>Cancel</Button>

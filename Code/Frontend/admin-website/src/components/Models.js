@@ -20,7 +20,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-import EditContainerModal from './popup/EditContainerModal';
+import EditModelModal from './popup/EditModelModal';
+import AddModelModal from './popup/AddModelModal';
 import { useNavigate } from 'react-router-dom';
 import './TableLayout.css';
 
@@ -164,6 +165,11 @@ export default function Customers() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const [selectedRow, setSelectedRow] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
 
   function handleRowClick(rowData) {
     setSelectedRow(rowData);
@@ -259,7 +265,7 @@ export default function Customers() {
             </TableBody>
           </Table>
           {selectedRow && ( //Checks if there is a selected Row, If this line isnt here, you will get an "Error child is empty" console message.
-        <EditContainerModal
+        <EditModelModal
           selectedRow={selectedRow}
           setSelectedRow={setSelectedRow}
         />
@@ -277,7 +283,8 @@ export default function Customers() {
       </Paper>
       </div>
       <div className = "grid-child-buttons">
-        <Button variant='contained' color='success'> Add Model </Button>
+        <Button variant='contained' color='success' onClick={handleOpenModal}> Add Model </Button>
+        <AddModelModal open={openModal} setOpen={setOpenModal} />
         <Button variant='contained' onClick={handleContainerClick}> Back to Container screen </Button>
       </div>
     </div>
