@@ -20,7 +20,21 @@ import NavBar from './components/NavBar'
 
 function Copyright(props) {
   return (
-    <Typography variant="body2" color="text.secondary" align="left" top="90" {...props}>
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      sx={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        padding: '8px',
+        width: '100%',
+        backgroundColor: 'white',
+        textAlign: 'left',
+        boxShadow: '0px -1px 5px rgba(0,0,0,0.2)'
+      }}
+      {...props}
+    >
       {'Copyright © '}
       <Link color="inherit" href="https://www.cryogenetics.com/">
         Cryogenetics

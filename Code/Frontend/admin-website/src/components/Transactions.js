@@ -22,8 +22,7 @@ import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import './TableLayout.css';
 
-
-
+// createData function takes in the row data and returns an object with the properties of the row
 function createData(id,date,act,operator,location,client,nr,serialnr,status,comment) {
   return {
     id,
@@ -39,12 +38,10 @@ function createData(id,date,act,operator,location,client,nr,serialnr,status,comm
   };
 }
 
-
-
 const rows = [
+  createData(7,'31-01-23 11:25', 'Main needed', "Jan", "Hamar", "United Fishermen",'047-7','5555-221',"In use", "fix lid please"),
   createData(1,'31-01-23 09:25', 'Sold', "Ola Nordmann", "Hamar", "United Fishermen",'047-1','5555-231',"At Client", "Will be shipped ASAP"),
   createData(2,'31-01-23 10:25', 'Refilled', "Ola Nordmann", "Hamar", "United Fishermen",'047-2','5555-331',"In use", ""),
-  createData(7,'31-01-23 11:25', 'Main needed', "Jan", "Hamar", "United Fishermen",'047-7','5555-221',"In use", "fix lid please"),
 ]; 
 
 function descendingComparator(a, b, orderBy) {
@@ -58,6 +55,7 @@ function descendingComparator(a, b, orderBy) {
 }
 
 function getComparator(order, orderBy) {
+  console.log(orderBy)
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
@@ -81,34 +79,35 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'Date', numeric: false, disablePadding: true, label: 'Date',
+    id: 'date', numeric: false, disablePadding: true, label: 'Date',
   },
   {
-    id: 'Act', numeric: false, disablePadding: true, label: 'Act',
+    id: 'act', numeric: false, disablePadding: true, label: 'Act',
   },
   {
-    id: 'Operator', numeric: false, disablePadding: true, label: 'Operator',
+    id: 'operator', numeric: false, disablePadding: true, label: 'Operator',
   },
   {
-    id: 'Location', numeric: false, disablePadding: true, label: 'Location',
+    id: 'location', numeric: false, disablePadding: true, label: 'Location',
   },
   {
-    id: 'Client', numeric: false, disablePadding: true, label: 'Client',
+    id: 'client', numeric: false, disablePadding: true, label: 'Client',
   },
   {
-    id: 'Nr', numeric: false, disablePadding: true, label: '#Nr',
+    id: 'nr', numeric: false, disablePadding: true, label: '#Nr',
   },
   {
-    id: 'SerialNr', numeric: false, disablePadding: true, label: 'SerialNR',
+    id: 'serialnr', numeric: false, disablePadding: true, label: 'SerialNR',
   },
   {
-    id: 'Status', numeric: false, disablePadding: true, label: 'Status',
+    id: 'status', numeric: false, disablePadding: true, label: 'Status',
   },
   {
-    id: 'Comment', numeric: false, disablePadding: true, label: 'Comment',
+    id: 'comment', numeric: false, disablePadding: true, label: 'Comment',
   },
 ];
 
+// EnhancedTableHead function takes in props and renders the table header with sorting functionality
 function EnhancedTableHead(props) {
   const { order, orderBy, onRequestSort } =
     props;
@@ -152,6 +151,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
+// EnhancedTableToolbar function takes in props and renders the toolbar with filtering and button functionality
 function EnhancedTableToolbar() {
   return (
     <Toolbar
@@ -183,7 +183,7 @@ export default function Transactions({ isLoggedIn }) {
   
     
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('calories');
+  const [orderBy, setOrderBy] = React.useState('operator');
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);

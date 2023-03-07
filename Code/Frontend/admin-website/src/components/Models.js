@@ -37,7 +37,7 @@ function createData(Model_Name, Refill_Interval,Liter_Capacity, Model_IsActive) 
 
 const rows = [
   createData("ET11",5, 8, true),
-
+  createData("test",3, 7, true),
 ]; 
 
 function descendingComparator(a, b, orderBy) {

@@ -35,6 +35,8 @@ function createData(serialnr, nr, model, location, customer, address, last_fille
 
 const rows = [
   createData('1234-999','047-1', 'ET11', "Hamar", "United Fishermen",'Hamar','29-01-23',"22-01-24", "In use"),
+  createData('12334-219','047-2', 'ET11', "Tronny", "United Fi3shermen",'aaaa','29-01-23',"22-01-24", "Broken"),
+  createData('122134-93299','047-3', 'ET11', "Haaamar", "United Fish2ermen",'eeee','29-01-23',"22-01-24", "Quarantined"),
 
 ]; 
 
@@ -72,31 +74,31 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'NR', numeric: false, disablePadding: true, label: 'NR',
+    id: 'nr', numeric: false, disablePadding: true, label: 'NR',
   },
   {
-    id: 'SerialNR', numeric: false, disablePadding: true, label: 'SerialNR',
+    id: 'serialnr', numeric: false, disablePadding: true, label: 'SerialNR',
   },
   {
-    id: 'Model', numeric: false, disablePadding: true, label: 'Model',
+    id: 'model', numeric: false, disablePadding: true, label: 'Model',
   },
   {
-    id: 'Location', numeric: false, disablePadding: true, label: 'Location',
+    id: 'location', numeric: false, disablePadding: true, label: 'Location',
   },
   {
-    id: 'Customer', numeric: false, disablePadding: true, label: 'Customer',
+    id: 'customer', numeric: false, disablePadding: true, label: 'Customer',
   },
   {
-    id: 'Address', numeric: false, disablePadding: true, label: 'Address',
+    id: 'address', numeric: false, disablePadding: true, label: 'Address',
   },
   {
-    id: 'Last Filled', numeric: false, disablePadding: true, label: 'Last Filled',
+    id: 'last_filled', numeric: false, disablePadding: true, label: 'Last Filled',
   },
   {
-    id: 'Invoice', numeric: false, disablePadding: true, label: 'Invoice',
+    id: 'invoice', numeric: false, disablePadding: true, label: 'Invoice',
   },
   {
-    id: 'Status', numeric: false, disablePadding: true, label: 'Status',
+    id: 'status', numeric: false, disablePadding: true, label: 'Status',
   },
 ];
 
