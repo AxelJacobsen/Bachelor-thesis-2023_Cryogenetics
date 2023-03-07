@@ -1,12 +1,36 @@
 import React, { useRef } from 'react';
 import QRCode from 'qrcode-generator';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import { useState } from 'react';
+
 
 export default function QrCodes() {
   const canvasRef = useRef(null);
+  const valueRef = useRef('') //creating a refernce for TextField Component
+  const [inputData,setInputData] = useState('');
+  const isValueEmpty = inputData.trim() === '';
 
-  // Generate QR code when component mounts
-  React.useEffect(() => {
-    const data = "047-0001";
+ 
+
+  // Handle download button click
+  const handleDownloadClick = () => {
+    const data = inputData;
+    const downloadLink = document.createElement('a');
+    downloadLink.setAttribute('download', data+'.png');
+    downloadLink.setAttribute('href', canvasRef.current.toDataURL('image/png').replace('image/png', 'image/octet-stream'));
+    downloadLink.click();
+  };
+
+ 
+  // Handle download button click
+  const handleGenerate = () => {
+    setInputData(valueRef.current.value)
+    return generateQRCode(valueRef.current.value) //on clicking button accesing current value of TextField and outputing it to console 
+    };
+
+
+  const generateQRCode = (data) => {
     const qr = QRCode(0, 'H');
     qr.addData(data);
     qr.make();
@@ -34,25 +58,17 @@ export default function QrCodes() {
       ctx.font = '100px Inter';
       ctx.textAlign = 'center'; // Center text horizontally
       ctx.fillText(data, qrX + qrSize / 4, qrY + qrSize);
-      const textY = qrY + qrSize + 20;
-      if (textY < canvasRef.current.height) { console.log("outside") }
     };
     img.src = imageDataUrl;
-  }, []);
-
-  // Handle download button click
-  const handleDownloadClick = () => {
-    const data = "test";
-    const downloadLink = document.createElement('a');
-    downloadLink.setAttribute('download', data+'.png');
-    downloadLink.setAttribute('href', canvasRef.current.toDataURL('image/png').replace('image/png', 'image/octet-stream'));
-    downloadLink.click();
-  };
+  }
 
   return (
+
+    
     <div>
+      <TextField required id="nrText" label={"What #NR?"} variant="outlined" inputRef={valueRef} sx={{ m: 2 }} onChange={() => {handleGenerate(valueRef)}}/>
       <canvas ref={canvasRef} width={512} height={700} />
-      <button onClick={handleDownloadClick}>Download QR code</button>
+      <Button onClick={() => {handleDownloadClick()}} variant='outlined' disabled={isValueEmpty}>Download QR code</Button>
     </div>
   );
 }
