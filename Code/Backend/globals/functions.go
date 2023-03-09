@@ -2,6 +2,7 @@ package globals
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"net"
 	"net/http"
@@ -122,81 +123,75 @@ func QueryJSON(db *sql.DB, query string, w http.ResponseWriter) ([]map[string]in
 	return res, nil
 }
 
-//The two functions below can be merged
-//Thought maybe it was nicer this way, but i dont really see a reason to split them
-//Unless we want to alter the values for whatever reasen :shrug:
+//Below creates an "exclusive query" by using AND, could be swapped to "Inclusive" by using OR
 
 /**
- *	Splits a url into a map of values
+ *	Takes an http request and returns an SQL query with values sepperate
  *
  *	@param r - a pointer to the http request
+ *  @param table - name of the relevant table, (should be added as request header or in the url instead)
  *
- *	@returns - a map[string]interface of the url values
+ *	@returns - an SQL string with placeholders
+ *	@returns - a list of values to fit the SQL query
+ *  @returns - any potential errors thrown
  */
-func HandleUrlParams(r *http.Request) map[string]interface{} {
+func ConvertUrlToSql(r *http.Request, table string) (string, []string, error) {
 	// Get url values
 	urlData := r.URL.Query()
 
-	params := make(map[string]interface{})
-
-	for key, vals := range urlData {
-		if len(vals) == 1 {
-			params[key] = vals[0]
-		} else {
-			var valSlice []interface{}
-			for _, val := range vals {
-				valSlice = append(valSlice, val)
-			}
-			params[key] = valSlice
-		}
+	//Empty table name
+	if len(table) <= 0 {
+		return "", []string{}, errors.New("couldn't write to string in SQL constructor")
 	}
-	return params
-}
 
-/**
- *	Constructs an SQL filter query based on parameters supplied in the url
- *
- *	@param table - name of the relevant table (could be added if we add a header / specific url param)
- *	@param params - contains key value pairs of url values
- *
- *	@returns - a prepared SQL string with placeholders to be filled
- *	@returns - a list of the data to fill the SQL placeholders
- *	@returns - any errors caught in the function
- */
-func ConstructQuery(table string, params map[string]interface{}) (string, []interface{}, error) {
+	//If there are no parameters
+	if len(urlData) <= 0 {
+		//Not necesserily an error, but should still break
+		noFilt := "SELECT * FROM " + table
+		return noFilt, []string{}, nil
+	}
+
 	//Initiate builder
 	var query strings.Builder
+
 	//Start with basic format
 	query.WriteString("SELECT * FROM " + table + " WHERE ")
 
 	//Prep args container
-	var argList []interface{}
+	var argList []string
+
 	//Placeholder counter
 	i := 1
-	//Iterate the map for key and values
-	for key, value := range params {
-		//if there are more than one values in the key enter if
-		if valSlice, ok := value.([]interface{}); ok {
-			//Prepare container
-			placeHolders := make([]string, len(valSlice))
-			for o := 0; o < len(valSlice); o++ {
-				argList = append(argList, valSlice[o])
-				//Add placeholder number into slice
-				placeHolders[o] = fmt.Sprintf("$%d", i)
+
+	for key, value := range urlData {
+		if len(value) == 1 {
+			//Single value under key
+			argList = append(argList, value[0])
+			_, err := query.WriteString(fmt.Sprintf("%s = $%d AND ", key, i))
+
+			if err != nil {
+				return "", []string{}, errors.New("couldn't write to string in SQL constructor")
+			}
+
+			i++
+		} else {
+			//Multiple variables under same key
+			for o := 0; o < len(value); o++ {
+				//Stow the actual value to be returned seperately
+				argList = append(argList, value[o])
+				//Overwrite inValue with a placeholder to be written into the SQL query
+				value[o] = fmt.Sprintf("$%d", i)
 				i++
 			}
 			//Write formatted placeholder to the query
-			query.WriteString(fmt.Sprintf("%s IN (%s) AND ", key, strings.Join(placeHolders, ", ")))
-		} else {
-			argList = append(argList, value)
-			query.WriteString(fmt.Sprintf("%s = $%d AND ", key, i))
-			i++
+			_, err := query.WriteString(fmt.Sprintf("%s IN (%s) AND ", key, strings.Join(value, ", ")))
+			if err != nil {
+				return "", []string{}, errors.New("couldn't write to string in SQL constructor")
+			}
+
 		}
 	}
 
-	//cut the last " AND " from the query
 	outQuery := query.String()[:len(query.String())-5]
-
-	//Unsure if this is necessary, but in my head it helps prevent injections when we replace placeholders later to query
 	return outQuery, argList, nil
 }

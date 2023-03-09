@@ -14,8 +14,7 @@ import (
 func HandlerMoblieLogin(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("content-type", "application/json")
 
-	urlMap := globals.HandleUrlParams(r)
-	sqlString, sqlValues, err := globals.ConstructQuery("testTable1", urlMap)
+	sqlString, sqlValues, err := globals.ConvertUrlToSql(r, "testTable1")
 	if err == nil {
 		//BING BONG SOMETHINGSWRONG
 	}
