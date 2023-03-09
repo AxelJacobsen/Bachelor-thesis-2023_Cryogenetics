@@ -2,11 +2,13 @@ package globals
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"net"
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 )
 
 /**
@@ -119,4 +121,77 @@ func QueryJSON(db *sql.DB, query string, w http.ResponseWriter) ([]map[string]in
 
 	// Return
 	return res, nil
+}
+
+//Below creates an "exclusive query" by using AND, could be swapped to "Inclusive" by using OR
+
+/**
+ *	Takes an http request and returns an SQL query with values sepperate
+ *
+ *	@param r - a pointer to the http request
+ *  @param table - name of the relevant table, (should be added as request header or in the url instead)
+ *
+ *	@returns - an SQL string with placeholders
+ *	@returns - a list of values to fit the SQL query
+ *  @returns - any potential errors thrown
+ */
+func ConvertUrlToSql(r *http.Request, table string) (string, []string, error) {
+	// Get url values
+	urlData := r.URL.Query()
+
+	//Empty table name
+	if len(table) <= 0 {
+		return "", []string{}, errors.New("couldn't write to string in SQL constructor")
+	}
+
+	//If there are no parameters
+	if len(urlData) <= 0 {
+		//Not necesserily an error, but should still break
+		noFilt := "SELECT * FROM " + table
+		return noFilt, []string{}, nil
+	}
+
+	//Initiate builder
+	var query strings.Builder
+
+	//Start with basic format
+	query.WriteString("SELECT * FROM " + table + " WHERE ")
+
+	//Prep args container
+	var argList []string
+
+	//Placeholder counter
+	i := 1
+
+	for key, value := range urlData {
+		if len(value) == 1 {
+			//Single value under key
+			argList = append(argList, value[0])
+			_, err := query.WriteString(fmt.Sprintf("%s = $%d AND ", key, i))
+
+			if err != nil {
+				return "", []string{}, errors.New("couldn't write to string in SQL constructor")
+			}
+
+			i++
+		} else {
+			//Multiple variables under same key
+			for o := 0; o < len(value); o++ {
+				//Stow the actual value to be returned seperately
+				argList = append(argList, value[o])
+				//Overwrite inValue with a placeholder to be written into the SQL query
+				value[o] = fmt.Sprintf("$%d", i)
+				i++
+			}
+			//Write formatted placeholder to the query
+			_, err := query.WriteString(fmt.Sprintf("%s IN (%s) AND ", key, strings.Join(value, ", ")))
+			if err != nil {
+				return "", []string{}, errors.New("couldn't write to string in SQL constructor")
+			}
+
+		}
+	}
+
+	outQuery := query.String()[:len(query.String())-5]
+	return outQuery, argList, nil
 }

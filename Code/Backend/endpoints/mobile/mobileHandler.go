@@ -2,6 +2,8 @@ package mobile
 
 import (
 	paths "backend/constants"
+	"backend/globals"
+	"fmt"
 	"net/http"
 	"strings"
 )
@@ -11,6 +13,13 @@ import (
  */
 func HandlerMoblieLogin(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("content-type", "application/json")
+
+	sqlString, sqlValues, err := globals.ConvertUrlToSql(r, "testTable1")
+	if err == nil {
+		//BING BONG SOMETHINGSWRONG
+	}
+
+	fmt.Println(sqlString, sqlValues)
 
 	// Get escaped path without base URL and remove the first character if it's a "/"
 	escapedPath := r.URL.EscapedPath()[len(paths.MOBILE_LOGIN_PATH):]
