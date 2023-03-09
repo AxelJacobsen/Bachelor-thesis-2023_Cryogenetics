@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 )
 
 /**
@@ -119,4 +120,83 @@ func QueryJSON(db *sql.DB, query string, w http.ResponseWriter) ([]map[string]in
 
 	// Return
 	return res, nil
+}
+
+//The two functions below can be merged
+//Thought maybe it was nicer this way, but i dont really see a reason to split them
+//Unless we want to alter the values for whatever reasen :shrug:
+
+/**
+ *	Splits a url into a map of values
+ *
+ *	@param r - a pointer to the http request
+ *
+ *	@returns - a map[string]interface of the url values
+ */
+func HandleUrlParams(r *http.Request) map[string]interface{} {
+	// Get url values
+	urlData := r.URL.Query()
+
+	params := make(map[string]interface{})
+
+	for key, vals := range urlData {
+		if len(vals) == 1 {
+			params[key] = vals[0]
+		} else {
+			var valSlice []interface{}
+			for _, val := range vals {
+				valSlice = append(valSlice, val)
+			}
+			params[key] = valSlice
+		}
+	}
+	return params
+}
+
+/**
+ *	Constructs an SQL filter query based on parameters supplied in the url
+ *
+ *	@param table - name of the relevant table (could be added if we add a header / specific url param)
+ *	@param params - contains key value pairs of url values
+ *
+ *	@returns - a prepared SQL string with placeholders to be filled
+ *	@returns - a list of the data to fill the SQL placeholders
+ *	@returns - any errors caught in the function
+ */
+func ConstructQuery(table string, params map[string]interface{}) (string, []interface{}, error) {
+	//Initiate builder
+	var query strings.Builder
+	//Start with basic format
+	query.WriteString("SELECT * FROM " + table + " WHERE ")
+
+	//Prep args container
+	var argList []interface{}
+	//Placeholder counter
+	i := 1
+	//Iterate the map for key and values
+	for key, value := range params {
+		//if there are more than one values in the key enter if
+		if valSlice, ok := value.([]interface{}); ok {
+			//Prepare container
+			placeHolders := make([]string, len(valSlice))
+			for o := 0; o < len(valSlice); o++ {
+				argList = append(argList, valSlice[o])
+				//Add placeholder number into slice
+				placeHolders[o] = fmt.Sprintf("$%d", i)
+				i++
+			}
+			//Write formatted placeholder to the query
+			query.WriteString(fmt.Sprintf("%s IN (%s) AND ", key, strings.Join(placeHolders, ", ")))
+		} else {
+			argList = append(argList, value)
+			query.WriteString(fmt.Sprintf("%s = $%d AND ", key, i))
+			i++
+		}
+	}
+
+	//cut the last " AND " from the query
+	outQuery := query.String()[:len(query.String())-5]
+
+	//Unsure if this is necessary, but in my head it helps prevent injections when we replace placeholders later to query
+	return outQuery, argList, nil
 }

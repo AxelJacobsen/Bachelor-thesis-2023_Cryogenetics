@@ -22,6 +22,7 @@ import (
 ////////////////////////////////////////////////////
 
 /*
+(Trenger vi disse VV ?)
 Structs:
 	Admin
 	Client
@@ -55,6 +56,11 @@ Functions:
 
 Glossary:
 	SC = Search Criteria
+
+
+DONE:
+	Can test url value aquisition with this
+	localhost:8080/api/user/login?id=alice&cake=yes&id=cool
 */
 
 /**
