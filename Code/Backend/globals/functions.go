@@ -103,6 +103,11 @@ func QueryJSON(db *sql.DB, query string, w http.ResponseWriter) ([]map[string]in
 
 		for i, v := range values {
 			col_current := cols[i]
+			if v == nil {
+				row_current[col_current] = nil
+				continue
+			}
+
 			v_bytes := v.([]byte)
 			if v_float, ok := strconv.ParseFloat(string(v_bytes), 64); ok == nil {
 				row_current[col_current] = v_float
