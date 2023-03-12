@@ -23,6 +23,7 @@ import { visuallyHidden } from '@mui/utils';
 import EditStatusModal from './popup/EditStatusModal';
 import AddStatusModal from './popup/AddStatusModal';
 import { useNavigate } from 'react-router-dom';
+import { TextField } from '@mui/material';
 import './TableLayout.css';
 
 
@@ -34,10 +35,10 @@ function createData(Status_Name, Status_IsActive) {
 }
 
 const rows = [
-  createData("Test", true),
-  createData("Test1", true),
-  createData("Test2", true),
-  createData("Test3", true),
+  createData("aaaa", true),
+  createData("dddd", true),
+  createData("ssss", true),
+  createData("eeeee", true),
 ]; 
 
 function descendingComparator(a, b, orderBy) {
@@ -124,7 +125,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-function EnhancedTableToolbar() {
+function EnhancedTableToolbar({ searchTerm, setSearchTerm }) {
   return (
     <Toolbar
       sx={{
@@ -132,26 +133,33 @@ function EnhancedTableToolbar() {
         pr: { xs: 1, sm: 1 },
       }}
     >
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          Act's
-        </Typography>
+      <Typography
+        sx={{ flex: '1 1 100%' }}
+        variant="h6"
+        id="tableTitle"
+        component="div"
+      >
+        Act's
+      </Typography>
 
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      
+      <Tooltip title="Filter list">
+        <IconButton>
+          <FilterListIcon />
+        </IconButton>
+      </Tooltip>
+
+      <TextField
+        label="Search"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        sx={{ ml: 2, width: 200 }}
+      />
+
     </Toolbar>
   );
 }
 
-export default function Customers() {
+export default function Statuses() {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [page, setPage] = React.useState(0);
@@ -160,6 +168,8 @@ export default function Customers() {
 
   const [selectedRow, setSelectedRow] = useState(null);
   const [openModal, setOpenModal] = useState(false);
+
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -203,7 +213,7 @@ export default function Customers() {
     <Box sx={{ width: '100%' }}>
     <div className = "grid-container">
       <div className = "grid-child table"><Paper sx={{ width: '100%', mb: 2 }}>
-      <EnhancedTableToolbar />
+      <EnhancedTableToolbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -214,10 +224,17 @@ export default function Customers() {
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={rows.filter((row) =>
+                row.Status_Name.toLowerCase().includes(searchTerm.toLowerCase())
+              ).length}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(
+                rows.filter((row) =>
+                  row.Status_Name.toLowerCase().includes(searchTerm.toLowerCase())
+                ),
+                getComparator(order, orderBy)
+              )
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const labelId = `enhanced-table-checkbox-${index}`;
@@ -237,7 +254,7 @@ export default function Customers() {
                         padding="none"
                         align='center'
                       >
-                        {"#"+row.Status_Name}
+                        {row.Status_Name}
                       </TableCell>
                       <TableCell align="center">{row.Status_IsActive ? "True" : "False"}</TableCell>
                       <TableCell onClick={() => handleRowClick(row)}> 
