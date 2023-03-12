@@ -26,6 +26,8 @@ CREATE DATABASE cryogenetics_database;
 
 -- --------------------------------------------------------
 
+USE cryogenetics_database;
+
 --
 -- Table structure for table `admin`
 --
