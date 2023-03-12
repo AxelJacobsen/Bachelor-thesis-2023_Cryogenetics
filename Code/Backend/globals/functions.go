@@ -67,15 +67,14 @@ func ProcessClient(connection net.Conn) {
  *	Sends a query to the database.
  *
  *	@param db - The database.
- *	@param query - The query.
+ *	@param query - The query, using '?' symbols for arguments.
+ *	@param queryArgs - The query arguments, in order.
+ *	@param w - The response writer to write back to.
  *
  *	@returns The result as an interface.
  */
 func QueryJSON(db *sql.DB, query string, queryArgs []interface{}, w http.ResponseWriter) ([]map[string]interface{}, error) {
 	// Query and fetch rows
-
-	fmt.Println(query, queryArgs)
-
 	rows, err := db.Query(query, queryArgs...)
 	if err != nil {
 		return nil, err

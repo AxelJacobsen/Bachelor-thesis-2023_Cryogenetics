@@ -94,7 +94,7 @@ func main() {
 
 	// Route
 	routes := map[string]func(http.ResponseWriter, *http.Request){
-		constants.MOBILE_LOGIN_PATH:       mobile.HandlerMoblieLogin,
+		constants.MOBILE_LOGIN_PATH:       mobile.HandlerMobileLogin,
 		constants.WEB_LOGIN_PATH:          web.HandlerWebLogin,
 		constants.WEB_PRIMARY_PATH:        web.HandlerWebDashboard,
 		constants.WEB_ADMIN_PATH:          web.HandlerAdmins,
