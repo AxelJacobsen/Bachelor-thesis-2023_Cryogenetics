@@ -4,6 +4,7 @@ import (
 	paths "backend/constants"
 	"backend/globals"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
 )
@@ -134,7 +135,8 @@ func HandlerClients(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// --------- TEMP EXAMPLE ON HOW TO FETCH (ADMINS) FROM DB --------- //
-		res, err := globals.QueryJSON(globals.DB, "SELECT * FROM `admin`", w)
+		var cringe []interface{}
+		res, err := globals.QueryJSON(globals.DB, "SELECT * FROM `admin`", cringe, w)
 		if err != nil {
 			http.Error(w, "Error fetching admins.", http.StatusInternalServerError)
 			return
@@ -205,10 +207,10 @@ func HandlerUsers(w http.ResponseWriter, r *http.Request) {
  */
 func HandlerContainer(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("content-type", "application/json")
-	tableName := "container"
+	tableName := "`container`"
 
 	// Get escaped path without base URL and remove the first character if it's a "/"
-	escapedPath := r.URL.EscapedPath()[len(paths.MOBILE_LOGIN_PATH):]
+	escapedPath := r.URL.EscapedPath()[len(paths.PUBLIC_CONTAINER_PATH):]
 
 	if len(escapedPath) > 0 && escapedPath[0] == '/' {
 		escapedPath = escapedPath[1:]
@@ -225,12 +227,6 @@ func HandlerContainer(w http.ResponseWriter, r *http.Request) {
 
 	// GET method
 	case http.MethodGet:
-		// If there's not enough args, return
-		if len(args) < 1 {
-			http.Error(w, "Not enough arguments, read the documentation for more information.", http.StatusUnprocessableEntity)
-			return
-		}
-
 		containerSQL, sqlArgs, err := globals.ConvertUrlToSql(r, tableName)
 		if err != nil {
 			http.Error(w, "Error in converting url to sql", http.StatusUnprocessableEntity)
@@ -238,7 +234,9 @@ func HandlerContainer(w http.ResponseWriter, r *http.Request) {
 
 		res, err := globals.QueryJSON(globals.DB, containerSQL, sqlArgs, w)
 		if err != nil {
-			http.Error(w, "Error fetching admins.", http.StatusInternalServerError)
+
+			fmt.Println(err)
+			http.Error(w, "Error fetching containers.", http.StatusInternalServerError)
 			return
 		}
 

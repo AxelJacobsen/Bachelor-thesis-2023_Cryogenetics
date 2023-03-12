@@ -71,9 +71,12 @@ func ProcessClient(connection net.Conn) {
  *
  *	@returns The result as an interface.
  */
-func QueryJSON(db *sql.DB, query string, w http.ResponseWriter) ([]map[string]interface{}, error) {
+func QueryJSON(db *sql.DB, query string, queryArgs []interface{}, w http.ResponseWriter) ([]map[string]interface{}, error) {
 	// Query and fetch rows
-	rows, err := db.Query(query)
+
+	fmt.Println(query, queryArgs)
+
+	rows, err := db.Query(query, queryArgs)
 	if err != nil {
 		return nil, err
 	}
@@ -172,7 +175,7 @@ func ConvertUrlToSql(r *http.Request, table string) (string, []string, error) {
 		if len(value) == 1 {
 			//Single value under key
 			argList = append(argList, value[0])
-			_, err := query.WriteString(fmt.Sprintf("%s = $%d OR ", key, i))
+			_, err := query.WriteString(fmt.Sprintf("%s = ?%d OR ", key, i))
 
 			if err != nil {
 				return "", []string{}, errors.New("couldn't write to string in SQL constructor")
@@ -185,7 +188,7 @@ func ConvertUrlToSql(r *http.Request, table string) (string, []string, error) {
 				//Stow the actual value to be returned seperately
 				argList = append(argList, value[o])
 				//Overwrite inValue with a placeholder to be written into the SQL query
-				value[o] = fmt.Sprintf("$%d", i)
+				value[o] = fmt.Sprintf("?%d", i)
 				i++
 			}
 			//Write formatted placeholder to the query
