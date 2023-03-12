@@ -16,6 +16,7 @@ const PUBLIC_TRANSACTION_PATH = BASE_PATH + "/transactions" // "/api/transaction
 const PUBLIC_INVENTORY_PATH = BASE_PATH + "/inventory"      // "/api/inventory"
 const PUBLIC_CLIENTS_PATH = BASE_PATH + "/client"           // "/api/client"
 const PUBLIC_USERS_PATH = BASE_USER_PATH + "/users"         // "/api/user/login"
+const PUBLIC_CONTAINER_PATH = BASE_USER_PATH + "/container" // "/api/user/container"
 
 const PUBLIC_STATUS_PATH = BASE_PATH + "/status" // "/api/status"
 

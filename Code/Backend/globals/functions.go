@@ -172,7 +172,7 @@ func ConvertUrlToSql(r *http.Request, table string) (string, []string, error) {
 		if len(value) == 1 {
 			//Single value under key
 			argList = append(argList, value[0])
-			_, err := query.WriteString(fmt.Sprintf("%s = $%d AND ", key, i))
+			_, err := query.WriteString(fmt.Sprintf("%s = $%d OR ", key, i))
 
 			if err != nil {
 				return "", []string{}, errors.New("couldn't write to string in SQL constructor")
@@ -189,7 +189,7 @@ func ConvertUrlToSql(r *http.Request, table string) (string, []string, error) {
 				i++
 			}
 			//Write formatted placeholder to the query
-			_, err := query.WriteString(fmt.Sprintf("%s IN (%s) AND ", key, strings.Join(value, ", ")))
+			_, err := query.WriteString(fmt.Sprintf("%s IN (%s) OR ", key, strings.Join(value, ", ")))
 			if err != nil {
 				return "", []string{}, errors.New("couldn't write to string in SQL constructor")
 			}

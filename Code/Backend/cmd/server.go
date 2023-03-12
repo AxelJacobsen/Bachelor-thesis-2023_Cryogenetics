@@ -101,6 +101,7 @@ func main() {
 		constants.PUBLIC_INVENTORY_PATH:   shared.HandlerInventory,
 		constants.PUBLIC_CLIENTS_PATH:     shared.HandlerClients,
 		constants.PUBLIC_USERS_PATH:       shared.HandlerUsers,
+		constants.PUBLIC_CONTAINER_PATH:   shared.HandlerContainer,
 
 		constants.PUBLIC_STATUS_PATH: status.HandlerStatus,
 	}
