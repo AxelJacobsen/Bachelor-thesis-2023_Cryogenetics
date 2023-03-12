@@ -76,7 +76,7 @@ func QueryJSON(db *sql.DB, query string, queryArgs []interface{}, w http.Respons
 
 	fmt.Println(query, queryArgs)
 
-	rows, err := db.Query(query, queryArgs)
+	rows, err := db.Query(query, queryArgs...)
 	if err != nil {
 		return nil, err
 	}
@@ -106,20 +106,20 @@ func QueryJSON(db *sql.DB, query string, queryArgs []interface{}, w http.Respons
 
 		for i, v := range values {
 			col_current := cols[i]
-			if v == nil {
-				row_current[col_current] = nil
-				continue
-			}
-
-			v_bytes := v.([]byte)
-			if v_float, ok := strconv.ParseFloat(string(v_bytes), 64); ok == nil {
-				row_current[col_current] = v_float
-			} else if v_bool, ok := strconv.ParseBool(string(v_bytes)); ok == nil {
-				row_current[col_current] = v_bool
-			} else if fmt.Sprintf("%T", string(v_bytes)) == "string" {
-				row_current[col_current] = string(v_bytes)
-			} else {
-				fmt.Println("Failed to parse data: ", v_bytes)
+			switch v.(type) {
+			case []uint8:
+				v_bytes := v.([]byte)
+				if v_float, ok := strconv.ParseFloat(string(v_bytes), 64); ok == nil {
+					row_current[col_current] = v_float
+				} else if v_bool, ok := strconv.ParseBool(string(v_bytes)); ok == nil {
+					row_current[col_current] = v_bool
+				} else if fmt.Sprintf("%T", string(v_bytes)) == "string" {
+					row_current[col_current] = string(v_bytes)
+				} else {
+					fmt.Println("Failed to parse data: ", v_bytes)
+				}
+			default:
+				row_current[col_current] = v
 			}
 		}
 
@@ -143,20 +143,21 @@ func QueryJSON(db *sql.DB, query string, queryArgs []interface{}, w http.Respons
  *	@returns - a list of values to fit the SQL query
  *  @returns - any potential errors thrown
  */
-func ConvertUrlToSql(r *http.Request, table string) (string, []string, error) {
+func ConvertUrlToSql(r *http.Request, table string) (string, []interface{}, error) {
 	// Get url values
 	urlData := r.URL.Query()
-
+	var emptyRet []interface{}
 	//Empty table name
 	if len(table) <= 0 {
-		return "", []string{}, errors.New("couldn't write to string in SQL constructor")
+
+		return "", emptyRet, errors.New("couldn't write to string in SQL constructor")
 	}
 
 	//If there are no parameters
 	if len(urlData) <= 0 {
 		//Not necesserily an error, but should still break
 		noFilt := "SELECT * FROM " + table
-		return noFilt, []string{}, nil
+		return noFilt, emptyRet, nil
 	}
 
 	//Initiate builder
@@ -166,7 +167,7 @@ func ConvertUrlToSql(r *http.Request, table string) (string, []string, error) {
 	query.WriteString("SELECT * FROM " + table + " WHERE ")
 
 	//Prep args container
-	var argList []string
+	var argList []interface{}
 
 	//Placeholder counter
 	i := 1
@@ -178,7 +179,7 @@ func ConvertUrlToSql(r *http.Request, table string) (string, []string, error) {
 			_, err := query.WriteString(fmt.Sprintf("%s = ?%d OR ", key, i))
 
 			if err != nil {
-				return "", []string{}, errors.New("couldn't write to string in SQL constructor")
+				return "", emptyRet, errors.New("couldn't write to string in SQL constructor")
 			}
 
 			i++
@@ -194,7 +195,7 @@ func ConvertUrlToSql(r *http.Request, table string) (string, []string, error) {
 			//Write formatted placeholder to the query
 			_, err := query.WriteString(fmt.Sprintf("%s IN (%s) OR ", key, strings.Join(value, ", ")))
 			if err != nil {
-				return "", []string{}, errors.New("couldn't write to string in SQL constructor")
+				return "", emptyRet, errors.New("couldn't write to string in SQL constructor")
 			}
 
 		}
