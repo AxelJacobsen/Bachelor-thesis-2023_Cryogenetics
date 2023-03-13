@@ -16,7 +16,7 @@ func HandlerTransactions(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("content-type", "application/json")
 	tableName := "`transaction`"
 	// Get escaped path without base URL and remove the first character if it's a "/"
-	escapedPath := r.URL.EscapedPath()[len(paths.MOBILE_LOGIN_PATH):]
+	escapedPath := r.URL.EscapedPath()[len(paths.PUBLIC_TRANSACTION_PATH):]
 
 	if len(escapedPath) > 0 && escapedPath[0] == '/' {
 		escapedPath = escapedPath[1:]
