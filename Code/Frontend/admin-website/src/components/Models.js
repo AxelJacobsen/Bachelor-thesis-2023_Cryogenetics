@@ -165,9 +165,9 @@ function EnhancedTableToolbar({ searchTerm, setSearchTerm }) {
   );
 }
 
-export default function Customers() {
+export default function Models() {
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('calories');
+  const [orderBy, setOrderBy] = React.useState('Model_Name');
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);

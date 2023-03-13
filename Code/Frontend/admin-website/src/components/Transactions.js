@@ -22,16 +22,18 @@ import { visuallyHidden } from '@mui/utils';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import './TableLayout.css';
+import fetchData from '../globals/fetchData';
+
 
 // createData function takes in the row data and returns an object with the properties of the row
-function createData(id,Date,Act,Operator,Location_Name,Client_Name,Nr,SerialNr,Status,Comment) {
+function createData(id,Date,Act,Operator,Location_Name,Customer_Name,Nr,SerialNr,Status,Comment) {
   return {
     id,
     Date,
     Act,
     Operator,
     Location_Name,
-    Client_Name,
+    Customer_Name,
     Nr,
     SerialNr,
     Status,
@@ -91,7 +93,7 @@ const headCells = [
     id: 'Location_Name', numeric: false, disablePadding: true, label: 'Location_Name',
   },
   {
-    id: 'Client_Name', numeric: false, disablePadding: true, label: 'Client_Name',
+    id: 'Customer_Name', numeric: false, disablePadding: true, label: 'Customer_Name',
   },
   {
     id: 'Nr', numeric: false, disablePadding: true, label: '#Nr',
@@ -204,7 +206,7 @@ export default function Transactions() {
       row.Location_Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       row.Act.toLowerCase().includes(searchTerm.toLowerCase()) ||
       row.Operator.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      row.Client_Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.Customer_Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       row.Comment.toLowerCase().includes(searchTerm.toLowerCase()) ||
       row.SerialNr.toLowerCase().includes(searchTerm.toLowerCase()) ||
       row.Nr.toLowerCase().includes(searchTerm.toLowerCase())
@@ -283,7 +285,7 @@ export default function Transactions() {
                         <TableCell align='center'>{row.Act}</TableCell>
                         <TableCell align="center">{row.Operator}</TableCell>
                         <TableCell align="center">{row.Location_Name}</TableCell>
-                        <TableCell align="center">{row.Client_Name}</TableCell>
+                        <TableCell align="center">{row.Customer_Name}</TableCell>
                         <TableCell align="center">{row.Nr}</TableCell>
                         <TableCell align="center">{row.SerialNr}</TableCell>
                         <TableCell align="center">{row.Status}</TableCell>

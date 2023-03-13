@@ -161,7 +161,7 @@ function EnhancedTableToolbar({ searchTerm, setSearchTerm }) {
 
 export default function Statuses() {
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('calories');
+  const [orderBy, setOrderBy] = React.useState('Status_Name');
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
