@@ -1,6 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
+import { TextField } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -23,18 +24,18 @@ import { useNavigate } from 'react-router-dom';
 import './TableLayout.css';
 
 // createData function takes in the row data and returns an object with the properties of the row
-function createData(id,date,act,operator,location,client,nr,serialnr,status,comment) {
+function createData(id,Date,Act,Operator,Location_Name,Client_Name,Nr,SerialNr,Status,Comment) {
   return {
     id,
-    date,
-    act,
-    operator,
-    location,
-    client,
-    nr,
-    serialnr,
-    status,
-    comment,
+    Date,
+    Act,
+    Operator,
+    Location_Name,
+    Client_Name,
+    Nr,
+    SerialNr,
+    Status,
+    Comment,
   };
 }
 
@@ -78,31 +79,31 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'date', numeric: false, disablePadding: true, label: 'Date',
+    id: 'Date', numeric: false, disablePadding: true, label: 'Date',
   },
   {
-    id: 'act', numeric: false, disablePadding: true, label: 'Act',
+    id: 'Act', numeric: false, disablePadding: true, label: 'Act',
   },
   {
-    id: 'operator', numeric: false, disablePadding: true, label: 'Operator',
+    id: 'Operator', numeric: false, disablePadding: true, label: 'Operator',
   },
   {
-    id: 'location', numeric: false, disablePadding: true, label: 'Location',
+    id: 'Location_Name', numeric: false, disablePadding: true, label: 'Location_Name',
   },
   {
-    id: 'client', numeric: false, disablePadding: true, label: 'Client',
+    id: 'Client_Name', numeric: false, disablePadding: true, label: 'Client_Name',
   },
   {
-    id: 'nr', numeric: false, disablePadding: true, label: '#Nr',
+    id: 'Nr', numeric: false, disablePadding: true, label: '#Nr',
   },
   {
-    id: 'serialnr', numeric: false, disablePadding: true, label: 'SerialNR',
+    id: 'SerialNr', numeric: false, disablePadding: true, label: 'SerialNr',
   },
   {
-    id: 'status', numeric: false, disablePadding: true, label: 'Status',
+    id: 'Status', numeric: false, disablePadding: true, label: 'Status',
   },
   {
-    id: 'comment', numeric: false, disablePadding: true, label: 'Comment',
+    id: 'Comment', numeric: false, disablePadding: true, label: 'Comment',
   },
 ];
 
@@ -151,7 +152,7 @@ EnhancedTableHead.propTypes = {
 };
 
 // EnhancedTableToolbar function takes in props and renders the toolbar with filtering and button functionality
-function EnhancedTableToolbar() {
+function EnhancedTableToolbar({ searchTerm, setSearchTerm }) {
   return (
     <Toolbar
       sx={{
@@ -173,19 +174,43 @@ function EnhancedTableToolbar() {
             <FilterListIcon />
           </IconButton>
         </Tooltip>
+
+        <TextField
+        label="Search"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        sx={{ ml: 2, width: 200 }}
+      />
       
     </Toolbar>
   );
 }
 
-export default function Transactions({ isLoggedIn }) {
+export default function Transactions() {
   
     
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('operator');
+  const [orderBy, setOrderBy] = React.useState('Operator');
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const [searchTerm, setSearchTerm] = React.useState('');
+
+  //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
+  const filterRows = (row) => {
+    return (
+      row.Status.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.Location_Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.Act.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.Operator.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.Client_Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.Comment.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.SerialNr.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.Nr.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  };
+  const filteredRows = rows.filter(filterRows);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -219,7 +244,7 @@ export default function Transactions({ isLoggedIn }) {
     <Box sx={{ width: '100%' }}>
     <div className = "grid-container">
       <div className = "grid-child table"><Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar />
+        <EnhancedTableToolbar searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
           <TableContainer>
             <Table
               sx={{ minWidth: 750 }}
@@ -230,10 +255,10 @@ export default function Transactions({ isLoggedIn }) {
                 order={order}
                 orderBy={orderBy}
                 onRequestSort={handleRequestSort}
-                rowCount={rows.length}
+                rowCount={filteredRows.length}
               />
               <TableBody>
-                {stableSort(rows, getComparator(order, orderBy))
+                {stableSort(filteredRows, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
                     const labelId = `enhanced-table-checkbox-${index}`;
@@ -253,16 +278,16 @@ export default function Transactions({ isLoggedIn }) {
                           padding="none"
                           align='center'
                         >
-                          {row.date}
+                          {row.Date}
                         </TableCell>
-                        <TableCell align='center'>{row.act}</TableCell>
-                        <TableCell align="center">{row.operator}</TableCell>
-                        <TableCell align="center">{row.location}</TableCell>
-                        <TableCell align="center">{row.client}</TableCell>
-                        <TableCell align="center">{row.nr}</TableCell>
-                        <TableCell align="center">{row.serialnr}</TableCell>
-                        <TableCell align="center">{row.status}</TableCell>
-                        <TableCell align="center">{row.comment}</TableCell>
+                        <TableCell align='center'>{row.Act}</TableCell>
+                        <TableCell align="center">{row.Operator}</TableCell>
+                        <TableCell align="center">{row.Location_Name}</TableCell>
+                        <TableCell align="center">{row.Client_Name}</TableCell>
+                        <TableCell align="center">{row.Nr}</TableCell>
+                        <TableCell align="center">{row.SerialNr}</TableCell>
+                        <TableCell align="center">{row.Status}</TableCell>
+                        <TableCell align="center">{row.Comment}</TableCell>
                       </TableRow>
                     );
                   })}

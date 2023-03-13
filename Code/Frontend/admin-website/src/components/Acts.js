@@ -19,6 +19,7 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import { TextField } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import EditActModal from './popup/EditActModal';
@@ -36,8 +37,10 @@ function createData(ACT_Name, ACT_Description, ACT_IsActive) {
 
 
 const rows = [
-  createData(1,"Geir's Laks", true),
-
+  createData("refill","the tank has been refilled", true),
+  createData("aaaaa","teeseses", true),
+  createData("yesyh","nononoana dsa pea", true),
+  createData("kekw","pranked nerd", true),
 ]; 
 
 function descendingComparator(a, b, orderBy) {
@@ -74,7 +77,7 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'ACT_Name', numeric: true, disablePadding: true, label: 'ACT_Name',
+    id: 'ACT_Name', numeric: false, disablePadding: true, label: 'ACT_Name',
   },
   {
     id: 'ACT_Description', numeric: false, disablePadding: true, label: 'ACT_Description',
@@ -127,7 +130,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-function EnhancedTableToolbar() {
+function EnhancedTableToolbar({ searchTerm, setSearchTerm }) {
   return (
     <Toolbar
       sx={{
@@ -149,12 +152,18 @@ function EnhancedTableToolbar() {
             <FilterListIcon />
           </IconButton>
         </Tooltip>
+        <TextField
+        label="Search"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        sx={{ ml: 2, width: 200 }}
+      />
       
     </Toolbar>
   );
 }
 
-export default function Customers() {
+export default function Acts() {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [page, setPage] = React.useState(0);
@@ -163,6 +172,16 @@ export default function Customers() {
 
   const [selectedRow, setSelectedRow] = useState(null);
   const [openModal, setOpenModal] = useState(false);
+  const [searchTerm, setSearchTerm] = React.useState('');
+
+  //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
+  const filterRows = (row) => {
+    return (
+      row.ACT_Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.ACT_Description.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  };
+  const filteredRows = rows.filter(filterRows);
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -204,7 +223,7 @@ export default function Customers() {
     <Box sx={{ width: '100%' }}>
       <div className = "grid-container">
         <div className = "grid-child table"><Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar />
+        <EnhancedTableToolbar searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
           <TableContainer>
             <Table
               sx={{ minWidth: 750 }}
@@ -215,10 +234,10 @@ export default function Customers() {
                 order={order}
                 orderBy={orderBy}
                 onRequestSort={handleRequestSort}
-                rowCount={rows.length}
+                rowCount={filteredRows.length}
               />
               <TableBody>
-                {stableSort(rows, getComparator(order, orderBy))
+                {stableSort(filteredRows, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
                     const labelId = `enhanced-table-checkbox-${index}`;
@@ -238,7 +257,7 @@ export default function Customers() {
                           padding="none"
                           align='center'
                         >
-                          {"#"+row.ACT_Name}
+                          {row.ACT_Name}
                         </TableCell>
                         <TableCell align='center'>{row.ACT_Description}</TableCell>
                         <TableCell align="center">{row.ACT_IsActive ? "True" : "False"}</TableCell>

@@ -19,24 +19,25 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import { TextField } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import EditContainerModal from './popup/EditContainerModal';
 import AddContainerModal from './popup/AddContainerModal';
 import './TableLayout.css';
 
-function createData(serialnr, nr, model, location, customer, address, last_filled, invoice, status) {
+function createData(SerialNr, NR, Model_Name, Location_Name, Customer_Name, Address, Last_Filled, Invoice, Status) {
   return {
-    serialnr, nr, model, location, customer, address, last_filled, invoice, status,
+    SerialNr, NR, Model_Name, Location_Name, Customer_Name, Address, Last_Filled, Invoice, Status,
   };
 }
 
 
 
 const rows = [
-  createData('1234-999','047-1', 'ET11', "Hamar", "United Fishermen",'Hamar','29-01-23',"22-01-24", "In use"),
-  createData('12334-219','047-2', 'ET11', "Tronny", "United Fi3shermen",'aaaa','29-01-23',"22-01-24", "Broken"),
-  createData('122134-93299','047-3', 'ET11', "Haaamar", "United Fish2ermen",'eeee','29-01-23',"22-01-24", "Quarantined"),
+  createData('184-999','047-1', 'ET11', "Hamar", "United Fishermen",'Hamar','21-06-23',"22-01-24", "In use"),
+  createData('7-219','047-2', '70millionlitres', "Tronny", "big fish",'aaaa','29-11-23',"22-11-24", "Broken"),
+  createData('124-93299','047-3', 'AES', "Haaamar", "bloblob",'eeee','24-11-22',"22-01-24", "Quarantined"),
 
 ]; 
 
@@ -74,31 +75,31 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'nr', numeric: false, disablePadding: true, label: 'NR',
+    id: 'NR', numeric: false, disablePadding: true, label: 'NR',
   },
   {
-    id: 'serialnr', numeric: false, disablePadding: true, label: 'SerialNR',
+    id: 'SerialNr', numeric: false, disablePadding: true, label: 'SerialNr',
   },
   {
-    id: 'model', numeric: false, disablePadding: true, label: 'Model',
+    id: 'Model_Name', numeric: false, disablePadding: true, label: 'Model_Name',
   },
   {
-    id: 'location', numeric: false, disablePadding: true, label: 'Location',
+    id: 'Location_Name', numeric: false, disablePadding: true, label: 'Location_Name',
   },
   {
-    id: 'customer', numeric: false, disablePadding: true, label: 'Customer',
+    id: 'Customer_Name', numeric: false, disablePadding: true, label: 'Customer_Name',
   },
   {
-    id: 'address', numeric: false, disablePadding: true, label: 'Address',
+    id: 'Address', numeric: false, disablePadding: true, label: 'Address',
   },
   {
-    id: 'last_filled', numeric: false, disablePadding: true, label: 'Last Filled',
+    id: 'Last_Filled', numeric: false, disablePadding: true, label: 'Last Filled',
   },
   {
-    id: 'invoice', numeric: false, disablePadding: true, label: 'Invoice',
+    id: 'Invoice', numeric: false, disablePadding: true, label: 'Invoice',
   },
   {
-    id: 'status', numeric: false, disablePadding: true, label: 'Status',
+    id: 'Status', numeric: false, disablePadding: true, label: 'Status',
   },
 ];
 
@@ -145,7 +146,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-function EnhancedTableToolbar() {
+function EnhancedTableToolbar({ searchTerm, setSearchTerm }) {
   return (
     <Toolbar
       sx={{
@@ -168,6 +169,12 @@ function EnhancedTableToolbar() {
           </IconButton>
         </Tooltip>
       
+        <TextField
+        label="Search"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        sx={{ ml: 2, width: 200 }}
+      />
     </Toolbar>
   );
 }
@@ -181,6 +188,21 @@ export default function Containers() {
 
   const [selectedRow, setSelectedRow] = useState(null);
   const [openModal, setOpenModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+
+    //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
+    const filterRows = (row) => {
+      return (
+        row.Status.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.Location_Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.Customer_Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.Model_Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.Address.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.SerialNr.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.Nr.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    };
+    const filteredRows = rows.filter(filterRows);
 
   const navigate = useNavigate();
 
@@ -211,8 +233,8 @@ export default function Containers() {
     setDense(event.target.checked);
   };
 
-  const handleModelClick = () =>{
-    navigate('/models');
+  const handleModel_NameClick = () =>{
+    navigate('/Model_Names');
   }
 
   const handleStatusClick = () =>{
@@ -228,7 +250,7 @@ export default function Containers() {
     <Box sx={{ width: '100%' }}>
     <div className = "grid-container">
       <div className = "grid-child table"><Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar />
+        <EnhancedTableToolbar searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
           <TableContainer>
             <Table
               sx={{ minWidth: 750 }}
@@ -239,10 +261,10 @@ export default function Containers() {
                 order={order}
                 orderBy={orderBy}
                 onRequestSort={handleRequestSort}
-                rowCount={rows.length}
+                rowCount={filteredRows.length}
               />
               <TableBody>
-                {stableSort(rows, getComparator(order, orderBy))
+                {stableSort(filteredRows, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
                     const labelId = `enhanced-table-checkbox-${index}`;
@@ -252,7 +274,7 @@ export default function Containers() {
                         hover
                         role="checkbox"
                         tabIndex={-1}
-                        key={row.serialnr}
+                        key={row.SerialNr}
                       >
                         
                         <TableCell
@@ -262,16 +284,16 @@ export default function Containers() {
                           padding="none"
                           align='center'
                         >
-                          {row.nr}
+                          {row.NR}
                         </TableCell>
-                        <TableCell align='center'>{row.serialnr}</TableCell>
-                        <TableCell align="center">{row.model}</TableCell>
-                        <TableCell align="center">{row.location}</TableCell>
-                        <TableCell align="center">{row.customer}</TableCell>
-                        <TableCell align="center">{row.address}</TableCell>
-                        <TableCell align="center">{row.last_filled}</TableCell>
-                        <TableCell align="center">{row.invoice}</TableCell>
-                        <TableCell align="center">{row.status}</TableCell>
+                        <TableCell align='center'>{row.SerialNr}</TableCell>
+                        <TableCell align="center">{row.Model_Name}</TableCell>
+                        <TableCell align="center">{row.Location_Name}</TableCell>
+                        <TableCell align="center">{row.Customer_Name}</TableCell>
+                        <TableCell align="center">{row.Address}</TableCell>
+                        <TableCell align="center">{row.Last_Filled}</TableCell>
+                        <TableCell align="center">{row.Invoice}</TableCell>
+                        <TableCell align="center">{row.Status}</TableCell>
                         <TableCell onClick={() => handleRowClick(row)}> 
                         <Button variant="outlined"> Edit </Button>
                       </TableCell> 
@@ -311,7 +333,7 @@ export default function Containers() {
       <div className = "grid-child-buttons">
         <Button variant='contained' color='success' onClick={handleOpenModal}> Add container </Button>
         <AddContainerModal open={openModal} setOpen={setOpenModal} />
-        <Button variant='contained' onClick={handleModelClick}> Model Overview </Button>
+        <Button variant='contained' onClick={handleModel_NameClick}> Model_Name Overview </Button>
         <Button variant='contained' onClick={handleStatusClick}> Status Overview </Button>
       </div>
     </div>

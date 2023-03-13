@@ -22,6 +22,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import EditCustomerModal from './popup/EditCustomerModal';
 import AddCustomerModal from './popup/AddCustomerModal';
+import { TextField } from '@mui/material';
 import './TableLayout.css';
 
 function createData(Customer_ID, Customer_Name, Customer_IsActive) {
@@ -34,7 +35,9 @@ function createData(Customer_ID, Customer_Name, Customer_IsActive) {
 
 const rows = [
   createData(1,"Geir's Laks", true),
-
+  createData(2,"ss", true),
+  createData(3,"eea", true),
+  createData(14,"Me :D", true),
 ]; 
 
 function descendingComparator(a, b, orderBy) {
@@ -124,7 +127,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-function EnhancedTableToolbar() {
+function EnhancedTableToolbar({ searchTerm, setSearchTerm }) {
   return (
     <Toolbar
       sx={{
@@ -146,6 +149,13 @@ function EnhancedTableToolbar() {
             <FilterListIcon />
           </IconButton>
         </Tooltip>
+
+        <TextField
+        label="Search"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        sx={{ ml: 2, width: 200 }}
+      />
       
     </Toolbar>
   );
@@ -160,6 +170,16 @@ export default function Customers() {
 
   const [selectedRow, setSelectedRow] = useState(null);
   const [openModal, setOpenModal] = useState(false);
+
+  const [searchTerm, setSearchTerm] = useState('');
+
+    //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
+    const filterRows = (row) => {
+      return (
+        row.Customer_Name.toLowerCase().includes(searchTerm.toLowerCase()) 
+      );
+    };
+    const filteredRows = rows.filter(filterRows);
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -197,7 +217,7 @@ export default function Customers() {
     <Box sx={{ width: '100%' }}>
     <div className = "grid-container">
       <div className = "grid-child table"><Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar />
+        <EnhancedTableToolbar searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
           <TableContainer>
             <Table
               sx={{ minWidth: 750 }}
@@ -208,10 +228,10 @@ export default function Customers() {
                 order={order}
                 orderBy={orderBy}
                 onRequestSort={handleRequestSort}
-                rowCount={rows.length}
+                rowCount={filteredRows.length}
               />
               <TableBody>
-                {stableSort(rows, getComparator(order, orderBy))
+                {stableSort(filteredRows, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
                     const labelId = `enhanced-table-checkbox-${index}`;

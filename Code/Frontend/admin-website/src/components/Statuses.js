@@ -139,7 +139,7 @@ function EnhancedTableToolbar({ searchTerm, setSearchTerm }) {
         id="tableTitle"
         component="div"
       >
-        Act's
+        Statuses
       </Typography>
 
       <Tooltip title="Filter list">
@@ -170,6 +170,14 @@ export default function Statuses() {
   const [openModal, setOpenModal] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState('');
+
+    //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
+    const filterRows = (row) => {
+      return (
+        row.Status_Name.toLowerCase().includes(searchTerm.toLowerCase()) 
+      );
+    };
+    const filteredRows = rows.filter(filterRows);
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -224,15 +232,11 @@ export default function Statuses() {
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
-              rowCount={rows.filter((row) =>
-                row.Status_Name.toLowerCase().includes(searchTerm.toLowerCase())
-              ).length}
+              rowCount={filteredRows.length}
             />
             <TableBody>
               {stableSort(
-                rows.filter((row) =>
-                  row.Status_Name.toLowerCase().includes(searchTerm.toLowerCase())
-                ),
+                filteredRows,
                 getComparator(order, orderBy)
               )
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)

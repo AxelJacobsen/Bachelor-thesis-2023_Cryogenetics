@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { TextField } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Table from '@mui/material/Table';
@@ -130,7 +131,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-function EnhancedTableToolbar() {
+function EnhancedTableToolbar({ searchTerm, setSearchTerm }) {
   return (
     <Toolbar
       sx={{
@@ -152,6 +153,13 @@ function EnhancedTableToolbar() {
             <FilterListIcon />
           </IconButton>
         </Tooltip>
+
+        <TextField
+        label="Search"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        sx={{ ml: 2, width: 200 }}
+      />
       
     </Toolbar>
   );
@@ -166,6 +174,16 @@ export default function Customers() {
 
   const [selectedRow, setSelectedRow] = useState(null);
   const [openModal, setOpenModal] = useState(false);
+
+  const [searchTerm, setSearchTerm] = useState('');
+
+    //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
+    const filterRows = (row) => {
+      return (
+        row.Model_Name.toLowerCase().includes(searchTerm.toLowerCase()) 
+      );
+    };
+    const filteredRows = rows.filter(filterRows);
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -208,7 +226,7 @@ export default function Customers() {
     <Box sx={{ width: '100%' }}>
       <div className = "grid-container">
       <div className = "grid-child table"><Paper sx={{ width: '100%', mb: 2 }}>
-      <EnhancedTableToolbar />
+      <EnhancedTableToolbar searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -219,10 +237,10 @@ export default function Customers() {
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={filteredRows.length}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(filteredRows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const labelId = `enhanced-table-checkbox-${index}`;
@@ -242,7 +260,7 @@ export default function Customers() {
                         padding="none"
                         align='center'
                       >
-                        {"#"+row.Model_Name}
+                        {row.Model_Name}
                       </TableCell>
                       <TableCell align='center'>{row.Refill_Interval}</TableCell>
                       <TableCell align='center'>{row.Liter_Capacity}</TableCell>
