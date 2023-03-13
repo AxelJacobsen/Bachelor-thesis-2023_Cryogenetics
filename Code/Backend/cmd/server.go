@@ -70,7 +70,7 @@ DONE:
 func main() {
 
 	// Connect to database
-	db, err := sql.Open("mysql", "root@tcp(127.0.0.1:3306)/database")
+	db, err := sql.Open("mysql", "root@tcp(127.0.0.1:3306)/cryogenetics_database")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -94,13 +94,14 @@ func main() {
 
 	// Route
 	routes := map[string]func(http.ResponseWriter, *http.Request){
-		constants.MOBILE_LOGIN_PATH:       mobile.HandlerMoblieLogin,
+		constants.MOBILE_LOGIN_PATH:       mobile.HandlerMobileLogin,
 		constants.WEB_LOGIN_PATH:          web.HandlerWebLogin,
 		constants.WEB_PRIMARY_PATH:        web.HandlerWebDashboard,
+		constants.WEB_ADMIN_PATH:          web.HandlerAdmins,
 		constants.PUBLIC_TRANSACTION_PATH: shared.HandlerTransactions,
-		constants.PUBLIC_INVENTORY_PATH:   shared.HandlerInventory,
 		constants.PUBLIC_CLIENTS_PATH:     shared.HandlerClients,
 		constants.PUBLIC_USERS_PATH:       shared.HandlerUsers,
+		constants.PUBLIC_CONTAINER_PATH:   shared.HandlerContainer,
 
 		constants.PUBLIC_STATUS_PATH: status.HandlerStatus,
 	}

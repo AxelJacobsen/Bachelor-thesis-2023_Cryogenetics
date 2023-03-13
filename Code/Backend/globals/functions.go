@@ -67,13 +67,15 @@ func ProcessClient(connection net.Conn) {
  *	Sends a query to the database.
  *
  *	@param db - The database.
- *	@param query - The query.
+ *	@param query - The query, using '?' symbols for arguments.
+ *	@param queryArgs - The query arguments, in order.
+ *	@param w - The response writer to write back to.
  *
  *	@returns The result as an interface.
  */
-func QueryJSON(db *sql.DB, query string, w http.ResponseWriter) ([]map[string]interface{}, error) {
+func QueryJSON(db *sql.DB, query string, queryArgs []interface{}, w http.ResponseWriter) ([]map[string]interface{}, error) {
 	// Query and fetch rows
-	rows, err := db.Query(query)
+	rows, err := db.Query(query, queryArgs...)
 	if err != nil {
 		return nil, err
 	}
@@ -103,15 +105,20 @@ func QueryJSON(db *sql.DB, query string, w http.ResponseWriter) ([]map[string]in
 
 		for i, v := range values {
 			col_current := cols[i]
-			v_bytes := v.([]byte)
-			if v_float, ok := strconv.ParseFloat(string(v_bytes), 64); ok == nil {
-				row_current[col_current] = v_float
-			} else if v_bool, ok := strconv.ParseBool(string(v_bytes)); ok == nil {
-				row_current[col_current] = v_bool
-			} else if fmt.Sprintf("%T", string(v_bytes)) == "string" {
-				row_current[col_current] = string(v_bytes)
-			} else {
-				fmt.Println("Failed to parse data: ", v_bytes)
+			switch v.(type) {
+			case []uint8:
+				v_bytes := v.([]byte)
+				if v_float, ok := strconv.ParseFloat(string(v_bytes), 64); ok == nil {
+					row_current[col_current] = v_float
+				} else if v_bool, ok := strconv.ParseBool(string(v_bytes)); ok == nil {
+					row_current[col_current] = v_bool
+				} else if fmt.Sprintf("%T", string(v_bytes)) == "string" {
+					row_current[col_current] = string(v_bytes)
+				} else {
+					fmt.Println("Failed to parse data: ", v_bytes)
+				}
+			default:
+				row_current[col_current] = v
 			}
 		}
 
@@ -135,20 +142,21 @@ func QueryJSON(db *sql.DB, query string, w http.ResponseWriter) ([]map[string]in
  *	@returns - a list of values to fit the SQL query
  *  @returns - any potential errors thrown
  */
-func ConvertUrlToSql(r *http.Request, table string) (string, []string, error) {
+func ConvertUrlToSql(r *http.Request, table string) (string, []interface{}, error) {
 	// Get url values
 	urlData := r.URL.Query()
-
+	var emptyRet []interface{}
 	//Empty table name
 	if len(table) <= 0 {
-		return "", []string{}, errors.New("couldn't write to string in SQL constructor")
+
+		return "", emptyRet, errors.New("couldn't write to string in SQL constructor")
 	}
 
 	//If there are no parameters
 	if len(urlData) <= 0 {
 		//Not necesserily an error, but should still break
 		noFilt := "SELECT * FROM " + table
-		return noFilt, []string{}, nil
+		return noFilt, emptyRet, nil
 	}
 
 	//Initiate builder
@@ -158,7 +166,7 @@ func ConvertUrlToSql(r *http.Request, table string) (string, []string, error) {
 	query.WriteString("SELECT * FROM " + table + " WHERE ")
 
 	//Prep args container
-	var argList []string
+	var argList []interface{}
 
 	//Placeholder counter
 	i := 1
@@ -167,10 +175,10 @@ func ConvertUrlToSql(r *http.Request, table string) (string, []string, error) {
 		if len(value) == 1 {
 			//Single value under key
 			argList = append(argList, value[0])
-			_, err := query.WriteString(fmt.Sprintf("%s = $%d AND ", key, i))
+			_, err := query.WriteString(fmt.Sprintf("%s = ?%d OR ", key, i))
 
 			if err != nil {
-				return "", []string{}, errors.New("couldn't write to string in SQL constructor")
+				return "", emptyRet, errors.New("couldn't write to string in SQL constructor")
 			}
 
 			i++
@@ -180,13 +188,13 @@ func ConvertUrlToSql(r *http.Request, table string) (string, []string, error) {
 				//Stow the actual value to be returned seperately
 				argList = append(argList, value[o])
 				//Overwrite inValue with a placeholder to be written into the SQL query
-				value[o] = fmt.Sprintf("$%d", i)
+				value[o] = fmt.Sprintf("?%d", i)
 				i++
 			}
 			//Write formatted placeholder to the query
-			_, err := query.WriteString(fmt.Sprintf("%s IN (%s) AND ", key, strings.Join(value, ", ")))
+			_, err := query.WriteString(fmt.Sprintf("%s IN (%s) OR ", key, strings.Join(value, ", ")))
 			if err != nil {
-				return "", []string{}, errors.New("couldn't write to string in SQL constructor")
+				return "", emptyRet, errors.New("couldn't write to string in SQL constructor")
 			}
 
 		}

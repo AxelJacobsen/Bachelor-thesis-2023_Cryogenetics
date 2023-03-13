@@ -4,6 +4,7 @@ import (
 	paths "backend/constants"
 	"backend/globals"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
 )
@@ -13,7 +14,7 @@ import (
  */
 func HandlerTransactions(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("content-type", "application/json")
-
+	tableName := "`transaction`"
 	// Get escaped path without base URL and remove the first character if it's a "/"
 	escapedPath := r.URL.EscapedPath()[len(paths.MOBILE_LOGIN_PATH):]
 
@@ -32,64 +33,25 @@ func HandlerTransactions(w http.ResponseWriter, r *http.Request) {
 
 	// GET method
 	case http.MethodGet:
-		// If there's not enough args, return
-		if len(args) < 1 {
-			http.Error(w, "Not enough arguments, read the documentation for more information.", http.StatusUnprocessableEntity)
+		containerSQL, sqlArgs, err := globals.ConvertUrlToSql(r, tableName)
+		if err != nil {
+			http.Error(w, "Error in converting url to sql", http.StatusUnprocessableEntity)
+		}
+
+		res, err := globals.QueryJSON(globals.DB, containerSQL, sqlArgs, w)
+		if err != nil {
+			http.Error(w, "Error fetching transactions.", http.StatusInternalServerError)
 			return
+		}
+
+		// Set header and encode to writer
+		w.Header().Set("Content-Type", "application/json")
+		err = json.NewEncoder(w).Encode(res)
+		if err != nil {
+			http.Error(w, "Error encoding transactions.", http.StatusInternalServerError)
 		}
 	// POST method
 	case http.MethodPost:
-		// If there's not enough args, return
-		if len(args) < 1 {
-			http.Error(w, "Not enough arguments, read the documentation for more information.", http.StatusUnprocessableEntity)
-			return
-		}
-
-	// Other method
-	default:
-		http.Error(w, "Method not allowed, read the documentation for more information.", http.StatusMethodNotAllowed)
-		return
-	}
-}
-
-/**
- *	Handler for 'inventory' endpoint.
- */
-func HandlerInventory(w http.ResponseWriter, r *http.Request) {
-	w.Header().Add("content-type", "application/json")
-
-	// Get escaped path without base URL and remove the first character if it's a "/"
-	escapedPath := r.URL.EscapedPath()[len(paths.MOBILE_LOGIN_PATH):]
-
-	if len(escapedPath) > 0 && escapedPath[0] == '/' {
-		escapedPath = escapedPath[1:]
-	}
-
-	// Split the path on each "/", unless the path is blank
-	args := []string{}
-	if len(escapedPath) > 0 {
-		args = strings.Split(escapedPath, "/")
-	}
-
-	// Switch based on method
-	switch r.Method {
-
-	// GET method
-	case http.MethodGet:
-		// If there's not enough args, return
-		if len(args) < 1 {
-			http.Error(w, "Not enough arguments, read the documentation for more information.", http.StatusUnprocessableEntity)
-			return
-		}
-		// POST method
-	case http.MethodPost:
-		// If there's not enough args, return
-		if len(args) < 1 {
-			http.Error(w, "Not enough arguments, read the documentation for more information.", http.StatusUnprocessableEntity)
-			return
-		}
-		// PUT method
-	case http.MethodPut:
 		// If there's not enough args, return
 		if len(args) < 1 {
 			http.Error(w, "Not enough arguments, read the documentation for more information.", http.StatusUnprocessableEntity)
@@ -108,7 +70,7 @@ func HandlerInventory(w http.ResponseWriter, r *http.Request) {
  */
 func HandlerClients(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("content-type", "application/json")
-
+	tableName := "`client`"
 	// Get escaped path without base URL and remove the first character if it's a "/"
 	escapedPath := r.URL.EscapedPath()[len(paths.PUBLIC_CLIENTS_PATH):]
 
@@ -124,19 +86,16 @@ func HandlerClients(w http.ResponseWriter, r *http.Request) {
 
 	// Switch based on method
 	switch r.Method {
-
 	// GET method
 	case http.MethodGet:
-		// If there's not enough args, return
-		if len(args) < 0 { // TEMP
-			http.Error(w, "Not enough arguments, read the documentation for more information.", http.StatusUnprocessableEntity)
-			return
+		containerSQL, sqlArgs, err := globals.ConvertUrlToSql(r, tableName)
+		if err != nil {
+			http.Error(w, "Error in converting url to sql", http.StatusUnprocessableEntity)
 		}
 
-		// --------- TEMP EXAMPLE ON HOW TO FETCH (ADMINS) FROM DB --------- //
-		res, err := globals.QueryJSON(globals.DB, "SELECT * FROM `admin`", w)
+		res, err := globals.QueryJSON(globals.DB, containerSQL, sqlArgs, w)
 		if err != nil {
-			http.Error(w, "Error fetching admins.", http.StatusInternalServerError)
+			http.Error(w, "Error fetching clients.", http.StatusInternalServerError)
 			return
 		}
 
@@ -144,9 +103,8 @@ func HandlerClients(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		err = json.NewEncoder(w).Encode(res)
 		if err != nil {
-			http.Error(w, "Error encoding admins.", http.StatusInternalServerError)
+			http.Error(w, "Error encoding clients.", http.StatusInternalServerError)
 		}
-		// ----------------------------------------------------------------- //
 
 		// PUT method
 	case http.MethodPut:
@@ -187,6 +145,66 @@ func HandlerUsers(w http.ResponseWriter, r *http.Request) {
 
 	// GET method
 	case http.MethodGet:
+		// If there's not enough args, return
+		if len(args) < 1 {
+			http.Error(w, "Not enough arguments, read the documentation for more information.", http.StatusUnprocessableEntity)
+			return
+		}
+
+	// Other method
+	default:
+		http.Error(w, "Method not allowed, read the documentation for more information.", http.StatusMethodNotAllowed)
+		return
+	}
+}
+
+/**
+ *	Handler for 'container' endpoint.
+ */
+func HandlerContainer(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("content-type", "application/json")
+	tableName := "`container`"
+
+	// Get escaped path without base URL and remove the first character if it's a "/"
+	escapedPath := r.URL.EscapedPath()[len(paths.PUBLIC_CONTAINER_PATH):]
+
+	if len(escapedPath) > 0 && escapedPath[0] == '/' {
+		escapedPath = escapedPath[1:]
+	}
+
+	// Split the path on each "/", unless the path is blank
+	args := []string{}
+	if len(escapedPath) > 0 {
+		args = strings.Split(escapedPath, "/")
+	}
+
+	// Switch based on method
+	switch r.Method {
+
+	// GET method
+	case http.MethodGet:
+		containerSQL, sqlArgs, err := globals.ConvertUrlToSql(r, tableName)
+		if err != nil {
+			http.Error(w, "Error in converting url to sql", http.StatusUnprocessableEntity)
+		}
+
+		res, err := globals.QueryJSON(globals.DB, containerSQL, sqlArgs, w)
+		if err != nil {
+
+			fmt.Println(err)
+			http.Error(w, "Error fetching containers.", http.StatusInternalServerError)
+			return
+		}
+
+		// Set header and encode to writer
+		w.Header().Set("Content-Type", "application/json")
+		err = json.NewEncoder(w).Encode(res)
+		if err != nil {
+			http.Error(w, "Error encoding containers.", http.StatusInternalServerError)
+		}
+
+	// POST method
+	case http.MethodPost:
 		// If there's not enough args, return
 		if len(args) < 1 {
 			http.Error(w, "Not enough arguments, read the documentation for more information.", http.StatusUnprocessableEntity)
