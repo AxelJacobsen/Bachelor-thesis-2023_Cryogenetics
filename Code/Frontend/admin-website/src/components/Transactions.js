@@ -189,8 +189,10 @@ function EnhancedTableToolbar({ searchTerm, setSearchTerm }) {
 }
 
 export default function Transactions() {
+  console.log("Fetching data from backend: ")
+  console.log(fetchData("localhost:8080/api/transactions","GET"))
   
-    
+
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('Operator');
   const [page, setPage] = React.useState(0);
