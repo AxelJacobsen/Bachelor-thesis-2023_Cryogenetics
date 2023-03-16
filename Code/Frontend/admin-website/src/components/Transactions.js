@@ -58,7 +58,16 @@ import {stableSort , getComparator} from '../globals/globalFunctions';
 
 const headCells = [
   {
-    id: 'action', numeric: false, disablePadding: true, label: 'action',
+    id: 'date', numeric: false, disablePadding: true, label: 'Date',
+  },
+  {
+    id: 'act', numeric: false, disablePadding: true, label: 'Act',
+  },
+  {
+    id: 'responsible_id', numeric: false, disablePadding: true, label: 'responsible_id',
+  },
+  {
+    id: 'inventory', numeric: false, disablePadding: true, label: 'inventory',
   },
   {
     id: 'address', numeric: false, disablePadding: true, label: 'address',
@@ -67,19 +76,10 @@ const headCells = [
     id: 'client_id', numeric: false, disablePadding: true, label: 'client_id',
   },
   {
+    id: 'container', numeric: false, disablePadding: true, label: 'SerialNR',
+  },
+  {
     id: 'comment', numeric: false, disablePadding: true, label: 'comment',
-  },
-  {
-    id: 'container', numeric: false, disablePadding: true, label: 'container',
-  },
-  {
-    id: 'date', numeric: false, disablePadding: true, label: '#date',
-  },
-  {
-    id: 'inventory', numeric: false, disablePadding: true, label: 'inventory',
-  },
-  {
-    id: 'responsible_id', numeric: false, disablePadding: true, label: 'responsible_id',
   },
   {
     id: 'transaction_id', numeric: false, disablePadding: true, label: 'transaction_id',
@@ -192,7 +192,7 @@ export default function Transactions() {
   //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
   const filterRows = (row) => {
     return (
-      row.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.act.toLowerCase().includes(searchTerm.toLowerCase()) ||
       row.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
       row.comment.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -267,15 +267,15 @@ export default function Transactions() {
                           padding="none"
                           align='center'
                         >
-                          {row.action}
+                          {row.date}
                         </TableCell>
-                        <TableCell align='center'>{row.address}</TableCell>
-                        <TableCell align="center">{row.client_id}</TableCell>
-                        <TableCell align="center">{row.comment}</TableCell>
-                        <TableCell align="center">{row.container}</TableCell>
-                        <TableCell align="center">{row.date}</TableCell>
-                        <TableCell align="center">{row.inventory}</TableCell>
+                        <TableCell align='center'>{row.act}</TableCell>
                         <TableCell align="center">{row.responsible_id}</TableCell>
+                        <TableCell align="center">{row.inventory}</TableCell>
+                        <TableCell align="center">{row.address}</TableCell>
+                        <TableCell align="center">{row.client_id}</TableCell>
+                        <TableCell align="center">{row.container}</TableCell>
+                        <TableCell align="center">{row.comment}</TableCell>
                         <TableCell align="center">{row.transaction_id}</TableCell>
                       </TableRow>
                     );
