@@ -176,7 +176,7 @@ export default function Transactions() {
   const [rows, setRows] = React.useState([]);
 
   React.useEffect(() => {
-    async function fetchMyData() {
+    async function fetchRowData() {
       try {
         const response = await fetchData('/api/transactions', 'GET');
         setRows(response);
@@ -184,11 +184,10 @@ export default function Transactions() {
         console.error(error);
       }
     }
-    fetchMyData();
+    fetchRowData();
   }, []);
 
-  //setRows(fetchData("/api/transactions","GET").value);
-  console.log(rows);
+  //console.log(rows);
 
   //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
   const filterRows = (row) => {
@@ -246,7 +245,9 @@ export default function Transactions() {
                 rowCount={filteredRows.length}
               />
               <TableBody>
-                {stableSort(filteredRows, getComparator(order, orderBy))
+              
+                {//sort the rows based on what "direction" is currently active, and what collumn is selected
+                  stableSort(filteredRows, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
                     const labelId = `enhanced-table-checkbox-${index}`;
