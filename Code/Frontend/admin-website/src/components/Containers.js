@@ -26,23 +26,9 @@ import EditContainerModal from './popup/EditContainerModal';
 import AddContainerModal from './popup/AddContainerModal';
 import './TableLayout.css';
 import {stableSort , getComparator} from '../globals/globalFunctions';
+import fetchData from '../globals/fetchData';
 
-function createData(SerialNr, NR, Model_Name, Location_Name, Customer_Name, Address, Last_Filled, Invoice, Status) {
-  return {
-    SerialNr, NR, Model_Name, Location_Name, Customer_Name, Address, Last_Filled, Invoice, Status,
-  };
-}
-
-
-
-const rows = [
-  createData('184-999','047-1', 'ET11', "Hamar", "United Fishermen",'Hamar','21-06-23',"22-01-24", "In use"),
-  createData('7-219','047-2', '70millionlitres', "Tronny", "big fish",'aaaa','29-11-23',"22-11-24", "Broken"),
-  createData('124-93299','047-3', 'AES', "Haaamar", "bloblob",'eeee','24-11-22',"22-01-24", "Quarantined"),
-
-]; 
-
-const headCells = [
+/* const headCells = [
   {
     id: 'NR', numeric: false, disablePadding: true, label: 'NR',
   },
@@ -69,6 +55,36 @@ const headCells = [
   },
   {
     id: 'Status', numeric: false, disablePadding: true, label: 'Status',
+  },
+]; */
+
+const headCells = [
+  {
+    id: 'id', numeric: false, disablePadding: true, label: 'id',
+  },
+  {
+    id: 'serial_number', numeric: false, disablePadding: true, label: 'SerialNr',
+  },
+  {
+    id: 'model', numeric: false, disablePadding: true, label: 'Model_Name',
+  },
+  {
+    id: 'Location_Name', numeric: false, disablePadding: true, label: 'Location_Name',
+  },
+  {
+    id: 'Customer_Name', numeric: false, disablePadding: true, label: 'Customer_Name',
+  },
+  {
+    id: 'address', numeric: false, disablePadding: true, label: 'Address',
+  },
+  {
+    id: 'last_filled', numeric: false, disablePadding: true, label: 'Last Filled',
+  },
+  {
+    id: 'invoice', numeric: false, disablePadding: true, label: 'Invoice',
+  },
+  {
+    id: 'status', numeric: false, disablePadding: true, label: 'Status',
   },
 ];
 
@@ -159,16 +175,25 @@ export default function Containers() {
   const [openModal, setOpenModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
+  const [rows, setRows] = React.useState([]);
+
+  React.useEffect(() => {
+    async function fetchRowData() {
+      try {
+        const response = await fetchData('/api/user/container', 'GET');
+        setRows(response);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchRowData();
+  }, []);
+  console.log(rows)
+
     //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
     const filterRows = (row) => {
       return (
-        row.Status.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        row.Location_Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        row.Customer_Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        row.Model_Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        row.Address.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        row.SerialNr.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        row.Nr.toLowerCase().includes(searchTerm.toLowerCase())
+        row.model.toLowerCase().includes(searchTerm.toLowerCase()) 
       );
     };
     const filteredRows = rows.filter(filterRows);
@@ -203,7 +228,7 @@ export default function Containers() {
   };
 
   const handleModel_NameClick = () =>{
-    navigate('/Model_Names');
+    navigate('/models');
   }
 
   const handleStatusClick = () =>{
@@ -243,7 +268,7 @@ export default function Containers() {
                         hover
                         role="checkbox"
                         tabIndex={-1}
-                        key={row.SerialNr}
+                        key={row.id}
                       >
                         
                         <TableCell
@@ -253,16 +278,16 @@ export default function Containers() {
                           padding="none"
                           align='center'
                         >
-                          {row.NR}
+                          {row.id}
                         </TableCell>
-                        <TableCell align='center'>{row.SerialNr}</TableCell>
-                        <TableCell align="center">{row.Model_Name}</TableCell>
+                        <TableCell align='center'>{row.serial_number}</TableCell>
+                        <TableCell align="center">{row.model}</TableCell>
                         <TableCell align="center">{row.Location_Name}</TableCell>
                         <TableCell align="center">{row.Customer_Name}</TableCell>
-                        <TableCell align="center">{row.Address}</TableCell>
-                        <TableCell align="center">{row.Last_Filled}</TableCell>
-                        <TableCell align="center">{row.Invoice}</TableCell>
-                        <TableCell align="center">{row.Status}</TableCell>
+                        <TableCell align="center">{row.address}</TableCell>
+                        <TableCell align="center">{row.last_filled}</TableCell>
+                        <TableCell align="center">{row.invoice}</TableCell>
+                        <TableCell align="center">{row.status}</TableCell>
                         <TableCell onClick={() => handleRowClick(row)}> 
                         <Button variant="outlined"> Edit </Button>
                       </TableCell> 
@@ -302,7 +327,7 @@ export default function Containers() {
       <div className = "grid-child-buttons">
         <Button variant='contained' color='success' onClick={handleOpenModal}> Add container </Button>
         <AddContainerModal open={openModal} setOpen={setOpenModal} />
-        <Button variant='contained' onClick={handleModel_NameClick}> Model_Name Overview </Button>
+        <Button variant='contained' onClick={handleModel_NameClick}> Models Overview </Button>
         <Button variant='contained' onClick={handleStatusClick}> Status Overview </Button>
       </div>
     </div>
