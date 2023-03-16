@@ -14,13 +14,9 @@ const fetchData = async (url, method) => {
       options.body = JSON.stringify(data);
     }*/
     
-    const response = await fetch(url, options);
-    const responseData = await response.json();
-    
-    if (!response.ok) {
-      throw new Error(responseData.message || 'Something went wrong!');
-    }
-    
-    return responseData;
+    return fetch(url, options)
+    .then((response)=>response.json())
+    .then((response)=> {return response})
+    .catch(error => console.warn(error));
 }
 export default fetchData;

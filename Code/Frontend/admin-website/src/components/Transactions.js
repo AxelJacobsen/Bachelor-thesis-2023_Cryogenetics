@@ -26,29 +26,7 @@ import fetchData from '../globals/fetchData';
 import {stableSort , getComparator} from '../globals/globalFunctions';
 
 
-// createData function takes in the row data and returns an object with the properties of the row
-function createData(id,Date,Act,Operator,Location_Name,Customer_Name,Nr,SerialNr,Status,Comment) {
-  return {
-    id,
-    Date,
-    Act,
-    Operator,
-    Location_Name,
-    Customer_Name,
-    Nr,
-    SerialNr,
-    Status,
-    Comment,
-  };
-}
-
-const rows = [
-  createData(7,'31-01-23 11:25', 'Main needed', "Jan", "Hamar", "United Fishermen",'047-7','5555-221',"In use", "fix lid please"),
-  createData(1,'31-01-23 09:25', 'Sold', "Ola Nordmann", "Hamar", "United Fishermen",'047-1','5555-231',"At Client", "Will be shipped ASAP"),
-  createData(2,'31-01-23 10:25', 'Refilled', "Ola Nordmann", "Hamar", "United Fishermen",'047-2','5555-331',"In use", ""),
-]; 
-
-const headCells = [
+/* const headCells = [
   {
     id: 'Date', numeric: false, disablePadding: true, label: 'Date',
   },
@@ -75,6 +53,36 @@ const headCells = [
   },
   {
     id: 'Comment', numeric: false, disablePadding: true, label: 'Comment',
+  },
+]; */
+
+const headCells = [
+  {
+    id: 'action', numeric: false, disablePadding: true, label: 'action',
+  },
+  {
+    id: 'address', numeric: false, disablePadding: true, label: 'address',
+  },
+  {
+    id: 'client_id', numeric: false, disablePadding: true, label: 'client_id',
+  },
+  {
+    id: 'comment', numeric: false, disablePadding: true, label: 'comment',
+  },
+  {
+    id: 'container', numeric: false, disablePadding: true, label: 'container',
+  },
+  {
+    id: 'date', numeric: false, disablePadding: true, label: '#date',
+  },
+  {
+    id: 'inventory', numeric: false, disablePadding: true, label: 'inventory',
+  },
+  {
+    id: 'responsible_id', numeric: false, disablePadding: true, label: 'responsible_id',
+  },
+  {
+    id: 'transaction_id', numeric: false, disablePadding: true, label: 'transaction_id',
   },
 ];
 
@@ -158,29 +166,36 @@ function EnhancedTableToolbar({ searchTerm, setSearchTerm }) {
 }
 
 export default function Transactions() {
-  console.log("Fetching data from backend: ")
-  console.log(fetchData("/api/transactions","GET"))
-  
-
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('Date');
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
   const [searchTerm, setSearchTerm] = React.useState('');
+
+  const [rows, setRows] = React.useState([]);
+
+  React.useEffect(() => {
+    async function fetchMyData() {
+      try {
+        const response = await fetchData('/api/transactions', 'GET');
+        setRows(response);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchMyData();
+  }, []);
+
+  //setRows(fetchData("/api/transactions","GET").value);
+  console.log(rows);
 
   //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
   const filterRows = (row) => {
     return (
-      row.Status.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      row.Location_Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      row.Act.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      row.Operator.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      row.Customer_Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      row.Comment.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      row.SerialNr.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      row.Nr.toLowerCase().includes(searchTerm.toLowerCase())
+      row.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.comment.toLowerCase().includes(searchTerm.toLowerCase())
     );
   };
   const filteredRows = rows.filter(filterRows);
@@ -241,7 +256,7 @@ export default function Transactions() {
                         hover
                         role="checkbox"
                         tabIndex={-1}
-                        key={row.id}
+                        key={row.transaction_id}
                       >
                         
                         <TableCell
@@ -251,16 +266,16 @@ export default function Transactions() {
                           padding="none"
                           align='center'
                         >
-                          {row.Date}
+                          {row.action}
                         </TableCell>
-                        <TableCell align='center'>{row.Act}</TableCell>
-                        <TableCell align="center">{row.Operator}</TableCell>
-                        <TableCell align="center">{row.Location_Name}</TableCell>
-                        <TableCell align="center">{row.Customer_Name}</TableCell>
-                        <TableCell align="center">{row.Nr}</TableCell>
-                        <TableCell align="center">{row.SerialNr}</TableCell>
-                        <TableCell align="center">{row.Status}</TableCell>
-                        <TableCell align="center">{row.Comment}</TableCell>
+                        <TableCell align='center'>{row.address}</TableCell>
+                        <TableCell align="center">{row.client_id}</TableCell>
+                        <TableCell align="center">{row.comment}</TableCell>
+                        <TableCell align="center">{row.container}</TableCell>
+                        <TableCell align="center">{row.date}</TableCell>
+                        <TableCell align="center">{row.inventory}</TableCell>
+                        <TableCell align="center">{row.responsible_id}</TableCell>
+                        <TableCell align="center">{row.transaction_id}</TableCell>
                       </TableRow>
                     );
                   })}
