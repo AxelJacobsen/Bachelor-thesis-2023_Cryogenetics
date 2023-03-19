@@ -2,6 +2,7 @@ package globals
 
 import (
 	"database/sql"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net"
@@ -163,7 +164,7 @@ func ConvertUrlToSql(r *http.Request, table string) (string, []interface{}, erro
 	var query strings.Builder
 
 	//Start with basic format
-	query.WriteString("SELECT * FROM " + table + " WHERE ")
+	query.WriteString("SELECT * FROM `" + table + "` WHERE ")
 
 	//Prep args container
 	var argList []interface{}
@@ -202,4 +203,79 @@ func ConvertUrlToSql(r *http.Request, table string) (string, []interface{}, erro
 
 	outQuery := query.String()[:len(query.String())-5]
 	return outQuery, argList, nil
+}
+
+/**
+ *	Takes an http request and returns an SQL query with values sepperate
+ *
+ *	@param r - a pointer to the http request
+ *  @param table - name of the relevant table, (should be added as request header or in the url instead)
+ *
+ *	@returns - an SQL string with placeholders
+ *	@returns - a list of values to fit the SQL query
+ *  @returns - any potential errors thrown
+ */
+func ConvertPostURLToSQL(r *http.Request, table string) (string, []interface{}, error) {
+	// Decode body
+	var data []map[string]interface{}
+	err := json.NewDecoder(r.Body).Decode(&data)
+	if err != nil {
+		return "", nil, err
+	}
+
+	var propsQuery strings.Builder
+	i := 0
+
+	// Reorder into format: ["propertyName":[value1, value2, value3]]
+	// (And assembly prop query)
+	props_values := make(map[string]([]interface{}))
+	var args []interface{}
+	var props []string
+	for _, kvp := range data {
+		for k, v := range kvp {
+
+			// Check if prop already exists in props
+			propExists := false
+			for _, prop := range props {
+				if prop == k {
+					propExists = true
+					break
+				}
+			}
+			if !propExists {
+				props = append(props, k)
+				if i > 0 {
+					propsQuery.WriteString(",")
+				}
+				propsQuery.WriteString(k)
+				i++
+			}
+
+			props_values[k] = append(props_values[k], v)
+		}
+	}
+
+	// Assemble values string
+	var valuesQuery strings.Builder
+	for i, kvp := range data {
+		if i > 0 {
+			valuesQuery.WriteString("), (")
+		}
+		for j, prop := range props {
+			if j > 0 {
+				valuesQuery.WriteString(",")
+			}
+			v := kvp[prop]
+			if v == nil {
+				valuesQuery.WriteString("NULL")
+				continue
+			}
+			args = append(args, fmt.Sprintf("%v", v))
+			valuesQuery.WriteString("?")
+		}
+	}
+
+	// Assemble final query and query it
+	query := fmt.Sprintf("INSERT INTO `%s` (%s) VALUES (%s)", table, propsQuery.String(), valuesQuery.String())
+	return query, args, nil
 }
