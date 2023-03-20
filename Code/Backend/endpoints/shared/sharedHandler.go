@@ -232,8 +232,6 @@ func HandlerContainer(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Could not decode body.", http.StatusUnprocessableEntity)
 			return
 		}
-		var propsQuery strings.Builder
-		i := 0
 
 		// Reorder into format: ["propertyName":[value1, value2, value3]]
 		// (And assembly prop query)
@@ -242,7 +240,6 @@ func HandlerContainer(w http.ResponseWriter, r *http.Request) {
 		var props []string
 		for _, kvp := range data {
 			for k, v := range kvp {
-
 				// Check if prop already exists in props
 				propExists := false
 				for _, prop := range props {
@@ -253,16 +250,13 @@ func HandlerContainer(w http.ResponseWriter, r *http.Request) {
 				}
 				if !propExists {
 					props = append(props, k)
-					if i > 0 {
-						propsQuery.WriteString(", ")
-					}
-					propsQuery.WriteString(fmt.Sprintf("`%s`", k))
-					i++
 				}
 
 				props_values[k] = append(props_values[k], v)
 			}
 		}
+
+		// TODO: Add exception for when NO values are given
 
 		// Assemble values string
 		var valuesQuery strings.Builder
@@ -306,11 +300,13 @@ func HandlerContainer(w http.ResponseWriter, r *http.Request) {
 					}
 					prevVal = propVal
 					if propVal != property {
+						it++
 						queryPref.WriteString(delayedEntry)
 						queryPref.WriteString(fmt.Sprintf(" WHEN `%s` = '%v' THEN '%v'", propVal, props_values[propVal][index], props_values[property][index]))
 						if index+1 != len(props_values["primary"]) {
-							queryPref.WriteString(fmt.Sprintf(" ELSE `%s` END", property))
+							queryPref.WriteString(fmt.Sprintf(" ELSE `%s`", property))
 						}
+						queryPref.WriteString(" END")
 					}
 				} else {
 					http.Error(w, "Error asserting props_values as string.", http.StatusInternalServerError)
@@ -318,7 +314,6 @@ func HandlerContainer(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 
-			it++
 		}
 
 		for p, property := range props_values["primary"] {
@@ -345,7 +340,7 @@ func HandlerContainer(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 
 			fmt.Println(err)
-			http.Error(w, "Error fetching containers.", http.StatusInternalServerError)
+			http.Error(w, "Error putting containers.", http.StatusInternalServerError)
 			return
 		}
 
