@@ -35,7 +35,7 @@ export default function NavBar() {
         <Button onClick={() => {navigate('/users'); handleClick(4)}}
                 variant={activeButton === 4 ? 'contained' : 'text'} 
                 color={activeButton === 4 ? 'primary' : 'inherit'}>
-                Users/Employees 
+                Users
         </Button>
         <Button onClick={() => {navigate('/locations'); handleClick(5)}}
                 variant={activeButton === 5 ? 'contained' : 'text'}
