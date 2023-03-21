@@ -224,122 +224,15 @@ func HandlerContainer(w http.ResponseWriter, r *http.Request) {
 
 		// PUT method
 	case http.MethodPut:
-		// Decode body
-		var data []map[string]interface{}
-
-		err := json.NewDecoder(r.Body).Decode(&data)
+		sqlQuery, sqlArgs, err := globals.ConvertPutURLToSQL(r, tableName)
 		if err != nil {
-			http.Error(w, "Could not decode body.", http.StatusUnprocessableEntity)
+			http.Error(w, "Error converting url to sql.", http.StatusUnprocessableEntity)
 			return
 		}
 
-		// Reorder into format: ["propertyName":[value1, value2, value3]]
-		// (And assembly prop query)
-		props_values := make(map[string]([]interface{}))
-
-		var props []string
-		for _, kvp := range data {
-			for k, v := range kvp {
-				// Check if prop already exists in props
-				propExists := false
-				for _, prop := range props {
-					if prop == k {
-						propExists = true
-						break
-					}
-				}
-				if !propExists {
-					props = append(props, k)
-				}
-
-				props_values[k] = append(props_values[k], v)
-			}
-		}
-
-		// TODO: Add exception for when NO values are given
-
-		// Assemble values string
-		var valuesQuery strings.Builder
-		for i, kvp := range data {
-			if i > 0 {
-				valuesQuery.WriteString("), (")
-			}
-			for j, prop := range props {
-				if j > 0 {
-					valuesQuery.WriteString(", ")
-				}
-				v := kvp[prop]
-				if v == nil {
-					valuesQuery.WriteString("NULL")
-					continue
-				}
-				valuesQuery.WriteString(fmt.Sprintf("'%v'", v))
-			}
-		}
-
-		var queryPref strings.Builder
-		queryPref.WriteString(fmt.Sprintf("UPDATE %s SET", tableName))
-
-		it := 0
-		for _, property := range props {
-			if property == "primary" {
-				continue
-			}
-			//Ensures that if there is only one type of primary key there wont be an empty update field for that value
-			delayedEntry := ""
-			if it == 0 {
-				delayedEntry = fmt.Sprintf(" `%s` = CASE", property)
-			} else {
-				delayedEntry = fmt.Sprintf(", `%s` = CASE", property)
-			}
-			prevVal := ""
-			for index, val := range props_values["primary"] {
-				if propVal, ok := val.(string); ok {
-					if prevVal == propVal {
-						continue
-					}
-					prevVal = propVal
-					if propVal != property {
-						it++
-						queryPref.WriteString(delayedEntry)
-						queryPref.WriteString(fmt.Sprintf(" WHEN `%s` = '%v' THEN '%v'", propVal, props_values[propVal][index], props_values[property][index]))
-						if index+1 != len(props_values["primary"]) {
-							queryPref.WriteString(fmt.Sprintf(" ELSE `%s`", property))
-						}
-						queryPref.WriteString(" END")
-					}
-				} else {
-					http.Error(w, "Error asserting props_values as string.", http.StatusInternalServerError)
-					return
-				}
-			}
-
-		}
-
-		for p, property := range props_values["primary"] {
-			if propVal, ok := property.(string); ok {
-				if p == 0 {
-					queryPref.WriteString(fmt.Sprintf(" WHERE `%s` = '%v'", propVal, props_values[propVal][p]))
-				} else {
-					queryPref.WriteString(fmt.Sprintf(" OR `%s` = '%v'", propVal, props_values[propVal][p]))
-				}
-			} else {
-				http.Error(w, "Error asserting props_values as string.", http.StatusInternalServerError)
-				return
-
-			}
-		}
-
-		queryPref.WriteString(";")
-
-		/* 		// Assemble final query and query it
-		   		query := fmt.Sprintf("UPDATE %s (%s) VALUES (%s)", tableName, propsQuery.String(), valuesQuery.String())
-		   		fmt.Println("query: ", query) */
-		var args []interface{}
-		res, err := globals.QueryJSON(globals.DB, queryPref.String(), args, w)
+		res, err := globals.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
 		if err != nil {
-
-			fmt.Println(err)
+			fmt.Println("err: ", err)
 			http.Error(w, "Error putting containers.", http.StatusInternalServerError)
 			return
 		}

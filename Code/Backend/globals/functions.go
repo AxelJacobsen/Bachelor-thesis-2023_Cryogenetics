@@ -13,6 +13,40 @@ import (
 )
 
 /**
+ *	Flattens a map slice.
+ *
+ *	@param mapSlice - The map slice
+ *
+ *	@return The map slice, flattened.
+ */
+func flattenMapSlice(mapSlice []map[string]interface{}) map[string]([]interface{}) {
+	// Reorder into format: ["propertyName":[value1, value2, value3]]
+	// (And assembly prop query)
+	props_values := make(map[string]([]interface{}))
+
+	var props []string
+	for _, kvp := range mapSlice {
+		for k, v := range kvp {
+			// Check if prop already exists in props
+			propExists := false
+			for _, prop := range props {
+				if prop == k {
+					propExists = true
+					break
+				}
+			}
+			if !propExists {
+				props = append(props, k)
+			}
+
+			props_values[k] = append(props_values[k], v)
+		}
+	}
+
+	return props_values
+}
+
+/**
  *	Opens a socket listening for clients.
  *
  *	@param serverHost - The server address.
@@ -134,7 +168,8 @@ func QueryJSON(db *sql.DB, query string, queryArgs []interface{}, w http.Respons
 //Below creates an "exclusive query" by using AND, could be swapped to "Inclusive" by using OR
 
 /**
- *	Takes an http request and returns an SQL query with values sepperate
+ *	Takes an http request and returns an SQL query with values sepperate.
+ *	The SQL query GETS entries from the given table.
  *
  *	@param r - a pointer to the http request
  *  @param table - name of the relevant table, (should be added as request header or in the url instead)
@@ -206,7 +241,8 @@ func ConvertUrlToSql(r *http.Request, table string) (string, []interface{}, erro
 }
 
 /**
- *	Takes an http request and returns an SQL query with values sepperate
+ *	Takes an http request and returns an SQL query with values sepperate.
+ *	The SQL query POSTS entries to the given table.
  *
  *	@param r - a pointer to the http request
  *  @param table - name of the relevant table, (should be added as request header or in the url instead)
@@ -223,37 +259,21 @@ func ConvertPostURLToSQL(r *http.Request, table string) (string, []interface{}, 
 		return "", nil, err
 	}
 
+	// Get props string
+	props_values := flattenMapSlice(data)
 	var propsQuery strings.Builder
+	props := make([]string, len(props_values))
 	i := 0
-
-	// Reorder into format: ["propertyName":[value1, value2, value3]]
-	// (And assembly prop query)
-	props_values := make(map[string]([]interface{}))
-	var args []interface{}
-	var props []string
-	for _, kvp := range data {
-		for k, v := range kvp {
-
-			// Check if prop already exists in props
-			propExists := false
-			for _, prop := range props {
-				if prop == k {
-					propExists = true
-					break
-				}
-			}
-			if !propExists {
-				props = append(props, k)
-				if i > 0 {
-					propsQuery.WriteString(",")
-				}
-				propsQuery.WriteString(k)
-				i++
-			}
-
-			props_values[k] = append(props_values[k], v)
+	for k := range props_values {
+		if i > 0 {
+			propsQuery.WriteString(",")
 		}
+		propsQuery.WriteString(k)
+		props[i] = k
+		i++
 	}
+
+	var args []interface{}
 
 	// Assemble values string
 	var valuesQuery strings.Builder
@@ -278,4 +298,92 @@ func ConvertPostURLToSQL(r *http.Request, table string) (string, []interface{}, 
 	// Assemble final query and query it
 	query := fmt.Sprintf("INSERT INTO `%s` (%s) VALUES (%s)", table, propsQuery.String(), valuesQuery.String())
 	return query, args, nil
+}
+
+/**
+ *	Takes an http request and returns an SQL query with values sepperate
+ *	The SQL query PUTS(updates) entries in the given table.
+ *
+ *	@param r - a pointer to the http request
+ *  @param table - name of the relevant table, (should be added as request header or in the url instead)
+ *
+ *	@returns - an SQL string with placeholders
+ *	@returns - a list of values to fit the SQL query
+ *  @returns - any potential errors thrown
+ */
+func ConvertPutURLToSQL(r *http.Request, table string) (string, []interface{}, error) {
+	// Decode body
+	var data []map[string]interface{}
+
+	err := json.NewDecoder(r.Body).Decode(&data)
+	if err != nil {
+		return "", nil, err
+	}
+
+	// Get props
+	props_values := flattenMapSlice(data)
+	props := make([]string, len(props_values))
+	i := 0
+	for k := range props_values {
+		props[i] = k
+		i++
+	}
+
+	// TODO: Add exception for when NO values are given
+
+	var queryPref strings.Builder
+	queryPref.WriteString(fmt.Sprintf("UPDATE %s SET", table))
+
+	it := 0
+	var args []interface{}
+	for _, property := range props {
+		if property == "primary" {
+			continue
+		}
+		//Ensures that if there is only one type of primary key there wont be an empty update field for that value
+		delayedEntry := ""
+		if it == 0 {
+			delayedEntry = fmt.Sprintf(" `%s` = CASE", property)
+		} else {
+			delayedEntry = fmt.Sprintf(", `%s` = CASE", property)
+		}
+		prevVal := ""
+		for index, val := range props_values["primary"] {
+			if propVal, ok := val.(string); ok {
+				if prevVal == propVal {
+					continue
+				}
+				prevVal = propVal
+				if propVal != property {
+					it++
+					queryPref.WriteString(delayedEntry)
+					queryPref.WriteString(fmt.Sprintf(" WHEN `%s` = ? THEN ?", propVal))
+					args = append(args, fmt.Sprintf("%v", props_values[propVal][index]))
+					args = append(args, fmt.Sprintf("%v", props_values[property][index]))
+					if index+1 != len(props_values["primary"]) {
+						queryPref.WriteString(fmt.Sprintf(" ELSE `%s`", property))
+					}
+					queryPref.WriteString(" END")
+				}
+			} else {
+				return "", nil, errors.New("error asserting props_values as string")
+			}
+		}
+	}
+
+	for p, property := range props_values["primary"] {
+		if propVal, ok := property.(string); ok {
+			if p == 0 {
+				queryPref.WriteString(fmt.Sprintf(" WHERE `%s` = '%v'", propVal, props_values[propVal][p]))
+			} else {
+				queryPref.WriteString(fmt.Sprintf(" OR `%s` = '%v'", propVal, props_values[propVal][p]))
+			}
+		} else {
+			return "", nil, errors.New("error asserting props_values as string")
+		}
+	}
+
+	// Return
+	queryPref.WriteString(";")
+	return queryPref.String(), args, nil
 }
