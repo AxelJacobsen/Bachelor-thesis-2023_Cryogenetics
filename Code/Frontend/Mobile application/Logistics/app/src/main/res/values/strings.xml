@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Logistics</string>
+
+    <string name="sDashboard">Dashboard</string>
+    <string name="sTank">Tank</string>
+    <string name="sTankFilling">Tank filling</string>
+    <string name="sLog">Log</string>
+    <string name="sInventory">Inventory</string>
+    <string name="inventory">Inventory</string>
+
+</resources>
