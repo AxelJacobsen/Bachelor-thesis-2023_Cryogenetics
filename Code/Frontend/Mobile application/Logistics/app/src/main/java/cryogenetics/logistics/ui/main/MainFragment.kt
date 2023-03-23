@@ -7,16 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import cryogenetics.logistics.R
-import cryogenetics.logistics.ui.sidebar.SidebarFragment
-import cryogenetics.logistics.ui.sidebar.SidebarViewModel
 
 class MainFragment : Fragment() {
 
     companion object {
-        fun newInstance() = SidebarFragment()
+        fun newInstance() = MainFragment()
     }
 
-    private lateinit var viewModel: SidebarViewModel
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,7 +25,7 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(SidebarViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         // TODO: Use the ViewModel
     }
 
