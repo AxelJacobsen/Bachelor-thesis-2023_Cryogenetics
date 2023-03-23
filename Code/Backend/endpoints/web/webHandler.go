@@ -88,7 +88,7 @@ func HandlerWebDashboard(w http.ResponseWriter, r *http.Request) {
  */
 func HandlerAdmins(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("content-type", "application/json")
-	tableName := "`admin`"
+	tableName := "admin"
 
 	// Get escaped path without base URL and remove the first character if it's a "/"
 	escapedPath := r.URL.EscapedPath()[len(paths.WEB_ADMIN_PATH):]
