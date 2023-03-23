@@ -3,7 +3,7 @@ package cryogenetics.logistics
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Window
-import cryogenetics.logistics.ui.main.MainFragment
+import cryogenetics.logistics.ui.host.HostFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.activityMain, MainFragment.newInstance())
+                .replace(R.id.activityMain, HostFragment.newInstance())
                 .commitNow()
         }
     }
