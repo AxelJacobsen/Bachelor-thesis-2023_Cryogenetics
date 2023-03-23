@@ -8,4 +8,6 @@
     <string name="sInventory">Inventory</string>
     <string name="inventory">Inventory</string>
 
+    <string name="usernamePlaceholder">Username Placeholder</string>
+
 </resources>

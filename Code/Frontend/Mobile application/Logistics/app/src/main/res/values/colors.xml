@@ -10,6 +10,9 @@
 
     <color name="cryoBlue">#009BDC</color>
     <color name="softGrey">#CC7E7E7E</color>
+    <color name="red">#FF0000</color>
+    <color name="yellow">#FFEB3B</color>
+    <color name="tabGrey">#FFD8D8D8</color>
 
 
 </resources>
