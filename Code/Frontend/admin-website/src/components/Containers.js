@@ -36,6 +36,9 @@ const headCells = [
     id: 'serial_number', numeric: false, disablePadding: true, label: 'SerialNr',
   },
   {
+    id: 'status', numeric: false, disablePadding: true, label: 'Status',
+  },
+  {
     id: 'model', numeric: false, disablePadding: true, label: 'Model_Name',
   },
   {
@@ -48,14 +51,21 @@ const headCells = [
     id: 'address', numeric: false, disablePadding: true, label: 'Address',
   },
   {
-    id: 'last_filled', numeric: false, disablePadding: true, label: 'Last Filled',
-  },
-  {
     id: 'invoice', numeric: false, disablePadding: true, label: 'Invoice',
   },
   {
-    id: 'status', numeric: false, disablePadding: true, label: 'Status',
+    id: 'last_filled', numeric: false, disablePadding: true, label: 'Last Filled',
   },
+  {
+    id: 'comment', numeric: false, disablePadding: true, label: 'Comment',
+  },
+  {
+    id: 'maintenance_needed', numeric: false, disablePadding: true, label: 'Maintenance Needed',
+  },
+  {
+    id: 'production_date', numeric: false, disablePadding: true, label: 'Production Date',
+  },
+  
 ];
 
 function EnhancedTableHead(props) {
@@ -252,6 +262,7 @@ export default function Containers() {
                         </TableCell>
                         <TableCell align='center'>{row.serial_number}</TableCell>
                         <TableCell align="center">{row.model}</TableCell>
+                        <TableCell align="center">{row.status}</TableCell>
                         <TableCell align="center">
                           {row.location_name === null ? "NULL" : row.location_name}
                         </TableCell>
@@ -261,11 +272,19 @@ export default function Containers() {
                         <TableCell align="center">
                           {row.address === null ? "NULL" : row.address}
                         </TableCell>
-                        <TableCell align="center">{row.last_filled}</TableCell>
                         <TableCell align="center">
                           {row.invoice === null ? "NULL" : row.invoice}
                         </TableCell>
-                        <TableCell align="center">{row.status}</TableCell>
+                        <TableCell align="center">{row.last_filled}</TableCell>
+                        
+                        <TableCell align="center">
+                          {row.comment === null ? "NULL" : row.comment}
+                        </TableCell>
+                        <TableCell align="center">
+                          {row.maintenance_needed === 0 ? "No" : "Yes"}
+                        </TableCell>
+                        <TableCell align="center">{row.production_date}</TableCell>
+                        
                         <TableCell onClick={() => handleRowClick(row)}> 
                         <Button variant="outlined"> Edit </Button>
                       </TableCell> 
