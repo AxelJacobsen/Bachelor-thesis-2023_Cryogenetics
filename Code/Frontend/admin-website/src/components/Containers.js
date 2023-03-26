@@ -28,36 +28,6 @@ import './TableLayout.css';
 import {stableSort , getComparator} from '../globals/globalFunctions';
 import fetchData from '../globals/fetchData';
 
-/* const headCells = [
-  {
-    id: 'NR', numeric: false, disablePadding: true, label: 'NR',
-  },
-  {
-    id: 'SerialNr', numeric: false, disablePadding: true, label: 'SerialNr',
-  },
-  {
-    id: 'Model_Name', numeric: false, disablePadding: true, label: 'Model_Name',
-  },
-  {
-    id: 'Location_Name', numeric: false, disablePadding: true, label: 'Location_Name',
-  },
-  {
-    id: 'Customer_Name', numeric: false, disablePadding: true, label: 'Customer_Name',
-  },
-  {
-    id: 'Address', numeric: false, disablePadding: true, label: 'Address',
-  },
-  {
-    id: 'Last_Filled', numeric: false, disablePadding: true, label: 'Last Filled',
-  },
-  {
-    id: 'Invoice', numeric: false, disablePadding: true, label: 'Invoice',
-  },
-  {
-    id: 'Status', numeric: false, disablePadding: true, label: 'Status',
-  },
-]; */
-
 const headCells = [
   {
     id: 'id', numeric: false, disablePadding: true, label: 'id',
@@ -69,10 +39,10 @@ const headCells = [
     id: 'model', numeric: false, disablePadding: true, label: 'Model_Name',
   },
   {
-    id: 'Location_Name', numeric: false, disablePadding: true, label: 'Location_Name',
+    id: 'location_name', numeric: false, disablePadding: true, label: 'Location_Name',
   },
   {
-    id: 'Customer_Name', numeric: false, disablePadding: true, label: 'Customer_Name',
+    id: 'customer_name', numeric: false, disablePadding: true, label: 'Customer Name',
   },
   {
     id: 'address', numeric: false, disablePadding: true, label: 'Address',
@@ -282,11 +252,19 @@ export default function Containers() {
                         </TableCell>
                         <TableCell align='center'>{row.serial_number}</TableCell>
                         <TableCell align="center">{row.model}</TableCell>
-                        <TableCell align="center">{row.Location_Name}</TableCell>
-                        <TableCell align="center">{row.Customer_Name}</TableCell>
-                        <TableCell align="center">{row.address}</TableCell>
+                        <TableCell align="center">
+                          {row.location_name === null ? "NULL" : row.location_name}
+                        </TableCell>
+                        <TableCell align="center">
+                          {row.customer_name === null ? "NULL" : row.customer_name}
+                        </TableCell>
+                        <TableCell align="center">
+                          {row.address === null ? "NULL" : row.address}
+                        </TableCell>
                         <TableCell align="center">{row.last_filled}</TableCell>
-                        <TableCell align="center">{row.invoice}</TableCell>
+                        <TableCell align="center">
+                          {row.invoice === null ? "NULL" : row.invoice}
+                        </TableCell>
                         <TableCell align="center">{row.status}</TableCell>
                         <TableCell onClick={() => handleRowClick(row)}> 
                         <Button variant="outlined"> Edit </Button>

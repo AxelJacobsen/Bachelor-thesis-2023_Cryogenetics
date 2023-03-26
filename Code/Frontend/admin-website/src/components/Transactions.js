@@ -25,37 +25,6 @@ import './TableLayout.css';
 import fetchData from '../globals/fetchData';
 import {stableSort , getComparator} from '../globals/globalFunctions';
 
-
-/* const headCells = [
-  {
-    id: 'Date', numeric: false, disablePadding: true, label: 'Date',
-  },
-  {
-    id: 'Act', numeric: false, disablePadding: true, label: 'Act',
-  },
-  {
-    id: 'Operator', numeric: false, disablePadding: true, label: 'Operator',
-  },
-  {
-    id: 'Location_Name', numeric: false, disablePadding: true, label: 'Location_Name',
-  },
-  {
-    id: 'Customer_Name', numeric: false, disablePadding: true, label: 'Customer_Name',
-  },
-  {
-    id: 'Nr', numeric: false, disablePadding: true, label: '#Nr',
-  },
-  {
-    id: 'SerialNr', numeric: false, disablePadding: true, label: 'SerialNr',
-  },
-  {
-    id: 'Status', numeric: false, disablePadding: true, label: 'Status',
-  },
-  {
-    id: 'Comment', numeric: false, disablePadding: true, label: 'Comment',
-  },
-]; */
-
 const headCells = [
   {
     id: 'date', numeric: false, disablePadding: true, label: 'Date',
@@ -64,25 +33,22 @@ const headCells = [
     id: 'act', numeric: false, disablePadding: true, label: 'Act',
   },
   {
-    id: 'responsible_id', numeric: false, disablePadding: true, label: 'responsible_id',
+    id: 'responsible_name', numeric: false, disablePadding: true, label: 'Responsible Name',
   },
   {
-    id: 'inventory', numeric: false, disablePadding: true, label: 'inventory',
+    id: 'inventory_name', numeric: false, disablePadding: true, label: 'Inventory Name',
   },
   {
-    id: 'address', numeric: false, disablePadding: true, label: 'address',
+    id: 'address', numeric: false, disablePadding: true, label: 'Address',
   },
   {
-    id: 'client_id', numeric: false, disablePadding: true, label: 'client_id',
+    id: 'customer_name', numeric: false, disablePadding: true, label: 'Customer Name',
   },
   {
     id: 'container', numeric: false, disablePadding: true, label: 'SerialNR',
   },
   {
-    id: 'comment', numeric: false, disablePadding: true, label: 'comment',
-  },
-  {
-    id: 'transaction_id', numeric: false, disablePadding: true, label: 'transaction_id',
+    id: 'comment', numeric: false, disablePadding: true, label: 'Comment',
   },
 ];
 
@@ -187,8 +153,6 @@ export default function Transactions() {
     fetchRowData();
   }, []);
 
-  //console.log(rows);
-
   //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
   const filterRows = (row) => {
     return (
@@ -270,13 +234,14 @@ export default function Transactions() {
                           {row.date}
                         </TableCell>
                         <TableCell align='center'>{row.act}</TableCell>
-                        <TableCell align="center">{row.responsible_id}</TableCell>
-                        <TableCell align="center">{row.inventory}</TableCell>
+                        <TableCell align="center">{row.responsible_name}</TableCell>
+                        <TableCell align="center">{row.inventory_name}</TableCell>
                         <TableCell align="center">{row.address}</TableCell>
-                        <TableCell align="center">{row.client_id}</TableCell>
+                        <TableCell align="center">
+                          {row.customer_name === null ? "NULL" : row.customer_name}
+                        </TableCell>
                         <TableCell align="center">{row.container}</TableCell>
                         <TableCell align="center">{row.comment}</TableCell>
-                        <TableCell align="center">{row.transaction_id}</TableCell>
                       </TableRow>
                     );
                   })}
