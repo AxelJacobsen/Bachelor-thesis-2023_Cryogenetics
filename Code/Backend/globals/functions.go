@@ -168,17 +168,21 @@ func QueryJSON(db *sql.DB, query string, queryArgs []interface{}, w http.Respons
 //Below creates an "exclusive query" by using AND, could be swapped to "Inclusive" by using OR
 
 /**
- *	Takes an http request and returns an SQL query with values sepperate.
- *	The SQL query GETS entries from the given table.
+ * Takes an http request and returns an SQL query with values separate.
+ * The SQL query GETS entries from the given table.
  *
- *	@param r - a pointer to the http request
- *  @param table - name of the relevant table, (should be added as request header or in the url instead)
+ * @param r - a pointer to the http request
+ * @param table - name of the relevant table, (should be added as request header or in the url instead)
+ * @param FKeys - SQL query of the foreign keys in the table for joining (e.g.["Client.client_Name AS client_name,"])
+ * @param joins - a slice of strings representing the tables to join on (e.g. ["Client ON Container.at_client = Client.client_ID"])
+ * @param joinType - a string representing the type of join (e.g. "LEFT JOIN")
  *
- *	@returns - an SQL string with placeholders
- *	@returns - a list of values to fit the SQL query
- *  @returns - any potential errors thrown
+ * @returns - an SQL string with placeholders
+ * @returns - a list of values to fit the SQL query
+ * @returns - any potential errors thrown
  */
-func ConvertUrlToSql(r *http.Request, table string) (string, []interface{}, error) {
+func ConvertUrlToSql(r *http.Request, table string, FKeys []string, joins []string, joinType string) (string, []interface{}, error) {
+	println("Start Convert")
 	// Get url values
 	urlData := r.URL.Query()
 	var emptyRet []interface{}
@@ -188,18 +192,43 @@ func ConvertUrlToSql(r *http.Request, table string) (string, []interface{}, erro
 		return "", emptyRet, errors.New("couldn't write to string in SQL constructor")
 	}
 
-	//If there are no parameters
-	if len(urlData) <= 0 {
-		//Not necesserily an error, but should still break
-		noFilt := "SELECT * FROM " + table
-		return noFilt, emptyRet, nil
-	}
-
 	//Initiate builder
 	var query strings.Builder
 
-	//Start with basic format
-	query.WriteString("SELECT * FROM `" + table + "` WHERE ")
+	if len(FKeys) > 0 {
+		var tempQuery = "SELECT " + table + ".*"
+		for _, FKey := range FKeys {
+			println(FKey)
+			tempQuery += ", " + FKey
+		}
+		tempQuery += " FROM " + table + " "
+
+		query.WriteString(tempQuery)
+
+	} else {
+		//Start with basic format
+		query.WriteString(fmt.Sprintf("SELECT %s FROM `%s` ", table+".*", table))
+	}
+
+	//Add joins if specified
+	if len(joins) > 0 {
+		for _, join := range joins {
+			println(join)
+			query.WriteString(fmt.Sprintf("%s %s ", joinType, join))
+		}
+	} else {
+		println("No Joins")
+	}
+
+	//If there are no parameters
+	if len(urlData) <= 0 {
+		println("No parameters")
+		//Not necessarily an error, but should still break
+		return query.String(), emptyRet, nil
+	}
+
+	//Add WHERE clause
+	query.WriteString("WHERE ")
 
 	//Prep args container
 	var argList []interface{}
@@ -221,7 +250,7 @@ func ConvertUrlToSql(r *http.Request, table string) (string, []interface{}, erro
 		} else {
 			//Multiple variables under same key
 			for o := 0; o < len(value); o++ {
-				//Stow the actual value to be returned seperately
+				//Stow the actual value to be returned separately
 				argList = append(argList, value[o])
 				//Overwrite inValue with a placeholder to be written into the SQL query
 				value[o] = fmt.Sprintf("?%d", i)

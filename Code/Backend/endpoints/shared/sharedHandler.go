@@ -33,7 +33,7 @@ func HandlerTransactions(w http.ResponseWriter, r *http.Request) {
 
 	// GET method
 	case http.MethodGet:
-		containerSQL, sqlArgs, err := globals.ConvertUrlToSql(r, tableName)
+		containerSQL, sqlArgs, err := globals.ConvertUrlToSql(r, tableName, []string{"Client.client_Name AS customer_name", "Location.name AS inventory_name", "employee.employee_name AS responsible_name"}, []string{"client ON transaction.client_id = client.client_id", "location ON transaction.inventory = location.location_id", "employee ON transaction.responsible_id = employee.employee_id"}, "LEFT JOIN")
 		if err != nil {
 			http.Error(w, "Error in converting url to sql", http.StatusUnprocessableEntity)
 		}
@@ -88,7 +88,7 @@ func HandlerClients(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	// GET method
 	case http.MethodGet:
-		containerSQL, sqlArgs, err := globals.ConvertUrlToSql(r, tableName)
+		containerSQL, sqlArgs, err := globals.ConvertUrlToSql(r, tableName, []string{}, []string{}, "")
 		if err != nil {
 			http.Error(w, "Error in converting url to sql", http.StatusUnprocessableEntity)
 		}
@@ -183,10 +183,12 @@ func HandlerContainer(w http.ResponseWriter, r *http.Request) {
 
 	// GET method
 	case http.MethodGet:
-		sqlQuery, sqlArgs, err := globals.ConvertUrlToSql(r, tableName)
+		sqlQuery, sqlArgs, err := globals.ConvertUrlToSql(r, tableName, []string{"Client.client_Name AS customer_name", "Location.name AS location_name"}, []string{"Client ON Container.at_client = Client.client_ID", "Location ON Container.at_inventory = Location.location_id;"}, "LEFT JOIN")
 		if err != nil {
 			http.Error(w, "Error in converting url to sql", http.StatusUnprocessableEntity)
 		}
+
+		println(sqlQuery)
 
 		res, err := globals.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
 		if err != nil {
