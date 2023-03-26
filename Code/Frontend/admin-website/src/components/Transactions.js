@@ -33,7 +33,7 @@ const headCells = [
     id: 'act', numeric: false, disablePadding: true, label: 'Act',
   },
   {
-    id: 'responsible_name', numeric: false, disablePadding: true, label: 'Responsible Name',
+    id: 'responsible_name', numeric: false, disablePadding: true, label: 'Responsible Sign',
   },
   {
     id: 'inventory_name', numeric: false, disablePadding: true, label: 'Inventory Name',
