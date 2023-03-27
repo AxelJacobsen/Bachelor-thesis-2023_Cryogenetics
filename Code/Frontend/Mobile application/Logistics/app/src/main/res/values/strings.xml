@@ -9,5 +9,13 @@
     <string name="inventory">Inventory</string>
 
     <string name="usernamePlaceholder">Username Placeholder</string>
+    <string name="hashNr">#Nr</string>
+    <string name="notifcations">Notifcations</string>
+    <string name="inovice">Inovice</string>
+    <string name="status">Status</string>
+    <string name="last_filled">Last filled</string>
+    <string name="client">Client</string>
+    <string name="location">Location</string>
+    <string name="filterbutton">Filter</string>
 
 </resources>
