@@ -25,31 +25,15 @@ import AddCustomerModal from './popup/AddCustomerModal';
 import { TextField } from '@mui/material';
 import './TableLayout.css';
 import {stableSort , getComparator} from '../globals/globalFunctions';
+import fetchData from '../globals/fetchData';
 
-function createData(Customer_ID, Customer_Name, Customer_IsActive) {
-  return {
-    Customer_ID, Customer_Name, Customer_IsActive
-  };
-}
-
-
-
-const rows = [
-  createData(1,"Geir's Laks", true),
-  createData(2,"ss", true),
-  createData(3,"eea", true),
-  createData(14,"Me :D", true),
-]; 
 
 const headCells = [
   {
-    id: 'Customer_ID', numeric: true, disablePadding: true, label: 'Customer_ID',
+    id: 'client_id', numeric: true, disablePadding: true, label: 'client_id',
   },
   {
-    id: 'Customer_Name', numeric: false, disablePadding: true, label: 'Customer_Name',
-  },
-  {
-    id: 'Customer_IsActive', numeric: true, disablePadding: true, label: 'Customer_IsActive', 
+    id: 'client_name', numeric: false, disablePadding: true, label: 'client_name',
   },
 ];
 
@@ -132,23 +116,36 @@ function EnhancedTableToolbar({ searchTerm, setSearchTerm }) {
 
 export default function Customers() {
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('Customer_ID');
+  const [orderBy, setOrderBy] = React.useState('client_id');
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const [selectedRow, setSelectedRow] = useState(null);
   const [openModal, setOpenModal] = useState(false);
-
   const [searchTerm, setSearchTerm] = useState('');
+  const [rows, setRows] = React.useState([]);
 
-    //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
-    const filterRows = (row) => {
-      return (
-        row.Customer_Name.toLowerCase().includes(searchTerm.toLowerCase()) 
-      );
-    };
-    const filteredRows = rows.filter(filterRows);
+  React.useEffect(() => {
+    async function fetchRowData() {
+      try {
+        const response = await fetchData('/api/client', 'GET');
+        setRows(response);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchRowData();
+  }, []);
+
+  console.log(rows)
+  //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
+  const filterRows = (row) => {
+    return (
+      row.client_name.toLowerCase().includes(searchTerm.toLowerCase()) 
+    );
+  };
+  const filteredRows = rows.filter(filterRows);
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -210,7 +207,7 @@ export default function Customers() {
                         hover
                         role="checkbox"
                         tabIndex={-1}
-                        key={row.Customer_ID}
+                        key={row.client_id}
                       >
                         
                         <TableCell
@@ -220,10 +217,9 @@ export default function Customers() {
                           padding="none"
                           align='center'
                         >
-                          {"#"+row.Customer_ID}
+                          {"#"+row.client_id}
                         </TableCell>
-                        <TableCell align='center'>{row.Customer_Name}</TableCell>
-                        <TableCell align="center">{row.Customer_IsActive ? "True" : "False"}</TableCell>
+                        <TableCell align='center'>{row.client_name}</TableCell>
                         <TableCell onClick={() => handleRowClick(row)}> 
                         <Button variant="outlined"> Edit </Button>
                       </TableCell> 
