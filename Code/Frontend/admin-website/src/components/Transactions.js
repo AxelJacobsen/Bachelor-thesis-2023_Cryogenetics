@@ -156,6 +156,9 @@ export default function Transactions() {
   //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
   const filterRows = (row) => {
     return (
+      row.responsible_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.customer_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.inventory_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       row.act.toLowerCase().includes(searchTerm.toLowerCase()) ||
       row.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
       row.comment.toLowerCase().includes(searchTerm.toLowerCase())

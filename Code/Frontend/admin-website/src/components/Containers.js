@@ -36,13 +36,13 @@ const headCells = [
     id: 'serial_number', numeric: false, disablePadding: true, label: 'SerialNr',
   },
   {
+    id: 'model', numeric: false, disablePadding: true, label: 'Model Name',
+  },
+  {
     id: 'status', numeric: false, disablePadding: true, label: 'Status',
   },
   {
-    id: 'model', numeric: false, disablePadding: true, label: 'Model_Name',
-  },
-  {
-    id: 'location_name', numeric: false, disablePadding: true, label: 'Location_Name',
+    id: 'location_name', numeric: false, disablePadding: true, label: 'Location Name',
   },
   {
     id: 'customer_name', numeric: false, disablePadding: true, label: 'Customer Name',
@@ -173,7 +173,13 @@ export default function Containers() {
     //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
     const filterRows = (row) => {
       return (
-        row.model.toLowerCase().includes(searchTerm.toLowerCase()) 
+        row.model.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.serial_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.customer_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.comment.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.location_name.toLowerCase().includes(searchTerm.toLowerCase()) 
       );
     };
     const filteredRows = rows.filter(filterRows);
