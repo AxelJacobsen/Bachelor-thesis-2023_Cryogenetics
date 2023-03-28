@@ -188,8 +188,6 @@ func HandlerContainer(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Error in converting url to sql", http.StatusUnprocessableEntity)
 		}
 
-		println(sqlQuery)
-
 		res, err := globals.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
 		if err != nil {
 			http.Error(w, "Error fetching containers.", http.StatusInternalServerError)

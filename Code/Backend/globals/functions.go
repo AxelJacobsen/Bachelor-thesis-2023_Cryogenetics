@@ -182,7 +182,6 @@ func QueryJSON(db *sql.DB, query string, queryArgs []interface{}, w http.Respons
  * @returns - any potential errors thrown
  */
 func ConvertUrlToSql(r *http.Request, table string, FKeys []string, joins []string, joinType string) (string, []interface{}, error) {
-	println("Start Convert")
 	// Get url values
 	urlData := r.URL.Query()
 	var emptyRet []interface{}
@@ -216,13 +215,10 @@ func ConvertUrlToSql(r *http.Request, table string, FKeys []string, joins []stri
 			println(join)
 			query.WriteString(fmt.Sprintf("%s %s ", joinType, join))
 		}
-	} else {
-		println("No Joins")
 	}
 
 	//If there are no parameters
 	if len(urlData) <= 0 {
-		println("No parameters")
 		//Not necessarily an error, but should still break
 		return query.String(), emptyRet, nil
 	}
