@@ -25,32 +25,14 @@ import AddLocationModal from './popup/AddLocationModal';
 import { TextField } from '@mui/material';
 import './TableLayout.css';
 import {stableSort , getComparator} from '../globals/globalFunctions';
-
-function createData(Location_ID, Location_Name, Location_IsActive) {
-  return {
-    Location_ID, Location_Name, Location_IsActive
-  };
-}
-
-
-
-const rows = [
-  createData(1,"Oslo", true),
-  createData(2,"Trondheim", true),
-  createData(3,"Bergen", true),
-  createData(4,"Spikkestad", true),
-]; 
-
+import fetchData from '../globals/fetchData';
 
 const headCells = [
   {
-    id: 'Location_ID', numeric: true, disablePadding: true, label: 'Location_ID',
+    id: 'location_id', numeric: true, disablePadding: true, label: 'Location ID',
   },
   {
-    id: 'Location_Name', numeric: false, disablePadding: true, label: 'Location_Name',
-  },
-  {
-    id: 'Location_IsActive', numeric: true, disablePadding: true, label: 'Location_IsActive', 
+    id: 'name', numeric: false, disablePadding: true, label: 'Location Name',
   },
 ];
 
@@ -133,7 +115,7 @@ function EnhancedTableToolbar({ searchTerm, setSearchTerm }) {
 
 export default function Locations() {
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('Location_ID');
+  const [orderBy, setOrderBy] = React.useState('location_id');
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -141,12 +123,26 @@ export default function Locations() {
   const [selectedRow, setSelectedRow] = useState(null);
   const [openModal, setOpenModal] = useState(false);
 
+  const [rows, setRows] = React.useState([]);
+
+  React.useEffect(() => {
+    async function fetchRowData() {
+      try {
+        const response = await fetchData('/api/location', 'GET');
+        setRows(response);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchRowData();
+  }, []);
+
   const [searchTerm, setSearchTerm] = useState('');
 
     //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
     const filterRows = (row) => {
       return (
-        row.Location_Name.toLowerCase().includes(searchTerm.toLowerCase()) 
+        row.name.toLowerCase().includes(searchTerm.toLowerCase()) 
       );
     };
     const filteredRows = rows.filter(filterRows);
@@ -212,7 +208,7 @@ export default function Locations() {
                         hover
                         role="checkbox"
                         tabIndex={-1}
-                        key={row.Location_ID}
+                        key={row.location_id}
                       >
                         
                         <TableCell
@@ -222,10 +218,9 @@ export default function Locations() {
                           padding="none"
                           align='center'
                         >
-                          {"#"+row.Location_ID}
+                          {"#"+row.location_id}
                         </TableCell>
-                        <TableCell align='center'>{row.Location_Name}</TableCell>
-                        <TableCell align="center">{row.Location_IsActive ? "True" : "False"}</TableCell>
+                        <TableCell align='center'>{row.name}</TableCell>
                         <TableCell onClick={() => handleRowClick(row)}> 
                         <Button variant="outlined"> Edit </Button>
                       </TableCell> 

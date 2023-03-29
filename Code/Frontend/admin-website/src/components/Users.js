@@ -25,35 +25,26 @@ import EditUserModal from './popup/EditUserModal';
 import AddUserModal from './popup/AddUserModal';
 import './TableLayout.css';
 import {stableSort , getComparator} from '../globals/globalFunctions';
-
-function createData(User_ID, User_Name, Login_Code, Location_Name, User_IsActive) {
-  return {
-    User_ID, User_Name, Login_Code, Location_Name, User_IsActive
-  };
-}
-
-const rows = [
-  createData(1,"Håvard Bø",322,"Hamar", true),
-  createData(2,"Mats Greeven",221,"Oslo", true),
-  createData(3,"Lars Ruud",541,"Hamar", true),
-]; 
+import fetchData from '../globals/fetchData';
 
 const headCells = [
   {
-    id: 'User_ID', numeric: true, disablePadding: true, label: 'User_ID',
+    id: 'employee_id', numeric: true, disablePadding: true, label: 'User ID',
   },
   {
-    id: 'User_Name', numeric: true, disablePadding: true, label: 'User_Name',
+    id: 'employee_alias', numeric: true, disablePadding: true, label: 'User alias',
   },
   {
-    id: 'Login_Code', numeric: true, disablePadding: true, label: 'Login_Code',
+    id: 'employee_name', numeric: true, disablePadding: true, label: 'User name',
   },
   {
-    id: 'Location_Name', numeric: false, disablePadding: true, label: 'Location_Name',
+    id: 'login_code', numeric: true, disablePadding: true, label: 'Login Code',
   },
   {
-    id: 'User_IsActive', numeric: true, disablePadding: true, label: 'User_IsActive', 
+    id: 'location_name', numeric: false, disablePadding: true, label: 'Location Name',
   },
+
+  
 ];
 
 function EnhancedTableHead(props) {
@@ -135,7 +126,7 @@ function EnhancedTableToolbar({ searchTerm, setSearchTerm }) {
 
 export default function Users() {
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('User_ID');
+  const [orderBy, setOrderBy] = React.useState('employee_id');
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -143,13 +134,28 @@ export default function Users() {
   const [selectedRow, setSelectedRow] = useState(null);
   const [openModal, setOpenModal] = useState(false);
 
+  const [rows, setRows] = React.useState([]);
+
+  React.useEffect(() => {
+    async function fetchRowData() {
+      try {
+        const response = await fetchData('/api/user/users', 'GET');
+        setRows(response);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchRowData();
+  }, []);
+
   const [searchTerm, setSearchTerm] = useState('');
 
   //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
   const filterRows = (row) => {
     return (
-      row.User_Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      row.Location_Name.toLowerCase().includes(searchTerm.toLowerCase())
+      row.employee_alias.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.employee_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.location_name.toLowerCase().includes(searchTerm.toLowerCase())
     );
   };
   const filteredRows = rows.filter(filterRows);
@@ -214,7 +220,7 @@ export default function Users() {
                       hover
                       role="checkbox"
                       tabIndex={-1}
-                      key={row.User_ID}
+                      key={row.employee_id}
                     >
                       
                       <TableCell
@@ -224,12 +230,12 @@ export default function Users() {
                         padding="none"
                         align='center'
                       >
-                        {"#"+row.User_ID}
+                        {"#"+row.employee_id}
                       </TableCell>
-                      <TableCell align='center'>{row.User_Name}</TableCell>
-                      <TableCell align='center'>{row.Login_Code}</TableCell>
-                      <TableCell align='center'>{row.Location_Name}</TableCell>
-                      <TableCell align="center">{row.User_IsActive ? "True" : "False"}</TableCell>
+                      <TableCell align='center'>{row.employee_alias}</TableCell>
+                      <TableCell align="center">{row.employee_name}</TableCell>
+                      <TableCell align='center'>{row.login_code}</TableCell>
+                      <TableCell align='center'>{row.location_name}</TableCell>
                       <TableCell onClick={() => handleRowClick(row)}> 
                         <Button variant="outlined"> Edit </Button>
                     </TableCell> 
