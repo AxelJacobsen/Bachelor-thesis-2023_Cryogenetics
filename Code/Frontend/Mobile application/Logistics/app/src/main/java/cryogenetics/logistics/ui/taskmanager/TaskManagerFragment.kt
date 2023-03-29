@@ -41,11 +41,28 @@ class TaskManagerFragment : Fragment() {
         var taskManagerData: List<Fragment> = mutableListOf<Fragment>(
         )
 
-        mAdapter = TaskManagerAdapter(taskManagerData) { _, i ->
-            childFragmentManager.beginTransaction()
-                .replace(R.id.taskManager, mAdapter.dataList[i])
-                .commit()
-        }
+        mAdapter = TaskManagerAdapter(taskManagerData,
+            // OnClick
+            { _, i ->
+                // Switch to fragment
+                childFragmentManager.beginTransaction()
+                    .replace(R.id.taskManager, mAdapter.dataList[i])
+                    .commit()
+            },
+
+            // OnClickX
+            {_, i ->
+                // Remove fragment from hierarchy
+                childFragmentManager.beginTransaction()
+                    .remove(mAdapter.dataList[i])
+                    .commit()
+
+                // Remove fragment from data list
+                var data = mAdapter.dataList.toMutableList()
+                data.removeAt(i)
+                mAdapter.updateData(data)
+            }
+        )
 
         val recyclerView: RecyclerView = view.findViewById(R.id.rvTaskList)
             ?: return
