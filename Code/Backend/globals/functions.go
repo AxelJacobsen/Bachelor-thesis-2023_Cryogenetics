@@ -197,7 +197,6 @@ func ConvertUrlToSql(r *http.Request, table string, FKeys []string, joins []stri
 	if len(FKeys) > 0 {
 		var tempQuery = "SELECT " + table + ".*"
 		for _, FKey := range FKeys {
-			println(FKey)
 			tempQuery += ", " + FKey
 		}
 		tempQuery += " FROM " + table + " "
@@ -212,7 +211,6 @@ func ConvertUrlToSql(r *http.Request, table string, FKeys []string, joins []stri
 	//Add joins if specified
 	if len(joins) > 0 {
 		for _, join := range joins {
-			println(join)
 			query.WriteString(fmt.Sprintf("%s %s ", joinType, join))
 		}
 	}
