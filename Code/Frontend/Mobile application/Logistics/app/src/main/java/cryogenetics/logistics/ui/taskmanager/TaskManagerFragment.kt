@@ -43,18 +43,18 @@ class TaskManagerFragment : Fragment() {
 
         mAdapter = TaskManagerAdapter(taskManagerData,
             // OnClick
-            { _, i ->
+            { f, _ ->
                 // Switch to fragment
                 childFragmentManager.beginTransaction()
-                    .replace(R.id.taskManager, mAdapter.dataList[i])
+                    .replace(R.id.taskManager, f)
                     .commit()
             },
 
             // OnClickX
-            {_, i ->
+            {f, i ->
                 // Remove fragment from hierarchy
                 childFragmentManager.beginTransaction()
-                    .remove(mAdapter.dataList[i])
+                    .remove(f)
                     .commit()
 
                 // Remove fragment from data list
