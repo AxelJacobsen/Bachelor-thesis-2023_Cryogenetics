@@ -263,12 +263,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <View
-                android:id="@+id/deleteMe0"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTaskList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/yellow" />
+                android:orientation="horizontal"
 
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+
+                tools:itemCount="2"
+                tools:listitem="@layout/task_item" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout

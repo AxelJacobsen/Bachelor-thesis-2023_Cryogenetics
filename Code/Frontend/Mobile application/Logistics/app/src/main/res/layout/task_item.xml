@@ -8,13 +8,15 @@
 
     <TextView
         android:id="@+id/taskItemtv"
-        android:layout_width="160dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_width="140dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="2dp"
         android:background="@drawable/rectangle_rounded"
         android:text="taskItem"
-        android:textSize="32dp"
+        android:textSize="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,8 +24,8 @@
 
     <ImageView
         android:id="@+id/taskItemX"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         app:layout_constraintBottom_toBottomOf="@+id/taskItemtv"
         app:layout_constraintEnd_toEndOf="@+id/taskItemtv"
         app:layout_constraintTop_toTopOf="@+id/taskItemtv"
