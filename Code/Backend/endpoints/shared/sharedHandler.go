@@ -392,7 +392,7 @@ func HandlerUsers(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	// GET method
 	case http.MethodGet:
-		containerSQL, sqlArgs, err := globals.ConvertUrlToSql(r, tableName, []string{}, []string{}, "")
+		containerSQL, sqlArgs, err := globals.ConvertUrlToSql(r, tableName, []string{"location.name AS location_name"}, []string{"Location ON employee.location_id = Location.location_id"}, "LEFT JOIN")
 		if err != nil {
 			http.Error(w, "Error in converting url to sql", http.StatusUnprocessableEntity)
 		}
