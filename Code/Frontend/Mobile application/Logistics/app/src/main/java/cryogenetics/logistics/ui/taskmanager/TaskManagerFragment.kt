@@ -38,8 +38,7 @@ class TaskManagerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Set up adapter
-        var taskManagerData: List<Fragment> = mutableListOf<Fragment>(
-        )
+        var taskManagerData: List<TaskItem> = mutableListOf<TaskItem>()
 
         mAdapter = TaskManagerAdapter(taskManagerData,
             // OnClick
@@ -76,7 +75,7 @@ class TaskManagerFragment : Fragment() {
 
         // Attach listeners
         mImgButton1.setOnClickListener {
-            openTestFragmentA(view)
+            openTestFragmentA()
         }
 
         mImgButton2.setOnClickListener {
@@ -84,7 +83,7 @@ class TaskManagerFragment : Fragment() {
         }
     }
 
-    fun openTestFragmentA(view: View) {
+    fun openTestFragmentA() {
         // Create a test fragment and expand it
         val childFragment: Fragment = TestFragmentA()
         childFragmentManager.beginTransaction()
@@ -93,7 +92,7 @@ class TaskManagerFragment : Fragment() {
 
         // Add it to the list of fragments
         var data = mAdapter.dataList.toMutableList()
-        data.add(childFragment)
+        data.add(TaskItem("FA", childFragment))
         mAdapter.updateData(data)
 
         /* IN CASE THE FRAGMENT MUST BE OPENED BY THE PARENT ACTIVITY
@@ -111,7 +110,7 @@ class TaskManagerFragment : Fragment() {
 
         // Add it to the list of fragments
         var data = mAdapter.dataList.toMutableList()
-        data.add(childFragment)
+        data.add(TaskItem("FB", childFragment))
         mAdapter.updateData(data)
 
         /* IN CASE THE FRAGMENT MUST BE OPENED BY THE PARENT ACTIVITY

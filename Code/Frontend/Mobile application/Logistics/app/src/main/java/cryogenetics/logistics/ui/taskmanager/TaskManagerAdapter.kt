@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
  *  Controls interactions with the task manager/bar.
  */
 class TaskManagerAdapter(
-    var dataList: List<Fragment>,           // Initial list of tabs.
+    var dataList: List<TaskItem>,           // Initial list of tabs.
     val onClick: (Fragment, Int) -> Unit,   // On click (each tab)
     val onClickX: (Fragment, Int) -> Unit   // On click (X-button for each tab)
 ): RecyclerView.Adapter<TaskManagerAdapter.ItemViewHolder>() {
@@ -33,14 +33,14 @@ class TaskManagerAdapter(
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         // Set up behavior of tabs
         val item = dataList[holder.adapterPosition]
-        holder.tvName.text = "YO!"
+        holder.tvName.text = item.name
 
         holder.tvName.setOnClickListener {
-            onClick(item, holder.adapterPosition)
+            onClick(item.fragment, holder.adapterPosition)
         }
 
         holder.ivX.setOnClickListener {
-            onClickX(item, holder.adapterPosition)
+            onClickX(item.fragment, holder.adapterPosition)
         }
     }
 
@@ -51,7 +51,7 @@ class TaskManagerAdapter(
     /**
      *  Updates the adapter with new data.
      */
-    fun updateData(updatedDataList: List<Fragment>){
+    fun updateData(updatedDataList: List<TaskItem>){
         dataList = updatedDataList
         notifyDataSetChanged()
     }
