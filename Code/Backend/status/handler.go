@@ -1,7 +1,11 @@
 package status
 
 import (
+	paths "backend/constants"
+	"backend/globals"
+	"encoding/json"
 	"net/http"
+	"strings"
 )
 
 /**
@@ -10,12 +14,49 @@ import (
 func HandlerStatus(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("content-type", "application/json")
 
+	tableName := "container_status"
+	// Get escaped path without base URL and remove the first character if it's a "/"
+	escapedPath := r.URL.EscapedPath()[len(paths.PUBLIC_STATUS_PATH):]
+
+	if len(escapedPath) > 0 && escapedPath[0] == '/' {
+		escapedPath = escapedPath[1:]
+	}
+
+	// Split the path on each "/", unless the path is blank
+	args := []string{}
+	if len(escapedPath) > 0 {
+		args = strings.Split(escapedPath, "/")
+	}
+
 	// Switch based on method
 	switch r.Method {
-
 	// GET method
 	case http.MethodGet:
-		return
+		containerSQL, sqlArgs, err := globals.ConvertUrlToSql(r, tableName, []string{}, []string{}, "")
+		if err != nil {
+			http.Error(w, "Error in converting url to sql", http.StatusUnprocessableEntity)
+		}
+
+		res, err := globals.QueryJSON(globals.DB, containerSQL, sqlArgs, w)
+		if err != nil {
+			http.Error(w, "Error fetching clients.", http.StatusInternalServerError)
+			return
+		}
+
+		// Set header and encode to writer
+		w.Header().Set("Content-Type", "application/json")
+		err = json.NewEncoder(w).Encode(res)
+		if err != nil {
+			http.Error(w, "Error encoding clients.", http.StatusInternalServerError)
+		}
+
+		// PUT method
+	case http.MethodPut:
+		// If there's not enough args, return
+		if len(args) < 1 {
+			http.Error(w, "Not enough arguments, read the documentation for more information.", http.StatusUnprocessableEntity)
+			return
+		}
 
 	// Other method
 	default:
