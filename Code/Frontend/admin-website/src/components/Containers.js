@@ -168,7 +168,6 @@ export default function Containers() {
     }
     fetchRowData();
   }, []);
-  console.log(rows)
 
     //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
     const filterRows = (row) => {
