@@ -10,6 +10,84 @@ import (
 )
 
 /**
+ *	Recieves all requests and performs security as well as
+ */
+func EndpointHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("content-type", "application/json")
+	var tableNames []string
+	tableNames = append(tableNames, "transaction", "client", "container", "handler")
+	// Get escaped path without base URL and remove the first character if it's a "/"
+	escapedPath := r.URL.EscapedPath()[len(paths.BASE_PATH):]
+
+	if len(escapedPath) > 0 && escapedPath[0] == '/' {
+		escapedPath = escapedPath[1:]
+	}
+
+	// Split the path on each "/", unless the path is blank
+	args := []string{}
+	var activeTable string
+	if len(escapedPath) > 0 {
+		args = strings.Split(escapedPath, "/")
+
+		//Check if url endpoint is legal table
+		for _, i := range tableNames {
+			if i == strings.ToLower(args[0]) {
+				activeTable = i
+			}
+		}
+		if activeTable == "" {
+			http.Error(w, "Missing or illegal endpoint name, check spelling", http.StatusBadRequest)
+			return
+		}
+
+	}
+
+	////////////////////////////////////
+	/// CHECK FOR AUTH TOKEN PERMISSIONS
+	////////////////////////////////////
+
+	// Redirect to generic function based on url
+	switch r.Method {
+
+	// GET method
+	case http.MethodGet:
+		/// SEND REQUEST TO GENERIC GET REQUEST, RECIEVE AS "res, err"
+
+		/* // Set header and encode to writer
+		w.Header().Set("Content-Type", "application/json")
+		err = json.NewEncoder(w).Encode(res)
+		if err != nil {
+			http.Error(w, "Error encoding transactions.", http.StatusInternalServerError)
+		} */
+	// POST method
+	case http.MethodPost:
+		/// SEND REQUEST TO GENERIC POST REQUEST, RECIEVE AS "res, err"
+
+		/* // Set header and encode to writer
+		w.Header().Set("Content-Type", "application/json")
+		err = json.NewEncoder(w).Encode(res)
+		if err != nil {
+			http.Error(w, "Error encoding transactions.", http.StatusInternalServerError)
+		} */
+	// PUT method
+	case http.MethodPut:
+	/// SEND REQUEST TO GENERIC PUT REQUEST, RECIEVE AS "res, err"
+
+	/* // Set header and encode to writer
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(res)
+	if err != nil {
+		http.Error(w, "Error encoding transactions.", http.StatusInternalServerError)
+	} */
+
+	default:
+		http.Error(w, "Method not allowed, read the documentation for more information.", http.StatusMethodNotAllowed)
+		return
+	}
+
+}
+
+/**
  *	Handler for 'transactions' endpoint.
  */
 func HandlerTransactions(w http.ResponseWriter, r *http.Request) {
