@@ -30,7 +30,7 @@ import fetchData from '../globals/fetchData';
 
 const headCells = [
   {
-    id: 'model_name', numeric: false, disablePadding: true, label: 'Model Name',
+    id: 'container_model_name', numeric: false, disablePadding: true, label: 'Model Name',
   },
   {
     id: 'refill_interval', numeric: true, disablePadding: true, label: 'Refill Interval',
@@ -119,7 +119,7 @@ function EnhancedTableToolbar({ searchTerm, setSearchTerm }) {
 
 export default function Models() {
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('model_name');
+  const [orderBy, setOrderBy] = React.useState('container_model_name');
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -132,7 +132,7 @@ export default function Models() {
   React.useEffect(() => {
     async function fetchRowData() {
       try {
-        const response = await fetchData('/api/model', 'GET');
+        const response = await fetchData('/api/container_model', 'GET');
         setRows(response);
       } catch (error) {
         console.error(error);
@@ -146,7 +146,7 @@ export default function Models() {
     //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
     const filterRows = (row) => {
       return (
-        row.model_name.toLowerCase().includes(searchTerm.toLowerCase()) 
+        row.container_model_name.toLowerCase().includes(searchTerm.toLowerCase()) 
       );
     };
     const filteredRows = rows.filter(filterRows);
@@ -216,7 +216,7 @@ export default function Models() {
                       hover
                       role="checkbox"
                       tabIndex={-1}
-                      key={row.model_name}
+                      key={row.container_model_name}
                     >
                       
                       <TableCell
@@ -226,7 +226,7 @@ export default function Models() {
                         padding="none"
                         align='center'
                       >
-                        {row.model_name}
+                        {row.container_model_name}
                       </TableCell>
                       <TableCell align='center'>{row.refill_interval}</TableCell>
                       <TableCell align='center'>{row.liter_capacity}</TableCell>

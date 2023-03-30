@@ -139,7 +139,7 @@ export default function Users() {
   React.useEffect(() => {
     async function fetchRowData() {
       try {
-        const response = await fetchData('/api/user/users', 'GET');
+        const response = await fetchData('/api/employee', 'GET');
         setRows(response);
       } catch (error) {
         console.error(error);

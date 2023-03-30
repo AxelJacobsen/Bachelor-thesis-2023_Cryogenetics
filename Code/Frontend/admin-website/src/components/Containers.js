@@ -36,16 +36,16 @@ const headCells = [
     id: 'serial_number', numeric: false, disablePadding: true, label: 'SerialNr',
   },
   {
-    id: 'model', numeric: false, disablePadding: true, label: 'Model Name',
+    id: 'container_model_name', numeric: false, disablePadding: true, label: 'Model Name',
   },
   {
-    id: 'status', numeric: false, disablePadding: true, label: 'Status',
+    id: 'container_status_name', numeric: false, disablePadding: true, label: 'Status',
   },
   {
     id: 'location_name', numeric: false, disablePadding: true, label: 'Location Name',
   },
   {
-    id: 'customer_name', numeric: false, disablePadding: true, label: 'Customer Name',
+    id: 'client_name', numeric: false, disablePadding: true, label: 'Customer Name',
   },
   {
     id: 'address', numeric: false, disablePadding: true, label: 'Address',
@@ -160,7 +160,7 @@ export default function Containers() {
   React.useEffect(() => {
     async function fetchRowData() {
       try {
-        const response = await fetchData('/api/user/container', 'GET');
+        const response = await fetchData('/api/container', 'GET');
         setRows(response);
       } catch (error) {
         console.error(error);
@@ -172,10 +172,9 @@ export default function Containers() {
     //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
     const filterRows = (row) => {
       return (
-        row.model.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        row.serial_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        row.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        row.customer_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.container_model_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.container_status_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        row.client_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         row.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
         row.comment.toLowerCase().includes(searchTerm.toLowerCase()) ||
         row.location_name.toLowerCase().includes(searchTerm.toLowerCase()) 
@@ -266,13 +265,13 @@ export default function Containers() {
                           {row.id}
                         </TableCell>
                         <TableCell align='center'>{row.serial_number}</TableCell>
-                        <TableCell align="center">{row.model}</TableCell>
-                        <TableCell align="center">{row.status}</TableCell>
+                        <TableCell align="center">{row.container_model_name}</TableCell>
+                        <TableCell align="center">{row.container_status_name}</TableCell>
                         <TableCell align="center">
                           {row.location_name === null ? "NULL" : row.location_name}
                         </TableCell>
                         <TableCell align="center">
-                          {row.customer_name === null ? "NULL" : row.customer_name}
+                          {row.client_name === null ? "NULL" : row.client_name}
                         </TableCell>
                         <TableCell align="center">
                           {row.address === null ? "NULL" : row.address}

@@ -32,7 +32,7 @@ const headCells = [
     id: 'location_id', numeric: true, disablePadding: true, label: 'Location ID',
   },
   {
-    id: 'name', numeric: false, disablePadding: true, label: 'Location Name',
+    id: 'location_name', numeric: false, disablePadding: true, label: 'Location Name',
   },
 ];
 
@@ -142,7 +142,7 @@ export default function Locations() {
     //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
     const filterRows = (row) => {
       return (
-        row.name.toLowerCase().includes(searchTerm.toLowerCase()) 
+        row.location_name.toLowerCase().includes(searchTerm.toLowerCase()) 
       );
     };
     const filteredRows = rows.filter(filterRows);
@@ -220,7 +220,7 @@ export default function Locations() {
                         >
                           {"#"+row.location_id}
                         </TableCell>
-                        <TableCell align='center'>{row.name}</TableCell>
+                        <TableCell align='center'>{row.location_name}</TableCell>
                         <TableCell onClick={() => handleRowClick(row)}> 
                         <Button variant="outlined"> Edit </Button>
                       </TableCell> 

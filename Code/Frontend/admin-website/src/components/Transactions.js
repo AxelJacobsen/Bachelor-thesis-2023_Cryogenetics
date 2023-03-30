@@ -33,16 +33,16 @@ const headCells = [
     id: 'act', numeric: false, disablePadding: true, label: 'Act',
   },
   {
-    id: 'responsible_name', numeric: false, disablePadding: true, label: 'Responsible Sign',
+    id: 'employee_alias', numeric: false, disablePadding: true, label: 'Responsible Sign',
   },
   {
-    id: 'inventory_name', numeric: false, disablePadding: true, label: 'Inventory Name',
+    id: 'location_name', numeric: false, disablePadding: true, label: 'Inventory Name',
   },
   {
     id: 'address', numeric: false, disablePadding: true, label: 'Address',
   },
   {
-    id: 'customer_name', numeric: false, disablePadding: true, label: 'Customer Name',
+    id: 'client_name', numeric: false, disablePadding: true, label: 'Customer Name',
   },
   {
     id: 'container', numeric: false, disablePadding: true, label: 'SerialNR',
@@ -144,7 +144,7 @@ export default function Transactions() {
   React.useEffect(() => {
     async function fetchRowData() {
       try {
-        const response = await fetchData('/api/transactions', 'GET');
+        const response = await fetchData('/api/transaction', 'GET');
         setRows(response);
       } catch (error) {
         console.error(error);
@@ -156,9 +156,9 @@ export default function Transactions() {
   //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
   const filterRows = (row) => {
     return (
-      row.responsible_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      row.customer_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      row.inventory_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.employee_alias.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.client_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.location_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       row.act.toLowerCase().includes(searchTerm.toLowerCase()) ||
       row.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
       row.comment.toLowerCase().includes(searchTerm.toLowerCase())
@@ -237,11 +237,11 @@ export default function Transactions() {
                           {row.date}
                         </TableCell>
                         <TableCell align='center'>{row.act}</TableCell>
-                        <TableCell align="center">{row.responsible_name}</TableCell>
-                        <TableCell align="center">{row.inventory_name}</TableCell>
+                        <TableCell align="center">{row.employee_alias}</TableCell>
+                        <TableCell align="center">{row.location_name}</TableCell>
                         <TableCell align="center">{row.address}</TableCell>
                         <TableCell align="center">
-                          {row.customer_name === null ? "NULL" : row.customer_name}
+                          {row.client_name === null ? "NULL" : row.client_name}
                         </TableCell>
                         <TableCell align="center">{row.container}</TableCell>
                         <TableCell align="center">{row.comment}</TableCell>

@@ -31,7 +31,7 @@ import fetchData from '../globals/fetchData';
 
 const headCells = [
   {
-    id: 'status_name', numeric: true, disablePadding: true, label: 'Status Name',
+    id: 'container_status_name', numeric: true, disablePadding: true, label: 'Status Name',
   }
 ];
 
@@ -114,7 +114,7 @@ function EnhancedTableToolbar({ searchTerm, setSearchTerm }) {
 
 export default function Statuses() {
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('status_name');
+  const [orderBy, setOrderBy] = React.useState('container_status_name');
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -127,7 +127,7 @@ export default function Statuses() {
   React.useEffect(() => {
     async function fetchRowData() {
       try {
-        const response = await fetchData('/api/status', 'GET');
+        const response = await fetchData('/api/container_status', 'GET');
         setRows(response);
       } catch (error) {
         console.error(error);
@@ -141,7 +141,7 @@ export default function Statuses() {
     //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
     const filterRows = (row) => {
       return (
-        row.status_name.toLowerCase().includes(searchTerm.toLowerCase()) 
+        row.container_status_name.toLowerCase().includes(searchTerm.toLowerCase()) 
       );
     };
     const filteredRows = rows.filter(filterRows);
@@ -215,7 +215,7 @@ export default function Statuses() {
                       hover
                       role="checkbox"
                       tabIndex={-1}
-                      key={row.status_name}
+                      key={row.container_status_name}
                     >
                       
                       <TableCell
@@ -225,7 +225,7 @@ export default function Statuses() {
                         padding="none"
                         align='center'
                       >
-                        {row.status_name}
+                        {row.container_status_name}
                       </TableCell>
                       <TableCell onClick={() => handleRowClick(row)}> 
                       <Button variant="outlined"> Edit </Button>
