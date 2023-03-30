@@ -17,5 +17,6 @@
     <string name="client">Client</string>
     <string name="location">Location</string>
     <string name="filterbutton">Filter</string>
+    <string name="ActLog">Act Log</string>
 
 </resources>
