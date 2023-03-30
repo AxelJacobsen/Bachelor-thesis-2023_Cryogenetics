@@ -5,9 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/inventoryFragment"
+    android:id="@+id/actLogFragment"
     android:layout_margin="7dip"
-    tools:context=".ui.inventory.InventoryFragment">
+    tools:context=".ui.actLog.ActLogFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/titleFilterSearchLayout"
@@ -31,11 +31,11 @@
             app:layout_constraintWidth_percent="0.10" />
 
         <TextView
-            android:id="@+id/tvInventoryTitle"
+            android:id="@+id/tvActLogTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/inventory"
+            android:text="@string/ActLog"
             android:textColor="@color/black"
             android:textSize="22sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -65,10 +65,6 @@
             app:layout_constraintStart_toStartOf="@+id/view2"
             app:layout_constraintTop_toTopOf="@+id/view2">
         </SearchView>
-
-
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -82,7 +78,7 @@
         app:layout_constraintTop_toBottomOf="@+id/titleFilterSearchLayout">
 
         <TextView
-            android:id="@+id/tvInventoryNr"
+            android:id="@+id/tvActLogNr"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="2dip"
@@ -95,91 +91,10 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.141" />
+            app:layout_constraintWidth_percent="0.123" />
 
         <TextView
-            android:id="@+id/tvInventoryLocation"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dip"
-            android:background="@color/white"
-            android:gravity="start"
-            android:padding="3dip"
-            android:text="@string/location"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvInventoryNr"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.141" />
-
-
-        <TextView
-            android:id="@+id/tvInventoryClient"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dip"
-            android:background="@color/white"
-            android:gravity="start"
-            android:padding="3dip"
-            android:text="@string/client"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvInventoryLocation"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.141" />
-
-        <TextView
-            android:id="@+id/tvInventoryLastFill"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dip"
-            android:background="@color/white"
-            android:gravity="start"
-            android:padding="3dip"
-            android:text="@string/last_filled"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvInventoryClient"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.141" />
-
-        <TextView
-            android:id="@+id/tvInventoryStatus"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dip"
-            android:background="@color/white"
-            android:gravity="start"
-            android:padding="3dip"
-            android:text="@string/status"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvInventoryLastFill"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.141" />
-
-        <TextView
-            android:id="@+id/tvInventoryInvoice"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dip"
-            android:background="@color/white"
-            android:gravity="start"
-            android:padding="3dip"
-            android:text="@string/inovice"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvInventoryStatus"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.141" />
-
-        <TextView
-            android:id="@+id/tvInventoryNoti"
+            android:id="@+id/tvActLogTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="2dip"
@@ -190,21 +105,114 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvInventoryInvoice"
+            app:layout_constraintStart_toEndOf="@+id/tvActLogNr"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.141" />
+            app:layout_constraintWidth_percent="0.123" />
+
+        <TextView
+            android:id="@+id/tvActLogClient"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dip"
+            android:background="@color/white"
+            android:gravity="start"
+            android:padding="3dip"
+            android:text="@string/notifcations"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvActLogTime"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.123" />
+        <TextView
+            android:id="@+id/tvActLogLocation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dip"
+            android:background="@color/white"
+            android:gravity="start"
+            android:padding="3dip"
+            android:text="@string/location"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvActLogClient"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.123" />
+
+        <TextView
+            android:id="@+id/tvActLogAct"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dip"
+            android:background="@color/white"
+            android:gravity="start"
+            android:padding="3dip"
+            android:text="@string/client"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvActLogLocation"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.123" />
+
+        <TextView
+            android:id="@+id/tvActLogComment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dip"
+            android:background="@color/white"
+            android:gravity="start"
+            android:padding="3dip"
+            android:text="@string/status"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvActLogAct"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.123" />
+
+        <TextView
+            android:id="@+id/tvActLogSign"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dip"
+            android:background="@color/white"
+            android:gravity="start"
+            android:padding="3dip"
+            android:text="@string/inovice"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvActLogComment"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.123" />
+
+        <TextView
+            android:id="@+id/tvActLogStatus"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dip"
+            android:background="@color/white"
+            android:gravity="start"
+            android:padding="3dip"
+            android:text="@string/notifcations"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvActLogSign"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.123" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/InventoryRecycler"
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tableLayout"
-        tools:itemCount="10"
-        tools:listitem="@layout/inventory_recycler_item"/>
+        app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

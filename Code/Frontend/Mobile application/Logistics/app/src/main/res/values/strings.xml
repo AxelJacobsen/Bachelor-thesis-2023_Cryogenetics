@@ -17,6 +17,7 @@
     <string name="client">Client</string>
     <string name="location">Location</string>
     <string name="filterbutton">Filter</string>
+    <string name="ActLog">Act Log</string>
 
     <!-- Json Ids, used in tags to fetch json data, ask Axel -->
     <string name="act">action</string>
