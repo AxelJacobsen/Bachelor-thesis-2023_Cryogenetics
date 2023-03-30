@@ -169,21 +169,21 @@ func QueryJSON(db *sql.DB, query string, queryArgs []interface{}, w http.Respons
 
 /*
 *
+Takes an HTTP request and generates an SQL query with values separated based on the parameters provided.
+The SQL query GETS entries from the provided activeTable.
 
-	Takes an HTTP request and generates an SQL query with values separated based on the parameters provided.
-	The SQL query GETS entries from the provided activeTable.
+@param r - a pointer to the HTTP request
+@param activeTable - name of the relevant table from which entries are to be fetched
+@param fkTables - slice of table names which act as foreign keys for the active table
+@param fkFilters - slice of foreign key filters for the fkTables
+@param nameEndpoints - slice of strings representing the table fields which are used as endpoints in the filters (e.g. ["transaction", "employee", "container"])
+@param specificSelects - slice of strings representing the specific selects to include in the query (e.g.["client.client_name AS client_name"])
 
-	@param r - a pointer to the HTTP request
-	@param activeTable - name of the relevant table from which entries are to be fetched
-	@param fkTables - slice of table names which act as foreign keys for the active table
-	@param fkFilters - slice of foreign key filters for the fkTables
-
-	@param nameEndpoints - slice of strings representing the table fields which are used as endpoints in the filters (e.g. ["transaction", "employee", "container"])
-	@returns - an SQL string with placeholders
-	@returns - a list of values to fit the SQL query
-	@returns - any potential errors thrown
+@returns - an SQL string with placeholders
+@returns - a list of values to fit the SQL query
+@returns - any potential errors thrown
 */
-func ConvertUrlToSql(r *http.Request, activeTable string, fkTables []string, fkFilters []string, nameEndpoints []string) (string, []interface{}, error) {
+func ConvertUrlToSql(r *http.Request, activeTable string, fkTables []string, fkFilters []string, nameEndpoints []string, specificSelects []string) (string, []interface{}, error) {
 	var (
 		sqlWhere  []string
 		sqlArgs   []interface{}
@@ -191,18 +191,11 @@ func ConvertUrlToSql(r *http.Request, activeTable string, fkTables []string, fkF
 		sqlJoin   string
 	)
 
-	// Check if specific columns were requested
-	if len(r.URL.Query()["columns"]) > 0 {
-		sqlSelect = "SELECT " + strings.Join(r.URL.Query()["columns"], ",") + " "
+	// Add specific columns to select if any
+	if len(specificSelects) > 0 {
+		sqlSelect = fmt.Sprintf("SELECT %s, %s", activeTable+".*", strings.Join(specificSelects, ", "))
 	} else {
-		sqlSelect = "SELECT " + activeTable + ".*, "
-	}
-
-	// Check if there are any filters to apply
-	if len(r.URL.Query()["filter"]) > 0 {
-		for _, filter := range r.URL.Query()["filter"] {
-			sqlWhere = append(sqlWhere, filter)
-		}
+		sqlSelect = fmt.Sprintf("SELECT %s.* ", activeTable)
 	}
 
 	// Add foreign key filters and joins
@@ -212,12 +205,7 @@ func ConvertUrlToSql(r *http.Request, activeTable string, fkTables []string, fkF
 		}
 
 		// Add left join for the foreign key table
-		sqlJoin += fmt.Sprintf(" LEFT JOIN %s ON %s.%s = %s.id ", table, activeTable, nameEndpoints[i], table)
-
-		// Add select fields for the foreign key table
-		for _, field := range strings.Split(r.URL.Query().Get("fields["+table+"]"), ",") {
-			sqlSelect += fmt.Sprintf("%s.%s AS %s_%s, ", table, field, table, field)
-		}
+		sqlJoin += fmt.Sprintf(" LEFT JOIN %s ON %s.%s = %s.%s_id ", table, activeTable, nameEndpoints[i], table, table)
 
 		// Add filter for the foreign key table
 		if len(fkFilters) > i && fkFilters[i] != "" {
@@ -229,7 +217,13 @@ func ConvertUrlToSql(r *http.Request, activeTable string, fkTables []string, fkF
 	// Remove trailing comma and space from sqlSelect
 	sqlSelect = strings.TrimSuffix(sqlSelect, ", ")
 
+	// Append activeTable name and joins to SQL query
 	sql := fmt.Sprintf("%s FROM %s %s", sqlSelect, activeTable, sqlJoin)
+
+	// Append filters to SQL query
+	if len(sqlWhere) > 0 {
+		sql += " WHERE " + strings.Join(sqlWhere, " AND ")
+	}
 
 	return sql, sqlArgs, nil
 }

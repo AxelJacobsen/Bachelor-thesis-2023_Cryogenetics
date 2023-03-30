@@ -42,7 +42,27 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 	}
-	println(activeTable)
+	var fkTables []string
+	var fkFilters []string
+	var nameEndpoints []string
+	var specificSelects []string
+
+	switch activeTable {
+	case "container":
+		fkTables = []string{"client", "location"}
+		nameEndpoints = []string{"client_id", "location_id"}
+		specificSelects = []string{"client.client_name AS client_name", "location.location_name AS location_name"}
+
+	case "transaction":
+		fkTables = []string{"client", "employee", "location"}
+		nameEndpoints = []string{"client_id", "employee_id", "location_id"}
+		specificSelects = []string{"client.client_name AS client_name", "employee.employee_alias AS employee_alias", "location.location_name AS location_name"}
+
+	case "employee":
+		fkTables = []string{"location"}
+		nameEndpoints = []string{"location_id"}
+		specificSelects = []string{"location.location_name AS location_name"}
+	}
 
 	////////////////////////////////////
 	/// CHECK FOR AUTH TOKEN PERMISSIONS
@@ -55,13 +75,12 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 	case http.MethodGet:
 		/// SEND REQUEST TO GENERIC GET REQUEST, RECIEVE AS "res, err"
 
-		//		SQL, sqlArgs, err := globals.ConvertUrlToSql(r, activeTable, []string{"Client", "Location"}, []string{"client_ID", "location_id"}, []string{"client", "employee"})
+		SQL, sqlArgs, err := globals.ConvertUrlToSql(r, activeTable, fkTables, fkFilters, nameEndpoints, specificSelects)
 
-		SQL, sqlArgs, err := globals.ConvertUrlToSql(r, activeTable, []string{}, []string{}, []string{})
+		//SQL, sqlArgs, err := globals.ConvertUrlToSql(r, activeTable, []string{}, []string{}, []string{})
 		if err != nil {
 			http.Error(w, "Error in converting url to sql", http.StatusUnprocessableEntity)
 		}
-		println(SQL)
 		res, err := globals.QueryJSON(globals.DB, SQL, sqlArgs, w)
 		if err != nil {
 			http.Error(w, "Error fetching Data.", http.StatusInternalServerError)

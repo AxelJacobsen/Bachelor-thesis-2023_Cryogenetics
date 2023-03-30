@@ -108,7 +108,7 @@ func HandlerAdmins(w http.ResponseWriter, r *http.Request) {
 
 	// GET method
 	case http.MethodGet:
-		containerSQL, sqlArgs, err := globals.ConvertUrlToSql(r, tableName, []string{}, []string{}, []string{})
+		containerSQL, sqlArgs, err := globals.ConvertUrlToSql(r, tableName, []string{}, []string{}, []string{}, []string{})
 		if err != nil {
 			http.Error(w, "Error in converting url to sql", http.StatusUnprocessableEntity)
 		}
