@@ -98,7 +98,7 @@ func main() {
 		constants.MOBILE_LOGIN_PATH: mobile.HandlerMobileLogin,
 		constants.WEB_LOGIN_PATH:    web.HandlerWebLogin,
 		constants.WEB_PRIMARY_PATH:  web.HandlerWebDashboard,
-		//constants.WEB_ADMIN_PATH:    web.HandlerAdmins,
+		constants.WEB_ADMIN_PATH:    web.HandlerAdmins,
 		/* constants.PUBLIC_TRANSACTION_PATH: shared.HandlerTransactions,
 		constants.PUBLIC_CLIENTS_PATH:     shared.HandlerClients,
 		constants.PUBLIC_USERS_PATH:       shared.HandlerUsers,
