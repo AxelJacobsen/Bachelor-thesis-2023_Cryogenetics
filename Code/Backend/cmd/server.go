@@ -94,18 +94,18 @@ func main() {
 
 	// Route
 	routes := map[string]func(http.ResponseWriter, *http.Request){
-		constants.BASE_PATH:               shared.EndpointHandler,
-		constants.MOBILE_LOGIN_PATH:       mobile.HandlerMobileLogin,
-		constants.WEB_LOGIN_PATH:          web.HandlerWebLogin,
-		constants.WEB_PRIMARY_PATH:        web.HandlerWebDashboard,
-		constants.WEB_ADMIN_PATH:          web.HandlerAdmins,
-		constants.PUBLIC_TRANSACTION_PATH: shared.HandlerTransactions,
+		constants.BASE_PATH:         shared.EndpointHandler,
+		constants.MOBILE_LOGIN_PATH: mobile.HandlerMobileLogin,
+		constants.WEB_LOGIN_PATH:    web.HandlerWebLogin,
+		constants.WEB_PRIMARY_PATH:  web.HandlerWebDashboard,
+		//constants.WEB_ADMIN_PATH:    web.HandlerAdmins,
+		/* constants.PUBLIC_TRANSACTION_PATH: shared.HandlerTransactions,
 		constants.PUBLIC_CLIENTS_PATH:     shared.HandlerClients,
 		constants.PUBLIC_USERS_PATH:       shared.HandlerUsers,
 		constants.PUBLIC_CONTAINER_PATH:   shared.HandlerContainer,
 		constants.PUBLIC_ACT_PATH:         shared.HandlerActs,
 		constants.PUBLIC_MODEL_PATH:       shared.HandlerModel,
-		constants.PUBLIC_LOCATION_PATH:    shared.HandlerLocation,
+		constants.PUBLIC_LOCATION_PATH:    shared.HandlerLocation, */
 
 		constants.PUBLIC_STATUS_PATH: status.HandlerStatus,
 	}
