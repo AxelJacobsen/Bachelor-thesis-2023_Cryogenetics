@@ -18,4 +18,19 @@
     <string name="location">Location</string>
     <string name="filterbutton">Filter</string>
 
+    <!-- Json Ids, used in tags to fetch json data, ask Axel -->
+    <string name="act">action</string>
+    <string name="adr">address</string>
+    <string name="cId">client_id</string>
+    <string name="cmt">comment</string>
+    <string name="cnt">container</string>
+    <string name="dat">date</string>
+    <string name="inv">inventory</string>
+    <string name="ivo">invoice</string>
+    <string name="rId">responsible_id</string>
+    <string name="id">id</string>
+    <string name="lFi">last_filled</string>
+    <string name="mod">model</string>
+    <string name="sNu">serial_number</string>
+
 </resources>

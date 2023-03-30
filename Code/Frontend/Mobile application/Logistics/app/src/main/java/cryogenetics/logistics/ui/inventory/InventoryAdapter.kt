@@ -1,16 +1,10 @@
 package cryogenetics.logistics.ui.inventory
 
 
-import android.annotation.SuppressLint
-import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.CheckBox
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import cryogenetics.logistics.R
 import cryogenetics.logistics.databinding.InventoryRecyclerItemBinding
 
 class InventoryAdapter(
@@ -50,7 +44,6 @@ class InventoryAdapter(
         binding.tvInventoryStatus.text = "FIVE"
         binding.tvInventoryInvoice.text = "SIX"
         binding.tvInventoryNoti.text = "SEVEN"
-
     }
 
     /**
