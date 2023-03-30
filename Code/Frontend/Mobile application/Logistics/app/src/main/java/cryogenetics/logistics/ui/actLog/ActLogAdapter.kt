@@ -1,21 +1,20 @@
-package cryogenetics.logistics.ui.inventory
+package cryogenetics.logistics.ui.actLog
 
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.recyclerview.widget.RecyclerView
-import cryogenetics.logistics.databinding.InventoryRecyclerItemBinding
-import cryogenetics.logistics.ui.actLog.ActLogDataModel
+import cryogenetics.logistics.databinding.ActLogRecyclerItemBinding
 
-class InventoryAdapter(
+class ActLogAdapter(
     private val mOnProductClickListener: AdapterView.OnItemClickListener,
     private val mProductList: ArrayList<ActLogDataModel> = ArrayList()
-) : RecyclerView.Adapter<InventoryAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<ActLogAdapter.ViewHolder>() {
 
-    inner class ViewHolder(val binder: InventoryRecyclerItemBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(val binder: ActLogRecyclerItemBinding) : RecyclerView.ViewHolder(binding.root)
 
-    private var _binding: InventoryRecyclerItemBinding? = null
+    private var _binding: ActLogRecyclerItemBinding? = null
     private val binding get() = _binding!!
 
     /**
@@ -25,8 +24,8 @@ class InventoryAdapter(
         val inventoryNr: TextView = binding.tvInventoryNr
     }*/
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder  {
-        val binder = InventoryRecyclerItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binder = ActLogRecyclerItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         _binding = binder
 
         return ViewHolder(binding)

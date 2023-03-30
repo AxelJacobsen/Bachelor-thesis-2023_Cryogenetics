@@ -1,4 +1,4 @@
-package cryogenetics.logistics.ui.inventory
+package cryogenetics.logistics.ui.actLog
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -9,12 +9,10 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.recyclerview.widget.LinearLayoutManager
 import cryogenetics.logistics.databinding.FragmentInventoryBinding
-import cryogenetics.logistics.ui.actLog.ActLogAdapter
-import cryogenetics.logistics.ui.actLog.ActLogDataModel
-import cryogenetics.logistics.ui.actLog.ActLogFragment
+import cryogenetics.logistics.ui.inventory.ActLogViewModel
 import java.util.*
 
-class InventoryFragment : Fragment() {
+class ActLogFragment : Fragment() {
 
     companion object {
         fun newInstance() = ActLogFragment()
