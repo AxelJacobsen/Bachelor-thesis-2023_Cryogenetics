@@ -167,100 +167,71 @@ func QueryJSON(db *sql.DB, query string, queryArgs []interface{}, w http.Respons
 
 //Below creates an "exclusive query" by using AND, could be swapped to "Inclusive" by using OR
 
-/**
- * Takes an http request and returns an SQL query with values separate.
- * The SQL query GETS entries from the given table.
- *
- * @param r - a pointer to the http request
- * @param table - name of the relevant table, (should be added as request header or in the url instead)
- * @param FKeys - SQL query of the foreign keys in the table for joining (e.g.["Client.client_Name AS client_name,"])
- * @param joins - a slice of strings representing the tables to join on (e.g. ["Client ON Container.at_client = Client.client_ID"])
- * @param joinType - a string representing the type of join (e.g. "LEFT JOIN")
- *
- * @returns - an SQL string with placeholders
- * @returns - a list of values to fit the SQL query
- * @returns - any potential errors thrown
- */
-func ConvertUrlToSql(r *http.Request, table string, FKeys []string, joins []string, joinType string) (string, []interface{}, error) {
-	// Get url values
-	urlData := r.URL.Query()
-	var emptyRet []interface{}
-	//Empty table name
-	if len(table) <= 0 {
+/*
+*
 
-		return "", emptyRet, errors.New("couldn't write to string in SQL constructor")
-	}
+	Takes an HTTP request and generates an SQL query with values separated based on the parameters provided.
+	The SQL query GETS entries from the provided activeTable.
 
-	//Initiate builder
-	var query strings.Builder
+	@param r - a pointer to the HTTP request
+	@param activeTable - name of the relevant table from which entries are to be fetched
+	@param fkTables - slice of table names which act as foreign keys for the active table
+	@param fkFilters - slice of foreign key filters for the fkTables
 
-	if len(FKeys) > 0 {
-		var tempQuery = "SELECT " + table + ".*"
-		for _, FKey := range FKeys {
-			tempQuery += ", " + FKey
-		}
-		tempQuery += " FROM " + table + " "
+	@param nameEndpoints - slice of strings representing the table fields which are used as endpoints in the filters (e.g. ["transaction", "employee", "container"])
+	@returns - an SQL string with placeholders
+	@returns - a list of values to fit the SQL query
+	@returns - any potential errors thrown
+*/
+func ConvertUrlToSql(r *http.Request, activeTable string, fkTables []string, fkFilters []string, nameEndpoints []string) (string, []interface{}, error) {
+	var (
+		sqlWhere  []string
+		sqlArgs   []interface{}
+		sqlSelect string
+		sqlJoin   string
+	)
 
-		query.WriteString(tempQuery)
-
+	// Check if specific columns were requested
+	if len(r.URL.Query()["columns"]) > 0 {
+		sqlSelect = "SELECT " + strings.Join(r.URL.Query()["columns"], ",") + " "
 	} else {
-		//Start with basic format
-		query.WriteString(fmt.Sprintf("SELECT %s FROM `%s` ", table+".*", table))
+		sqlSelect = "SELECT " + activeTable + ".*, "
 	}
 
-	//Add joins if specified
-	if len(joins) > 0 {
-		for _, join := range joins {
-			query.WriteString(fmt.Sprintf("%s %s ", joinType, join))
+	// Check if there are any filters to apply
+	if len(r.URL.Query()["filter"]) > 0 {
+		for _, filter := range r.URL.Query()["filter"] {
+			sqlWhere = append(sqlWhere, filter)
 		}
 	}
 
-	//If there are no parameters
-	if len(urlData) <= 0 {
-		//Not necessarily an error, but should still break
-		return query.String(), emptyRet, nil
-	}
+	// Add foreign key filters and joins
+	for i, table := range fkTables {
+		if table == "" {
+			continue
+		}
 
-	//Add WHERE clause
-	query.WriteString("WHERE ")
+		// Add left join for the foreign key table
+		sqlJoin += fmt.Sprintf(" LEFT JOIN %s ON %s.%s = %s.id ", table, activeTable, nameEndpoints[i], table)
 
-	//Prep args container
-	var argList []interface{}
+		// Add select fields for the foreign key table
+		for _, field := range strings.Split(r.URL.Query().Get("fields["+table+"]"), ",") {
+			sqlSelect += fmt.Sprintf("%s.%s AS %s_%s, ", table, field, table, field)
+		}
 
-	//Placeholder counter
-	i := 1
-
-	for key, value := range urlData {
-		if len(value) == 1 {
-			//Single value under key
-			argList = append(argList, value[0])
-			_, err := query.WriteString(fmt.Sprintf("%s = ?%d OR ", key, i))
-
-			if err != nil {
-				return "", emptyRet, errors.New("couldn't write to string in SQL constructor")
-			}
-
-			i++
-		} else {
-			//Multiple variables under same key
-			for o := 0; o < len(value); o++ {
-				//Stow the actual value to be returned separately
-				argList = append(argList, value[o])
-				//Overwrite inValue with a placeholder to be written into the SQL query
-				value[o] = fmt.Sprintf("?%d", i)
-				i++
-			}
-			//Write formatted placeholder to the query
-			_, err := query.WriteString(fmt.Sprintf("%s IN (%s) OR ", key, strings.Join(value, ", ")))
-			if err != nil {
-				return "", emptyRet, errors.New("couldn't write to string in SQL constructor")
-			}
-
+		// Add filter for the foreign key table
+		if len(fkFilters) > i && fkFilters[i] != "" {
+			sqlWhere = append(sqlWhere, fmt.Sprintf("%s.%s = ?", table, fkFilters[i]))
+			sqlArgs = append(sqlArgs, r.URL.Query().Get(nameEndpoints[i]))
 		}
 	}
 
-	outQuery := query.String()[:len(query.String())-5]
-	return outQuery, argList, nil
+	// Remove trailing comma and space from sqlSelect
+	sqlSelect = strings.TrimSuffix(sqlSelect, ", ")
+
+	sql := fmt.Sprintf("%s FROM %s %s", sqlSelect, activeTable, sqlJoin)
+
+	return sql, sqlArgs, nil
 }
 
 /**
