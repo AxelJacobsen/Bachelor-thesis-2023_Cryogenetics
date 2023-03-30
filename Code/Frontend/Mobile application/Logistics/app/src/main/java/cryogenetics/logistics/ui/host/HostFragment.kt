@@ -5,10 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
+import cryogenetics.logistics.databinding.FragmentHostBinding
+import cryogenetics.logistics.databinding.FragmentInventoryBinding
 import cryogenetics.logistics.ui.tank.TankFragment
 import cryogenetics.logistics.ui.taskmanager.TaskItem
 import cryogenetics.logistics.ui.taskmanager.TaskManagerAdapter
@@ -19,8 +22,10 @@ class HostFragment : Fragment() {
         fun newInstance() = HostFragment()
     }
 
+    private var _binding : FragmentHostBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var viewModel: HostViewModel
-    private lateinit var mIvDashboard: ImageView
     private lateinit var mAdapter: TaskManagerAdapter
 
     override fun onCreateView(
@@ -28,7 +33,8 @@ class HostFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        return inflater.inflate(R.layout.fragment_host, container, false)
+        _binding = FragmentHostBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -66,10 +72,10 @@ class HostFragment : Fragment() {
         mAdapter.updateData(taskManagerData)
 
         // Find components
-        mIvDashboard    = view.findViewById(cryogenetics.logistics.R.id.ivDashboard)
+        //mIvDashboard    = view.findViewById(cryogenetics.logistics.R.id.ivDashboard)
 
         // Set onclick listeners
-        mIvDashboard.setOnClickListener {
+        binding.clDashboard.setOnClickListener {
             openAndAddFragment(TankFragment(), "FB")
         }
     }

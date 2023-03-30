@@ -19,6 +19,7 @@
 
                 <TextView
                     android:id="@+id/tvInventoryNr"
+                    android:tag="@string/inv"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dip"
@@ -37,6 +38,7 @@
 
                 <TextView
                     android:id="@+id/tvInventoryLocation"
+                    android:tag="@string/adr"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dip"
@@ -56,6 +58,7 @@
 
                 <TextView
                     android:id="@+id/tvInventoryClient"
+                    android:tag="@string/cId"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dip"
@@ -74,6 +77,7 @@
 
                 <TextView
                     android:id="@+id/tvInventoryLastFill"
+                    android:tag="@string/lFi"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dip"
@@ -92,6 +96,7 @@
 
                 <TextView
                     android:id="@+id/tvInventoryStatus"
+                    android:tag="@string/act"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dip"
@@ -110,6 +115,7 @@
 
                 <TextView
                     android:id="@+id/tvInventoryInvoice"
+                    android:tag="@string/ivo"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dip"
@@ -128,6 +134,7 @@
 
                 <TextView
                     android:id="@+id/tvInventoryNoti"
+                    android:tag="@string/cmt"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dip"

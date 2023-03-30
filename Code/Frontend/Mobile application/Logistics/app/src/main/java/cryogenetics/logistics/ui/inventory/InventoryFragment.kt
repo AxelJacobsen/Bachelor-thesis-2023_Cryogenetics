@@ -61,7 +61,7 @@ class InventoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.HeaderPayment?.text = "TESTING123"
+        //binding.HeaderPayment?.text = "TESTING123"
 
         // initialize the recyclerView
         inventoryList = view.findViewById(R.id.InventoryRecycler)

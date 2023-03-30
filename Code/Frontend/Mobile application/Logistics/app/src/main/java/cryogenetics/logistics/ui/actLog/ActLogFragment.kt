@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.recyclerview.widget.LinearLayoutManager
+import cryogenetics.logistics.databinding.FragmentActLogBinding
 import cryogenetics.logistics.databinding.FragmentInventoryBinding
 import cryogenetics.logistics.ui.inventory.ActLogViewModel
 import java.util.*
@@ -18,7 +19,7 @@ class ActLogFragment : Fragment() {
         fun newInstance() = ActLogFragment()
     }
 
-    private var _binding : FragmentInventoryBinding? = null
+    private var _binding : FragmentActLogBinding? = null
     private val binding get() = _binding!!
 
     //private lateinit var inventoryList: RecyclerView
@@ -50,7 +51,7 @@ class ActLogFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentInventoryBinding.inflate(inflater, container, false)
+        _binding = FragmentActLogBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -60,12 +61,13 @@ class ActLogFragment : Fragment() {
         //binding.tvInventoryNr.text = "TESTING123"
 
         // initialize the recyclerView
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerView.setHasFixedSize(true)
+        binding.recyclerViewActLog
+        binding.recyclerViewActLog.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerViewActLog.setHasFixedSize(true)
 
         // initialize the recyclerView-adapter
         mProductListAdapter = ActLogAdapter(mOnProductClickListener/*, arrayListOf(InventoryDataModel())*/)
-        binding.recyclerView.adapter = mProductListAdapter
+        binding.recyclerViewActLog.adapter = mProductListAdapter
 
         val model = ActLogDataModel(0, "name", true)
         mProductListAdapter.addProduct(model)
