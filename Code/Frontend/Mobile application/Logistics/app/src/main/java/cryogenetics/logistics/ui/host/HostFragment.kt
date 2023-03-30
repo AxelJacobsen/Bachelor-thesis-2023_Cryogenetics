@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import cryogenetics.logistics.ui.inventory.InventoryFragment
 import cryogenetics.logistics.ui.tank.TankFragment
+
 
 class HostFragment : Fragment() {
 
@@ -27,7 +29,7 @@ class HostFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         //super.onViewCreated(view, savedInstanceState)
 
-        val childFragment: Fragment = TankFragment()
+        val childFragment: Fragment = InventoryFragment()
 
         if (savedInstanceState == null) {
             childFragmentManager.beginTransaction()

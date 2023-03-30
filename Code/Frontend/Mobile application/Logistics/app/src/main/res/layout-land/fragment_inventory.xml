@@ -95,7 +95,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.141" />
+            app:layout_constraintWidth_percent="0.14" />
 
         <TextView
             android:id="@+id/tvInventoryLocation"
@@ -111,7 +111,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tvInventoryNr"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.141" />
+            app:layout_constraintWidth_percent="0.14" />
 
 
         <TextView
@@ -128,7 +128,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tvInventoryLocation"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.141" />
+            app:layout_constraintWidth_percent="0.14" />
 
         <TextView
             android:id="@+id/tvInventoryLastFill"
@@ -144,7 +144,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tvInventoryClient"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.141" />
+            app:layout_constraintWidth_percent="0.14" />
 
         <TextView
             android:id="@+id/tvInventoryStatus"
@@ -160,7 +160,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tvInventoryLastFill"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.141" />
+            app:layout_constraintWidth_percent="0.14" />
 
         <TextView
             android:id="@+id/tvInventoryInvoice"
@@ -176,7 +176,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tvInventoryStatus"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.141" />
+            app:layout_constraintWidth_percent="0.14" />
 
         <TextView
             android:id="@+id/tvInventoryNoti"
@@ -192,7 +192,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tvInventoryInvoice"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.141" />
+            app:layout_constraintWidth_percent="0.14" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

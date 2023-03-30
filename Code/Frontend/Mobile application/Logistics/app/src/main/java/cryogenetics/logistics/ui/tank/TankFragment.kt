@@ -7,16 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import cryogenetics.logistics.R
-import cryogenetics.logistics.ui.actLog.ActLogFragment
-import cryogenetics.logistics.ui.inventory.ActLogViewModel
+import cryogenetics.logistics.ui.inventory.InventoryFragment
+import cryogenetics.logistics.ui.inventory.InventoryViewModel
 
 class TankFragment : Fragment() {
 
     companion object {
-        fun newInstance() = ActLogFragment()
+        fun newInstance() = InventoryFragment()
     }
 
-    private lateinit var viewModel: ActLogViewModel
+    private lateinit var viewModel: InventoryViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,7 +28,7 @@ class TankFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ActLogViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(InventoryViewModel::class.java)
         // TODO: Use the ViewModel
     }
 

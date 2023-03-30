@@ -1,16 +1,21 @@
 package cryogenetics.logistics.ui.inventory
 
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.CheckBox
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import cryogenetics.logistics.R
 import cryogenetics.logistics.databinding.InventoryRecyclerItemBinding
-import cryogenetics.logistics.ui.actLog.ActLogDataModel
 
 class InventoryAdapter(
     private val mOnProductClickListener: AdapterView.OnItemClickListener,
-    private val mProductList: ArrayList<ActLogDataModel> = ArrayList()
+    private val mProductList: ArrayList<InventoryDataModel> = ArrayList()
 ) : RecyclerView.Adapter<InventoryAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binder: InventoryRecyclerItemBinding) : RecyclerView.ViewHolder(binding.root)
@@ -59,7 +64,7 @@ class InventoryAdapter(
     /**
      * Adds each item to list for recycler view.
      */
-    fun addProduct(model: ActLogDataModel) {
+    fun addProduct(model: InventoryDataModel) {
         mProductList.add(model)
         notifyItemInserted(mProductList.size)
     }
@@ -67,7 +72,7 @@ class InventoryAdapter(
     /**
      * Updates the existing product at specific position of the list.
      */
-    fun updateProduct(model: ActLogDataModel?) {
+    fun updateProduct(model: InventoryDataModel?) {
         if (model == null) return // we cannot update the value because it is null
         for (item in mProductList) {
             // search by id
@@ -86,7 +91,7 @@ class InventoryAdapter(
      * @param model to be removed
      */
     fun removeProducts(clearAll: Boolean) {
-        val mDeleteList: ArrayList<ActLogDataModel> = ArrayList()
+        val mDeleteList: ArrayList<InventoryDataModel> = ArrayList()
 
         if (mProductList.isNotEmpty()) {
             for (item in mProductList) {
