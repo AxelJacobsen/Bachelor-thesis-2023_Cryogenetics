@@ -39,23 +39,23 @@ class HostFragment : Fragment() {
 
         mAdapter = TaskManagerAdapter(taskManagerData,
             // OnClick
-            { f, _ ->
+            { fragment, _ ->
                 // Switch to fragment
                 childFragmentManager.beginTransaction()
-                    .replace(R.id.hostFragment, f)
+                    .replace(R.id.mainContent, fragment)
                     .commit()
             },
 
             // OnClickX
-            {f, i ->
+            {fragment, index ->
                 // Remove fragment from hierarchy
                 childFragmentManager.beginTransaction()
-                    .remove(f)
+                    .remove(fragment)
                     .commit()
 
                 // Remove fragment from data list
                 var data = mAdapter.dataList.toMutableList()
-                data.removeAt(i)
+                data.removeAt(index)
                 mAdapter.updateData(data)
             }
         )
@@ -70,7 +70,7 @@ class HostFragment : Fragment() {
 
         // Set onclick listeners
         mIvDashboard.setOnClickListener {
-            //openAndAddFragment(TankFragment(), "FB")
+            openAndAddFragment(TankFragment(), "FB")
         }
     }
 
@@ -83,7 +83,7 @@ class HostFragment : Fragment() {
     fun openAndAddFragment(fragment: Fragment, name: String) {
         // Create the fragment and replace the current one with it
         childFragmentManager.beginTransaction()
-            .replace(R.id.hostFragment, fragment)
+            .replace(R.id.mainContent, fragment)
             .commit()
 
         // Add it to the list of fragments
