@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
 import cryogenetics.logistics.databinding.FragmentHostBinding
 import cryogenetics.logistics.databinding.FragmentInventoryBinding
+import cryogenetics.logistics.ui.actLog.ActLogFragment
+import cryogenetics.logistics.ui.inventory.InventoryFragment
 import cryogenetics.logistics.ui.tank.TankFragment
 import cryogenetics.logistics.ui.taskmanager.TaskItem
 import cryogenetics.logistics.ui.taskmanager.TaskManagerAdapter
@@ -76,8 +78,21 @@ class HostFragment : Fragment() {
 
         // Set onclick listeners
         binding.clDashboard.setOnClickListener {
-            openAndAddFragment(TankFragment(), "FB")
+            openAndAddFragment(TankFragment(), "Dashboard")
         }
+        binding.clTank.setOnClickListener {
+            openAndAddFragment(TankFragment(), "Tank")
+        }
+        binding.clTankFilling.setOnClickListener {
+            openAndAddFragment(TankFragment(), "Tank Filling")
+        }
+        binding.clLog.setOnClickListener {
+            openAndAddFragment(ActLogFragment(), "Log")
+        }
+        binding.clInventory.setOnClickListener {
+            openAndAddFragment(InventoryFragment(), "Inventory")
+        }
+
     }
 
     /**
