@@ -1,119 +1,65 @@
 package cryogenetics.logistics.ui.actLog
 
-
+import android.content.ContentValues.TAG
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import cryogenetics.logistics.databinding.ActLogRecyclerItemBinding
+import cryogenetics.logistics.R
 
 class ActLogAdapter(
-    private val mOnProductClickListener: AdapterView.OnItemClickListener,
-    private val mProductList: ArrayList<ActLogDataModel> = ArrayList()
+    private val itemList: MutableList<Map<String, Any>>,
+    private val viewIds: List<Int>
 ) : RecyclerView.Adapter<ActLogAdapter.ViewHolder>() {
 
-    inner class ViewHolder(val binder: ActLogRecyclerItemBinding) : RecyclerView.ViewHolder(binding.root)
+    class ViewHolder(view: View, viewIds: List<Int>) : RecyclerView.ViewHolder(view) {
+        //Prepare vessel to hold all TextViews
+        val views: MutableMap<Int, TextView> = mutableMapOf()
 
-    private var _binding: ActLogRecyclerItemBinding? = null
-    private val binding get() = _binding!!
+        init {
+            //Propagate views with textViews based on their ID provided by the fragment
+            for (viewId in viewIds) {
+                val textView = view.findViewById<TextView>(viewId)
+                //If views are filled with nulls it breaks
+                if (textView != null){
+                    views[viewId] = textView
+                } else {
+                    Log.e(TAG, "No textView found with id: $viewId")
+                }
 
-    /**
-     * ViewHolder implementation for holding the mapped views.
-     */
-    /*inner class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val inventoryNr: TextView = binding.tvInventoryNr
-    }*/
+            }
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binder = ActLogRecyclerItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        _binding = binder
-
-        return ViewHolder(binding)
+        //Create a view based on the parent viewgroup
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.act_log_recycler_item, parent, false)
+        return ViewHolder(view, viewIds)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        // data will be set here whenever the system thinks it's required
+        val item = itemList[position]
+        //Iterate the view list constructed in above function
+        for ((viewId, textView) in holder.views) {
+            // Normally viewId would be used, however it doesn't match the json data we receive
+            // This is why we use the tag system to find the objects we want in the json data
+            // There probably is a better way, talk to Axel if you have suggestions
+            val tTag = textView.tag as? String
+            if (tTag == null){
+                //Logs an error for development, isn't critical for function as text will be empty
+                Log.e(TAG, "Couldnt find textview tag")
+            }
+            //Finally find correct json data and fill textview
+            val text = item[tTag]?.toString() ?: ""
+            textView.text = text
 
-        // get the product at position
-        val product = mProductList[position]
-
-        binding.tvInventoryNr.text = "ONEEE"
-        binding.tvInventoryLocation.text = "TWOO"
-        binding.tvInventoryClient.text = "THREE"
-        binding.tvInventoryLastFill.text = "FOUUR"
-        binding.tvInventoryStatus.text = "FIVE"
-        binding.tvInventoryInvoice.text = "SIX"
-        binding.tvInventoryNoti.text = "SEVEN"
-
+        }
     }
 
-    /**
-     * Returns the total number of items in the list to be displayed.
-     * this will refresh when we call notifyDataSetChanged() or other related methods.
-     */
     override fun getItemCount(): Int {
-        return mProductList.size
-    }
-
-    /**
-     * Adds each item to list for recycler view.
-     */
-    fun addProduct(model: ActLogDataModel) {
-        mProductList.add(model)
-        notifyItemInserted(mProductList.size)
-    }
-
-    /**
-     * Updates the existing product at specific position of the list.
-     */
-    fun updateProduct(model: ActLogDataModel?) {
-        if (model == null) return // we cannot update the value because it is null
-        for (item in mProductList) {
-            // search by id
-            if (item.id == model.id) {
-                val position = mProductList.indexOf(model)
-                mProductList[position] = model
-                notifyItemChanged(position)
-                break // Stops the loop
-            }
-        }
-    }
-
-    /**
-     * Removes the specified product from the list.
-     *
-     * @param model to be removed
-     */
-    fun removeProducts(clearAll: Boolean) {
-        val mDeleteList: ArrayList<ActLogDataModel> = ArrayList()
-
-        if (mProductList.isNotEmpty()) {
-            for (item in mProductList) {
-                if (clearAll) {
-                    mDeleteList.add(item)
-                } else {
-                    if (item.isChecked) {
-                        item.isChecked = false
-                        mDeleteList.add(item)
-                    }
-                }
-            }
-            for (item in mDeleteList) {
-                val position = mProductList.indexOf(item)
-                mProductList.remove(item)
-                notifyItemRemoved(position)
-            }
-        }
-    }
-
-
-    fun getNextItemId(): Int {
-        var id = 1
-        if (mProductList.isNotEmpty()) {
-            // .last is equivalent to .size() - 1
-            // we want to add 1 to that id and return it
-            id = mProductList.last().id + 1
-        }
-        return id
+        return itemList.size
     }
 }

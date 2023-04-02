@@ -8,141 +8,142 @@
     tools:ignore="MissingDefaultResource">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+        android:id="@+id/tableLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:background="@color/black"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/tvInventoryNr"
+            android:id="@+id/tvActLogRNr"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="2dip"
-            android:layout_marginLeft="2dip"
-            android:layout_marginRight="2dip"
+            android:layout_margin="2dip"
             android:background="@color/white"
             android:gravity="start"
             android:padding="3dip"
             android:text="@string/hashNr"
-            android:textSize="16sp"
             android:textColor="@color/black"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.14" />
+            app:layout_constraintWidth_percent="0.123" />
 
         <TextView
-            android:id="@+id/tvInventoryLocation"
+            android:id="@+id/tvActLogRTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="2dip"
-            android:layout_marginLeft="2dip"
-            android:layout_marginRight="2dip"
+            android:layout_margin="2dip"
             android:background="@color/white"
             android:gravity="start"
             android:padding="3dip"
-            android:text="@string/location"
-            android:textSize="16sp"
+            android:text="@string/time"
             android:textColor="@color/black"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvInventoryNr"
+            app:layout_constraintStart_toEndOf="@+id/tvActLogRNr"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.14" />
-
+            app:layout_constraintWidth_percent="0.123" />
 
         <TextView
-            android:id="@+id/tvInventoryClient"
+            android:id="@+id/tvActLogRClient"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="2dip"
-            android:layout_marginLeft="2dip"
-            android:layout_marginRight="2dip"
+            android:layout_margin="2dip"
             android:background="@color/white"
             android:gravity="start"
             android:padding="3dip"
             android:text="@string/client"
-            android:textSize="16sp"
             android:textColor="@color/black"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvInventoryLocation"
+            app:layout_constraintStart_toEndOf="@+id/tvActLogRTime"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.14" />
+            app:layout_constraintWidth_percent="0.123" />
 
         <TextView
-            android:id="@+id/tvInventoryLastFill"
+            android:id="@+id/tvActLogRLocation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="2dip"
-            android:layout_marginLeft="2dip"
-            android:layout_marginRight="2dip"
+            android:layout_margin="2dip"
             android:background="@color/white"
             android:gravity="start"
             android:padding="3dip"
-            android:text="@string/last_filled"
-            android:textSize="16sp"
+            android:text="@string/location"
             android:textColor="@color/black"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvInventoryClient"
+            app:layout_constraintStart_toEndOf="@+id/tvActLogRClient"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.14" />
+            app:layout_constraintWidth_percent="0.123" />
 
         <TextView
-            android:id="@+id/tvInventoryStatus"
+            android:id="@+id/tvActLogRAct"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="2dip"
-            android:layout_marginLeft="2dip"
-            android:layout_marginRight="2dip"
+            android:layout_margin="2dip"
             android:background="@color/white"
             android:gravity="start"
             android:padding="3dip"
-            android:text="@string/status"
-            android:textSize="16sp"
+            android:text="@string/act"
             android:textColor="@color/black"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvInventoryLastFill"
+            app:layout_constraintStart_toEndOf="@+id/tvActLogRLocation"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.14" />
+            app:layout_constraintWidth_percent="0.123" />
 
         <TextView
-            android:id="@+id/tvInventoryInvoice"
+            android:id="@+id/tvActLogRComment"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="2dip"
-            android:layout_marginLeft="2dip"
-            android:layout_marginRight="2dip"
+            android:layout_margin="2dip"
             android:background="@color/white"
             android:gravity="start"
             android:padding="3dip"
-            android:text="@string/inovice"
-            android:textSize="16sp"
+            android:text="@string/comment"
             android:textColor="@color/black"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvInventoryStatus"
+            app:layout_constraintStart_toEndOf="@+id/tvActLogRAct"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.14" />
+            app:layout_constraintWidth_percent="0.123" />
 
         <TextView
-            android:id="@+id/tvInventoryNoti"
+            android:id="@+id/tvActLogRSign"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="2dip"
-            android:layout_marginLeft="2dip"
-            android:layout_marginRight="2dip"
+            android:layout_margin="2dip"
             android:background="@color/white"
             android:gravity="start"
             android:padding="3dip"
-            android:text="@string/notifcations"
-            android:textSize="16sp"
+            android:text="@string/sign"
             android:textColor="@color/black"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvInventoryInvoice"
+            app:layout_constraintStart_toEndOf="@+id/tvActLogRComment"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.14" />
+            app:layout_constraintWidth_percent="0.123" />
+
+        <TextView
+            android:id="@+id/tvActLogRStatus"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dip"
+            android:background="@color/white"
+            android:gravity="start"
+            android:padding="3dip"
+            android:text="Status"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvActLogRSign"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.123" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

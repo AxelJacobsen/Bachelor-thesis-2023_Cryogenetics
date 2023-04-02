@@ -8,10 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import cryogenetics.logistics.R
+import cryogenetics.logistics.api.Api
 import cryogenetics.logistics.databinding.FragmentActLogBinding
-import cryogenetics.logistics.databinding.FragmentInventoryBinding
-import cryogenetics.logistics.ui.inventory.ActLogViewModel
-import java.util.*
+import cryogenetics.logistics.ui.inventory.*
 
 class ActLogFragment : Fragment() {
 
@@ -22,29 +23,28 @@ class ActLogFragment : Fragment() {
     private var _binding : FragmentActLogBinding? = null
     private val binding get() = _binding!!
 
-    //private lateinit var inventoryList: RecyclerView
+    private lateinit var inventoryList: RecyclerView
     private lateinit var viewModel: ActLogViewModel
-    private lateinit var mProductListAdapter: ActLogAdapter
-
-    private var modelToBeUpdated: Stack<ActLogDataModel> = Stack()
+    private lateinit var mProductListAdapter: JsonAdapter
 
     private val mOnProductClickListener =
         AdapterView.OnItemClickListener { parent, view, position, id ->
+
             /*
-           fun onUpdate(position: Int, model: InventoryDataModel) {
-               // Add model we want to update to modelToBeUpdated
-               modelToBeUpdated.add(model)
+            fun onUpdate(position: Int, model: InventoryDataModel) {
+                // Add model we want to update to modelToBeUpdated
+                modelToBeUpdated.add(model)
 
-               // Set the value of the clicked model in the edit text
-               binding.HeaderName?.setText(model.name)
-           }
+                // Set the value of the clicked model in the edit text
+                binding.HeaderName?.setText(model.name)
+            }
 
-           fun onDelete(model: InventoryDataModel, checkd: Boolean) {
-               // We change the value of isChecked to prepare removal.
-               model.isChecked = checkd
-           }
-           */
-            TODO("Not yet implemented")
+            fun onDelete(model: InventoryDataModel, checkd: Boolean) {
+                // We change the value of isChecked to prepare removal.
+                model.isChecked = checkd
+            }
+            */
+            // TODO("Not yet implemented")
         }
 
     override fun onCreateView(
@@ -52,37 +52,56 @@ class ActLogFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentActLogBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //binding.tvInventoryNr.text = "TESTING123"
 
         // initialize the recyclerView
-        binding.recyclerViewActLog
         binding.recyclerViewActLog.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewActLog.setHasFixedSize(true)
 
         // initialize the recyclerView-adapter
-        mProductListAdapter = ActLogAdapter(mOnProductClickListener/*, arrayListOf(InventoryDataModel())*/)
-        binding.recyclerViewActLog.adapter = mProductListAdapter
+        val itemList = mutableListOf<Map<String, Any>>()
+        //Fetch json data and add to itemlist
+        print(fetchActLogData())
 
-        val model = ActLogDataModel(0, "name", true)
-        mProductListAdapter.addProduct(model)
-        mProductListAdapter.addProduct(model)
-        mProductListAdapter.addProduct(model)
+        for (model in fetchActLogData()) {
+            itemList.add(model)
+            print(model)
+        }
+
+        //Create a list of references
+
+        val viewIds = listOf(
+            R.id.tvActLogRNr,
+            R.id.tvActLogRTime,
+            R.id.tvActLogRClient,
+            R.id.tvActLogRLocation,
+            R.id.tvActLogRAct,
+            R.id.tvActLogRComment,
+            R.id.tvActLogRSign,
+            R.id.tvActLogRStatus
+        )
+        //Create adapter
+        binding.recyclerViewActLog.adapter = ActLogAdapter(itemList, viewIds)
     }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ActLogViewModel::class.java)
+
+        viewModel = ViewModelProvider(this)[ActLogViewModel::class.java]
         // TODO: Use the ViewModel
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun fetchActLogData() :  List<Map<String, Any>>{
+        val urlDataString = Api.fetchJsonData("http://10.0.2.2:8080/api/transactions")
+        return Api.parseJsonArray(urlDataString)
     }
 
 }
