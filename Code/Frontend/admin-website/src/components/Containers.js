@@ -33,7 +33,7 @@ const headCells = [
     id: 'id', numeric: false, disablePadding: true, label: 'id',
   },
   {
-    id: 'serial_number', numeric: false, disablePadding: true, label: 'SerialNr',
+    id: 'container_sr_number', numeric: false, disablePadding: true, label: 'SerialNr',
   },
   {
     id: 'container_model_name', numeric: false, disablePadding: true, label: 'Model Name',
@@ -264,7 +264,7 @@ export default function Containers() {
                         >
                           {row.id}
                         </TableCell>
-                        <TableCell align='center'>{row.serial_number}</TableCell>
+                        <TableCell align='center'>{row.container_sr_number}</TableCell>
                         <TableCell align="center">{row.container_model_name}</TableCell>
                         <TableCell align="center">{row.container_status_name}</TableCell>
                         <TableCell align="center">

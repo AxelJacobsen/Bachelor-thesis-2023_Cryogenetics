@@ -45,7 +45,7 @@ const headCells = [
     id: 'client_name', numeric: false, disablePadding: true, label: 'Customer Name',
   },
   {
-    id: 'container', numeric: false, disablePadding: true, label: 'SerialNR',
+    id: 'container_sr_number', numeric: false, disablePadding: true, label: 'SerialNR',
   },
   {
     id: 'comment', numeric: false, disablePadding: true, label: 'Comment',
@@ -243,7 +243,7 @@ export default function Transactions() {
                         <TableCell align="center">
                           {row.client_name === null ? "NULL" : row.client_name}
                         </TableCell>
-                        <TableCell align="center">{row.container}</TableCell>
+                        <TableCell align="center">{row.container_sr_number}</TableCell>
                         <TableCell align="center">{row.comment}</TableCell>
                       </TableRow>
                     );
