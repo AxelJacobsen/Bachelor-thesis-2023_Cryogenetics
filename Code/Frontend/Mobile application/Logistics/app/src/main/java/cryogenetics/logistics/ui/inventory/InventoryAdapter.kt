@@ -29,7 +29,6 @@ class InventoryAdapter(
                 } else {
                     Log.e(TAG, "No textView found with id: $viewId")
                 }
-
             }
         }
     }

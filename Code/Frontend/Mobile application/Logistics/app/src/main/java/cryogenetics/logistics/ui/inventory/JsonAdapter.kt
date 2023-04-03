@@ -57,7 +57,6 @@ class JsonAdapter(
             //Finally find correct json data and fill textview
             val text = item[tTag]?.toString() ?: ""
             textView.text = text
-
         }
     }
 
