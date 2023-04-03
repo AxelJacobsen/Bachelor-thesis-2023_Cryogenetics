@@ -49,9 +49,9 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 
 	switch activeTable {
 	case "container":
-		fkTables = []string{"client", "location"}
-		nameEndpoints = []string{"client_id", "location_id"}
-		specificSelects = []string{"client.client_name AS client_name", "location.location_name AS location_name"}
+		fkTables = []string{"client", "location", "container_model"}
+		nameEndpoints = []string{"client_id", "location_id", "container_model_name"}
+		specificSelects = []string{"client.client_name AS client_name", "location.location_name AS location_name", "container_model.liter_capacity", "container_model.refill_interval"}
 
 	case "transaction":
 		fkTables = []string{"client", "employee", "location"}
@@ -81,6 +81,7 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(w, "Error in converting url to sql", http.StatusUnprocessableEntity)
 		}
+
 		res, err := globals.QueryJSON(globals.DB, SQL, sqlArgs, w)
 		if err != nil {
 			http.Error(w, "Error fetching Data.", http.StatusInternalServerError)
