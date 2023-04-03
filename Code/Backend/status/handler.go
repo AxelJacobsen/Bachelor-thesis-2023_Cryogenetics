@@ -8,18 +8,10 @@ import (
  *	Handler for 'status' endpoint.
  */
 func HandlerStatus(w http.ResponseWriter, r *http.Request) {
-	w.Header().Add("content-type", "application/json")
-
-	// Switch based on method
-	switch r.Method {
-
-	// GET method
-	case http.MethodGet:
-		return
-
-	// Other method
-	default:
-		http.Error(w, "Method not allowed, read the documentation for more information.", http.StatusMethodNotAllowed)
-		return
+	if r.Method == "GET" {
+		w.Write([]byte("this is temporary, but it's working"))
+	} else {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		w.Write([]byte("405 - Method Not Allowed"))
 	}
 }

@@ -1,0 +1,14 @@
+
+
+.grid-child-buttons Button{
+    display: block;
+    margin-bottom: 5%;
+    margin-left: 2%;
+
+}
+
+.grid-container{
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 85fr 15fr;
+}
