@@ -205,7 +205,7 @@ func ConvertUrlToSql(r *http.Request, activeTable string, fkTables []string, fkF
 		}
 
 		// Add left join for the foreign key table
-		sqlJoin += fmt.Sprintf(" LEFT JOIN %s ON %s.%s = %s.%s_id ", table, activeTable, nameEndpoints[i], table, table)
+		sqlJoin += fmt.Sprintf(" LEFT JOIN %s ON %s.%s = %s.%s ", table, activeTable, nameEndpoints[i], table, nameEndpoints[i])
 
 		// Add filter for the foreign key table
 		if len(fkFilters) > i && fkFilters[i] != "" {
