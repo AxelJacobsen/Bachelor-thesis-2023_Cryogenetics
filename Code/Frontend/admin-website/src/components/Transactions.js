@@ -45,6 +45,9 @@ const headCells = [
     id: 'client_name', numeric: false, disablePadding: true, label: 'Customer Name',
   },
   {
+    id: 'container_status_name', numeric: false, disablePadding: true, label: 'Status',
+  },
+  {
     id: 'container_sr_number', numeric: false, disablePadding: true, label: 'SerialNR',
   },
   {
@@ -243,6 +246,7 @@ export default function Transactions() {
                         <TableCell align="center">
                           {row.client_name === null ? "NULL" : row.client_name}
                         </TableCell>
+                        <TableCell align="center">{row.container_status_name}</TableCell>
                         <TableCell align="center">{row.container_sr_number}</TableCell>
                         <TableCell align="center">{row.comment}</TableCell>
                       </TableRow>
