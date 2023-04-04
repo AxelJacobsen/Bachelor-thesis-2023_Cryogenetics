@@ -33,7 +33,7 @@
                 android:layout_height="0dp"
                 android:background="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHeight_percent="0.15"
+                app:layout_constraintHeight_percent="0.2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -43,8 +43,8 @@
                     android:layout_height="0dp"
                     android:layout_margin="4dp"
                     android:background="@color/white"
-                    android:gravity="start"
-                    android:hint="Write here"
+                    android:gravity="center_horizontal"
+                    android:hint="@string/write_here"
                     android:textColor="@color/black"
                     android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -58,7 +58,7 @@
                     android:layout_height="0dp"
                     android:layout_marginEnd="4dp"
                     android:gravity="center"
-                    android:text="Search"
+                    android:text="@string/search"
                     android:textColor="@color/black"
                     android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -149,7 +149,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:text="Current container"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -162,7 +162,7 @@
                     android:gravity="end"
                     android:text="000-0000"
                     android:textColor="@color/black"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tv10"
@@ -190,7 +190,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:text="Current container"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -203,7 +203,7 @@
                     android:gravity="end"
                     android:text="000-0000"
                     android:textColor="@color/black"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tv20"
@@ -231,7 +231,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:text="Current container"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -244,7 +244,7 @@
                     android:gravity="end"
                     android:text="000-0000"
                     android:textColor="@color/black"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tv30"
@@ -272,7 +272,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:text="Current container"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -285,7 +285,7 @@
                     android:gravity="end"
                     android:text="000-0000"
                     android:textColor="@color/black"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tv40"
@@ -313,7 +313,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:text="Current container"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -326,7 +326,7 @@
                     android:gravity="end"
                     android:text="000-0000"
                     android:textColor="@color/black"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tv50"
@@ -354,7 +354,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:text="Current container"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -367,7 +367,7 @@
                     android:gravity="end"
                     android:text="000-0000"
                     android:textColor="@color/black"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tv60"
@@ -396,7 +396,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:text="Current container"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -409,7 +409,7 @@
                     android:gravity="end"
                     android:text="000-0000"
                     android:textColor="@color/black"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tv70"
@@ -441,8 +441,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/rightMenuFirstRow"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@color/red"
+                android:layout_height="70dp"
+                android:background="@color/cryoBlue"
                 app:layout_constraintBottom_toTopOf="@id/rightMenuSecondRow"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -453,42 +453,84 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/firstRowFirst"
                     android:layout_width="0dp"
-                    android:layout_height="80dp"
+                    android:layout_height="0dp"
                     android:layout_marginStart="5dip"
                     android:layout_marginTop="5dip"
                     android:layout_marginEnd="2.5dip"
                     android:background="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/firstRowSecond"
-                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintHorizontal_weight="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
+                    <ImageView
+                        android:id="@+id/ivFirstRowFirst"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:src="@drawable/recieve_from_user"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tvFirstRowFirst"
+                        app:layout_constraintHorizontal_weight="0.4"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvFirstRowFirst"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="TextView"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintStart_toEndOf="@+id/ivFirstRowFirst"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/firstRowSecond"
                     android:layout_width="0dp"
-                    android:layout_height="80dp"
+                    android:layout_height="0dp"
                     android:layout_marginStart="2.5dip"
                     android:layout_marginTop="5dip"
                     android:layout_marginEnd="5dip"
                     android:background="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintHorizontal_weight="0.5"
                     app:layout_constraintStart_toEndOf="@id/firstRowFirst"
                     app:layout_constraintTop_toTopOf="parent">
 
 
+                    <ImageView
+                        android:id="@+id/ivFirstRowSecond"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:src="@drawable/maint_color_menu"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tvFirstRowSecond"
+                        app:layout_constraintHorizontal_weight="0.4"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvFirstRowSecond"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="TextView"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintStart_toEndOf="@+id/ivFirstRowSecond"
+                        app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/rightMenuSecondRow"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@color/red"
+                android:layout_height="70dp"
+                android:background="@color/cryoBlue"
                 app:layout_constraintBottom_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -498,7 +540,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/secondRowFirst"
                     android:layout_width="0dp"
-                    android:layout_height="80dp"
+                    android:layout_height="0dp"
                     android:layout_marginStart="5dip"
                     android:layout_marginTop="5dip"
                     android:layout_marginEnd="2.5dip"
@@ -510,12 +552,33 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
+                    <ImageView
+                        android:id="@+id/ivSecondRowFirst"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:src="@drawable/cancel"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tvSecondRowFirst"
+                        app:layout_constraintHorizontal_weight="0.4"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvSecondRowFirst"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="TextView"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintStart_toEndOf="@+id/ivSecondRowFirst"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/secondRowSecond"
                     android:layout_width="0dp"
-                    android:layout_height="80dp"
+                    android:layout_height="0dp"
                     android:layout_marginStart="2.5dip"
                     android:layout_marginTop="5dip"
                     android:layout_marginEnd="2.5dip"
@@ -527,11 +590,33 @@
                     app:layout_constraintStart_toEndOf="@id/secondRowFirst"
                     app:layout_constraintTop_toTopOf="parent">
 
+                    <ImageView
+                        android:id="@+id/ivSecondRowSecond"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:src="@drawable/cancel"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tvSecondRowSecond"
+                        app:layout_constraintHorizontal_weight="0.4"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvSecondRowSecond"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="TextView"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintStart_toEndOf="@+id/ivSecondRowSecond"
+                        app:layout_constraintTop_toTopOf="parent" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/secondRowThird"
                     android:layout_width="0dp"
-                    android:layout_height="80dp"
+                    android:layout_height="0dp"
                     android:layout_marginStart="2.5dip"
                     android:layout_marginTop="5dip"
                     android:layout_marginEnd="2.5dip"
@@ -543,12 +628,34 @@
                     app:layout_constraintStart_toEndOf="@id/secondRowSecond"
                     app:layout_constraintTop_toTopOf="parent">
 
+                    <ImageView
+                        android:id="@+id/ivSecondRowThird"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:src="@drawable/cancel"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tvSecondRowThird"
+                        app:layout_constraintHorizontal_weight="0.4"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvSecondRowThird"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="TextView"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintStart_toEndOf="@+id/ivSecondRowThird"
+                        app:layout_constraintTop_toTopOf="parent" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/secondRowFourth"
                     android:layout_width="0dp"
-                    android:layout_height="80dp"
+                    android:layout_height="0dp"
                     android:layout_marginStart="2.5dip"
                     android:layout_marginTop="5dip"
                     android:layout_marginEnd="5dip"
@@ -560,6 +667,27 @@
                     app:layout_constraintStart_toEndOf="@id/secondRowThird"
                     app:layout_constraintTop_toTopOf="parent">
 
+                    <ImageView
+                        android:id="@+id/ivSecondRowFourth"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:src="@drawable/cancel"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tvSecondRowFourth"
+                        app:layout_constraintHorizontal_weight="0.4"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvSecondRowFourth"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="TextView"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintStart_toEndOf="@+id/ivSecondRowFourth"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -580,7 +708,7 @@
                 android:id="@+id/rightContent"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@color/cryoBlue"
+                android:background="@color/teal_700"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -600,7 +728,7 @@
                         android:layout_height="50dp"
                         android:gravity="center"
                         android:text="textViewPlaceHolderForFragment"
-                        android:textSize="32sp" />
+                        android:textSize="24sp" />
                     <!-- TODO: Insert logFragment! -->
                 </FrameLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -621,7 +749,8 @@
                     android:layout_height="50dp"
                     android:gravity="center"
                     android:text="textViewPlaceHolderForFragment"
-                    android:textSize="32sp"
+                    android:textSize="24sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

@@ -100,7 +100,7 @@ class ActLogFragment : Fragment() {
     }
 
     private fun fetchActLogData() :  List<Map<String, Any>>{
-        val urlDataString = Api.fetchJsonData("http://10.0.2.2:8080/api/transactions")
+        val urlDataString = Api.fetchJsonData("http://10.0.2.2:8080/api/transaction")
         return Api.parseJsonArray(urlDataString)
     }
 

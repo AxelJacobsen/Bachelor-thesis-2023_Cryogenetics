@@ -87,7 +87,8 @@ class InventoryFragment : Fragment() {
                 R.id.tvInventoryInvoice,
                 R.id.tvInventoryLastFill,
                 R.id.tvInventoryNoti,
-                R.id.tvInventoryStatus
+                R.id.tvInventoryStatus,
+                R.id.tvInventorySerialNr
                 //, R.id.tvInventoryTitle // Cant be found
                 )
         //Create adapter
@@ -109,7 +110,7 @@ class InventoryFragment : Fragment() {
     }
 
     private fun fetchInventoryData() :  List<Map<String, Any>>{
-        val urlDataString = Api.fetchJsonData("http://10.0.2.2:8080/api/user/container")
+        val urlDataString = Api.fetchJsonData("http://10.0.2.2:8080/api/container")
         return Api.parseJsonArray(urlDataString)
     }
 
