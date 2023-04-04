@@ -46,10 +46,6 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 	joinData := make(map[string][]string)
 	var keys []string
 
-	/* var fkTables []string
-	var fkFilters []string
-	var nameEndpoints []string
-	var specificSelects []string */
 	joinData["main"] = append(joinData["main"], activeTable, "", "*") //WHAT TABLE IS THE SQL REQUEST FOR?
 	keys = []string{"main"}
 
@@ -76,7 +72,6 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 		*	dataIWant: desired data we want SQL query to include
 		 */
 		// 								"targetTableName" :	["tablename", "PrimaryKey",	"dataIWant", "moreDataIWant", etc...]
-		//joinData["main"] = append(joinData["main"], "transaction", "", "*") //WHAT TABLE IS THE SQL REQUEST FOR?
 		joinData["client"] = append(joinData["client"], "transaction", "client_id", "client_name")
 		joinData["employee"] = append(joinData["employee"], "transaction", "employee_id", "employee_alias")
 		joinData["location"] = append(joinData["location"], "transaction", "location_id", "location_name")
@@ -93,7 +88,6 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 		*	dataIWant: desired data we want SQL query to include
 		 */
 		// 								"targetTableName" :	["tablename", "PrimaryKey",	"dataIWant", "moreDataIWant", etc...]
-		//joinData["main"] = append(joinData["main"], "employee", "", "*") //WHAT TABLE IS THE SQL REQUEST FOR?
 		joinData["location"] = append(joinData["location"], "container", "location_id", "location_name")
 
 		//List of keys used in joinData. NEEDS TO BE IN THE SAME ORDER!
@@ -110,11 +104,7 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 	// GET method
 	case http.MethodGet:
 		/// SEND REQUEST TO GENERIC GET REQUEST, RECIEVE AS "res, err"
-
-		//SQL, sqlArgs, err := globals.ConvertUrlToSql(r, activeTable, fkTables, fkFilters, nameEndpoints, specificSelects)
-		SQL, sqlArgs, err := globals.ConvertUrlToSql(r, joinData, keys, activeTable)
-
-		//SQL, sqlArgs, err := globals.ConvertUrlToSql(r, activeTable, []string{}, []string{}, []string{})
+		SQL, sqlArgs, err := globals.ConvertUrlToSql(r, joinData, keys)
 		if err != nil {
 			http.Error(w, "Error in converting url to sql: "+err.Error(), http.StatusUnprocessableEntity)
 			return

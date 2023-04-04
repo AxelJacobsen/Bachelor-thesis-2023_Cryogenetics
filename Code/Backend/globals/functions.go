@@ -184,7 +184,7 @@ The SQL query GETS entries from the provided activeTable and its related foreign
 @returns: an error if there are any issues with the request or query construction
 */
 
-func ConvertUrlToSql(r *http.Request, joinData map[string][]string, keys []string, table string) (string, []interface{}, error) {
+func ConvertUrlToSql(r *http.Request, joinData map[string][]string, keys []string) (string, []interface{}, error) {
 	var (
 		sqlArgs   []interface{}
 		sqlSelect string
@@ -239,7 +239,7 @@ func ConvertUrlToSql(r *http.Request, joinData map[string][]string, keys []strin
 
 		// If not found, assume the field belongs to the main table
 		if belongsToTable == "" {
-			belongsToTable = table
+			belongsToTable = joinData["main"][0]
 		}
 
 		// If found, add field and table to query string
@@ -260,9 +260,9 @@ func ConvertUrlToSql(r *http.Request, joinData map[string][]string, keys []strin
 	// Combine all SQL statements into one
 	SQL := fmt.Sprintf(
 		"SELECT %s FROM %s %s ",
-		sqlSelect,
-		joinData["main"][0],
-		sqlJoin,
+		sqlSelect,           //what we want
+		joinData["main"][0], //what is the main table
+		sqlJoin,             //where do we get extra data
 	)
 
 	// Append filters to SQL query
