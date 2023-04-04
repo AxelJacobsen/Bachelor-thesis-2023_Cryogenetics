@@ -42,26 +42,62 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 	}
-	var fkTables []string
+
+	joinData := make(map[string][]string)
+	var keys []string
+
+	/* var fkTables []string
 	var fkFilters []string
 	var nameEndpoints []string
-	var specificSelects []string
+	var specificSelects []string */
+	joinData["main"] = append(joinData["main"], activeTable, "", "*") //WHAT TABLE IS THE SQL REQUEST FOR?
+	keys = []string{"main"}
 
 	switch activeTable {
 	case "container":
-		fkTables = []string{"client", "location", "container_model"}
-		nameEndpoints = []string{"client_id", "location_id", "container_model_name"}
-		specificSelects = []string{"client.client_name AS client_name", "location.location_name AS location_name", "container_model.liter_capacity", "container_model.refill_interval"}
+		/*
+		* 	targetTableName: Name of table we want "dataIWant" and such from
+		*	tablename: Name of the table that shares the primary key value with target table
+		*	PrimaryKey: Name of value that is the SQL Primary key on TargetTableName
+		*	dataIWant: desired data we want SQL query to include
+		 */
+		// 								"targetTableName" :	["tablename", "PrimaryKey",	"dataIWant", "moreDataIWant", etc...]
+		joinData["client"] = append(joinData["client"], "container", "client_id", "client_name")
+		joinData["location"] = append(joinData["location"], "container", "location_id", "location_name")
+		joinData["container_model"] = append(joinData["container_model"], "container", "container_model_name", "liter_capacity", "refill_interval")
 
+		//List of keys used in joinData. NEEDS TO BE IN THE SAME ORDER!
+		keys = []string{"main", "client", "location", "container_model"}
 	case "transaction":
-		fkTables = []string{"client", "employee", "location"}
-		nameEndpoints = []string{"client_id", "employee_id", "location_id"}
-		specificSelects = []string{"client.client_name AS client_name", "employee.employee_alias AS employee_alias", "location.location_name AS location_name"}
+		/*
+		* 	targetTableName: Name of table we want "dataIWant" and such from
+		*	tablename: Name of the table that shares the primary key value with target table
+		*	PrimaryKey: Name of value that is the SQL Primary key on TargetTableName
+		*	dataIWant: desired data we want SQL query to include
+		 */
+		// 								"targetTableName" :	["tablename", "PrimaryKey",	"dataIWant", "moreDataIWant", etc...]
+		//joinData["main"] = append(joinData["main"], "transaction", "", "*") //WHAT TABLE IS THE SQL REQUEST FOR?
+		joinData["client"] = append(joinData["client"], "transaction", "client_id", "client_name")
+		joinData["employee"] = append(joinData["employee"], "transaction", "employee_id", "employee_alias")
+		joinData["location"] = append(joinData["location"], "transaction", "location_id", "location_name")
+		joinData["container"] = append(joinData["container"], "container", "container_sr_number", "temp_id")
+		joinData["container_model"] = append(joinData["container_model"], "container", "container_model_name", "liter_capacity")
 
+		//List of keys used in joinData. NEEDS TO BE IN THE SAME ORDER!
+		keys = []string{"main", "client", "employee", "location", "container", "container_model"}
 	case "employee":
-		fkTables = []string{"location"}
-		nameEndpoints = []string{"location_id"}
-		specificSelects = []string{"location.location_name AS location_name"}
+		/*
+		* 	targetTableName: Name of table we want "dataIWant" and such from
+		*	tablename: Name of the table that shares the primary key value with target table
+		*	PrimaryKey: Name of value that is the SQL Primary key on TargetTableName
+		*	dataIWant: desired data we want SQL query to include
+		 */
+		// 								"targetTableName" :	["tablename", "PrimaryKey",	"dataIWant", "moreDataIWant", etc...]
+		//joinData["main"] = append(joinData["main"], "employee", "", "*") //WHAT TABLE IS THE SQL REQUEST FOR?
+		joinData["location"] = append(joinData["location"], "container", "location_id", "location_name")
+
+		//List of keys used in joinData. NEEDS TO BE IN THE SAME ORDER!
+		keys = []string{"main", "location"}
 	}
 
 	////////////////////////////////////
@@ -75,12 +111,15 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 	case http.MethodGet:
 		/// SEND REQUEST TO GENERIC GET REQUEST, RECIEVE AS "res, err"
 
-		SQL, sqlArgs, err := globals.ConvertUrlToSql(r, activeTable, fkTables, fkFilters, nameEndpoints, specificSelects)
+		//SQL, sqlArgs, err := globals.ConvertUrlToSql(r, activeTable, fkTables, fkFilters, nameEndpoints, specificSelects)
+		SQL, sqlArgs, err := globals.ConvertUrlToSql(r, joinData, keys)
 
 		//SQL, sqlArgs, err := globals.ConvertUrlToSql(r, activeTable, []string{}, []string{}, []string{})
 		if err != nil {
-			http.Error(w, "Error in converting url to sql", http.StatusUnprocessableEntity)
+			http.Error(w, "Error in converting url to sql: "+err.Error(), http.StatusUnprocessableEntity)
+			return
 		}
+		println(SQL)
 
 		res, err := globals.QueryJSON(globals.DB, SQL, sqlArgs, w)
 		if err != nil {
