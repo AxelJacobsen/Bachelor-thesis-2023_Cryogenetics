@@ -168,22 +168,22 @@ func QueryJSON(db *sql.DB, query string, queryArgs []interface{}, w http.Respons
 //Below creates an "exclusive query" by using AND, could be swapped to "Inclusive" by using OR
 
 /*
-*
-Takes an HTTP request and generates an SQL query with values separated based on the parameters provided.
-The SQL query GETS entries from the provided activeTable.
+ConvertUrlToSql takes an HTTP request and generates an SQL query with values separated based on the parameters provided.
+The SQL query GETS entries from the provided activeTable and its related foreign key tables.
 
-@param r - a pointer to the HTTP request
-@param activeTable - name of the relevant table from which entries are to be fetched
-@param fkTables - slice of table names which act as foreign keys for the active table
-@param fkFilters - slice of foreign key filters for the fkTables
-@param nameEndpoints - slice of strings representing the table fields which are used as endpoints in the filters (e.g. ["transaction", "employee", "container"])
-@param specificSelects - slice of strings representing the specific selects to include in the query (e.g.["client.client_name AS client_name"])
+@param r: a pointer to the HTTP request
+@param joinData: a map where the key is a string representing the table name and any foreign key references, and the value is a slice containing:
+- the name of the table
+- the name of the primary key for that table
+- any data values requested from that table
+@param keys: a slice of strings representing the keys in the joinData map
 
-@returns - an SQL string with placeholders
-@returns - a list of values to fit the SQL query
-@returns - any potential errors thrown
+@returns: a string representing the SQL query with placeholders
+@returns: a slice of interface{} containing the values to fit the SQL query
+@returns: an error if there are any issues with the request or query construction
 */
-func ConvertUrlToSql(r *http.Request, activeTable string, fkTables []string, fkFilters []string, nameEndpoints []string, specificSelects []string) (string, []interface{}, error) {
+
+func ConvertUrlToSql(r *http.Request, joinData map[string][]string, keys []string) (string, []interface{}, error) {
 	var (
 		sqlWhere  []string
 		sqlArgs   []interface{}
@@ -191,41 +191,53 @@ func ConvertUrlToSql(r *http.Request, activeTable string, fkTables []string, fkF
 		sqlJoin   string
 	)
 
-	// Add specific columns to select if any
-	if len(specificSelects) > 0 {
-		sqlSelect = fmt.Sprintf("SELECT %s, %s", activeTable+".*", strings.Join(specificSelects, ", "))
-	} else {
-		sqlSelect = fmt.Sprintf("SELECT %s.* ", activeTable)
-	}
+	for _, key := range keys {
+		// Extract values from data
+		data := joinData[key]
+		tableName := data[0]
+		primaryKey := data[1]
+		dataIWant := data[2:]
 
-	// Add foreign key filters and joins
-	for i, table := range fkTables {
-		if table == "" {
-			continue
+		// Extract target table name from key
+		targetTableName := strings.Split(key, ":")[0]
+
+		// Construct SQL JOIN statement
+		if key != "main" {
+			sqlJoin += fmt.Sprintf("LEFT JOIN %s ON %s.%s = %s.%s ", targetTableName, tableName, primaryKey, targetTableName, primaryKey)
 		}
 
-		// Add left join for the foreign key table
-		sqlJoin += fmt.Sprintf(" LEFT JOIN %s ON %s.%s = %s.%s ", table, activeTable, nameEndpoints[i], table, nameEndpoints[i])
-
-		// Add filter for the foreign key table
-		if len(fkFilters) > i && fkFilters[i] != "" {
-			sqlWhere = append(sqlWhere, fmt.Sprintf("%s.%s = ?", table, fkFilters[i]))
-			sqlArgs = append(sqlArgs, r.URL.Query().Get(nameEndpoints[i]))
+		// Construct SQL SELECT statement
+		for _, val := range dataIWant {
+			if key == "main" {
+				sqlSelect += fmt.Sprintf("%s.%s, ", joinData[key][0], val)
+			} else {
+				sqlSelect += fmt.Sprintf("%s.%s, ", key, val)
+			}
 		}
+
+		/* // Construct SQL WHERE statement
+		if primaryKey != "" {
+			pkValue := r.URL.Query().Get(primaryKey)
+			if pkValue == "" {
+				return "", nil, fmt.Errorf("missing primary key value")
+			}
+			sqlWhere = append(sqlWhere, fmt.Sprintf("%s.%s = %s", targetTableName, primaryKey, pkValue))
+			sqlArgs = append(sqlArgs, pkValue)
+		} */
 	}
 
-	// Remove trailing comma and space from sqlSelect
-	sqlSelect = strings.TrimSuffix(sqlSelect, ", ")
+	// Remove trailing comma from SELECT statement
+	sqlSelect = sqlSelect[:len(sqlSelect)-2]
 
-	// Append activeTable name and joins to SQL query
-	sql := fmt.Sprintf("%s FROM %s %s", sqlSelect, activeTable, sqlJoin)
+	// Combine all SQL statements into one
+	SQL := fmt.Sprintf("SELECT %s FROM %s %s ", sqlSelect, joinData["main"][0], sqlJoin)
 
 	// Append filters to SQL query
 	if len(sqlWhere) > 0 {
-		sql += " WHERE " + strings.Join(sqlWhere, " AND ")
+		SQL += " WHERE " + strings.Join(sqlWhere, " AND ")
 	}
 
-	return sql, sqlArgs, nil
+	return SQL, sqlArgs, nil
 }
 
 /**
