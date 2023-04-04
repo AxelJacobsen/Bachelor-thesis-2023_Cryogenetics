@@ -177,15 +177,15 @@ The SQL query GETS entries from the provided activeTable and its related foreign
 - the name of the primary key for that table
 - any data values requested from that table
 @param keys: a slice of strings representing the keys in the joinData map
+@param table: The main table which data is being queried from
 
 @returns: a string representing the SQL query with placeholders
 @returns: a slice of interface{} containing the values to fit the SQL query
 @returns: an error if there are any issues with the request or query construction
 */
 
-func ConvertUrlToSql(r *http.Request, joinData map[string][]string, keys []string) (string, []interface{}, error) {
+func ConvertUrlToSql(r *http.Request, joinData map[string][]string, keys []string, table string) (string, []interface{}, error) {
 	var (
-		sqlWhere  []string
 		sqlArgs   []interface{}
 		sqlSelect string
 		sqlJoin   string
@@ -214,27 +214,60 @@ func ConvertUrlToSql(r *http.Request, joinData map[string][]string, keys []strin
 				sqlSelect += fmt.Sprintf("%s.%s, ", key, val)
 			}
 		}
+	}
 
-		/* // Construct SQL WHERE statement
-		if primaryKey != "" {
-			pkValue := r.URL.Query().Get(primaryKey)
-			if pkValue == "" {
-				return "", nil, fmt.Errorf("missing primary key value")
+	// Construct SQL WHERE statement
+	urlData := r.URL.Query()
+	var queryWhere strings.Builder
+
+	// Iterate each key (field name) and value (filter after)
+	for k, v := range urlData {
+
+		// Find which table the given field belongs to
+		belongsToTable := ""
+		for t, tf := range joinData {
+			for _, s := range tf {
+				if k == s {
+					belongsToTable = t
+					break
+				}
 			}
-			sqlWhere = append(sqlWhere, fmt.Sprintf("%s.%s = %s", targetTableName, primaryKey, pkValue))
-			sqlArgs = append(sqlArgs, pkValue)
-		} */
+			if belongsToTable != "" {
+				break
+			}
+		}
+
+		// If not found, assume the field belongs to the main table
+		if belongsToTable == "" {
+			belongsToTable = table
+		}
+
+		// If found, add field and table to query string
+		if belongsToTable != "" {
+			for _, vd := range v {
+				if queryWhere.String() != "" {
+					queryWhere.WriteString(" OR")
+				}
+				queryWhere.WriteString(fmt.Sprintf(" %s.%s = ?", belongsToTable, k))
+				sqlArgs = append(sqlArgs, vd)
+			}
+		}
 	}
 
 	// Remove trailing comma from SELECT statement
 	sqlSelect = sqlSelect[:len(sqlSelect)-2]
 
 	// Combine all SQL statements into one
-	SQL := fmt.Sprintf("SELECT %s FROM %s %s ", sqlSelect, joinData["main"][0], sqlJoin)
+	SQL := fmt.Sprintf(
+		"SELECT %s FROM %s %s ",
+		sqlSelect,
+		joinData["main"][0],
+		sqlJoin,
+	)
 
 	// Append filters to SQL query
-	if len(sqlWhere) > 0 {
-		SQL += " WHERE " + strings.Join(sqlWhere, " AND ")
+	if queryWhere.String() != "" {
+		SQL += " WHERE " + queryWhere.String()
 	}
 
 	return SQL, sqlArgs, nil

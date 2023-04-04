@@ -112,14 +112,13 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 		/// SEND REQUEST TO GENERIC GET REQUEST, RECIEVE AS "res, err"
 
 		//SQL, sqlArgs, err := globals.ConvertUrlToSql(r, activeTable, fkTables, fkFilters, nameEndpoints, specificSelects)
-		SQL, sqlArgs, err := globals.ConvertUrlToSql(r, joinData, keys)
+		SQL, sqlArgs, err := globals.ConvertUrlToSql(r, joinData, keys, activeTable)
 
 		//SQL, sqlArgs, err := globals.ConvertUrlToSql(r, activeTable, []string{}, []string{}, []string{})
 		if err != nil {
 			http.Error(w, "Error in converting url to sql: "+err.Error(), http.StatusUnprocessableEntity)
 			return
 		}
-		println(SQL)
 
 		res, err := globals.QueryJSON(globals.DB, SQL, sqlArgs, w)
 		if err != nil {
