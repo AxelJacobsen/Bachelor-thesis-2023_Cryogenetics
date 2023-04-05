@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
+import cryogenetics.logistics.api.Api.Companion.makeBackendRequest
 import cryogenetics.logistics.databinding.FragmentInventoryBinding
-import java.util.*
 
 
 class InventoryFragment : Fragment() {
@@ -71,15 +71,12 @@ class InventoryFragment : Fragment() {
         // initialize the recyclerView-adapter
         val itemList = mutableListOf<Map<String, Any>>()
         //Fetch json data and add to itemlist
-        print(fetchInventoryData())
-
         for (model in fetchInventoryData()) {
             itemList.add(model)
             print(model)
         }
 
         //Create a list of references
-
         val viewIds = listOf(
                 R.id.tvInventoryNr,
                 R.id.tvInventoryClient,
@@ -95,6 +92,13 @@ class InventoryFragment : Fragment() {
         //mProductListAdapter = adapter
         inventoryList.adapter = InventoryAdapter(itemList, viewIds)
 
+
+        val dataList = listOf(
+            mapOf("address" to "Wow this is one ugly container", "model" to "large200", "primary" to "model"),
+            mapOf("address" to "TestAdresse", "model" to "verySmall60", "primary" to "model")
+        )
+
+        makeBackendRequest("container", dataList, "PUT")
     }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

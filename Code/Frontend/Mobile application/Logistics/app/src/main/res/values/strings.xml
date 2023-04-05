@@ -7,6 +7,7 @@
     <string name="sLog">Log</string>
     <string name="sInventory">Inventory</string>
     <string name="inventory">Inventory</string>
+    <string name="baseUrl">http://10.0.2.2:8080/api/</string>
 
     <string name="usernamePlaceholder">Username Placeholder</string>
     <string name="hashNr">#Nr</string>
