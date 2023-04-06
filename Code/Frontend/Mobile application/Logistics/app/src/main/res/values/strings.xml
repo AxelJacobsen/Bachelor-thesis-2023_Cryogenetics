@@ -44,5 +44,9 @@
     <string name="alias">employee_alias</string>
     <string name="write_here">Write here</string>
     <string name="search">Search</string>
+    <string name="CompleteLog">Complete Log</string>
+    <string name="current_container">Current container:</string>
+    <string name="_000_0000">000-0000</string>
+    <string name="none">None</string>
 
 </resources>
