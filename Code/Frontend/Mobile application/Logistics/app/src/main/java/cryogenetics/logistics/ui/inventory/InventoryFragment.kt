@@ -71,11 +71,9 @@ class InventoryFragment : Fragment() {
         // initialize the recyclerView-adapter
         val itemList = mutableListOf<Map<String, Any>>()
         //Fetch json data and add to itemlist
-        print(fetchInventoryData())
 
         for (model in fetchInventoryData()) {
             itemList.add(model)
-            print(model)
         }
 
         //Create a list of references

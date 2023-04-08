@@ -1,4 +1,4 @@
-package cryogenetics.logistics.ui.actLog
+package cryogenetics.logistics.ui.inventory.mini
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -11,20 +11,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
-import cryogenetics.logistics.databinding.FragmentActLogBinding
+import cryogenetics.logistics.databinding.FragmentMiniActLogBinding
+import cryogenetics.logistics.databinding.FragmentMiniInventoryBinding
+import cryogenetics.logistics.ui.actLog.mini.MiniInventoryAdapter
+import cryogenetics.logistics.ui.actLog.mini.MiniInventoryViewModel
 import cryogenetics.logistics.ui.inventory.*
 
-class ActLogFragment : Fragment() {
+class MiniInventoryFragment : Fragment() {
 
     companion object {
-        fun newInstance() = ActLogFragment()
+        fun newInstance() = MiniInventoryFragment()
     }
 
-    private var _binding : FragmentActLogBinding? = null
+    private var _binding : FragmentMiniInventoryBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var inventoryList: RecyclerView
-    private lateinit var viewModel: ActLogViewModel
+    private lateinit var viewModel: MiniInventoryViewModel
     private lateinit var mProductListAdapter: JsonAdapter
 
     private val mOnProductClickListener =
@@ -51,7 +54,7 @@ class ActLogFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentActLogBinding.inflate(inflater, container, false)
+        _binding = FragmentMiniInventoryBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -59,8 +62,9 @@ class ActLogFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // initialize the recyclerView
-        binding.recyclerViewActLog.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerViewActLog.setHasFixedSize(true)
+        binding.InventoryRecycler
+        binding.InventoryRecycler.layoutManager = LinearLayoutManager(requireContext())
+        binding.InventoryRecycler.setHasFixedSize(true)
 
         // initialize the recyclerView-adapter
         val itemList = mutableListOf<Map<String, Any>>()
@@ -73,22 +77,22 @@ class ActLogFragment : Fragment() {
         //Create a list of references
 
         val viewIds = listOf(
-            R.id.tvActLogRNr,
-            R.id.tvActLogRTime,
-            R.id.tvActLogRClient,
-            R.id.tvActLogRLocation,
-            R.id.tvActLogRAct,
-            R.id.tvActLogRComment,
-            R.id.tvActLogRSign,
-            R.id.tvActLogRStatus
+            R.id.tvInventoryNr,
+            R.id.tvInventoryClient,
+            R.id.tvInventoryLocation,
+            R.id.tvInventoryInvoice,
+            R.id.tvInventoryLastFill,
+            R.id.tvInventoryNoti,
+            R.id.tvInventoryStatus,
+            R.id.tvInventorySerialNr
         )
         //Create adapter
-        binding.recyclerViewActLog.adapter = ActLogAdapter(itemList, viewIds)
+        binding.InventoryRecycler.adapter = MiniInventoryAdapter(itemList, viewIds)
     }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel = ViewModelProvider(this)[ActLogViewModel::class.java]
+        viewModel = ViewModelProvider(this)[MiniInventoryViewModel::class.java]
         // TODO: Use the ViewModel
     }
 
@@ -98,7 +102,7 @@ class ActLogFragment : Fragment() {
     }
 
     private fun fetchActLogData() :  List<Map<String, Any>>{
-        val urlDataString = Api.fetchJsonData("http://10.0.2.2:8080/api/transaction")
+        val urlDataString = Api.fetchJsonData("http://10.0.2.2:8080/api/container")
         return Api.parseJsonArray(urlDataString)
     }
 

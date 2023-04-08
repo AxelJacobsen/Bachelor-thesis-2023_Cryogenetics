@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
-import cryogenetics.logistics.databinding.FragmentActLogBinding
 import cryogenetics.logistics.databinding.FragmentMiniActLogBinding
 import cryogenetics.logistics.ui.inventory.*
 
@@ -24,15 +23,15 @@ class MiniActLogFragment : Fragment() {
     private var _binding : FragmentMiniActLogBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var inventoryList: RecyclerView
+    //private lateinit var actLogList: RecyclerView
     private lateinit var viewModel: MiniActLogViewModel
-    private lateinit var mProductListAdapter: JsonAdapter
+    //private lateinit var mProductListAdapter: JsonAdapter
 
     private val mOnProductClickListener =
         AdapterView.OnItemClickListener { parent, view, position, id ->
 
             /*
-            fun onUpdate(position: Int, model: InventoryDataModel) {
+            fun onUpdate(position: Int, model: ActLogDataModel) {
                 // Add model we want to update to modelToBeUpdated
                 modelToBeUpdated.add(model)
 
@@ -40,7 +39,7 @@ class MiniActLogFragment : Fragment() {
                 binding.HeaderName?.setText(model.name)
             }
 
-            fun onDelete(model: InventoryDataModel, checkd: Boolean) {
+            fun onDelete(model: ActLogDataModel, checkd: Boolean) {
                 // We change the value of isChecked to prepare removal.
                 model.isChecked = checkd
             }
@@ -66,7 +65,6 @@ class MiniActLogFragment : Fragment() {
         // initialize the recyclerView-adapter
         val itemList = mutableListOf<Map<String, Any>>()
         //Fetch json data and add to itemlist
-        print(fetchActLogData())
 
         for (model in fetchActLogData()) {
             itemList.add(model)
