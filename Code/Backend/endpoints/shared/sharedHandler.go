@@ -4,6 +4,7 @@ import (
 	paths "backend/constants"
 	"backend/globals"
 	"encoding/json"
+	"fmt"
 
 	//"fmt"
 	"net/http"
@@ -112,7 +113,7 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 
 		res, err := globals.QueryJSON(globals.DB, SQL, sqlArgs, w)
 		if err != nil {
-			http.Error(w, "Error fetching Data.", http.StatusInternalServerError)
+			http.Error(w, "Error fetching data.", http.StatusInternalServerError)
 			return
 		}
 
@@ -120,28 +121,53 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		err = json.NewEncoder(w).Encode(res)
 		if err != nil {
-			http.Error(w, "Error encoding Data.", http.StatusInternalServerError)
+			http.Error(w, "Error encoding data.", http.StatusInternalServerError)
 		}
 	// POST method
 	case http.MethodPost:
 		/// SEND REQUEST TO GENERIC POST REQUEST, RECIEVE AS "res, err"
+		sqlQuery, sqlArgs, err := globals.ConvertPostURLToSQL(r, activeTable)
+		if err != nil {
+			http.Error(w, "Error in converting url to sql.", http.StatusUnprocessableEntity)
+		}
 
-		/* // Set header and encode to writer
+		res, err := globals.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
+		if err != nil {
+			http.Error(w, "Error posting data.", http.StatusInternalServerError)
+			return
+		}
+
+		// Set header and encode to writer
 		w.Header().Set("Content-Type", "application/json")
 		err = json.NewEncoder(w).Encode(res)
 		if err != nil {
-			http.Error(w, "Error encoding transactions.", http.StatusInternalServerError)
-		} */
+			http.Error(w, "Error encoding sql result.", http.StatusInternalServerError)
+			return
+		}
 	// PUT method
 	case http.MethodPut:
-	/// SEND REQUEST TO GENERIC PUT REQUEST, RECIEVE AS "res, err"
+		/// SEND REQUEST TO GENERIC PUT REQUEST, RECIEVE AS "res, err"
+		sqlQuery, sqlArgs, err := globals.ConvertPutURLToSQL(r, activeTable)
+		if err != nil {
+			http.Error(w, "Error converting url to sql.", http.StatusUnprocessableEntity)
+			return
+		}
+		println("SQL: " + sqlQuery)
 
-	/* // Set header and encode to writer
-	w.Header().Set("Content-Type", "application/json")
-	err = json.NewEncoder(w).Encode(res)
-	if err != nil {
-		http.Error(w, "Error encoding transactions.", http.StatusInternalServerError)
-	} */
+		res, err := globals.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
+		if err != nil {
+			fmt.Println("err: ", err)
+			http.Error(w, "Error putting data.", http.StatusInternalServerError)
+			return
+		}
+
+		// Set header and encode to writer
+		w.Header().Set("Content-Type", "application/json")
+		err = json.NewEncoder(w).Encode(res)
+		if err != nil {
+			http.Error(w, "Error encoding data.", http.StatusInternalServerError)
+			return
+		}
 
 	default:
 		http.Error(w, "Method not allowed, read the documentation for more information.", http.StatusMethodNotAllowed)
@@ -153,35 +179,36 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 /**
  *	Handler for 'transactions' endpoint.
  */
-/* func HandlerTransactions(w http.ResponseWriter, r *http.Request) {
-	w.Header().Add("content-type", "application/json")
-	tableName := "transaction"
-	// Get escaped path without base URL and remove the first character if it's a "/"
-	escapedPath := r.URL.EscapedPath()[len(paths.PUBLIC_TRANSACTION_PATH):]
+/* func HandlerContainer(w http.ResponseWriter, r *http.Request) {
+w.Header().Add("content-type", "application/json")
+tableName := "container"
 
-	if len(escapedPath) > 0 && escapedPath[0] == '/' {
-		escapedPath = escapedPath[1:]
-	}
+// Get escaped path without base URL and remove the first character if it's a "/"
+escapedPath := r.URL.EscapedPath()[len(paths.PUBLIC_CONTAINER_PATH):]
 
-	// Split the path on each "/", unless the path is blank
-	args := []string{}
-	if len(escapedPath) > 0 {
-		args = strings.Split(escapedPath, "/")
-	}
+if len(escapedPath) > 0 && escapedPath[0] == '/' {
+	escapedPath = escapedPath[1:]
+}
 
-	// Switch based on method
-	switch r.Method {
+// Split the path on each "/", unless the path is blank
+ args := []string{}
+if len(escapedPath) > 0 {
+	args = strings.Split(escapedPath, "/")
+} */
+
+// Switch based on method
+/*switch r.Method {
 
 	// GET method
 	case http.MethodGet:
-		containerSQL, sqlArgs, err := globals.ConvertUrlToSql(r, tableName, []string{"Client.client_Name AS customer_name", "Location.name AS inventory_name", "employee.employee_alias AS responsible_name"}, []string{"client ON transaction.client_id = client.client_id", "location ON transaction.inventory = location.location_id", "employee ON transaction.responsible_id = employee.employee_id"}, "LEFT JOIN")
+		sqlQuery, sqlArgs, err := globals.ConvertUrlToSql(r, tableName)
 		if err != nil {
 			http.Error(w, "Error in converting url to sql", http.StatusUnprocessableEntity)
 		}
 
-		res, err := globals.QueryJSON(globals.DB, containerSQL, sqlArgs, w)
+		res, err := globals.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
 		if err != nil {
-			http.Error(w, "Error fetching transactions.", http.StatusInternalServerError)
+			http.Error(w, "Error fetching containers.", http.StatusInternalServerError)
 			return
 		}
 
@@ -189,13 +216,50 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		err = json.NewEncoder(w).Encode(res)
 		if err != nil {
-			http.Error(w, "Error encoding transactions.", http.StatusInternalServerError)
+			http.Error(w, "Error encoding containers.", http.StatusInternalServerError)
 		}
+
 	// POST method
 	case http.MethodPost:
-		// If there's not enough args, return
-		if len(args) < 1 {
-			http.Error(w, "Not enough arguments, read the documentation for more information.", http.StatusUnprocessableEntity)
+		sqlQuery, sqlArgs, err := globals.ConvertPostURLToSQL(r, tableName)
+		if err != nil {
+			http.Error(w, "Error in converting url to sql", http.StatusUnprocessableEntity)
+		}
+
+		res, err := globals.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
+		if err != nil {
+			http.Error(w, "Error posting containers.", http.StatusInternalServerError)
+			return
+		}
+
+		// Set header and encode to writer
+		w.Header().Set("Content-Type", "application/json")
+		err = json.NewEncoder(w).Encode(res)
+		if err != nil {
+			http.Error(w, "Error encoding sql result.", http.StatusInternalServerError)
+			return
+		}
+
+		// PUT method
+	case http.MethodPut:
+		sqlQuery, sqlArgs, err := globals.ConvertPutURLToSQL(r, tableName)
+		if err != nil {
+			http.Error(w, "Error converting url to sql.", http.StatusUnprocessableEntity)
+			return
+		}
+
+		res, err := globals.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
+		if err != nil {
+			fmt.Println("err: ", err)
+			http.Error(w, "Error putting containers.", http.StatusInternalServerError)
+			return
+		}
+
+		// Set header and encode to writer
+		w.Header().Set("Content-Type", "application/json")
+		err = json.NewEncoder(w).Encode(res)
+		if err != nil {
+			http.Error(w, "Error encoding containers.", http.StatusInternalServerError)
 			return
 		}
 
