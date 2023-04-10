@@ -50,51 +50,6 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 	joinData["main"] = append(joinData["main"], activeTable, "", "*") //WHAT TABLE IS THE SQL REQUEST FOR?
 	keys = []string{"main"}
 
-	switch activeTable {
-	case "container":
-		/*
-		* 	targetTableName: Name of table we want "dataIWant" and such from
-		*	tablename: Name of the table that shares the primary key value with target table
-		*	PrimaryKey: Name of value that is the SQL Primary key on TargetTableName
-		*	dataIWant: desired data we want SQL query to include
-		 */
-		// 								"targetTableName" :	["tablename", "PrimaryKey",	"dataIWant", "moreDataIWant", etc...]
-		joinData["client"] = append(joinData["client"], "container", "client_id", "client_name")
-		joinData["location"] = append(joinData["location"], "container", "location_id", "location_name")
-		joinData["container_model"] = append(joinData["container_model"], "container", "container_model_name", "liter_capacity", "refill_interval")
-
-		//List of keys used in joinData. NEEDS TO BE IN THE SAME ORDER!
-		keys = []string{"main", "client", "location", "container_model"}
-	case "transaction":
-		/*
-		* 	targetTableName: Name of table we want "dataIWant" and such from
-		*	tablename: Name of the table that shares the primary key value with target table
-		*	PrimaryKey: Name of value that is the SQL Primary key on TargetTableName
-		*	dataIWant: desired data we want SQL query to include
-		 */
-		// 								"targetTableName" :	["tablename", "PrimaryKey",	"dataIWant", "moreDataIWant", etc...]
-		joinData["client"] = append(joinData["client"], "transaction", "client_id", "client_name")
-		joinData["employee"] = append(joinData["employee"], "transaction", "employee_id", "employee_alias")
-		joinData["location"] = append(joinData["location"], "transaction", "location_id", "location_name")
-		joinData["container"] = append(joinData["container"], "container", "container_sr_number", "temp_id")
-		joinData["container_model"] = append(joinData["container_model"], "container", "container_model_name", "liter_capacity")
-
-		//List of keys used in joinData. NEEDS TO BE IN THE SAME ORDER!
-		keys = []string{"main", "client", "employee", "location", "container", "container_model"}
-	case "employee":
-		/*
-		* 	targetTableName: Name of table we want "dataIWant" and such from
-		*	tablename: Name of the table that shares the primary key value with target table
-		*	PrimaryKey: Name of value that is the SQL Primary key on TargetTableName
-		*	dataIWant: desired data we want SQL query to include
-		 */
-		// 								"targetTableName" :	["tablename", "PrimaryKey",	"dataIWant", "moreDataIWant", etc...]
-		joinData["location"] = append(joinData["location"], "container", "location_id", "location_name")
-
-		//List of keys used in joinData. NEEDS TO BE IN THE SAME ORDER!
-		keys = []string{"main", "location"}
-	}
-
 	////////////////////////////////////
 	/// CHECK FOR AUTH TOKEN PERMISSIONS
 	////////////////////////////////////
@@ -104,6 +59,7 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 
 	// GET method
 	case http.MethodGet:
+		joinData, keys = globals.SetJoinData(joinData, keys, activeTable)
 		/// SEND REQUEST TO GENERIC GET REQUEST, RECIEVE AS "res, err"
 		SQL, sqlArgs, err := globals.ConvertUrlToSql(r, joinData, keys)
 		if err != nil {
@@ -175,97 +131,3 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
-
-/**
- *	Handler for 'transactions' endpoint.
- */
-/* func HandlerContainer(w http.ResponseWriter, r *http.Request) {
-w.Header().Add("content-type", "application/json")
-tableName := "container"
-
-// Get escaped path without base URL and remove the first character if it's a "/"
-escapedPath := r.URL.EscapedPath()[len(paths.PUBLIC_CONTAINER_PATH):]
-
-if len(escapedPath) > 0 && escapedPath[0] == '/' {
-	escapedPath = escapedPath[1:]
-}
-
-// Split the path on each "/", unless the path is blank
- args := []string{}
-if len(escapedPath) > 0 {
-	args = strings.Split(escapedPath, "/")
-} */
-
-// Switch based on method
-/*switch r.Method {
-
-	// GET method
-	case http.MethodGet:
-		sqlQuery, sqlArgs, err := globals.ConvertUrlToSql(r, tableName)
-		if err != nil {
-			http.Error(w, "Error in converting url to sql", http.StatusUnprocessableEntity)
-		}
-
-		res, err := globals.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
-		if err != nil {
-			http.Error(w, "Error fetching containers.", http.StatusInternalServerError)
-			return
-		}
-
-		// Set header and encode to writer
-		w.Header().Set("Content-Type", "application/json")
-		err = json.NewEncoder(w).Encode(res)
-		if err != nil {
-			http.Error(w, "Error encoding containers.", http.StatusInternalServerError)
-		}
-
-	// POST method
-	case http.MethodPost:
-		sqlQuery, sqlArgs, err := globals.ConvertPostURLToSQL(r, tableName)
-		if err != nil {
-			http.Error(w, "Error in converting url to sql", http.StatusUnprocessableEntity)
-		}
-
-		res, err := globals.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
-		if err != nil {
-			http.Error(w, "Error posting containers.", http.StatusInternalServerError)
-			return
-		}
-
-		// Set header and encode to writer
-		w.Header().Set("Content-Type", "application/json")
-		err = json.NewEncoder(w).Encode(res)
-		if err != nil {
-			http.Error(w, "Error encoding sql result.", http.StatusInternalServerError)
-			return
-		}
-
-		// PUT method
-	case http.MethodPut:
-		sqlQuery, sqlArgs, err := globals.ConvertPutURLToSQL(r, tableName)
-		if err != nil {
-			http.Error(w, "Error converting url to sql.", http.StatusUnprocessableEntity)
-			return
-		}
-
-		res, err := globals.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
-		if err != nil {
-			fmt.Println("err: ", err)
-			http.Error(w, "Error putting containers.", http.StatusInternalServerError)
-			return
-		}
-
-		// Set header and encode to writer
-		w.Header().Set("Content-Type", "application/json")
-		err = json.NewEncoder(w).Encode(res)
-		if err != nil {
-			http.Error(w, "Error encoding containers.", http.StatusInternalServerError)
-			return
-		}
-
-	// Other method
-	default:
-		http.Error(w, "Method not allowed, read the documentation for more information.", http.StatusMethodNotAllowed)
-		return
-	}
-} */
