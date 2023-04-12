@@ -60,8 +60,6 @@ class InventoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //binding.HeaderPayment?.text = "TESTING123"
-
 
         // initialize the recyclerView
         inventoryList = view.findViewById(R.id.InventoryRecycler)
@@ -85,20 +83,26 @@ class InventoryFragment : Fragment() {
                 R.id.tvInventoryLastFill,
                 R.id.tvInventoryNoti,
                 R.id.tvInventoryStatus
-                //, R.id.tvInventoryTitle // Cant be found
                 )
-        //Create adapter
-        //val adapter = JsonAdapter(itemList, viewIds)
-        //mProductListAdapter = adapter
+
         inventoryList.adapter = InventoryAdapter(itemList, viewIds)
 
+        //POST EXAMPLE, make sure all fields that are non-nullable are provided
+        /*
+        val dataList = listOf(
 
+            mapOf(  "serial_number" to 123321, "country_iso3" to "KYS",
+                    "model" to "large200", "status" to "Quarantine")
+        )
+        */
+
+        //PUT EXAMPLE, primary must be identical to a provided field
         val dataList = listOf(
             mapOf("address" to "Wow this is one ugly container", "model" to "large200", "primary" to "model"),
             mapOf("address" to "TestAdresse", "model" to "verySmall60", "primary" to "model")
         )
 
-        makeBackendRequest("container", dataList, "PUT")
+        makeBackendRequest("user/container", dataList, "POST")
     }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

@@ -71,8 +71,7 @@ class Api {
             }
             return itemList
         }
-        /// IN PROGRESS --- Function works as intended however returns 404 when connecting to server
-        /// Might look at it at the cottage - Axel
+
         fun makeBackendRequest(endpoint: String, dataList: List<Map<String, Any>>, method: String) {
             // Define the base URL for your backend server
             val baseUrl = "http://10.0.2.2:8080/api/"
@@ -81,7 +80,6 @@ class Api {
             val endpointUrl = URL(baseUrl + endpoint)
 
             var jsonString = generateJson(dataList)
-            println("HERE!")
             if (jsonString.isNotEmpty()) {
                 println(jsonString)
             }
@@ -99,15 +97,10 @@ class Api {
             outputStreamWriter.write(jsonString)
             outputStreamWriter.flush()
 
-            // Get the response code
-            val responseCode = connection.responseCode
-            Log.i(TAG,responseCode.toString())
-
             // Close the connection and output stream writer
             outputStreamWriter.close()
             connection.disconnect()
         }
-
 
         fun generateJson(dataList: List<Map<String, Any>>): String {
             val jsonArray = StringBuilder("[")
