@@ -1,6 +1,8 @@
 package cryogenetics.logistics.ui.inventory
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -69,9 +71,14 @@ class InventoryFragment : Fragment() {
         // initialize the recyclerView-adapter
         val itemList = mutableListOf<Map<String, Any>>()
         //Fetch json data and add to itemlist
-        for (model in fetchInventoryData()) {
-            itemList.add(model)
-            print(model)
+        val fetchedData = fetchInventoryData()
+
+        if (fetchedData.isNotEmpty()){
+            for (model in fetchedData) {
+                itemList.add(model)
+            }
+        } else {
+            Log.e(TAG, "Fetched no data")
         }
 
         //Create a list of references
