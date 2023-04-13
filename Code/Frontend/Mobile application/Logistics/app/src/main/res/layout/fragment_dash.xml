@@ -9,27 +9,26 @@
     tools:ignore="MissingDefaultResource">
 
     <FrameLayout
-        android:id="@+id/miniLog"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/softGrey"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_weight="0.5"
-        app:layout_constraintStart_toEndOf="@+id/miniInventory"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </FrameLayout>
-
-    <FrameLayout
         android:id="@+id/miniInventory"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/cryoBlue"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/miniLog"
-        app:layout_constraintHorizontal_weight="0.5"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_weight="0.5"
+        app:layout_constraintEnd_toStartOf="@+id/miniLog"
+        app:layout_constraintTop_toTopOf="parent">
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/miniLog"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/softGrey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_weight="0.5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/miniInventory"
         app:layout_constraintTop_toTopOf="parent">
     </FrameLayout>
 

@@ -13,6 +13,7 @@ import cryogenetics.logistics.ui.actLog.ActLogFragment
 import cryogenetics.logistics.ui.inventory.InventoryFragment
 import cryogenetics.logistics.ui.dash.DashFragment
 import cryogenetics.logistics.ui.tank.TankFragment
+import cryogenetics.logistics.ui.tankfill.TankFillFragment
 import cryogenetics.logistics.ui.taskmanager.TaskItem
 import cryogenetics.logistics.ui.taskmanager.TaskManagerAdapter
 
@@ -82,7 +83,7 @@ class HostFragment : Fragment() {
             openAndAddFragment(TankFragment(), "Tank")
         }
         binding.clTankFilling.setOnClickListener {
-            openAndAddFragment(DashFragment(), "Tank Filling")
+            openAndAddFragment(TankFillFragment(), "Tank Filling")
         }
         binding.clLog.setOnClickListener {
             openAndAddFragment(ActLogFragment(), "Log")
@@ -90,7 +91,6 @@ class HostFragment : Fragment() {
         binding.clInventory.setOnClickListener {
             openAndAddFragment(InventoryFragment(), "Inventory")
         }
-
     }
 
     /**

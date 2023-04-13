@@ -64,9 +64,8 @@ class InventoryFragment : Fragment() {
 
 
         // initialize the recyclerView
-        inventoryList = view.findViewById(R.id.InventoryRecycler)
-        inventoryList.layoutManager = LinearLayoutManager(requireContext())
-        inventoryList.setHasFixedSize(true)
+        binding.InventoryRecycler.layoutManager = LinearLayoutManager(requireContext())
+        binding.InventoryRecycler.setHasFixedSize(true)
 
         // initialize the recyclerView-adapter
         val itemList = mutableListOf<Map<String, Any>>()
@@ -92,7 +91,7 @@ class InventoryFragment : Fragment() {
         //Create adapter
         //val adapter = JsonAdapter(itemList, viewIds)
         //mProductListAdapter = adapter
-        inventoryList.adapter = InventoryAdapter(itemList, viewIds)
+        binding.InventoryRecycler.adapter = InventoryAdapter(itemList, viewIds)
 
     }
     override fun onActivityCreated(savedInstanceState: Bundle?) {

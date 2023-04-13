@@ -1,4 +1,4 @@
-package cryogenetics.logistics.ui.actLog.mini
+package cryogenetics.logistics.ui.inventory.mini
 
 import android.content.ContentValues.TAG
 import android.util.Log
@@ -38,7 +38,7 @@ class MiniInventoryAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         //Create a view based on the parent viewgroup
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.inventory_recycler_item, parent, false)
+            .inflate(R.layout.mini_inventory_recycler_item, parent, false)
         return ViewHolder(view, viewIds)
     }
 

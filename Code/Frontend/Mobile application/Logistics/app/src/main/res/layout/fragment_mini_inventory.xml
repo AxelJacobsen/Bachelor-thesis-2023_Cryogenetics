@@ -18,18 +18,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/bFilter"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#9DB5BF"
-            android:text="@string/filterbutton"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.10" />
-
         <TextView
             android:id="@+id/tvInventoryTitle"
             android:layout_width="0dp"
@@ -42,31 +30,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
-
-        <View
-            android:id="@+id/view2"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="#9DB5BF"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.35"/>
-
-        <SearchView
-            android:id="@+id/searchView2"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/white"
-            android:queryHint="Search"
-            android:layout_margin="5dp"
-            app:layout_constraintBottom_toBottomOf="@+id/view2"
-            app:layout_constraintEnd_toEndOf="@+id/view2"
-            app:layout_constraintStart_toStartOf="@+id/view2"
-            app:layout_constraintTop_toTopOf="@+id/view2">
-        </SearchView>
-
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -83,148 +46,64 @@
 
         <TextView
             android:id="@+id/tvInventoryNr"
-            android:tag="@string/id"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="2dip"
-            android:maxLines="1"
             android:background="@color/white"
             android:gravity="start"
+            android:maxLines="1"
             android:padding="3dip"
+            android:tag="@string/id"
             android:text="@string/hashNr"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tvInventoryLocation"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tvInventoryLocation"
-            android:tag="@string/adr"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dip"
-            android:maxLines="1"
-            android:background="@color/white"
-            android:gravity="start"
-            android:padding="3dip"
-            android:text="@string/location"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tvInventoryClient"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@+id/tvInventoryNr"
+            app:layout_constraintHorizontal_weight="0.5"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
 
         <TextView
             android:id="@+id/tvInventoryClient"
-            android:tag="@string/cli"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="2dip"
-            android:maxLines="1"
             android:background="@color/white"
             android:gravity="start"
+            android:maxLines="1"
             android:padding="3dip"
+            android:tag="@string/cli"
             android:text="@string/client"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tvInventoryLastFill"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@+id/tvInventoryLocation"
+            app:layout_constraintHorizontal_weight="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tvInventoryNr"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvInventoryLastFill"
-            android:tag="@string/lFi"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="2dip"
-            android:maxLines="1"
             android:background="@color/white"
             android:gravity="start"
+            android:maxLines="1"
             android:padding="3dip"
+            android:tag="@string/lFi"
             android:text="@string/last_filled"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tvInventoryStatus"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintEnd_toStartOf="@+id/tvInventoryNoti"
+            app:layout_constraintHorizontal_weight="0.5"
             app:layout_constraintStart_toEndOf="@+id/tvInventoryClient"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tvInventoryStatus"
-            android:tag="@string/sta"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dip"
-            android:maxLines="1"
-            android:background="@color/white"
-            android:gravity="start"
-            android:padding="3dip"
-            android:text="@string/status"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tvInventorySerialNr"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@+id/tvInventoryLastFill"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tvInventorySerialNr"
-            android:tag="@string/serial"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dip"
-            android:maxLines="1"
-            android:background="@color/white"
-            android:gravity="start"
-            android:padding="3dip"
-            android:text="@string/serialNr"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tvInventoryInvoice"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@+id/tvInventoryStatus"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tvInventoryInvoice"
-            android:tag="@string/ivo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dip"
-            android:maxLines="1"
-            android:background="@color/white"
-            android:gravity="start"
-            android:padding="3dip"
-            android:text="@string/inovice"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tvInventoryNoti"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@+id/tvInventorySerialNr"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
             android:id="@+id/tvInventoryNoti"
-            android:tag="@string/maint"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="2dip"
@@ -232,14 +111,14 @@
             android:gravity="start"
             android:maxLines="1"
             android:padding="3dip"
+            android:tag="@string/maint"
             android:text="@string/notifcations"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@+id/tvInventoryInvoice"
+            app:layout_constraintHorizontal_weight="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tvInventoryLastFill"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

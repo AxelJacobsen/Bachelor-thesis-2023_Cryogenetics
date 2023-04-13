@@ -29,6 +29,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/taskItemtv"
         app:layout_constraintEnd_toEndOf="@+id/taskItemtv"
         app:layout_constraintTop_toTopOf="@+id/taskItemtv"
-        app:srcCompat="@drawable/cancel_hs" />
+        app:srcCompat="@drawable/cancel" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

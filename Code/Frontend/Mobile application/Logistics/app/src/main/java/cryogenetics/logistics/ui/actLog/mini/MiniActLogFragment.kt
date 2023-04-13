@@ -68,7 +68,6 @@ class MiniActLogFragment : Fragment() {
 
         for (model in fetchActLogData()) {
             itemList.add(model)
-            print(model)
         }
 
         //Create a list of references
