@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:ignore="MissingDefaultResource">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/tableLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/black"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvActLogRNr"
+            android:layout_width="0dp"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dip"
+            android:background="@color/white"
+            android:gravity="start"
+            android:maxLines="1"
+            android:padding="3dip"
+            android:tag="@string/id"
+            android:text="@string/hashNr"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvActLogRTime"
+            app:layout_constraintHorizontal_weight="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvActLogRTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dip"
+            android:background="@color/white"
+            android:gravity="start"
+            android:maxLines="1"
+            android:padding="3dip"
+            android:tag="@string/date"
+            android:text="@string/time"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvActLogRClient"
+            app:layout_constraintHorizontal_weight="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tvActLogRNr"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvActLogRClient"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dip"
+            android:background="@color/white"
+            android:gravity="start"
+            android:maxLines="1"
+            android:padding="3dip"
+            android:tag="@string/cli"
+            android:text="@string/client"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvActLogRLocation"
+            app:layout_constraintHorizontal_weight="0.2"
+            app:layout_constraintStart_toEndOf="@+id/tvActLogRTime"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvActLogRLocation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dip"
+            android:background="@color/white"
+            android:gravity="start"
+            android:maxLines="1"
+            android:padding="3dip"
+            android:tag="@string/adr"
+            android:text="@string/location"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvActLogRAct"
+            app:layout_constraintHorizontal_weight="0.4"
+            app:layout_constraintStart_toEndOf="@+id/tvActLogRClient"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvActLogRAct"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dip"
+            android:background="@color/white"
+            android:gravity="start"
+            android:maxLines="1"
+            android:padding="3dip"
+            android:tag="@string/act"
+            android:text="@string/act"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvActLogRComment"
+            app:layout_constraintHorizontal_weight="0.35"
+            app:layout_constraintStart_toEndOf="@+id/tvActLogRLocation"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvActLogRComment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dip"
+            android:background="@color/white"
+            android:gravity="start"
+            android:maxLines="1"
+            android:padding="3dip"
+            android:tag="@string/cmt"
+            android:text="@string/comment"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvActLogRStatus"
+            app:layout_constraintHorizontal_weight="0.7"
+            app:layout_constraintStart_toEndOf="@+id/tvActLogRAct"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvActLogRStatus"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dip"
+            android:background="@color/white"
+            android:gravity="start"
+            android:maxLines="1"
+            android:padding="3dip"
+            android:tag="@string/sta"
+            android:text="Status"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="0.35"
+            app:layout_constraintStart_toEndOf="@+id/tvActLogRComment"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+

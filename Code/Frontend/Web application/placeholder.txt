@@ -1,1 +1,0 @@
-Placeholder to enforce folder structure in git

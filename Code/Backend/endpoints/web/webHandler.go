@@ -2,9 +2,6 @@ package web
 
 import (
 	paths "backend/constants"
-	"backend/globals"
-	"encoding/json"
-	"fmt"
 	"net/http"
 	"strings"
 )
@@ -88,7 +85,7 @@ func HandlerWebDashboard(w http.ResponseWriter, r *http.Request) {
  */
 func HandlerAdmins(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("content-type", "application/json")
-	tableName := "admin"
+	//tableName := "admin"
 
 	// Get escaped path without base URL and remove the first character if it's a "/"
 	escapedPath := r.URL.EscapedPath()[len(paths.WEB_ADMIN_PATH):]
@@ -108,7 +105,11 @@ func HandlerAdmins(w http.ResponseWriter, r *http.Request) {
 
 	// GET method
 	case http.MethodGet:
-		containerSQL, sqlArgs, err := globals.ConvertUrlToSql(r, tableName)
+		if len(args) < 1 {
+			http.Error(w, "Not enough arguments, read the documentation for more information.", http.StatusUnprocessableEntity)
+			return
+		}
+		/* containerSQL, sqlArgs, err := globals.ConvertUrlToSql(r, tableName, []string{}, []string{}, []string{}, []string{})
 		if err != nil {
 			http.Error(w, "Error in converting url to sql", http.StatusUnprocessableEntity)
 		}
@@ -126,7 +127,7 @@ func HandlerAdmins(w http.ResponseWriter, r *http.Request) {
 		err = json.NewEncoder(w).Encode(res)
 		if err != nil {
 			http.Error(w, "Error encoding admins.", http.StatusInternalServerError)
-		}
+		} */
 
 	// POST method
 	case http.MethodPost:

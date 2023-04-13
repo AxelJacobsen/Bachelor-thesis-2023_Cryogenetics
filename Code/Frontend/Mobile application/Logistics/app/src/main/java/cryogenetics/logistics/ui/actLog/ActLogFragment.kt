@@ -66,11 +66,9 @@ class ActLogFragment : Fragment() {
         // initialize the recyclerView-adapter
         val itemList = mutableListOf<Map<String, Any>>()
         //Fetch json data and add to itemlist
-        print(fetchActLogData())
 
         for (model in fetchActLogData()) {
             itemList.add(model)
-            print(model)
         }
 
         //Create a list of references
@@ -101,7 +99,7 @@ class ActLogFragment : Fragment() {
     }
 
     private fun fetchActLogData() :  List<Map<String, Any>>{
-        val urlDataString = Api.fetchJsonData("http://10.0.2.2:8080/api/transactions")
+        val urlDataString = Api.fetchJsonData("http://10.0.2.2:8080/api/transaction")
         return Api.parseJsonArray(urlDataString)
     }
 

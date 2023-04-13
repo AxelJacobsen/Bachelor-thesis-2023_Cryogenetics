@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 16. Mar, 2023 19:31 PM
--- Tjener-versjon: 10.4.27-MariaDB
--- PHP Version: 8.2.0
+-- Generation Time: Apr 03, 2023 at 04:49 PM
+-- Server version: 10.4.22-MariaDB
+-- PHP Version: 8.0.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -17,28 +17,24 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
-CREATE DATABASE cryogenetics_database;
-
 --
 -- Database: `cryogenetics_database`
 --
 
 -- --------------------------------------------------------
 
-USE cryogenetics_database;
-
 --
--- Tabellstruktur for tabell `act`
+-- Table structure for table `act`
 --
 
 CREATE TABLE `act` (
-  `act_name` varchar(32) NOT NULL,
-  `description` varchar(64) DEFAULT NULL,
+  `act_name` varchar(32) COLLATE utf8mb4_danish_ci NOT NULL,
+  `description` varchar(64) COLLATE utf8mb4_danish_ci DEFAULT NULL,
   `is_active` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
--- Dataark for tabell `act`
+-- Dumping data for table `act`
 --
 
 INSERT INTO `act` (`act_name`, `description`, `is_active`) VALUES
@@ -54,17 +50,17 @@ INSERT INTO `act` (`act_name`, `description`, `is_active`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur for tabell `admin`
+-- Table structure for table `admin`
 --
 
 CREATE TABLE `admin` (
   `admin_id` int(11) NOT NULL,
-  `email` varchar(64) NOT NULL,
+  `email` varchar(64) COLLATE utf8mb4_danish_ci NOT NULL,
   `password_hash` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
--- Dataark for tabell `admin`
+-- Dumping data for table `admin`
 --
 
 INSERT INTO `admin` (`admin_id`, `email`, `password_hash`) VALUES
@@ -76,16 +72,16 @@ INSERT INTO `admin` (`admin_id`, `email`, `password_hash`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur for tabell `client`
+-- Table structure for table `client`
 --
 
 CREATE TABLE `client` (
   `client_id` int(11) NOT NULL,
-  `client_name` varchar(64) NOT NULL
+  `client_name` varchar(64) COLLATE utf8mb4_danish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
--- Dataark for tabell `client`
+-- Dumping data for table `client`
 --
 
 INSERT INTO `client` (`client_id`, `client_name`) VALUES
@@ -99,52 +95,52 @@ INSERT INTO `client` (`client_id`, `client_name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur for tabell `container`
+-- Table structure for table `container`
 --
 
 CREATE TABLE `container` (
-  `serial_number` varchar(32) NOT NULL,
-  `model` varchar(32) NOT NULL,
-  `country_iso3` varchar(3) NOT NULL,
+  `container_sr_number` varchar(32) COLLATE utf8mb4_danish_ci NOT NULL,
+  `container_model_name` varchar(32) COLLATE utf8mb4_danish_ci NOT NULL,
+  `country_iso3` varchar(3) COLLATE utf8mb4_danish_ci NOT NULL,
   `last_filled` date DEFAULT NULL,
-  `status` varchar(32) NOT NULL,
-  `at_client` int(11) DEFAULT NULL,
-  `address` varchar(64) DEFAULT NULL,
-  `at_inventory` int(11) DEFAULT NULL,
+  `container_status_name` varchar(32) COLLATE utf8mb4_danish_ci NOT NULL,
+  `client_id` int(11) DEFAULT NULL,
+  `address` varchar(64) COLLATE utf8mb4_danish_ci DEFAULT NULL,
+  `location_id` int(11) DEFAULT NULL,
   `invoice` date DEFAULT NULL,
-  `id` varchar(8) DEFAULT NULL,
-  `comment` varchar(512) DEFAULT NULL,
+  `temp_id` varchar(8) COLLATE utf8mb4_danish_ci DEFAULT NULL,
+  `comment` varchar(512) COLLATE utf8mb4_danish_ci DEFAULT NULL,
   `maintenance_needed` tinyint(1) NOT NULL DEFAULT 0,
   `production_date` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
--- Dataark for tabell `container`
+-- Dumping data for table `container`
 --
 
-INSERT INTO `container` (`serial_number`, `model`, `country_iso3`, `last_filled`, `status`, `at_client`, `address`, `at_inventory`, `invoice`, `id`, `comment`, `maintenance_needed`, `production_date`) VALUES
-('1', 'verySmall60', 'USA', '2014-03-12', 'At client', 3, 'Test', NULL, '2023-03-09', '1', 'Leaking', 0, '2023-03-15'),
-('111111111', 'verySmall60', 'USA', '2014-03-12', 'At client', 3, '47 Maple Street\r\nManchester, NH 03101', NULL, '2023-03-09', '13', NULL, 0, '2015-12-03'),
+INSERT INTO `container` (`container_sr_number`, `container_model_name`, `country_iso3`, `last_filled`, `container_status_name`, `client_id`, `address`, `location_id`, `invoice`, `temp_id`, `comment`, `maintenance_needed`, `production_date`) VALUES
+('1', 'verySmall60', 'USA', '2014-03-12', 'At client', 3, 'Test', 2, '2023-03-09', '1', 'Leaking', 0, '2023-03-15'),
+('111111111', 'verySmall60', 'USA', '2014-03-12', 'At client', 3, '47 Maple Street\r\nManchester, NH 03101', 101, '2023-03-09', '13', NULL, 0, '2015-12-03'),
 ('123456789', 'large200', 'NOR', '2023-03-07', 'Available', NULL, NULL, 1, NULL, '12', NULL, 0, '2005-12-01'),
-('2222222222', 'small100', 'CHL', '2023-03-23', 'In use', 6, 'Salmon Sages\r\nAvenida Providencia 2309\r\nProvidencia, Santiago, C', NULL, '2023-03-18', '67', NULL, 0, '1994-12-22');
+('2222222222', 'small100', 'CHL', '2023-03-23', 'In use', 6, 'Salmon Sages\r\nAvenida Providencia 2309\r\nProvidencia, Santiago, C', 1, '2023-03-18', '67', NULL, 0, '1994-12-22');
 
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur for tabell `container_model`
+-- Table structure for table `container_model`
 --
 
 CREATE TABLE `container_model` (
-  `model_name` varchar(32) NOT NULL,
+  `container_model_name` varchar(32) COLLATE utf8mb4_danish_ci NOT NULL,
   `refill_interval` float DEFAULT NULL,
   `liter_capacity` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
--- Dataark for tabell `container_model`
+-- Dumping data for table `container_model`
 --
 
-INSERT INTO `container_model` (`model_name`, `refill_interval`, `liter_capacity`) VALUES
+INSERT INTO `container_model` (`container_model_name`, `refill_interval`, `liter_capacity`) VALUES
 ('large200', 4, 200),
 ('medium150', 5, 150),
 ('small100', 6, 100),
@@ -153,18 +149,18 @@ INSERT INTO `container_model` (`model_name`, `refill_interval`, `liter_capacity`
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur for tabell `container_status`
+-- Table structure for table `container_status`
 --
 
 CREATE TABLE `container_status` (
-  `status_name` varchar(32) NOT NULL
+  `container_status_name` varchar(32) COLLATE utf8mb4_danish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
--- Dataark for tabell `container_status`
+-- Dumping data for table `container_status`
 --
 
-INSERT INTO `container_status` (`status_name`) VALUES
+INSERT INTO `container_status` (`container_status_name`) VALUES
 ('At client'),
 ('Available'),
 ('Discarded'),
@@ -175,19 +171,19 @@ INSERT INTO `container_status` (`status_name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur for tabell `employee`
+-- Table structure for table `employee`
 --
 
 CREATE TABLE `employee` (
   `employee_id` int(11) NOT NULL,
-  `employee_name` varchar(64) NOT NULL,
-  `employee_alias` varchar(16) NOT NULL,
+  `employee_name` varchar(64) COLLATE utf8mb4_danish_ci NOT NULL,
+  `employee_alias` varchar(16) COLLATE utf8mb4_danish_ci NOT NULL,
   `login_code` int(11) NOT NULL,
   `location_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
--- Dataark for tabell `employee`
+-- Dumping data for table `employee`
 --
 
 INSERT INTO `employee` (`employee_id`, `employee_name`, `employee_alias`, `login_code`, `location_id`) VALUES
@@ -204,19 +200,19 @@ INSERT INTO `employee` (`employee_id`, `employee_name`, `employee_alias`, `login
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur for tabell `location`
+-- Table structure for table `location`
 --
 
 CREATE TABLE `location` (
   `location_id` int(11) NOT NULL,
-  `name` varchar(64) NOT NULL
+  `location_name` varchar(64) COLLATE utf8mb4_danish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
--- Dataark for tabell `location`
+-- Dumping data for table `location`
 --
 
-INSERT INTO `location` (`location_id`, `name`) VALUES
+INSERT INTO `location` (`location_id`, `location_name`) VALUES
 (1, 'Norway: Hamar'),
 (2, 'Norway: Trondheim'),
 (101, 'USA: New Hampshire'),
@@ -226,29 +222,30 @@ INSERT INTO `location` (`location_id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabellstruktur for tabell `transaction`
+-- Table structure for table `transaction`
 --
 
 CREATE TABLE `transaction` (
   `transaction_id` int(11) NOT NULL,
-  `responsible_id` int(11) NOT NULL,
+  `employee_id` int(11) NOT NULL,
   `client_id` int(11) DEFAULT NULL,
-  `address` varchar(64) DEFAULT NULL,
-  `inventory` int(11) DEFAULT NULL,
-  `container` varchar(32) DEFAULT NULL,
-  `comment` varchar(512) DEFAULT NULL,
-  `date` date NOT NULL,
-  `act` varchar(32) NOT NULL
+  `address` varchar(64) COLLATE utf8mb4_danish_ci DEFAULT NULL,
+  `location_id` int(11) DEFAULT NULL,
+  `container_sr_number` varchar(32) COLLATE utf8mb4_danish_ci DEFAULT NULL,
+  `comment` varchar(512) COLLATE utf8mb4_danish_ci DEFAULT NULL,
+  `date` datetime NOT NULL,
+  `act` varchar(32) COLLATE utf8mb4_danish_ci NOT NULL,
+  `container_status_name` varchar(60) COLLATE utf8mb4_danish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
--- Dataark for tabell `transaction`
+-- Dumping data for table `transaction`
 --
 
-INSERT INTO `transaction` (`transaction_id`, `responsible_id`, `client_id`, `address`, `inventory`, `container`, `comment`, `date`, `act`) VALUES
-(101, 103, 3, '123 Warehouse Lane\r\nMerrimack, NH 03054', 101, '123456789', 'Sent container to customer', '2023-03-08', 'Sent out'),
-(102, 1, NULL, '456 Lagerveien\r\nHamar, 2316', 1, '111111111', 'Patched hole underneath container, used duct tape so might not last. ', '2023-03-16', 'Maint. completed'),
-(103, 101, 5, '1010 Main Street West\r\nNorth Bay, ON P1B 2W1', 201, '2222222222', 'Recieved container from customer', '2023-03-08', 'Returned');
+INSERT INTO `transaction` (`transaction_id`, `employee_id`, `client_id`, `address`, `location_id`, `container_sr_number`, `comment`, `date`, `act`, `container_status_name`) VALUES
+(101, 103, 3, '123 Warehouse Lane\r\nMerrimack, NH 03054', 101, '123456789', 'Sent container to customer', '2023-03-08 12:22:18', 'Sent out', 'At client'),
+(102, 1, NULL, '456 Lagerveien\r\nHamar, 2316', 1, '111111111', 'Patched hole underneath container, used duct tape so might not last. ', '2023-03-16 05:27:28', 'Maint. completed', 'Available'),
+(103, 101, 5, '1010 Main Street West\r\nNorth Bay, ON P1B 2W1', 201, '2222222222', 'Recieved container from customer', '2023-03-08 17:47:13', 'Returned', 'Quarantine');
 
 --
 -- Indexes for dumped tables
@@ -276,23 +273,23 @@ ALTER TABLE `client`
 -- Indexes for table `container`
 --
 ALTER TABLE `container`
-  ADD PRIMARY KEY (`serial_number`),
-  ADD KEY `container_fk1` (`model`),
-  ADD KEY `container_fk2` (`status`),
-  ADD KEY `container_fk3` (`at_client`),
-  ADD KEY `container_fk4` (`at_inventory`);
+  ADD PRIMARY KEY (`container_sr_number`),
+  ADD KEY `container_fk1` (`container_model_name`),
+  ADD KEY `container_fk2` (`container_status_name`),
+  ADD KEY `container_fk3` (`client_id`),
+  ADD KEY `container_fk4` (`location_id`);
 
 --
 -- Indexes for table `container_model`
 --
 ALTER TABLE `container_model`
-  ADD PRIMARY KEY (`model_name`);
+  ADD PRIMARY KEY (`container_model_name`);
 
 --
 -- Indexes for table `container_status`
 --
 ALTER TABLE `container_status`
-  ADD PRIMARY KEY (`status_name`);
+  ADD PRIMARY KEY (`container_status_name`);
 
 --
 -- Indexes for table `employee`
@@ -313,10 +310,11 @@ ALTER TABLE `location`
 ALTER TABLE `transaction`
   ADD PRIMARY KEY (`transaction_id`),
   ADD KEY `transaction_fk1` (`act`),
-  ADD KEY `transaction_fk2` (`responsible_id`),
+  ADD KEY `transaction_fk2` (`employee_id`),
   ADD KEY `transaction_fk3` (`client_id`),
-  ADD KEY `transaction_fk4` (`container`),
-  ADD KEY `transaction_fk5` (`inventory`);
+  ADD KEY `transaction_fk4` (`container_sr_number`),
+  ADD KEY `transaction_fk5` (`location_id`),
+  ADD KEY `transaction_fk6` (`container_status_name`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -353,33 +351,34 @@ ALTER TABLE `transaction`
   MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
 
 --
--- Begrensninger for dumpede tabeller
+-- Constraints for dumped tables
 --
 
 --
--- Begrensninger for tabell `container`
+-- Constraints for table `container`
 --
 ALTER TABLE `container`
-  ADD CONSTRAINT `container_fk1` FOREIGN KEY (`model`) REFERENCES `container_model` (`model_name`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `container_fk2` FOREIGN KEY (`status`) REFERENCES `container_status` (`status_name`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `container_fk3` FOREIGN KEY (`at_client`) REFERENCES `client` (`client_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `container_fk4` FOREIGN KEY (`at_inventory`) REFERENCES `location` (`location_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `container_fk1` FOREIGN KEY (`container_model_name`) REFERENCES `container_model` (`container_model_name`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `container_fk2` FOREIGN KEY (`container_status_name`) REFERENCES `container_status` (`container_status_name`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `container_fk3` FOREIGN KEY (`client_id`) REFERENCES `client` (`client_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `container_fk4` FOREIGN KEY (`location_id`) REFERENCES `location` (`location_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
--- Begrensninger for tabell `employee`
+-- Constraints for table `employee`
 --
 ALTER TABLE `employee`
   ADD CONSTRAINT `employee_fk1` FOREIGN KEY (`location_id`) REFERENCES `location` (`location_id`) ON UPDATE CASCADE;
 
 --
--- Begrensninger for tabell `transaction`
+-- Constraints for table `transaction`
 --
 ALTER TABLE `transaction`
   ADD CONSTRAINT `transaction_fk1` FOREIGN KEY (`act`) REFERENCES `act` (`act_name`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `transaction_fk2` FOREIGN KEY (`responsible_id`) REFERENCES `employee` (`employee_id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `transaction_fk2` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `transaction_fk3` FOREIGN KEY (`client_id`) REFERENCES `client` (`client_id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `transaction_fk4` FOREIGN KEY (`container`) REFERENCES `container` (`serial_number`),
-  ADD CONSTRAINT `transaction_fk5` FOREIGN KEY (`inventory`) REFERENCES `location` (`location_id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `transaction_fk4` FOREIGN KEY (`container_sr_number`) REFERENCES `container` (`container_sr_number`),
+  ADD CONSTRAINT `transaction_fk5` FOREIGN KEY (`location_id`) REFERENCES `location` (`location_id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `transaction_fk6` FOREIGN KEY (`container_status_name`) REFERENCES `container_status` (`container_status_name`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

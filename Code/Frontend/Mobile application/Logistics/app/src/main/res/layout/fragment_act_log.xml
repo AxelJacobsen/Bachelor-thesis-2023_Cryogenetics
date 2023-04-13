@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:id="@+id/actLogFragment"
     android:layout_margin="7dip"
-    tools:context=".ui.actLog.ActLogFragment">
+    tools:context=".ui.actLog.ActLogFragment"
+    tools:ignore="MissingDefaultResource">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/titleFilterSearchLayout"
@@ -78,131 +79,156 @@
         app:layout_constraintTop_toBottomOf="@+id/titleFilterSearchLayout">
 
         <TextView
-            android:id="@+id/tvActLogNr"
+            android:id="@+id/tvActLogRNr"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="2dip"
             android:background="@color/white"
             android:gravity="start"
+            android:maxLines="1"
             android:padding="3dip"
+            android:tag="@string/id"
             android:text="@string/hashNr"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvActLogRTime"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.123" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tvActLogTime"
+            android:id="@+id/tvActLogRTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="2dip"
             android:background="@color/white"
             android:gravity="start"
+            android:maxLines="1"
             android:padding="3dip"
-            android:text="@string/notifcations"
+            android:tag="@string/date"
+            android:text="@string/time"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvActLogNr"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.123" />
+            app:layout_constraintEnd_toStartOf="@+id/tvActLogRClient"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tvActLogRNr"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tvActLogClient"
+            android:id="@+id/tvActLogRClient"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="2dip"
             android:background="@color/white"
             android:gravity="start"
+            android:maxLines="1"
             android:padding="3dip"
-            android:text="@string/notifcations"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvActLogTime"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.123" />
-        <TextView
-            android:id="@+id/tvActLogLocation"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dip"
-            android:background="@color/white"
-            android:gravity="start"
-            android:padding="3dip"
-            android:text="@string/location"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvActLogClient"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.123" />
-
-        <TextView
-            android:id="@+id/tvActLogAct"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dip"
-            android:background="@color/white"
-            android:gravity="start"
-            android:padding="3dip"
+            android:tag="@string/cli"
             android:text="@string/client"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvActLogLocation"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.123" />
+            app:layout_constraintEnd_toStartOf="@+id/tvActLogRLocation"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tvActLogRTime"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tvActLogComment"
+            android:id="@+id/tvActLogRLocation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="2dip"
             android:background="@color/white"
             android:gravity="start"
+            android:maxLines="1"
             android:padding="3dip"
-            android:text="@string/status"
+            android:tag="@string/adr"
+            android:text="@string/location"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvActLogAct"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.123" />
+            app:layout_constraintEnd_toStartOf="@+id/tvActLogRAct"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tvActLogRClient"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tvActLogSign"
+            android:id="@+id/tvActLogRAct"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="2dip"
             android:background="@color/white"
             android:gravity="start"
+            android:maxLines="1"
             android:padding="3dip"
-            android:text="@string/inovice"
+            android:tag="@string/act"
+            android:text="@string/act"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvActLogComment"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.123" />
+            app:layout_constraintEnd_toStartOf="@+id/tvActLogRComment"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tvActLogRLocation"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tvActLogStatus"
+            android:id="@+id/tvActLogRComment"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="2dip"
             android:background="@color/white"
             android:gravity="start"
+            android:maxLines="1"
             android:padding="3dip"
-            android:text="@string/notifcations"
+            android:tag="@string/cmt"
+            android:text="@string/comment"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvActLogSign"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.123" />
+            app:layout_constraintEnd_toStartOf="@+id/tvActLogRSign"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tvActLogRAct"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvActLogRSign"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dip"
+            android:background="@color/white"
+            android:gravity="start"
+            android:maxLines="1"
+            android:padding="3dip"
+            android:tag="@string/alias"
+            android:text="@string/sign"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvActLogRStatus"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tvActLogRComment"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvActLogRStatus"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dip"
+            android:background="@color/white"
+            android:gravity="start"
+            android:maxLines="1"
+            android:padding="3dip"
+            android:tag="@string/sta"
+            android:text="Status"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tvActLogRSign"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

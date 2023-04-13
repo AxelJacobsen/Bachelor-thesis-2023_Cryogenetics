@@ -21,21 +21,33 @@
     <string name="ActLog">Act Log</string>
 
     <!-- Json Ids, used in tags to fetch json data, ask Axel -->
-    <string name="act">action</string>
+    <string name="action">action</string>
+    <string name="act">act</string>
     <string name="adr">address</string>
-    <string name="cId">client_id</string>
+    <string name="cli">client_name</string>
     <string name="cmt">comment</string>
     <string name="cnt">container</string>
     <string name="dat">date</string>
     <string name="inv">inventory</string>
     <string name="ivo">invoice</string>
     <string name="rId">responsible_id</string>
-    <string name="id">id</string>
+    <string name="id">temp_id</string>
     <string name="lFi">last_filled</string>
     <string name="mod">model</string>
-    <string name="sNu">serial_number</string>
     <string name="sign">Sign</string>
     <string name="comment">Comment</string>
     <string name="time">Time</string>
+    <string name="sta">container_status_name</string>
+    <string name="maint">maintenance_needed</string>
+    <string name="serial">container_sr_number</string>
+    <string name="serialNr">SerialNr</string>
+    <string name="date">date</string>
+    <string name="alias">employee_alias</string>
+    <string name="write_here">Write here</string>
+    <string name="search">Search</string>
+    <string name="CompleteLog">Complete Log</string>
+    <string name="current_container">Current container:</string>
+    <string name="_000_0000">000-0000</string>
+    <string name="none">None</string>
 
 </resources>
