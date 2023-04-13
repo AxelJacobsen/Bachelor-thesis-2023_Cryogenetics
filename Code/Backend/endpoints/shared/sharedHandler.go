@@ -1,6 +1,7 @@
 package shared
 
 import (
+	"backend/constants"
 	paths "backend/constants"
 	"backend/globals"
 	"encoding/json"
@@ -59,7 +60,7 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 
 	// GET method
 	case http.MethodGet:
-		joinData, keys = globals.SetJoinData(joinData, keys, activeTable)
+		joinData, keys = constants.SetJoinData(joinData, keys, activeTable)
 		/// SEND REQUEST TO GENERIC GET REQUEST, RECIEVE AS "res, err"
 		SQL, sqlArgs, err := globals.ConvertUrlToSql(r, joinData, keys)
 		if err != nil {
@@ -69,7 +70,7 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 
 		res, err := globals.QueryJSON(globals.DB, SQL, sqlArgs, w)
 		if err != nil {
-			http.Error(w, "Error fetching data.", http.StatusInternalServerError)
+			http.Error(w, "Error fetching data."+err.Error(), http.StatusInternalServerError)
 			return
 		}
 
@@ -89,7 +90,7 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 
 		res, err := globals.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
 		if err != nil {
-			http.Error(w, "Error posting data.", http.StatusInternalServerError)
+			http.Error(w, "Error posting data."+err.Error(), http.StatusInternalServerError)
 			return
 		}
 
