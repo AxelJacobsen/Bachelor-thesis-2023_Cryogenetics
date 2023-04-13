@@ -1,6 +1,8 @@
 package cryogenetics.logistics.ui.inventory
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
 import cryogenetics.logistics.databinding.FragmentInventoryBinding
-import java.util.*
 
 
 class InventoryFragment : Fragment() {
@@ -60,8 +61,6 @@ class InventoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //binding.HeaderPayment?.text = "TESTING123"
-
 
         // initialize the recyclerView
         inventoryList = view.findViewById(R.id.InventoryRecycler)
@@ -70,14 +69,19 @@ class InventoryFragment : Fragment() {
 
         // initialize the recyclerView-adapter
         val itemList = mutableListOf<Map<String, Any>>()
-        //Fetch json data and add to itemlist
 
-        for (model in fetchInventoryData()) {
-            itemList.add(model)
+        //Fetch json data and add to itemlist
+        val fetchedData = fetchInventoryData()
+
+        if (fetchedData.isNotEmpty()){
+            for (model in fetchedData) {
+                itemList.add(model)
+            }
+        } else {
+            Log.e(TAG, "Fetched no data")
         }
 
         //Create a list of references
-
         val viewIds = listOf(
                 R.id.tvInventoryNr,
                 R.id.tvInventoryClient,
@@ -85,15 +89,27 @@ class InventoryFragment : Fragment() {
                 R.id.tvInventoryInvoice,
                 R.id.tvInventoryLastFill,
                 R.id.tvInventoryNoti,
-                R.id.tvInventoryStatus,
-                R.id.tvInventorySerialNr
-                //, R.id.tvInventoryTitle // Cant be found
+                R.id.tvInventoryStatus
                 )
-        //Create adapter
-        //val adapter = JsonAdapter(itemList, viewIds)
-        //mProductListAdapter = adapter
+
         inventoryList.adapter = InventoryAdapter(itemList, viewIds)
 
+        //POST EXAMPLE, make sure all fields that are non-nullable are provided
+        /*
+        val dataList = listOf(
+
+            mapOf(  "serial_number" to 123321, "country_iso3" to "KYS",
+                    "model" to "large200", "status" to "Quarantine")
+        )
+
+        //PUT EXAMPLE, primary must be identical to a provided field
+        val dataList = listOf(
+            mapOf("address" to "Wow this is one ugly container", "model" to "large200", "primary" to "model"),
+            mapOf("address" to "TestAdresse", "model" to "verySmall60", "primary" to "model")
+        )
+        */
+        //NEED TO UPDATE URL TO MATCH LOCAL VERISON OF BACKEND
+        //makeBackendRequest("user/container", dataList, "POST")
     }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
