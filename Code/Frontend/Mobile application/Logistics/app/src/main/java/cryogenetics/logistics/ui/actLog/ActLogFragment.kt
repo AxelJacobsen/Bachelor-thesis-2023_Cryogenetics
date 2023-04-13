@@ -1,18 +1,19 @@
 package cryogenetics.logistics.ui.actLog
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
 import cryogenetics.logistics.databinding.FragmentActLogBinding
-import cryogenetics.logistics.ui.inventory.*
+import cryogenetics.logistics.ui.inventory.ActLogViewModel
+import cryogenetics.logistics.ui.inventory.JsonAdapter
 
 class ActLogFragment : Fragment() {
 
