@@ -11,10 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
-import cryogenetics.logistics.databinding.FragmentMiniActLogBinding
 import cryogenetics.logistics.databinding.FragmentMiniInventoryBinding
-import cryogenetics.logistics.ui.actLog.mini.MiniInventoryAdapter
-import cryogenetics.logistics.ui.actLog.mini.MiniInventoryViewModel
 import cryogenetics.logistics.ui.inventory.*
 
 class MiniInventoryFragment : Fragment() {
@@ -62,7 +59,6 @@ class MiniInventoryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // initialize the recyclerView
-        binding.InventoryRecycler
         binding.InventoryRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.InventoryRecycler.setHasFixedSize(true)
 
@@ -70,7 +66,7 @@ class MiniInventoryFragment : Fragment() {
         val itemList = mutableListOf<Map<String, Any>>()
         //Fetch json data and add to itemlist
 
-        for (model in fetchActLogData()) {
+        for (model in fetchInventoryData()) {
             itemList.add(model)
         }
 
@@ -79,12 +75,8 @@ class MiniInventoryFragment : Fragment() {
         val viewIds = listOf(
             R.id.tvInventoryNr,
             R.id.tvInventoryClient,
-            R.id.tvInventoryLocation,
-            R.id.tvInventoryInvoice,
             R.id.tvInventoryLastFill,
-            R.id.tvInventoryNoti,
-            R.id.tvInventoryStatus,
-            R.id.tvInventorySerialNr
+            R.id.tvInventoryNoti
         )
         //Create adapter
         binding.InventoryRecycler.adapter = MiniInventoryAdapter(itemList, viewIds)
@@ -101,7 +93,7 @@ class MiniInventoryFragment : Fragment() {
         _binding = null
     }
 
-    private fun fetchActLogData() :  List<Map<String, Any>>{
+    private fun fetchInventoryData() :  List<Map<String, Any>>{
         val urlDataString = Api.fetchJsonData("http://10.0.2.2:8080/api/container")
         return Api.parseJsonArray(urlDataString)
     }

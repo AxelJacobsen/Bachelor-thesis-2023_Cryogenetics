@@ -1,4 +1,4 @@
-package cryogenetics.logistics.ui.actLog.mini
+package cryogenetics.logistics.ui.inventory.mini
 
 import androidx.lifecycle.ViewModel
 

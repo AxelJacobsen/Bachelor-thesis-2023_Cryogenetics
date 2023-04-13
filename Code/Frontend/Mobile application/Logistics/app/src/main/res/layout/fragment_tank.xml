@@ -56,7 +56,8 @@
                     app:layout_constraintEnd_toStartOf="@+id/bSearch"
                     app:layout_constraintHorizontal_weight="0.7"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:inputType="text" />
 
                 <Button
                     android:id="@+id/bSearch"
@@ -78,17 +79,20 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-            <ImageView
+            <ImageButton
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:src="@drawable/camera_icon"
+                android:background="@android:color/transparent"
+                android:scaleType="centerInside"
+                android:adjustViewBounds="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/searchView" />
+                app:layout_constraintTop_toBottomOf="@+id/searchView"
+                android:contentDescription="TODO" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/bottomDetails"
             android:layout_width="0dp"
@@ -449,7 +453,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/rightMenuFirstRow"
                 android:layout_width="0dp"
-                android:layout_height="70dp"
+                android:layout_height="wrap_content"
                 android:background="@color/cryoBlue"
                 app:layout_constraintBottom_toTopOf="@id/rightMenuSecondRow"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -461,9 +465,10 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/firstRowFirst"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="5dip"
                     android:layout_marginTop="5dip"
+                    android:layout_marginBottom="5dip"
                     android:layout_marginEnd="2.5dip"
                     android:background="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -475,7 +480,7 @@
                     <ImageView
                         android:id="@+id/ivFirstRowFirst"
                         android:layout_width="0dp"
-                        android:layout_height="0dp"
+                        android:layout_height="70dp"
                         android:src="@drawable/recieve_from_user"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/tvFirstRowFirst"
@@ -499,9 +504,10 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/firstRowSecond"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_height="70dp"
                     android:layout_marginStart="2.5dip"
                     android:layout_marginTop="5dip"
+                    android:layout_marginBottom="5dip"
                     android:layout_marginEnd="5dip"
                     android:background="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -535,11 +541,13 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <!-- android:visibility="gone" -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/rightMenuSecondRow"
                 android:layout_width="0dp"
-                android:layout_height="70dp"
+                android:layout_height="wrap_content"
                 android:background="@color/cryoBlue"
+                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -549,7 +557,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/secondRowFirst"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="5dip"
                     android:layout_marginTop="5dip"
                     android:layout_marginEnd="2.5dip"
@@ -564,7 +572,7 @@
                     <ImageView
                         android:id="@+id/ivSecondRowFirst"
                         android:layout_width="0dp"
-                        android:layout_height="0dp"
+                        android:layout_height="70dp"
                         android:src="@drawable/cancel"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/tvSecondRowFirst"
@@ -588,7 +596,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/secondRowSecond"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="2.5dip"
                     android:layout_marginTop="5dip"
                     android:layout_marginEnd="2.5dip"
@@ -603,7 +611,7 @@
                     <ImageView
                         android:id="@+id/ivSecondRowSecond"
                         android:layout_width="0dp"
-                        android:layout_height="0dp"
+                        android:layout_height="70dp"
                         android:src="@drawable/cancel"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/tvSecondRowSecond"
@@ -627,7 +635,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/secondRowThird"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="2.5dip"
                     android:layout_marginTop="5dip"
                     android:layout_marginEnd="2.5dip"
@@ -642,7 +650,7 @@
                     <ImageView
                         android:id="@+id/ivSecondRowThird"
                         android:layout_width="0dp"
-                        android:layout_height="0dp"
+                        android:layout_height="70dp"
                         android:src="@drawable/cancel"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/tvSecondRowThird"
@@ -666,7 +674,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/secondRowFourth"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="2.5dip"
                     android:layout_marginTop="5dip"
                     android:layout_marginEnd="5dip"
@@ -681,7 +689,7 @@
                     <ImageView
                         android:id="@+id/ivSecondRowFourth"
                         android:layout_width="0dp"
-                        android:layout_height="0dp"
+                        android:layout_height="70dp"
                         android:src="@drawable/cancel"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/tvSecondRowFourth"
