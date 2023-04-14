@@ -68,6 +68,7 @@
                     android:maxLines="1"
                     android:text="@string/search"
                     android:textColor="@color/black"
+                    android:backgroundTint="@color/white"
                     app:autoSizeMaxTextSize="100sp"
                     app:autoSizeMinTextSize="12sp"
                     app:autoSizeStepGranularity="2sp"

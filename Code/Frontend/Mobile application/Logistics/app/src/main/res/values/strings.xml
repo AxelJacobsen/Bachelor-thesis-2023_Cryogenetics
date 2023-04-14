@@ -51,5 +51,9 @@
     <string name="none">None</string>
     <string name="transaction">Transaction</string>
     <string name="maintenance">Maintenance</string>
+    <string name="ManualAct">Manual Act</string>
+    <string name="manualActDescription">Manual Act should ONLY be used for cases where another act cannot be used, when used please be cautious to avoid possible errors. All Manual Acts will be marked with [M].</string>
+    <string name="dateformat">DD/MM/YYYY</string>
+    <string name="writeCommentHere">Write comment here</string>
 
 </resources>

@@ -32,7 +32,7 @@ class MiniInventoryFragment : Fragment() {
 
             /*
             fun onUpdate(position: Int, model: InventoryDataModel) {
-                // Add model we want to update to modelToBeUpdated
+                // Add model we want to update to modelTGoBeUpdated
                 modelToBeUpdated.add(model)
 
                 // Set the value of the clicked model in the edit text

@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import cryogenetics.logistics.R
 import cryogenetics.logistics.databinding.FragmentTankBinding
 import cryogenetics.logistics.ui.actLog.mini.MiniActLogFragment
-import cryogenetics.logistics.ui.inventory.InventoryFragment
+import cryogenetics.logistics.ui.tank.tankMenu.ManualActFragment
 
 class TankFragment : Fragment() {
 
@@ -23,6 +23,7 @@ class TankFragment : Fragment() {
 
     private var _binding : FragmentTankBinding? = null
     private val binding get() = _binding!!
+    private var menuOne : Boolean = false
     private lateinit var viewModel: TankViewModel
 
     override fun onCreateView(
@@ -44,7 +45,10 @@ class TankFragment : Fragment() {
             menuFunctionality("maintenance")
         }
         binding.secondRowFirst.setOnClickListener {
-            menuFunctionality("")
+            menuFunctionality("secondRowFirst")
+        }
+        binding.secondRowFourth.setOnClickListener {
+            menuFunctionality("secondRowFourth")
         }
         childFragmentManager.beginTransaction()
             .replace(R.id.miniLog, MiniActLogFragment())
@@ -65,6 +69,7 @@ class TankFragment : Fragment() {
                 "Return from Client",
                 "Internal Transfer"
             )
+            menuOne = true
         }
         "maintenance" -> {
             changeMarginsAndUpdateMenu(
@@ -78,11 +83,27 @@ class TankFragment : Fragment() {
                 "Dispose",
                 "Manual Act"
             )
+            menuOne = false
+        }
+        "secondRowFourth" -> {
+            if (menuOne) {
+                childFragmentManager.beginTransaction()
+                    .replace(binding.menuInventory.id, MiniActLogFragment())
+                    .commit()
+                println("internal transfer")
+
+            } else {
+                childFragmentManager.beginTransaction()
+                    .replace(binding.menuInventory.id, ManualActFragment())
+                    .commit()
+                println("manual act")
+            }
         }
         else -> {
             changeMarginsAndUpdateMenu()
         }
     }
+
     private fun changeMarginsAndUpdateMenu(
         visibility: Int = View.GONE,
         ivSecondRowFirst: Int = R.drawable.cancel,

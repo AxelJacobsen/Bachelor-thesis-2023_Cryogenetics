@@ -93,9 +93,9 @@ class InventoryFragment : Fragment() {
         //Create adapter
         //val adapter = JsonAdapter(itemList, viewIds)
         //mProductListAdapter = adapter
-        //binding.InventoryRecycler.adapter = InventoryAdapter(itemList, viewIds)
+        binding.InventoryRecycler.adapter = InventoryAdapter(itemList, viewIds)
 
-        inventoryList.adapter = InventoryAdapter(itemList, viewIds)
+        //inventoryList.adapter = InventoryAdapter(itemList, viewIds)
 
         //POST EXAMPLE, make sure all fields that are non-nullable are provided
         /*
