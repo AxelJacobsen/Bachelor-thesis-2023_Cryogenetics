@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
 import cryogenetics.logistics.databinding.FragmentInventoryBinding
+import cryogenetics.logistics.functions.Functions.Companion.enforceNumberFormat
 
 
 class InventoryFragment : Fragment() {
@@ -74,7 +75,15 @@ class InventoryFragment : Fragment() {
 
         if (fetchedData.isNotEmpty()){
             for (model in fetchedData) {
-                itemList.add(model)
+                print("HERE!")
+                print(model)
+                val updatedModel = enforceNumberFormat(model)
+                print(updatedModel)
+                if (updatedModel.isNotEmpty()){
+                    itemList.add(updatedModel)
+                } else{
+                    itemList.add(model)
+                }
             }
         } else {
             Log.e(TAG, "Fetched no data")
