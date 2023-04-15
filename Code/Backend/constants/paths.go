@@ -21,19 +21,13 @@ const BASE_USER_PATH = BASE_PATH + USER_PATH
  */
 
 // Endpoint paths
-const MOBILE_LOGIN_PATH = BASE_USER_PATH + "/login"         // "/api/user/login"
-const WEB_LOGIN_PATH = BASE_USER_PATH + "/admin/login"      // "/api/user/admin/login"
-const WEB_PRIMARY_PATH = BASE_USER_PATH + "/admin"          // "/api/user/admin"
-const WEB_ADMIN_PATH = BASE_PATH + "/getAdmins"             // "/api/getAdmins"
-const PUBLIC_TRANSACTION_PATH = BASE_PATH + "/transactions" // "/api/transactions"
-const PUBLIC_CLIENTS_PATH = BASE_PATH + "/client"           // "/api/client"
-const PUBLIC_USERS_PATH = BASE_USER_PATH + "/users"         // "/api/user/login" Actually: "/api/user/users"
-const PUBLIC_CONTAINER_PATH = BASE_USER_PATH + "/container" // "/api/user/container"
-const PUBLIC_ACT_PATH = BASE_USER_PATH + "/act"             // "/api/user/act"
+const MOBILE_LOGIN_PATH = BASE_USER_PATH + "/login"    // "/api/user/login"
+const WEB_LOGIN_PATH = BASE_USER_PATH + "/admin/login" // "/api/user/admin/login"
+const WEB_PRIMARY_PATH = BASE_USER_PATH + "/admin"     // "/api/user/admin"
+const WEB_ADMIN_PATH = BASE_PATH + "/getAdmins"        // "/api/getAdmins"
+const SHARED_CREATE_PATH = BASE_PATH + "/create"       // "/api/create/container" or "/api/create/transactions"
 
-const PUBLIC_STATUS_PATH = BASE_PATH + "/status"     // "/api/status"
-const PUBLIC_MODEL_PATH = BASE_PATH + "/model"       // "/api/model"
-const PUBLIC_LOCATION_PATH = BASE_PATH + "/location" // "/api/location"
+const PUBLIC_STATUS_PATH = BASE_PATH + "/status" // "/api/status"
 
 // Database
 //const DB_PATH = "mongodb://localhost:27017"

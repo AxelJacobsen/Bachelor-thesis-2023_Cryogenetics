@@ -6,8 +6,6 @@ import (
 	"backend/globals"
 	"encoding/json"
 	"fmt"
-
-	//"fmt"
 	"net/http"
 	"strings"
 )
@@ -43,6 +41,9 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+	} else {
+		http.Error(w, "Missing or illegal endpoint name", http.StatusBadRequest)
+		return
 	}
 
 	joinData := make(map[string][]string)
@@ -125,6 +126,79 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Error encoding data.", http.StatusInternalServerError)
 			return
 		}
+
+	default:
+		http.Error(w, "Method not allowed, read the documentation for more information.", http.StatusMethodNotAllowed)
+		return
+	}
+
+}
+
+/**
+ *	Handles GET requests for website to create Containers and Transactions
+ *  THESE REQUESTS DO NOT RECIEVE ANY BODY, THEY ONLY PROVIDE THE DATA FOR "DROP DOWN MENUS"
+ */
+func CreateDataHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("content-type", "application/json")
+
+	// Get escaped path without base URL and remove the first character if it's a "/"
+	escapedPath := r.URL.EscapedPath()[len(paths.SHARED_CREATE_PATH):]
+
+	if len(escapedPath) > 0 && escapedPath[0] == '/' {
+		escapedPath = escapedPath[1:]
+	}
+	var tables = []string{}
+	// Split the path on each "/", unless the path is blank
+	args := []string{}
+	if len(escapedPath) > 0 {
+		args = strings.Split(escapedPath, "/")
+
+		// Check if url endpoint is legal table
+		if strings.ToLower(args[0]) != "transaction" && strings.ToLower(args[0]) != "container" && strings.ToLower(args[0]) != "employee" {
+			http.Error(w, "Missing or illegal endpoint name, check spelling", http.StatusBadRequest)
+			return
+		}
+
+		switch strings.ToLower(args[0]) {
+		case "transaction":
+			tables = append(tables, "act", "client", "employee", "container", "location", "container_model")
+		case "container":
+			tables = append(tables, "container_status", "client", "location", "container_model")
+		case "employee":
+			tables = append(tables, "location")
+		}
+
+	} else {
+		http.Error(w, "Missing or illegal endpoint name", http.StatusBadRequest)
+		return
+	}
+
+	// Redirect to generic function based on url
+	switch r.Method {
+
+	// GET method
+	case http.MethodGet:
+		var data = make(map[string]interface{})
+		for _, tableName := range tables {
+			// define your SQL query
+			query := fmt.Sprintf("SELECT * FROM %s", tableName)
+
+			// define your query arguments as an empty slice of interface{}
+			queryArgs := []interface{}{}
+			sliceValue, err := globals.QueryJSON(globals.DB, query, queryArgs, w)
+			if err != nil {
+				http.Error(w, "Error fetching data.", http.StatusInternalServerError)
+			}
+			data[tableName] = sliceValue
+		}
+
+		responseJSON, err := json.Marshal(data)
+		if err != nil {
+			http.Error(w, "Error Marshalling data.", http.StatusInternalServerError)
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(responseJSON)
 
 	default:
 		http.Error(w, "Method not allowed, read the documentation for more information.", http.StatusMethodNotAllowed)
