@@ -55,5 +55,27 @@
     <string name="manualActDescription">Manual Act should ONLY be used for cases where another act cannot be used, when used please be cautious to avoid possible errors. All Manual Acts will be marked with [M].</string>
     <string name="dateformat">DD/MM/YYYY</string>
     <string name="writeCommentHere">Write comment here</string>
+    <string name="write_address">Write address</string>
+    <string name="Act">Act</string>
+    <string name="Note">Note</string>
+    <string name="Invoicedate">Invoice date</string>
+    <string name="Affiliatedlab">Affiliated lab</string>
+    <string name="Status" />
+    <string name="Maintencestatus">Maintence status</string>
+    <string name="Lastfilled">Last filled</string>
+
+
+    <string-array name="act_array">
+        <item>Internal</item>
+        <item>Sent out</item>
+        <item>Returned</item>
+        <item>Linked</item>
+        <item>Unlinked</item>
+        <item>Maint need</item>
+        <item>Maint compl</item>
+        <item>Sold</item>
+        <item>Discarded</item>
+    </string-array>
+
 
 </resources>

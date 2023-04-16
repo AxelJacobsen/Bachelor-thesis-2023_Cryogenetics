@@ -1,6 +1,7 @@
 package cryogenetics.logistics.ui.tank.tankMenu
 
 import android.app.DatePickerDialog
+import android.graphics.Color
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.os.Bundle
@@ -8,6 +9,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import android.widget.TextView
+import cryogenetics.logistics.api.Api.Companion.makeBackendRequest
 import cryogenetics.logistics.databinding.FragmentTankManualActBinding
 import java.util.*
 
@@ -38,9 +43,27 @@ class   ManualActFragment : Fragment() {
         invoiceDateListener = datePickListener("invoiceDateListener")
 
         // when you click on the button, show DatePickerDialog that is set with OnDateSetListener
+        binding.tvLastFilled.setOnClickListener { datePickDiag(lastFillDateListener) }
         binding.ibLastFilled.setOnClickListener { datePickDiag(lastFillDateListener) }
-        binding.ibInvoice.setOnClickListener { datePickDiag(invoiceDateListener) }
+        binding.tvInvoice.setOnClickListener { datePickDiag(invoiceDateListener) }
+        binding.clInvoice.setOnClickListener { datePickDiag(invoiceDateListener) }
 
+        val customList = listOf("null", "Internal", "Sent out", "Returned", "Linked", "Unlinked", "Maint need", "Maint compl",  "Sold", "Discarded")
+        val customList1 = listOf("null", "In use", "Quarantine", "Available", "At Client", "Disposed")
+        val customList2 = listOf("null", "Hamar", "Trondheim")
+        val customList3 = listOf("null", "Needs Maintenance", "Maintained")
+        spinnerArrayAdapter(customList, binding.spinnerAct)
+        spinnerArrayAdapter(customList1, binding.spinnerStatus)
+        spinnerArrayAdapter(customList2, binding.spinnerAffiliatedLab)
+        spinnerArrayAdapter(customList3, binding.spinnerMaintStatus)
+
+        binding.bConfirm.setOnClickListener {
+            val dataList = listOf(
+                mapOf("address" to "Wow this is one ugly container", "model" to "large200", "primary" to "model"),
+                mapOf("address" to "TestAdresse", "model" to "verySmall60", "primary" to "model")
+            )
+            makeBackendRequest("user/container", dataList, "POST")
+        }
         //POST EXAMPLE, make sure all fields that are non-nullable are provided
         /*
         val dataList = listOf(
@@ -57,6 +80,25 @@ class   ManualActFragment : Fragment() {
         */
         //NEED TO UPDATE URL TO MATCH LOCAL VERISON OF BACKEND
         //makeBackendRequest("user/container", dataList, "POST")
+    }
+
+    /**
+     * Applies a list to a spinner
+     */
+    private fun spinnerArrayAdapter (list: List<String>, spinner :Spinner) {
+        spinner.adapter = object : ArrayAdapter<String>(
+            requireContext(),
+            androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+            list
+        ) /** TODO: Delete this and drop null? */{
+            override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup
+            ): View {
+                val view: TextView = super.getDropDownView(position, convertView, parent) as TextView
+                //set the color of first item in the drop down list to gray, ensure the rest is always black (necessary).
+                if(position == 0) view.setTextColor(Color.RED) else view.setTextColor(Color.BLACK)
+                return view
+            }
+        }
     }
 
     /**
@@ -91,7 +133,7 @@ class   ManualActFragment : Fragment() {
      * Updates date in textView
      */
     private fun updateDateInView(listenerRef : String) {
-        val myFormat = "dd/MM/yyyy" // mention the format you need
+        val myFormat = "dd/MM/yyyy" // mention the format you need, needs to be big M, small d/y.
         val sdf = SimpleDateFormat(myFormat, Locale.US)
         when(listenerRef) {
             "lastFillDateListener" -> {
