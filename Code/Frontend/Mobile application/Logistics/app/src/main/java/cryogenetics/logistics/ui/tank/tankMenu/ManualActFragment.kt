@@ -48,7 +48,7 @@ class   ManualActFragment : Fragment() {
         binding.tvInvoice.setOnClickListener { datePickDiag(invoiceDateListener) }
         binding.clInvoice.setOnClickListener { datePickDiag(invoiceDateListener) }
 
-        val customList = listOf("null", "Internal", "Sent out", "Returned", "Linked", "Unlinked", "Maint need", "Maint compl",  "Sold", "Discarded")
+        val customList = listOf("null", "Internal", "Sent out", "Returned", "Refilled", "Linked", "Unlinked", "Maint. need", "Maint. compl", "Sold", "Discarded")
         val customList1 = listOf("null", "In use", "Quarantine", "Available", "At Client", "Disposed")
         val customList2 = listOf("null", "Hamar", "Trondheim")
         val customList3 = listOf("null", "Needs Maintenance", "Maintained")
@@ -57,15 +57,27 @@ class   ManualActFragment : Fragment() {
         spinnerArrayAdapter(customList2, binding.spinnerAffiliatedLab)
         spinnerArrayAdapter(customList3, binding.spinnerMaintStatus)
 
+
         binding.bConfirm.setOnClickListener {
             val dataList = listOf(
-                mapOf("address" to "Wow this is one ugly container", "model" to "large200", "primary" to "model"),
-                mapOf("address" to "TestAdresse", "model" to "verySmall60", "primary" to "model")
+
+                mapOf("container_sr_number" to "123456789", "act" to binding.spinnerAct.selectedItem.toString(),
+                    "comment" to binding.etComment.text.toString(), "employee_id" to 103,
+                    "client_id" to 1, "location_id" to 1,
+                    "address" to "addresses", "container_status_name" to binding.spinnerStatus.selectedItem.toString(),
+                    "date" to "2023-03-08 12:22:18")
             )
-            makeBackendRequest("user/container", dataList, "POST")
+            makeBackendRequest("transaction", dataList, "POST")
         }
         //POST EXAMPLE, make sure all fields that are non-nullable are provided
         /*
+
+        ,
+                mapOf("container_sr_number" to "123456789", "act" to binding.spinnerAct.selectedItem.toString(),
+                "comment" to binding.etComment.text.toString(), "employee_id" to 103,
+                "client_id" to 1, "location_id" to 1,
+                "address" to "addresses", "container_status_name" to "Available",
+                "date" to "2023-03-08 12:22:18")
         val dataList = listOf(
 
             mapOf(  "serial_number" to 123321, "country_iso3" to "KYS",
