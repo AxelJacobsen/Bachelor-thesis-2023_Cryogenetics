@@ -289,9 +289,9 @@ func ConvertPostURLToSQL(r *http.Request, table string) (string, []interface{}, 
 	var data []map[string]interface{}
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
+		println(data)
 		return "", nil, err
 	}
-
 	// Get props string
 	props_values := flattenMapSlice(data)
 	var propsQuery strings.Builder
@@ -350,6 +350,7 @@ func ConvertPutURLToSQL(r *http.Request, table string) (string, []interface{}, e
 
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
+		println("error decode")
 		return "", nil, err
 	}
 
@@ -399,6 +400,8 @@ func ConvertPutURLToSQL(r *http.Request, table string) (string, []interface{}, e
 					queryPref.WriteString(" END")
 				}
 			} else {
+				println("error prop value")
+
 				return "", nil, errors.New("error asserting props_values as string")
 			}
 		}
@@ -412,6 +415,8 @@ func ConvertPutURLToSQL(r *http.Request, table string) (string, []interface{}, e
 				queryPref.WriteString(fmt.Sprintf(" OR `%s` = '%v'", propVal, props_values[propVal][p]))
 			}
 		} else {
+
+			println("error prop value as string")
 			return "", nil, errors.New("error asserting props_values as string")
 		}
 	}

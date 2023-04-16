@@ -1,11 +1,11 @@
 package shared
 
 import (
+	"backend/constants"
 	paths "backend/constants"
 	"backend/globals"
 	"encoding/json"
-
-	//"fmt"
+	"fmt"
 	"net/http"
 	"strings"
 )
@@ -41,6 +41,9 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+	} else {
+		http.Error(w, "Missing or illegal endpoint name", http.StatusBadRequest)
+		return
 	}
 
 	joinData := make(map[string][]string)
@@ -48,51 +51,6 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 
 	joinData["main"] = append(joinData["main"], activeTable, "", "*") //WHAT TABLE IS THE SQL REQUEST FOR?
 	keys = []string{"main"}
-
-	switch activeTable {
-	case "container":
-		/*
-		* 	targetTableName: Name of table we want "dataIWant" and such from
-		*	tablename: Name of the table that shares the primary key value with target table
-		*	PrimaryKey: Name of value that is the SQL Primary key on TargetTableName
-		*	dataIWant: desired data we want SQL query to include
-		 */
-		// 								"targetTableName" :	["tablename", "PrimaryKey",	"dataIWant", "moreDataIWant", etc...]
-		joinData["client"] = append(joinData["client"], "container", "client_id", "client_name")
-		joinData["location"] = append(joinData["location"], "container", "location_id", "location_name")
-		joinData["container_model"] = append(joinData["container_model"], "container", "container_model_name", "liter_capacity", "refill_interval")
-
-		//List of keys used in joinData. NEEDS TO BE IN THE SAME ORDER!
-		keys = []string{"main", "client", "location", "container_model"}
-	case "transaction":
-		/*
-		* 	targetTableName: Name of table we want "dataIWant" and such from
-		*	tablename: Name of the table that shares the primary key value with target table
-		*	PrimaryKey: Name of value that is the SQL Primary key on TargetTableName
-		*	dataIWant: desired data we want SQL query to include
-		 */
-		// 								"targetTableName" :	["tablename", "PrimaryKey",	"dataIWant", "moreDataIWant", etc...]
-		joinData["client"] = append(joinData["client"], "transaction", "client_id", "client_name")
-		joinData["employee"] = append(joinData["employee"], "transaction", "employee_id", "employee_alias")
-		joinData["location"] = append(joinData["location"], "transaction", "location_id", "location_name")
-		joinData["container"] = append(joinData["container"], "container", "container_sr_number", "temp_id")
-		joinData["container_model"] = append(joinData["container_model"], "container", "container_model_name", "liter_capacity")
-
-		//List of keys used in joinData. NEEDS TO BE IN THE SAME ORDER!
-		keys = []string{"main", "client", "employee", "location", "container", "container_model"}
-	case "employee":
-		/*
-		* 	targetTableName: Name of table we want "dataIWant" and such from
-		*	tablename: Name of the table that shares the primary key value with target table
-		*	PrimaryKey: Name of value that is the SQL Primary key on TargetTableName
-		*	dataIWant: desired data we want SQL query to include
-		 */
-		// 								"targetTableName" :	["tablename", "PrimaryKey",	"dataIWant", "moreDataIWant", etc...]
-		joinData["location"] = append(joinData["location"], "container", "location_id", "location_name")
-
-		//List of keys used in joinData. NEEDS TO BE IN THE SAME ORDER!
-		keys = []string{"main", "location"}
-	}
 
 	////////////////////////////////////
 	/// CHECK FOR AUTH TOKEN PERMISSIONS
@@ -103,6 +61,7 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 
 	// GET method
 	case http.MethodGet:
+		joinData, keys = constants.SetJoinData(joinData, keys, activeTable)
 		/// SEND REQUEST TO GENERIC GET REQUEST, RECIEVE AS "res, err"
 		SQL, sqlArgs, err := globals.ConvertUrlToSql(r, joinData, keys)
 		if err != nil {
@@ -112,7 +71,7 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 
 		res, err := globals.QueryJSON(globals.DB, SQL, sqlArgs, w)
 		if err != nil {
-			http.Error(w, "Error fetching Data.", http.StatusInternalServerError)
+			http.Error(w, "Error fetching data."+err.Error(), http.StatusInternalServerError)
 			return
 		}
 
@@ -120,28 +79,53 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		err = json.NewEncoder(w).Encode(res)
 		if err != nil {
-			http.Error(w, "Error encoding Data.", http.StatusInternalServerError)
+			http.Error(w, "Error encoding data.", http.StatusInternalServerError)
 		}
 	// POST method
 	case http.MethodPost:
 		/// SEND REQUEST TO GENERIC POST REQUEST, RECIEVE AS "res, err"
+		sqlQuery, sqlArgs, err := globals.ConvertPostURLToSQL(r, activeTable)
+		if err != nil {
+			http.Error(w, "Error in converting url to sql.", http.StatusUnprocessableEntity)
+		}
 
-		/* // Set header and encode to writer
+		res, err := globals.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
+		if err != nil {
+			http.Error(w, "Error posting data."+err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		// Set header and encode to writer
 		w.Header().Set("Content-Type", "application/json")
 		err = json.NewEncoder(w).Encode(res)
 		if err != nil {
-			http.Error(w, "Error encoding transactions.", http.StatusInternalServerError)
-		} */
+			http.Error(w, "Error encoding sql result.", http.StatusInternalServerError)
+			return
+		}
 	// PUT method
 	case http.MethodPut:
-	/// SEND REQUEST TO GENERIC PUT REQUEST, RECIEVE AS "res, err"
+		/// SEND REQUEST TO GENERIC PUT REQUEST, RECIEVE AS "res, err"
+		sqlQuery, sqlArgs, err := globals.ConvertPutURLToSQL(r, activeTable)
+		if err != nil {
+			http.Error(w, "Error converting url to sql.", http.StatusUnprocessableEntity)
+			return
+		}
+		println("SQL: " + sqlQuery)
 
-	/* // Set header and encode to writer
-	w.Header().Set("Content-Type", "application/json")
-	err = json.NewEncoder(w).Encode(res)
-	if err != nil {
-		http.Error(w, "Error encoding transactions.", http.StatusInternalServerError)
-	} */
+		res, err := globals.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
+		if err != nil {
+			fmt.Println("err: ", err)
+			http.Error(w, "Error putting data.", http.StatusInternalServerError)
+			return
+		}
+
+		// Set header and encode to writer
+		w.Header().Set("Content-Type", "application/json")
+		err = json.NewEncoder(w).Encode(res)
+		if err != nil {
+			http.Error(w, "Error encoding data.", http.StatusInternalServerError)
+			return
+		}
 
 	default:
 		http.Error(w, "Method not allowed, read the documentation for more information.", http.StatusMethodNotAllowed)
@@ -151,57 +135,74 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 /**
- *	Handler for 'transactions' endpoint.
+ *	Handles GET requests for website to create Containers and Transactions
+ *  THESE REQUESTS DO NOT RECIEVE ANY BODY, THEY ONLY PROVIDE THE DATA FOR "DROP DOWN MENUS"
  */
-/* func HandlerTransactions(w http.ResponseWriter, r *http.Request) {
+func CreateDataHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("content-type", "application/json")
-	tableName := "transaction"
+
 	// Get escaped path without base URL and remove the first character if it's a "/"
-	escapedPath := r.URL.EscapedPath()[len(paths.PUBLIC_TRANSACTION_PATH):]
+	escapedPath := r.URL.EscapedPath()[len(paths.SHARED_CREATE_PATH):]
 
 	if len(escapedPath) > 0 && escapedPath[0] == '/' {
 		escapedPath = escapedPath[1:]
 	}
-
+	var tables = []string{}
 	// Split the path on each "/", unless the path is blank
 	args := []string{}
 	if len(escapedPath) > 0 {
 		args = strings.Split(escapedPath, "/")
+
+		// Check if url endpoint is legal table
+		if strings.ToLower(args[0]) != "transaction" && strings.ToLower(args[0]) != "container" && strings.ToLower(args[0]) != "employee" {
+			http.Error(w, "Missing or illegal endpoint name, check spelling", http.StatusBadRequest)
+			return
+		}
+
+		switch strings.ToLower(args[0]) {
+		case "transaction":
+			tables = append(tables, "act", "client", "employee", "container", "location", "container_model")
+		case "container":
+			tables = append(tables, "container_status", "client", "location", "container_model")
+		case "employee":
+			tables = append(tables, "location")
+		}
+
+	} else {
+		http.Error(w, "Missing or illegal endpoint name", http.StatusBadRequest)
+		return
 	}
 
-	// Switch based on method
+	// Redirect to generic function based on url
 	switch r.Method {
 
 	// GET method
 	case http.MethodGet:
-		containerSQL, sqlArgs, err := globals.ConvertUrlToSql(r, tableName, []string{"Client.client_Name AS customer_name", "Location.name AS inventory_name", "employee.employee_alias AS responsible_name"}, []string{"client ON transaction.client_id = client.client_id", "location ON transaction.inventory = location.location_id", "employee ON transaction.responsible_id = employee.employee_id"}, "LEFT JOIN")
-		if err != nil {
-			http.Error(w, "Error in converting url to sql", http.StatusUnprocessableEntity)
+		var data = make(map[string]interface{})
+		for _, tableName := range tables {
+			// define your SQL query
+			query := fmt.Sprintf("SELECT * FROM %s", tableName)
+
+			// define your query arguments as an empty slice of interface{}
+			queryArgs := []interface{}{}
+			sliceValue, err := globals.QueryJSON(globals.DB, query, queryArgs, w)
+			if err != nil {
+				http.Error(w, "Error fetching data.", http.StatusInternalServerError)
+			}
+			data[tableName] = sliceValue
 		}
 
-		res, err := globals.QueryJSON(globals.DB, containerSQL, sqlArgs, w)
+		responseJSON, err := json.Marshal(data)
 		if err != nil {
-			http.Error(w, "Error fetching transactions.", http.StatusInternalServerError)
-			return
+			http.Error(w, "Error Marshalling data.", http.StatusInternalServerError)
 		}
 
-		// Set header and encode to writer
 		w.Header().Set("Content-Type", "application/json")
-		err = json.NewEncoder(w).Encode(res)
-		if err != nil {
-			http.Error(w, "Error encoding transactions.", http.StatusInternalServerError)
-		}
-	// POST method
-	case http.MethodPost:
-		// If there's not enough args, return
-		if len(args) < 1 {
-			http.Error(w, "Not enough arguments, read the documentation for more information.", http.StatusUnprocessableEntity)
-			return
-		}
+		w.Write(responseJSON)
 
-	// Other method
 	default:
 		http.Error(w, "Method not allowed, read the documentation for more information.", http.StatusMethodNotAllowed)
 		return
 	}
-} */
+
+}
