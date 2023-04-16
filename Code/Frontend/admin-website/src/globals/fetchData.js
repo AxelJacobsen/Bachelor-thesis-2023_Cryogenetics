@@ -2,7 +2,7 @@
 method: the HTTP method (e.g. 'GET', 'POST', 'PUT')
 data: an optional object to send as the request body 
 */
-const fetchData = async (url, method) => {
+const fetchData = async (url, method, data) => {
     const options = {
       method: method,
       headers: {
@@ -10,9 +10,9 @@ const fetchData = async (url, method) => {
       }
     };
     
-    /*if (data) {
+    if (data) {
       options.body = JSON.stringify(data);
-    }*/
+    }
     
     return fetch(url, options)
     .then((response)=>response.json())

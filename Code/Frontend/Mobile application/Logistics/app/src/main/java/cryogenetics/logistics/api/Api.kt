@@ -4,6 +4,7 @@ import android.content.ContentValues.TAG
 import android.os.StrictMode
 import android.util.Log
 import org.json.JSONArray
+import org.json.JSONException
 import java.io.BufferedReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
@@ -53,7 +54,13 @@ class Api {
          */
         fun parseJsonArray(jsonText: String): List<Map<String, Any>> {
             // convert the jsonText into a jsonArray
-            val jsonArray = JSONArray(jsonText)
+            var jsonArray: JSONArray
+            try {
+                jsonArray = JSONArray(jsonText)
+            } catch (e: JSONException) {
+                Log.e(TAG, "Error parsing jsonText as jsonArray")
+                return mutableListOf<Map<String, Any>>()
+            }
             // initialize the map list
             val itemList = mutableListOf<Map<String, Any>>()
 
