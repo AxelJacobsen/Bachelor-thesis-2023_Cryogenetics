@@ -1,10 +1,10 @@
 # Bachelor-thesis-2023_Cryogenetics
 Bachelor thesis directory for the Cryogenetics task. 
 ## Authors
-[Axel Jacobsen](https://github.com/AxelJacobsen)
-[Håvard Bø](https://github.com/Haavbo)
-[Lars Ruud](https://github.com/Thefantasticbagle)
-[Matthias Greeven] (https://github.com/TheGrevling)
+[Axel Jacobsen](https://github.com/AxelJacobsen) <br>
+[Håvard Bø](https://github.com/Haavbo) <br>
+[Lars Ruud](https://github.com/Thefantasticbagle) <br>
+[Matthias Greeven](https://github.com/TheGrevling)
 
 ## Directory Navigation
 #### Code
