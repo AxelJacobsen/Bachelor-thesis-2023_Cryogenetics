@@ -1,19 +1,26 @@
 package cryogenetics.logistics.ui.tank.tankMenu
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.content.ContentValues
 import android.graphics.Color
+import android.icu.text.DateFormat
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import cryogenetics.logistics.api.Api
 import cryogenetics.logistics.api.Api.Companion.makeBackendRequest
 import cryogenetics.logistics.databinding.FragmentTankManualActBinding
+import cryogenetics.logistics.functions.Functions
 import java.util.*
 
 class   ManualActFragment : Fragment() {
@@ -38,6 +45,8 @@ class   ManualActFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         // get the references from layout file
 
+
+
         // create an OnDateSetListener
         lastFillDateListener = datePickListener("lastFillDateListener")
         invoiceDateListener = datePickListener("invoiceDateListener")
@@ -58,40 +67,33 @@ class   ManualActFragment : Fragment() {
         spinnerArrayAdapter(customList3, binding.spinnerMaintStatus)
 
 
+
         binding.bConfirm.setOnClickListener {
-            val dataList = listOf(
+            println(getDateTime())
+            if (binding.spinnerAct.selectedItem.toString() == "null" ||
+                binding.spinnerStatus.selectedItem.toString() == "null" ||
+                binding.tvLastFilled.text.toString() == "@string/dateformat") {
+                Toast.makeText(requireContext(), "Act, Status or Last filled is not entered", Toast.LENGTH_LONG).show()
+                println("act " + binding.spinnerAct.selectedItem.toString() +
+                    " status " + binding.spinnerStatus.selectedItem.toString() +
+                    " lastFilled " + binding.tvLastFilled.text.toString())
 
-                mapOf("container_sr_number" to "123456789", "act" to binding.spinnerAct.selectedItem.toString(),
-                    "comment" to binding.etComment.text.toString(), "employee_id" to 103,
-                    "client_id" to 1, "location_id" to 1,
-                    "address" to "addresses", "container_status_name" to binding.spinnerStatus.selectedItem.toString(),
-                    "date" to "2023-03-08 12:22:18")
-            )
-            makeBackendRequest("transaction", dataList, "POST")
+            } else {
+                val dataList = listOf(
+
+                    mapOf("container_sr_number" to "123456789", "act" to binding.spinnerAct.selectedItem.toString(),
+                        "comment" to binding.etComment.text.toString(), "employee_id" to 103,
+                        "client_id" to 1, "location_id" to 1,
+                        "address" to binding.etAddress.text.toString(), "container_status_name" to binding.spinnerStatus.selectedItem.toString(),
+                        "date" to getDateTime().toString())
+                )
+                val result = makeBackendRequest("transaction", dataList, "POST")
+                println(result.toString())
+                Toast.makeText(requireContext(), result.toString(), Toast.LENGTH_LONG).show()
+
+            }
+
         }
-        //POST EXAMPLE, make sure all fields that are non-nullable are provided
-        /*
-
-        ,
-                mapOf("container_sr_number" to "123456789", "act" to binding.spinnerAct.selectedItem.toString(),
-                "comment" to binding.etComment.text.toString(), "employee_id" to 103,
-                "client_id" to 1, "location_id" to 1,
-                "address" to "addresses", "container_status_name" to "Available",
-                "date" to "2023-03-08 12:22:18")
-        val dataList = listOf(
-
-            mapOf(  "serial_number" to 123321, "country_iso3" to "KYS",
-                    "model" to "large200", "status" to "Quarantine")
-        )
-
-        //PUT EXAMPLE, primary must be identical to a provided field
-        val dataList = listOf(
-            mapOf("address" to "Wow this is one ugly container", "model" to "large200", "primary" to "model"),
-            mapOf("address" to "TestAdresse", "model" to "verySmall60", "primary" to "model")
-        )
-        */
-        //NEED TO UPDATE URL TO MATCH LOCAL VERISON OF BACKEND
-        //makeBackendRequest("user/container", dataList, "POST")
     }
 
     /**
@@ -111,6 +113,13 @@ class   ManualActFragment : Fragment() {
                 return view
             }
         }
+    }
+
+    private fun getDateTime(): String? {
+        val myFormat = "yyyy-MM-dd HH:mm:ss"
+        val dateFormat = SimpleDateFormat(myFormat, Locale.US)
+        val date = Date()
+        return dateFormat.format(date)
     }
 
     /**

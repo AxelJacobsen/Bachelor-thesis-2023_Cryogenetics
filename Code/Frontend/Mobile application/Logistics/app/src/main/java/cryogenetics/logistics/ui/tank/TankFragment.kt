@@ -1,15 +1,19 @@
 package cryogenetics.logistics.ui.tank
 
 import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.marginTop
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import cryogenetics.logistics.R
+import cryogenetics.logistics.api.Api
 import cryogenetics.logistics.databinding.FragmentTankBinding
 import cryogenetics.logistics.ui.actLog.mini.MiniActLogFragment
 import cryogenetics.logistics.ui.tank.tankMenu.ManualActFragment
@@ -38,6 +42,13 @@ class TankFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val fetchedData = fetchInventoryData()
+
+        binding.bSearch.setOnClickListener {
+            val searchRes = searchContainer(fetchedData, binding.edSearchValue.text.toString())
+            Toast.makeText(requireContext(), searchRes.toString(), Toast.LENGTH_LONG).show()
+        }
+
         binding.firstRowFirst.setOnClickListener {
             menuFunctionality("transaction")
         }
@@ -53,6 +64,39 @@ class TankFragment : Fragment() {
         childFragmentManager.beginTransaction()
             .replace(R.id.miniLog, MiniActLogFragment())
             .commit()
+    }
+
+    private fun searchContainer(
+        fetchedData: List<Map<String, Any>>,
+        searchValue: String = ""
+    ): MutableList<Map<String, Any>> {
+        val searchResults = mutableListOf<Map<String, Any>>()
+        if (fetchedData.isNotEmpty() && searchValue != ""){
+            for (model in fetchedData) {
+                for (value in model.values) {
+                    val result = value.toString().contains("a")
+                    if (result) {
+                        println("VALUE! $value")
+                        searchResults.add(model)
+                        break
+                    }
+                }
+            }
+            // TODO : Remove this, its only for debugging
+            if (searchResults.isNotEmpty()) {
+                for (model in searchResults) {
+                    println("model.values " + model.values)
+                }
+            }
+        } else {
+            Toast.makeText(requireContext(), "No search value entered, or no Tanks added!", Toast.LENGTH_LONG).show()
+        }
+        return searchResults
+    }
+
+    private fun fetchInventoryData() :  List<Map<String, Any>>{
+        val urlDataString = Api.fetchJsonData("http://10.0.2.2:8080/api/container")
+        return Api.parseJsonArray(urlDataString)
     }
 
     @SuppressLint("SetTextI18n") // Strings could be exported to res/values/string for different language support and etc, but it is not necessary yet for this project.
