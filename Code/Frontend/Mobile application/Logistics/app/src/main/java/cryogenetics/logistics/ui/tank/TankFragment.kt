@@ -1,9 +1,9 @@
 package cryogenetics.logistics.ui.tank
 
 import android.annotation.SuppressLint
-import android.content.ContentValues
+import android.content.Intent
+import android.os.Build.TYPE
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +12,7 @@ import androidx.core.view.marginTop
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
 import cryogenetics.logistics.databinding.FragmentTankBinding
@@ -20,15 +21,11 @@ import cryogenetics.logistics.ui.tank.tankMenu.ManualActFragment
 
 class TankFragment : Fragment() {
 
-    /*
-    companion object {
-        fun newInstance() = InventoryFragment()
-    }*/
-
     private var _binding : FragmentTankBinding? = null
     private val binding get() = _binding!!
     private var menuOne : Boolean = false
     private lateinit var viewModel: TankViewModel
+    private lateinit var dTank : TankData
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,11 +39,23 @@ class TankFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val fetchedData = fetchInventoryData()
-
         binding.bSearch.setOnClickListener {
-            val searchRes = searchContainer(fetchedData, binding.edSearchValue.text.toString())
-            Toast.makeText(requireContext(), searchRes.toString(), Toast.LENGTH_LONG).show()
+            val searchRes = searchContainer(fetchInventoryData(), binding.edSearchValue.text.toString())
+
+            // initialize the recyclerView
+            binding.searchResult?.layoutManager = LinearLayoutManager(requireContext())
+            binding.searchResult?.setHasFixedSize(true)
+
+            //Create a list of references
+            val viewIds = listOf(
+                R.id.tvInventoryNr,
+                R.id.tvInventoryClient,
+                R.id.tvInventoryLastFill,
+                R.id.tvInventoryNoti
+            )
+            //Create adapter
+            binding.searchResult?.adapter = SearchAdapter(searchRes, viewIds, mOnProductClickListener)
+            binding.searchResult?.visibility = View.VISIBLE
         }
 
         binding.firstRowFirst.setOnClickListener {
@@ -74,9 +83,8 @@ class TankFragment : Fragment() {
         if (fetchedData.isNotEmpty() && searchValue != ""){
             for (model in fetchedData) {
                 for (value in model.values) {
-                    val result = value.toString().contains("a")
+                    val result = value.toString().contains(binding.edSearchValue.text)
                     if (result) {
-                        println("VALUE! $value")
                         searchResults.add(model)
                         break
                     }
@@ -137,10 +145,13 @@ class TankFragment : Fragment() {
                 println("internal transfer")
 
             } else {
+                println("manueel")
                 childFragmentManager.beginTransaction()
                     .replace(binding.menuInventory.id, ManualActFragment())
                     .commit()
-                println("manual act")
+
+                println("manual act$dTank")
+
             }
         }
         else -> {
@@ -181,6 +192,37 @@ class TankFragment : Fragment() {
             binding.tvSecondRowSecond.text = tvSecondRowSecond
             binding.tvSecondRowThird.text = tvSecondRowThird
             binding.tvSecondRowFourth.text = tvSecondRowFourth
+        }
+    }
+
+    private val mOnProductClickListener = object :OnItemClickListener {
+        override fun onClick(model: Map<String, Any>) {
+            println("MODELLO" + model)
+            dTank = TankData(
+                address = model.entries.find { it.key == "address" }?.value.toString(),
+                client_id = model.entries.find { it.key == "client_id" }?.value.toString(),
+                client_name = model.entries.find { it.key == "client_name" }?.value.toString(),
+                comment = model.entries.find { it.key == "comment" }?.value.toString(),
+                container_model_name = model.entries.find { it.key == "container_model_name" }?.value.toString(),
+                container_sr_number = model.entries.find { it.key == "container_sr_number" }?.value.toString(),
+                container_status_name = model.entries.find { it.key == "container_status_name" }?.value.toString(),
+                invoice = model.entries.find { it.key == "invoice" }?.value.toString(),
+                last_filled = model.entries.find { it.key == "last_filled" }?.value.toString(),
+                liter_capacity = model.entries.find { it.key == "liter_capacity" }?.value.toString(),
+                location_id = model.entries.find { it.key == "location_id" }?.value.toString(),
+                location_name = model.entries.find { it.key == "location_name" }?.value.toString(),
+                maintenance_needed = model.entries.find { it.key == "maintenance_needed" }?.value.toString(),
+                production_date = model.entries.find { it.key == "production_date" }?.value.toString(),
+                refill_interval = model.entries.find { it.key == "refill_interval" }?.value.toString(),
+                temp_id = model.entries.find { it.key == "temp_id" }?.value.toString()
+            )
+            binding.tvTankId.text = dTank.temp_id
+            binding.tvTankStatus.text = dTank.container_status_name
+            binding.tvTankLocation.text = dTank.address
+            binding.tvTankClient.text = dTank.client_name
+            binding.tvTankLastFilled.text = dTank.last_filled
+            binding.tvTankNote.text = dTank.comment
+            binding.searchResult?.visibility = View.INVISIBLE
         }
     }
 

@@ -1,14 +1,11 @@
 package cryogenetics.logistics.ui.tank.tankMenu
 
-import android.annotation.SuppressLint
 import android.app.DatePickerDialog
-import android.content.ContentValues
 import android.graphics.Color
-import android.icu.text.DateFormat
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.os.Bundle
-import android.util.Log
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,20 +14,19 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import cryogenetics.logistics.api.Api
 import cryogenetics.logistics.api.Api.Companion.makeBackendRequest
 import cryogenetics.logistics.databinding.FragmentTankManualActBinding
-import cryogenetics.logistics.functions.Functions
+import cryogenetics.logistics.ui.tank.TankData
 import java.util.*
 
-class   ManualActFragment : Fragment() {
+
+class  ManualActFragment : Fragment() {
 
     var cal = Calendar.getInstance()
     private var _binding : FragmentTankManualActBinding? = null
     private val binding get() = _binding!!
     private lateinit var lastFillDateListener: DatePickerDialog.OnDateSetListener
     private lateinit var invoiceDateListener: DatePickerDialog.OnDateSetListener
-   // private lateinit var viewModel: DashViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,9 +39,6 @@ class   ManualActFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // get the references from layout file
-
-
 
         // create an OnDateSetListener
         lastFillDateListener = datePickListener("lastFillDateListener")
@@ -65,8 +58,6 @@ class   ManualActFragment : Fragment() {
         spinnerArrayAdapter(customList1, binding.spinnerStatus)
         spinnerArrayAdapter(customList2, binding.spinnerAffiliatedLab)
         spinnerArrayAdapter(customList3, binding.spinnerMaintStatus)
-
-
 
         binding.bConfirm.setOnClickListener {
             println(getDateTime())

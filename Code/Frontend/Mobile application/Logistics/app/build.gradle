@@ -7,6 +7,8 @@ buildscript {
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id("kotlin-parcelize")
+
 }
 
 
@@ -43,6 +45,7 @@ android {
 }
 //Dont update the packages, leads to duplicate errors
 dependencies {
+
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
     implementation "io.ktor:ktor-client-core:$ktor_version"
@@ -59,6 +62,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+    implementation("androidx.fragment:fragment-ktx:1.5.6")
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.0'
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jackson_version"
     implementation "com.fasterxml.jackson.core:jackson-databind:$jackson_version"

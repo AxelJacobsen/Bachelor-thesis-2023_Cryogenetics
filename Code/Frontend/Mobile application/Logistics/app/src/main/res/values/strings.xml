@@ -64,6 +64,7 @@
     <string name="Maintencestatus">Maintence status</string>
     <string name="Lastfilled">Last filled</string>
     <string name="Address">Address</string>
+    <string name="note">Note</string>
 
 
     <string-array name="act_array">

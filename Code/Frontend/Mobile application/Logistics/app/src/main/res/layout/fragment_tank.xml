@@ -133,12 +133,12 @@
                     app:autoSizeTextType="uniform"
                     app:layout_constraintHorizontal_weight="0.5"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/tv01"
+                    app:layout_constraintEnd_toStartOf="@+id/tvTankId"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/tv01"
+                    android:id="@+id/tvTankId"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:maxLines="1"
@@ -187,12 +187,12 @@
                     app:autoSizeTextType="uniform"
                     app:layout_constraintHorizontal_weight="0.5"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/tv11"
+                    app:layout_constraintEnd_toStartOf="@+id/tvTankStatus"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/tv11"
+                    android:id="@+id/tvTankStatus"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:maxLines="1"
@@ -241,12 +241,12 @@
                     app:autoSizeTextType="uniform"
                     app:layout_constraintHorizontal_weight="0.5"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/tv21"
+                    app:layout_constraintEnd_toStartOf="@+id/tvTankLocation"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/tv21"
+                    android:id="@+id/tvTankLocation"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:maxLines="2"
@@ -296,12 +296,12 @@
                     app:autoSizeTextType="uniform"
                     app:layout_constraintHorizontal_weight="0.5"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/tv31"
+                    app:layout_constraintEnd_toStartOf="@+id/tvTankClient"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/tv31"
+                    android:id="@+id/tvTankClient"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:maxLines="1"
@@ -350,12 +350,12 @@
                     app:autoSizeTextType="uniform"
                     app:layout_constraintHorizontal_weight="0.5"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/tv41"
+                    app:layout_constraintEnd_toStartOf="@+id/tvTankLastFilled"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/tv41"
+                    android:id="@+id/tvTankLastFilled"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:maxLines="1"
@@ -404,12 +404,12 @@
                     app:autoSizeTextType="uniform"
                     app:layout_constraintHorizontal_weight="0.5"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/tv71"
+                    app:layout_constraintEnd_toStartOf="@+id/tvTankNote"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/tv71"
+                    android:id="@+id/tvTankNote"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:paddingStart="2dp"
