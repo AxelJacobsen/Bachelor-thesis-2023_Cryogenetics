@@ -129,17 +129,22 @@ export default function Models() {
 
   const [rows, setRows] = React.useState([]);
 
-  React.useEffect(() => {
-    async function fetchRowData() {
-      try {
-        const response = await fetchData('/api/container_model', 'GET');
-        setRows(response);
-      } catch (error) {
-        console.error(error);
-      }
+  async function fetchRowData() {
+    try {
+      const response = await fetchData('/api/container_model', 'GET');
+      setRows(response);
+    } catch (error) {
+      console.error(error);
     }
+  }
+
+  React.useEffect(() => {
     fetchRowData();
   }, []);
+
+  const handleModalClose = () => {
+    fetchRowData();
+  }
 
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -267,7 +272,7 @@ export default function Models() {
       </div>
       <div className = "grid-child-buttons">
         <Button variant='contained' color='success' onClick={handleOpenModal}> Add Model </Button>
-        <AddModelModal open={openModal} setOpen={setOpenModal} />
+        <AddModelModal open={openModal} setOpen={setOpenModal} onClose={handleModalClose}/>
         <Button variant='contained' onClick={handleContainerClick}> Back to Container screen </Button>
       </div>
     </div>
