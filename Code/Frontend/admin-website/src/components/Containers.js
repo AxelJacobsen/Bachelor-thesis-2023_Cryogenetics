@@ -30,7 +30,7 @@ import fetchData from '../globals/fetchData';
 
 const headCells = [
   {
-    id: 'id', numeric: false, disablePadding: true, label: 'id',
+    id: 'container_id', numeric: false, disablePadding: true, label: 'id',
   },
   {
     id: 'container_sr_number', numeric: false, disablePadding: true, label: 'SerialNr',
@@ -157,17 +157,23 @@ export default function Containers() {
 
   const [rows, setRows] = React.useState([]);
 
-  React.useEffect(() => {
-    async function fetchRowData() {
-      try {
-        const response = await fetchData('/api/container', 'GET');
-        setRows(response);
-      } catch (error) {
-        console.error(error);
-      }
+
+  async function fetchRowData() {
+    try {
+      const response = await fetchData('/api/container', 'GET');
+      setRows(response);
+    } catch (error) {
+      console.error(error);
     }
+  }
+  
+  React.useEffect(() => {
     fetchRowData();
   }, []);
+  
+  const handleModalClose = () => {
+    fetchRowData();
+  };
 
     //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
     const filterRows = (row) => {
@@ -252,7 +258,7 @@ export default function Containers() {
                         hover
                         role="checkbox"
                         tabIndex={-1}
-                        key={row.id}
+                        key={row.container_sr_number}
                       >
                         
                         <TableCell
@@ -262,7 +268,7 @@ export default function Containers() {
                           padding="none"
                           align='center'
                         >
-                          {row.id}
+                          {row.container_model_name + '-' + row.temp_id}
                         </TableCell>
                         <TableCell align='center'>{row.container_sr_number}</TableCell>
                         <TableCell align="center">{row.container_model_name}</TableCell>
@@ -327,7 +333,7 @@ export default function Containers() {
       
       <div className = "grid-child-buttons">
         <Button variant='contained' color='success' onClick={handleOpenModal}> Add container </Button>
-        <AddContainerModal open={openModal} setOpen={setOpenModal} />
+        <AddContainerModal open={openModal} setOpen={setOpenModal} onClose={handleModalClose}/>
         <Button variant='contained' onClick={handleModel_NameClick}> Models Overview </Button>
         <Button variant='contained' onClick={handleStatusClick}> Status Overview </Button>
       </div>
