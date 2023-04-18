@@ -118,7 +118,7 @@ export default function AddContainerModal({ open, setOpen, onClose}) {
                   onKeyDown: (event) => {
                     const key = event.key;
                     // Allow only numeric characters (0-9)
-                    if (isNaN(key) || key === " ") {
+                    if ((key !== "Backspace" && key !== "Delete" && isNaN(key)) || key === " ") {
                       event.preventDefault();
                     }
                   }
@@ -242,7 +242,7 @@ export default function AddContainerModal({ open, setOpen, onClose}) {
                   onKeyDown: (event) => {
                     const key = event.key;
                     // Allow only numeric characters (0-9)
-                    if (isNaN(key) || key === " ") {
+                    if ((key !== "Backspace" && key !== "Delete" && isNaN(key)) || key === " ") {
                       event.preventDefault();
                     }
                   }
