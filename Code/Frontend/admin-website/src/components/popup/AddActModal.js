@@ -32,12 +32,9 @@ export default function AddActModal({ open, setOpen, onClose }) {
         is_active: 1
       }];      
       await fetchData("/api/act", 'POST', data);
-      setActName('');
-      setActDescription('');
-      setOpen(false);
-      onClose();
+      handleCloseModal()
     } catch (error) {
-      console.error(error);
+      alert(`Error: ${error.message}`);
     }
   }
 

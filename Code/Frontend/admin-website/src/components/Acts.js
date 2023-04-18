@@ -1,54 +1,44 @@
-import * as React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-import { TextField } from '@mui/material';
-import FilterListIcon from '@mui/icons-material/FilterList';
+import {
+  Box,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  TableSortLabel,
+  Toolbar,
+  Typography,
+  Paper,
+  IconButton,
+  Tooltip,
+  FormControlLabel,
+  Switch,
+  TextField,
+} from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
+import FilterListIcon from '@mui/icons-material/FilterList';
 import EditActModal from './popup/EditActModal';
 import AddActModal from './popup/AddActModal';
 import './TableLayout.css';
-import {stableSort , getComparator} from '../globals/globalFunctions';
+import {stableSort, getComparator} from '../globals/globalFunctions';
+import fetchData from '../globals/fetchData';
 
-function createData(ACT_Name, ACT_Description, ACT_IsActive) {
-  return {
-    ACT_Name, ACT_Description, ACT_IsActive
-  };
-}
-
-const rows = [
-  createData("refill","the tank has been refilled", true),
-  createData("aaaaa","teeseses", true),
-  createData("yesyh","nononoana dsa pea", true),
-  createData("kekw","pranked nerd", true),
-]; 
 
 const headCells = [
   {
-    id: 'ACT_Name', numeric: false, disablePadding: true, label: 'ACT_Name',
+    id: 'act_name', numeric: false, disablePadding: true, label: 'act_name',
   },
   {
-    id: 'ACT_Description', numeric: false, disablePadding: true, label: 'ACT_Description',
+    id: 'description', numeric: false, disablePadding: true, label: 'description',
   },
   {
-    id: 'ACT_IsActive', numeric: true, disablePadding: true, label: 'ACT_IsActive', 
+    id: 'is_active', numeric: true, disablePadding: true, label: 'is_active', 
   },
 ];
 
@@ -130,7 +120,7 @@ function EnhancedTableToolbar({ searchTerm, setSearchTerm }) {
 
 export default function Acts() {
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('ACT_Name');
+  const [orderBy, setOrderBy] = React.useState('act_name');
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -138,12 +128,31 @@ export default function Acts() {
   const [selectedRow, setSelectedRow] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [searchTerm, setSearchTerm] = React.useState('');
+  const [rows, setRows] = React.useState([]);
+
+  async function fetchRowData() {
+    try {
+      const response = await fetchData('/api/act', 'GET');
+      setRows(response);
+      console.log(response)
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  React.useEffect(() => {
+    fetchRowData();
+  }, []);
+
+  const handleModalClose = () => {
+    fetchRowData();
+  }
 
   //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
   const filterRows = (row) => {
     return (
-      row.ACT_Name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      row.ACT_Description.toLowerCase().includes(searchTerm.toLowerCase())
+      row.act_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.description.toLowerCase().includes(searchTerm.toLowerCase())
     );
   };
   const filteredRows = rows.filter(filterRows);
@@ -212,7 +221,7 @@ export default function Acts() {
                         hover
                         role="checkbox"
                         tabIndex={-1}
-                        key={row.ACT_Name}
+                        key={row.act_name}
                       >
                         
                         <TableCell
@@ -222,10 +231,10 @@ export default function Acts() {
                           padding="none"
                           align='center'
                         >
-                          {row.ACT_Name}
+                          {row.act_name}
                         </TableCell>
-                        <TableCell align='center'>{row.ACT_Description}</TableCell>
-                        <TableCell align="center">{row.ACT_IsActive ? "True" : "False"}</TableCell>
+                        <TableCell align='center'>{row.description}</TableCell>
+                        <TableCell align="center">{row.is_active ? "True" : "False"}</TableCell>
                         <TableCell onClick={() => handleRowClick(row)}> 
                         <Button variant="outlined"> Edit </Button>
                       </TableCell> 
@@ -263,7 +272,7 @@ export default function Acts() {
       </div>
       <div className = "grid-child-buttons">
         <Button variant='contained' color='success' onClick={handleOpenModal}> Add Act </Button>
-        <AddActModal open={openModal} setOpen={setOpenModal} />
+        <AddActModal open={openModal} setOpen={setOpenModal} onClose={handleModalClose} />
         <Button variant='contained' onClick={handleTransactionClick}> Back to Transaction screen </Button>
       </div>
     </div>
