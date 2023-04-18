@@ -91,7 +91,7 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 
 		res, err := globals.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
 		if err != nil {
-			http.Error(w, "Error posting data."+err.Error(), http.StatusInternalServerError)
+			http.Error(w, "Error posting data."+err.Error(), http.StatusConflict)
 			return
 		}
 
