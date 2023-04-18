@@ -21,17 +21,15 @@ const style = {
 export default function AddUserModal({ open, setOpen, onClose }) {
   const [rows, setRows] = React.useState([]);
   const [location, setLocation] = React.useState("");
-  const [id, setId] = React.useState(null);
   const [name, setName] = React.useState("");
   const [alias, setAlias] = React.useState("");
-  const [code, setCode] = React.useState(null);
+  const [code, setCode] = React.useState(0);
   const [duplicateCode, setDuplicateCode] = React.useState(false);
 
   async function fetchRowData() {
     try {
       const response = await fetchData('/api/create/employee', 'GET');
       setRows(response);
-      setId(Math.max(...rows.employee.map(employee => employee.employee_id))+1)
     } catch (error) {
       console.error(error);
     }
@@ -44,20 +42,21 @@ export default function AddUserModal({ open, setOpen, onClose }) {
       fetchRowData();
     }
   }, [open]); 
+  
+
 
   const handleCloseModal = () => {
     setOpen(false);
     onClose();
-    setCode(null);
+    setCode(0);
     setAlias("");
     setName("");
-    setId(null);
     setLocation("")
   }
   const handleConfirmModal = async () => {
     try {
       const data = [{
-        employee_id: id,
+        employee_id:Math.max(...rows.employee.map(employee => employee.employee_id))+1,
         employee_name: name,
         employee_alias: alias,
         login_code: code,
@@ -71,6 +70,11 @@ export default function AddUserModal({ open, setOpen, onClose }) {
   }
   const handleCodeChange = (event) => {
     const enteredCode = event.target.value;
+    const key = event.key;
+    // Allow only numeric characters (0-9)
+    if ((key !== "Backspace" && key !== "Delete" && isNaN(key)) || key === " ") {
+      event.preventDefault();
+    }
 
     // Check if entered code exists in employeeData
     const codeExists = rows.employee.some(
@@ -140,7 +144,7 @@ export default function AddUserModal({ open, setOpen, onClose }) {
           
         <Button variant="contained" sx={{ m: 2 }} color="error" onClick={handleCloseModal}>Cancel</Button>
 
-        <Button variant="contained" sx={{ m: 2 }} color="success" onClick={handleConfirmModal} disabled={!id || !name || !alias || !code || !location || duplicateCode}>Confirm</Button>
+        <Button variant="contained" sx={{ m: 2 }} color="success" onClick={handleConfirmModal} disabled={!name || !alias || !code || !location || duplicateCode}>Confirm</Button>
         </Box>
       
     </Modal>
