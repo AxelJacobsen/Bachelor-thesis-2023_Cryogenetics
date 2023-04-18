@@ -126,17 +126,22 @@ export default function Customers() {
   const [searchTerm, setSearchTerm] = useState('');
   const [rows, setRows] = React.useState([]);
 
-  React.useEffect(() => {
-    async function fetchRowData() {
-      try {
-        const response = await fetchData('/api/client', 'GET');
-        setRows(response);
-      } catch (error) {
-        console.error(error);
-      }
+  async function fetchRowData() {
+    try {
+      const response = await fetchData('/api/client', 'GET');
+      setRows(response);
+    } catch (error) {
+      console.error(error);
     }
+  }
+
+  React.useEffect(() => {
     fetchRowData();
   }, []);
+
+  const handleModalClose = () => {
+    fetchRowData();
+  }
 
   //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
   const filterRows = (row) => {
@@ -256,7 +261,7 @@ export default function Customers() {
       </div>
       <div className = "grid-child-buttons">
         <Button variant='contained' color='success' onClick={handleOpenModal}> Add customer </Button>
-        <AddCustomerModal open={openModal} setOpen={setOpenModal} />
+        <AddCustomerModal open={openModal} setOpen={setOpenModal } onClose={handleModalClose} />
       </div>
     </div>
       <FormControlLabel
