@@ -62,7 +62,7 @@ export default function AddContainerModal({ open, setOpen, onClose}) {
     setInvoice("");
     setTempId("");
     setComment("");
-    setMaintenanceNeeded(false);
+    setMaintenanceNeeded(0);
     setProductionDate("");
   }
 
@@ -109,12 +109,21 @@ export default function AddContainerModal({ open, setOpen, onClose}) {
             <Grid item xs={12} sm={4}>
               <TextField
                 fullWidth
+                type={"number"}
                 label="Container Serial Number"
                 id="serial-number"
                 value={serialNumber}
                 required
+                inputProps={{
+                  onKeyDown: (event) => {
+                    const key = event.key;
+                    // Allow only numeric characters (0-9)
+                    if (isNaN(key) || key === " ") {
+                      event.preventDefault();
+                    }
+                  }
+                }}
                 onChange={(event) => setSerialNumber(event.target.value)}
-                  
               />
             </Grid>
 
@@ -224,10 +233,20 @@ export default function AddContainerModal({ open, setOpen, onClose}) {
               <TextField
                 fullWidth
                 required
+                type={"number"}
                 label="Temp ID"
                 id="temp-id"
                 sx={{mt: 3}}
                 value={tempId}
+                inputProps={{
+                  onKeyDown: (event) => {
+                    const key = event.key;
+                    // Allow only numeric characters (0-9)
+                    if (isNaN(key) || key === " ") {
+                      event.preventDefault();
+                    }
+                  }
+                }}
                 onChange={(event) => setTempId(event.target.value)}
               />
             </Grid>
