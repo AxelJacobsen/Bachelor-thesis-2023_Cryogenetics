@@ -165,7 +165,7 @@ func CreateDataHandler(w http.ResponseWriter, r *http.Request) {
 		case "container":
 			tables = append(tables, "container_status", "client", "location", "container_model")
 		case "employee":
-			tables = append(tables, "location")
+			tables = append(tables, "location", "employee")
 		}
 
 	} else {
