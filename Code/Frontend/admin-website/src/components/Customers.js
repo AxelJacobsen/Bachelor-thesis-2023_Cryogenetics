@@ -245,6 +245,7 @@ export default function Customers() {
           <EditCustomerModal
             selectedRow={selectedRow}
             setSelectedRow={setSelectedRow}
+            onClose={handleModalClose}
           />
         )} 
           </TableContainer>
