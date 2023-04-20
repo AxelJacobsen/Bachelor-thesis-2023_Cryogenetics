@@ -247,6 +247,7 @@ export default function Locations() {
           <EditLocationModal
             selectedRow={selectedRow}
             setSelectedRow={setSelectedRow}
+            onClose={handleModalClose}
           />
         )} 
           </TableContainer>
