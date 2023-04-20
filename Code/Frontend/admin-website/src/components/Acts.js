@@ -24,6 +24,7 @@ import {
 import { visuallyHidden } from '@mui/utils';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import AddActModal from './popup/AddActModal';
+import EditActModal from './popup/EditActModal';
 import './TableLayout.css';
 import {stableSort, getComparator} from '../globals/globalFunctions';
 import fetchData from '../globals/fetchData';
@@ -161,7 +162,11 @@ export default function Acts() {
   };
 
   function handleRowClick(rowData) {
+    setSelectedRow({ ...rowData, type: "edit" });
+  }
+  function handleDelete(rowData) {
     setSelectedRow(rowData);
+    setSelectedRow({ ...rowData, type: "delete" });
   }
 
   const handleRequestSort = (event, property) => {
@@ -235,7 +240,10 @@ export default function Acts() {
                         <TableCell align='center'>{row.description}</TableCell>
                         <TableCell align="center">{row.is_active ? "True" : "False"}</TableCell>
                         <TableCell onClick={() => handleRowClick(row)}> 
-                        <Button variant="container" color="error"> Delete </Button>
+                        <Button variant="outlined"> Edit </Button>
+                      </TableCell> 
+                        <TableCell onClick={() => handleDelete(row)}> 
+                        <Button variant="outlined" color="error"> Delete </Button>
                       </TableCell> 
                       </TableRow>
                     );
@@ -251,6 +259,13 @@ export default function Acts() {
                 )}
               </TableBody>
             </Table>
+            {selectedRow && selectedRow.type === "edit" && (
+              <EditActModal
+                selectedRow={selectedRow}
+                setSelectedRow={setSelectedRow}
+                onClose={handleModalClose}
+              />
+            )} 
           </TableContainer>
           <TablePagination
             rowsPerPageOptions={[10, 25, 50]}
