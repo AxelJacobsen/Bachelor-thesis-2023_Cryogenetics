@@ -42,11 +42,6 @@ export default function NavBar() {
                 color={activeButton === 5 ? 'primary' : 'inherit'}> 
                 Locations 
         </Button>
-        <Button onClick={() => {navigate('/qrcodes'); handleClick(6)}}
-                variant={activeButton === 6 ? 'contained' : 'text'} 
-                color={activeButton === 6 ? 'primary' : 'inherit'}>
-                QR Codes 
-        </Button>
     </div>
     )
 }

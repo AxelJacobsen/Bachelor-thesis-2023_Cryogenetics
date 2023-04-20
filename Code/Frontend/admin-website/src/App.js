@@ -6,7 +6,6 @@ import Containers from './components/Containers'
 import ErrorPage from './components/ErrorPage'
 import Customers from './components/Customers'
 import Locations from './components/Locations'
-import QrCodes from './components/QrCodes'
 import './App.css'
 import Typography from '@mui/material/Typography';
 import Users from './components/Users'
@@ -75,7 +74,6 @@ function App() {
         <Route path="/customers" element={isLoggedIn ? <Customers /> : <Navigate to="/login" />} />
         <Route path="/users" element={isLoggedIn ? <Users /> : <Navigate to="/login" />} />
         <Route path="/locations" element={isLoggedIn ? <Locations /> : <Navigate to="/login" />} />
-        <Route path="/qrcodes" element={isLoggedIn ? <QrCodes /> : <Navigate to="/login" />} />
         <Route path="/models" element={isLoggedIn ? <Models /> : <Navigate to="/login" />} />        
         <Route path="/acts" element={ isLoggedIn ? <Acts /> : <Navigate to="/login" />} />
         <Route path="/statuses" element={ isLoggedIn ? <Statuses /> : <Navigate to="/login" />} />
