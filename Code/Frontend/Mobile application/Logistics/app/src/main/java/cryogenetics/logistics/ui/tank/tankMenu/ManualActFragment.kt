@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,18 +19,27 @@ import cryogenetics.logistics.ui.tank.TankData
 import java.util.*
 
 
-class  ManualActFragment : Fragment() {
+class ManualActFragment : Fragment() {
 
     var cal = Calendar.getInstance()
-    private var _binding : FragmentTankManualActBinding? = null
+    private var _binding: FragmentTankManualActBinding? = null
     private val binding get() = _binding!!
     private lateinit var lastFillDateListener: DatePickerDialog.OnDateSetListener
     private lateinit var invoiceDateListener: DatePickerDialog.OnDateSetListener
+    private lateinit var mTank: TankData
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        mTank = arguments?.getParcelable("tankData")!!
+        /* todo: delete */
+
+        println("data" + mTank)
+        println("datatata")
+        println(mTank.address)
+
 
         _binding = FragmentTankManualActBinding.inflate(inflater, container, false)
         return binding.root
@@ -39,6 +47,17 @@ class  ManualActFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (mTank.temp_id != null) {
+            binding.etAddress.setText(mTank.address)
+            binding.etNote.setText(mTank.comment)
+            binding.tvInvoice.text = mTank.invoice
+            binding.tvLastFilled.text = mTank.last_filled
+            //binding.spinnerStatus.setSelection(mTank.container_status_name)
+            //println("dTank.maintenance_needed!!.toInt()" + mTank.maintenance_needed!!.toInt())
+            binding.spinnerMaintStatus.setSelection(mTank.maintenance_needed!!.toInt())
+            binding.spinnerAffiliatedLab.setSelection(mTank.location_id!!.toInt())
+        }
 
         // create an OnDateSetListener
         lastFillDateListener = datePickListener("lastFillDateListener")
@@ -50,10 +69,12 @@ class  ManualActFragment : Fragment() {
         binding.tvInvoice.setOnClickListener { datePickDiag(invoiceDateListener) }
         binding.clInvoice.setOnClickListener { datePickDiag(invoiceDateListener) }
 
-        val customList = listOf("null", "Internal", "Sent out", "Returned", "Refilled", "Linked", "Unlinked", "Maint. need", "Maint. compl", "Sold", "Discarded")
-        val customList1 = listOf("null", "In use", "Quarantine", "Available", "At Client", "Disposed")
-        val customList2 = listOf("null", "Hamar", "Trondheim")
-        val customList3 = listOf("null", "Needs Maintenance", "Maintained")
+        val customList = listOf(
+            "null", "Internal", "Sent out", "Returned", "Refilled",
+            "Linked", "Unlinked", "Maint. need", "Maint. compl", "Sold", "Discarded")
+        val customList1 = listOf("In use", "Quarantine", "Available", "At Client", "Disposed")
+        val customList2 = listOf("Hamar", "Trondheim")
+        val customList3 = listOf("Maintained", "Needs Maintenance")
         spinnerArrayAdapter(customList, binding.spinnerAct)
         spinnerArrayAdapter(customList1, binding.spinnerStatus)
         spinnerArrayAdapter(customList2, binding.spinnerAffiliatedLab)
@@ -61,26 +82,50 @@ class  ManualActFragment : Fragment() {
 
         binding.bConfirm.setOnClickListener {
             println(getDateTime())
-            if (binding.spinnerAct.selectedItem.toString() == "null" ||
-                binding.spinnerStatus.selectedItem.toString() == "null" ||
-                binding.tvLastFilled.text.toString() == "@string/dateformat") {
-                Toast.makeText(requireContext(), "Act, Status or Last filled is not entered", Toast.LENGTH_LONG).show()
-                println("act " + binding.spinnerAct.selectedItem.toString() +
-                    " status " + binding.spinnerStatus.selectedItem.toString() +
-                    " lastFilled " + binding.tvLastFilled.text.toString())
+            if (binding.spinnerAct.selectedItem.toString() == "null") {
+                Toast.makeText(
+                    requireContext(),
+                    "Act is not entered, cannot be null!",
+                    Toast.LENGTH_LONG
+                ).show()
+                println("act " + binding.spinnerAct.selectedItem.toString())
 
             } else {
-                val dataList = listOf(
-
-                    mapOf("container_sr_number" to "123456789", "act" to binding.spinnerAct.selectedItem.toString(),
-                        "comment" to binding.etComment.text.toString(), "employee_id" to 103,
-                        "client_id" to 1, "location_id" to 1,
-                        "address" to binding.etAddress.text.toString(), "container_status_name" to binding.spinnerStatus.selectedItem.toString(),
-                        "date" to getDateTime().toString())
+                val actData = listOf(
+                    mapOf(
+                        "container_sr_number" to mTank.container_sr_number.toString(),
+                        "act" to binding.spinnerAct.selectedItem.toString(),
+                        "comment" to binding.etComment.text.toString(),
+                        "employee_id" to 103,
+                        "client_id" to 1,
+                        "location_id" to binding.spinnerAffiliatedLab.selectedItemPosition,
+                        // TODO: maybe change to location_id"location_name" to binding.spinnerAffiliatedLab.selectedItem.toString(),
+                        "address" to binding.etAddress.text.toString(),
+                        "container_status_name" to binding.spinnerStatus.selectedItem.toString(),
+                        "date" to getDateTime().toString()
+                    )
                 )
-                val result = makeBackendRequest("transaction", dataList, "POST")
-                println(result.toString())
-                Toast.makeText(requireContext(), result.toString(), Toast.LENGTH_LONG).show()
+                val dankData = listOf(
+                    mapOf(
+                        "container_sr_number" to mTank.container_sr_number.toString(), // Primary
+                        "primary" to "container_sr_number", // Must be after Primary-key srNumb
+                        "comment" to binding.etNote.text.toString(),
+                        "client_id" to 1,  // TODO: add client correctly
+                        "location_id" to binding.spinnerAffiliatedLab.selectedItemPosition,
+                        //"location_name" to binding.spinnerAffiliatedLab.selectedItem.toString(),
+                        // TODO: maybe change to location_id"location_name" to binding.spinnerAffiliatedLab.selectedItem.toString(),
+                        "address" to binding.etAddress.text.toString(),
+                        "container_status_name" to binding.spinnerStatus.selectedItem.toString(),
+                        "maintenance_needed" to binding.spinnerMaintStatus.selectedItemPosition,
+                        "last_filled" to binding.tvLastFilled.text.toString(),
+                        "invoice" to binding.tvInvoice.text.toString(),
+                    )
+                )
+
+                val result1 = makeBackendRequest("transaction", actData, "POST")
+                val result2 = makeBackendRequest("container", dankData, "PUT")
+                println("res1" + result1.toString() + "res2" + result2.toString())
+                Toast.makeText(requireContext(), "res1" + result1.toString() + "res2" + result2.toString(), Toast.LENGTH_LONG).show()
 
             }
 
@@ -90,17 +135,21 @@ class  ManualActFragment : Fragment() {
     /**
      * Applies a list to a spinner
      */
-    private fun spinnerArrayAdapter (list: List<String>, spinner :Spinner) {
+    private fun spinnerArrayAdapter(list: List<String>, spinner: Spinner) {
         spinner.adapter = object : ArrayAdapter<String>(
             requireContext(),
             androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
             list
-        ) /** TODO: Delete this and drop null? */{
-            override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup
+        )
+        /** TODO: Delete this and drop null? */
+        {
+            override fun getDropDownView(
+                position: Int, convertView: View?, parent: ViewGroup
             ): View {
-                val view: TextView = super.getDropDownView(position, convertView, parent) as TextView
+                val view: TextView =
+                    super.getDropDownView(position, convertView, parent) as TextView
                 //set the color of first item in the drop down list to gray, ensure the rest is always black (necessary).
-                if(position == 0) view.setTextColor(Color.RED) else view.setTextColor(Color.BLACK)
+                if (position == 0) view.setTextColor(Color.RED) else view.setTextColor(Color.BLACK)
                 return view
             }
         }
@@ -116,7 +165,7 @@ class  ManualActFragment : Fragment() {
     /**
      * Common datePickerDialog body.
      */
-    private fun datePickDiag(dateChangeListener : DatePickerDialog.OnDateSetListener) {
+    private fun datePickDiag(dateChangeListener: DatePickerDialog.OnDateSetListener) {
         DatePickerDialog(
             requireContext(),
             dateChangeListener,
@@ -130,24 +179,24 @@ class  ManualActFragment : Fragment() {
     /**
      * Common onDateSetListener body.
      */
-    private fun datePickListener(listenerRef : String) :DatePickerDialog.OnDateSetListener {
+    private fun datePickListener(listenerRef: String): DatePickerDialog.OnDateSetListener {
         val listener =
             DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-            cal.set(Calendar.YEAR, year)
-            cal.set(Calendar.MONTH, monthOfYear)
-            cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            updateDateInView(listenerRef)
-        }
+                cal.set(Calendar.YEAR, year)
+                cal.set(Calendar.MONTH, monthOfYear)
+                cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                updateDateInView(listenerRef)
+            }
         return listener
     }
 
     /**
      * Updates date in textView
      */
-    private fun updateDateInView(listenerRef : String) {
+    private fun updateDateInView(listenerRef: String) {
         val myFormat = "dd/MM/yyyy" // mention the format you need, needs to be big M, small d/y.
         val sdf = SimpleDateFormat(myFormat, Locale.US)
-        when(listenerRef) {
+        when (listenerRef) {
             "lastFillDateListener" -> {
                 binding.tvLastFilled.text = sdf.format(cal.time)
             }

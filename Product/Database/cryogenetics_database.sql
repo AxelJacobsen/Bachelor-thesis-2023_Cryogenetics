@@ -77,7 +77,7 @@ INSERT INTO `admin` (`admin_id`, `email`, `password_hash`) VALUES
 
 CREATE TABLE `client` (
   `client_id` int(11) NOT NULL,
-  `client_name` varchar(64) COLLATE utf8mb4_danish_ci NOT NULL
+  `client_name` varchar(64) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
@@ -104,7 +104,7 @@ CREATE TABLE `container` (
   `country_iso3` varchar(3) COLLATE utf8mb4_danish_ci NOT NULL,
   `last_filled` date DEFAULT NULL,
   `container_status_name` varchar(32) COLLATE utf8mb4_danish_ci NOT NULL,
-  `client_id` int(11) DEFAULT NULL,
+  `client_name` varchar(64) NOT NULL,
   `address` varchar(64) COLLATE utf8mb4_danish_ci DEFAULT NULL,
   `location_id` int(11) DEFAULT NULL,
   `invoice` date DEFAULT NULL,
@@ -118,11 +118,11 @@ CREATE TABLE `container` (
 -- Dumping data for table `container`
 --
 
-INSERT INTO `container` (`container_sr_number`, `container_model_name`, `country_iso3`, `last_filled`, `container_status_name`, `client_id`, `address`, `location_id`, `invoice`, `temp_id`, `comment`, `maintenance_needed`, `production_date`) VALUES
-('1', 'verySmall60', 'USA', '2014-03-12', 'At client', 3, 'Test', 2, '2023-03-09', '1', 'Leaking', 0, '2023-03-15'),
-('111111111', 'verySmall60', 'USA', '2014-03-12', 'At client', 3, '47 Maple Street\r\nManchester, NH 03101', 101, '2023-03-09', '13', NULL, 0, '2015-12-03'),
-('123456789', 'large200', 'NOR', '2023-03-07', 'Available', NULL, NULL, 1, NULL, '12', NULL, 0, '2005-12-01'),
-('2222222222', 'small100', 'CHL', '2023-03-23', 'In use', 6, 'Salmon Sages\r\nAvenida Providencia 2309\r\nProvidencia, Santiago, C', 1, '2023-03-18', '67', NULL, 0, '1994-12-22');
+INSERT INTO `container` (`container_sr_number`, `container_model_name`, `country_iso3`, `last_filled`, `container_status_name`, `client_name`, `address`, `location_id`, `invoice`, `temp_id`, `comment`, `maintenance_needed`, `production_date`) VALUES
+('1', 'verySmall60', 'USA', '2014-03-12', 'At client', 'Canada fish', 'Test', 2, '2023-03-09', '1', 'Leaking', 0, '2023-03-15'),
+('111111111', 'verySmall60', 'USA', '2014-03-12', 'At client', 'Canada fish', '47 Maple Street\r\nManchester, NH 03101', 101, '2023-03-09', '13', NULL, 0, '2015-12-03'),
+('123456789', 'large200', 'NOR', '2023-03-07', 'Available', 'Canada fish', NULL, 1, NULL, '12', NULL, 0, '2005-12-01'),
+('2222222222', 'small100', 'CHL', '2023-03-23', 'In use', 'Canada fish', 'Salmon Sages\r\nAvenida Providencia 2309\r\nProvidencia, Santiago, C', 1, '2023-03-18', '67', NULL, 0, '1994-12-22');
 
 -- --------------------------------------------------------
 
@@ -276,7 +276,7 @@ ALTER TABLE `container`
   ADD PRIMARY KEY (`container_sr_number`),
   ADD KEY `container_fk1` (`container_model_name`),
   ADD KEY `container_fk2` (`container_status_name`),
-  ADD KEY `container_fk3` (`client_id`),
+  ADD KEY `container_fk3` (`client_name`),
   ADD KEY `container_fk4` (`location_id`);
 
 --
@@ -360,7 +360,7 @@ ALTER TABLE `transaction`
 ALTER TABLE `container`
   ADD CONSTRAINT `container_fk1` FOREIGN KEY (`container_model_name`) REFERENCES `container_model` (`container_model_name`) ON UPDATE CASCADE,
   ADD CONSTRAINT `container_fk2` FOREIGN KEY (`container_status_name`) REFERENCES `container_status` (`container_status_name`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `container_fk3` FOREIGN KEY (`client_id`) REFERENCES `client` (`client_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `container_fk3` FOREIGN KEY (`client_name`) REFERENCES `client` (`client_name`),
   ADD CONSTRAINT `container_fk4` FOREIGN KEY (`location_id`) REFERENCES `location` (`location_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --

@@ -148,7 +148,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/tvNoteTitle">
 
                         <EditText
-                            android:id="@+id/tvNote"
+                            android:id="@+id/etNote"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"

@@ -1,8 +1,6 @@
 package cryogenetics.logistics.ui.tank
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.os.Build.TYPE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -109,6 +107,8 @@ class TankFragment : Fragment() {
 
     @SuppressLint("SetTextI18n") // Strings could be exported to res/values/string for different language support and etc, but it is not necessary yet for this project.
     private fun menuFunctionality(type: String) = when (type) {
+        // TODO: LOCK DOWN THIS MENU UNTIL A TANK IS CHOSEN, to avoid:
+        // TODO: lateinit property dTank has not been initialized
         "transaction" -> {
             changeMarginsAndUpdateMenu(
                 View.VISIBLE,
@@ -146,8 +146,13 @@ class TankFragment : Fragment() {
 
             } else {
                 println("manueel")
+                val bundle = Bundle()
+                bundle.putParcelable("tankData", dTank)
+                //bundle.putString("key", "value")
+                val childFragment = ManualActFragment()
+                childFragment.arguments = bundle
                 childFragmentManager.beginTransaction()
-                    .replace(binding.menuInventory.id, ManualActFragment())
+                    .replace(binding.menuInventory.id, childFragment)
                     .commit()
 
                 println("manual act$dTank")
