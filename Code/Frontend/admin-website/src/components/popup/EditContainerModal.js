@@ -39,27 +39,6 @@ const tempData = [
 
 export default function EditContainerModal(props) {
 
- /*  {selectedRow && ( //Checks if there is a selected Row, If this line isnt here, you will get an "Error child is empty" console message.
-        <EditWindowModal
-          selectedRow={selectedRow}
-          setSelectedRow={setSelectedRow}
-        />
-      )} 
-      INSERT ^^^ AT THE </TABLE> CALL
-      */
-
-      /* <TableCell onClick={() => handleRowClick(row)}> 
-                        <Button> Edit </Button>
-      </TableCell> 
-      
-      */
-
-   /*    const [selectedRow, setSelectedRow] = useState(null);
-
-  function handleRowClick(rowData) {
-    setSelectedRow(rowData);
-  } */
-
   function handleCloseModal() {
     props.setSelectedRow(null);
   }
