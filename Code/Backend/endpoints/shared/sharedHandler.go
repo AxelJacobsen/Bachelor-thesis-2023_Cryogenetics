@@ -104,17 +104,17 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	// PUT method
 	case http.MethodPut:
+		joinData, keys = constants.SetJoinData(joinData, keys, activeTable)
+
 		/// SEND REQUEST TO GENERIC PUT REQUEST, RECIEVE AS "res, err"
-		sqlQuery, sqlArgs, err := globals.ConvertPutURLToSQL(r, activeTable)
+		sqlQuery, sqlArgs, err := globals.ConvertPutURLToSQL(r, joinData, keys)
 		if err != nil {
 			http.Error(w, "Error converting url to sql.", http.StatusUnprocessableEntity)
 			return
 		}
-		println("SQL: " + sqlQuery)
 
 		res, err := globals.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
 		if err != nil {
-			fmt.Println("err: ", err)
 			http.Error(w, "Error putting data.", http.StatusInternalServerError)
 			return
 		}

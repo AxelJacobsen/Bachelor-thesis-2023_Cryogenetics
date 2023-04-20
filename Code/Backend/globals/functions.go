@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"math"
 	"net"
 	"net/http"
 	"os"
@@ -44,6 +45,73 @@ func flattenMapSlice(mapSlice []map[string]interface{}) map[string]([]interface{
 	}
 
 	return props_values
+}
+
+/**
+ *	Parses a value, removing the in-built scientific notation of GoLang.
+ *	For example: Parsing 123456789 becomes "123456789" instead of 1.23456789e8, and 12345678.9 becomes "12345678.90000" instead of 1.23456789e7
+ *	Non-numbers are parsed like normal.
+ *
+ *	@param any - Value to parse.
+ *
+ *	@return The parsed value, devoid of scientific notation.
+ */
+func RemoveScientificNotation(any interface{}) string {
+	parsed := ""
+	switch any.(type) {
+	case float64, float32:
+		// Parse as float...
+		parsed = fmt.Sprintf("%f", any)
+
+		// ...Then convert the float to int if it doesn't change it's value
+		if argVal64, ok := any.(float64); ok {
+			if argVal64 == math.Floor(argVal64) {
+				parsed = fmt.Sprint(int(argVal64))
+			}
+		} else if argVal32, ok := any.(float32); ok {
+			if float64(argVal32) == math.Floor(float64(argVal32)) {
+				parsed = fmt.Sprint(int(argVal64))
+			}
+		}
+
+	default:
+		parsed = fmt.Sprintf("%v", any)
+	}
+
+	// Return
+	return parsed
+}
+
+/**
+ *	Finds the origin table of a column, if given by joinData.
+ *
+ *	@param column - The column name.
+ *	@param joinData - The joinData to search through.
+ *
+ *	@return The table which the column originates from.
+ */
+func FindOriginTable(column string, joinData map[string][]string) string {
+	// Find which table the given field belongs to
+	belongsToTable := ""
+	for t, tf := range joinData {
+		for _, s := range tf {
+			if column == s {
+				belongsToTable = t
+				break
+			}
+		}
+		if belongsToTable != "" {
+			break
+		}
+	}
+
+	// If not found, assume the field belongs to the main table
+	if belongsToTable == "" {
+		belongsToTable = joinData["main"][0]
+	}
+
+	// Return
+	return belongsToTable
 }
 
 /**
@@ -338,13 +406,29 @@ func ConvertPostURLToSQL(r *http.Request, table string) (string, []interface{}, 
  *	The SQL query PUTS(updates) entries in the given table.
  *
  *	@param r - a pointer to the http request
- *  @param table - name of the relevant table, (should be added as request header or in the url instead)
+ *	@param joinData - a map where the key is a string representing the table name and any foreign key references, and the value is a slice containing:
+ *		- the name of the table
+ *		- the name of the primary key for that table
+ *		- any data values requested from that table
+ *	@param keys - a slice of strings representing the keys in the joinData map
+ *	@param kwargs - Additional arguments presented as strings:
+ *		"alterForeignTables" - Alters foreign table values rather than the main table values whenever possible
  *
  *	@returns - an SQL string with placeholders
  *	@returns - a list of values to fit the SQL query
  *  @returns - any potential errors thrown
  */
-func ConvertPutURLToSQL(r *http.Request, table string) (string, []interface{}, error) {
+func ConvertPutURLToSQL(r *http.Request, joinData map[string][]string, keys []string, kwargs ...string) (string, []interface{}, error) {
+	table := joinData["main"][0] // The table which the request is aimed at
+
+	// Additional arguments
+	alterForeignTables := false
+	for _, kwarg := range kwargs {
+		if kwarg == "alterForeignTables" {
+			alterForeignTables = true
+		}
+	}
+
 	// Decode body
 	var data []map[string]interface{}
 
@@ -364,9 +448,30 @@ func ConvertPutURLToSQL(r *http.Request, table string) (string, []interface{}, e
 	}
 
 	// TODO: Add exception for when NO values are given
+	// OR primary_key's value isnt found in the JSON data
 
 	var queryPref strings.Builder
-	queryPref.WriteString(fmt.Sprintf("UPDATE %s SET", table))
+	queryPref.WriteString(fmt.Sprintf("UPDATE %s ", table))
+
+	// Add inner joins
+	for _, key := range keys {
+		if key == "main" {
+			continue
+		}
+
+		// Extract values from data
+		data := joinData[key]
+		tableName := data[0]
+		primaryKey := data[1]
+
+		// Extract target table name from key
+		targetTableName := strings.Split(key, ":")[0]
+
+		// Construct SQL JOIN statement
+		queryPref.WriteString(fmt.Sprintf("LEFT JOIN %s ON %s.%s = %s.%s ", targetTableName, tableName, primaryKey, targetTableName, primaryKey))
+	}
+
+	queryPref.WriteString(" SET")
 
 	it := 0
 	var args []interface{}
@@ -374,12 +479,19 @@ func ConvertPutURLToSQL(r *http.Request, table string) (string, []interface{}, e
 		if property == "primary" {
 			continue
 		}
+
+		// Find which table the given field belongs to, if allowed to alter foreign tables
+		belongsToTable := table
+		if alterForeignTables {
+			belongsToTable = FindOriginTable(property, joinData)
+		}
+
 		//Ensures that if there is only one type of primary key there wont be an empty update field for that value
 		delayedEntry := ""
 		if it == 0 {
-			delayedEntry = fmt.Sprintf(" `%s` = CASE", property)
+			delayedEntry = fmt.Sprintf(" %s.`%s` = CASE", belongsToTable, property)
 		} else {
-			delayedEntry = fmt.Sprintf(", `%s` = CASE", property)
+			delayedEntry = fmt.Sprintf(", %s.`%s` = CASE", belongsToTable, property)
 		}
 		prevVal := ""
 		for index, val := range props_values["primary"] {
@@ -391,9 +503,12 @@ func ConvertPutURLToSQL(r *http.Request, table string) (string, []interface{}, e
 				if propVal != property {
 					it++
 					queryPref.WriteString(delayedEntry)
-					queryPref.WriteString(fmt.Sprintf(" WHEN `%s` = ? THEN ?", propVal))
-					args = append(args, fmt.Sprintf("%v", props_values[propVal][index]))
-					args = append(args, fmt.Sprintf("%v", props_values[property][index]))
+					queryPref.WriteString(fmt.Sprintf(" WHEN %s.`%s` = ? THEN ?", FindOriginTable(propVal, joinData), propVal))
+
+					// If the args are numbers, don't use scientific connotation
+					args = append(args, RemoveScientificNotation(props_values[propVal][index]))
+					args = append(args, RemoveScientificNotation(props_values[property][index]))
+
 					if index+1 != len(props_values["primary"]) {
 						queryPref.WriteString(fmt.Sprintf(" ELSE `%s`", property))
 					}
@@ -409,10 +524,12 @@ func ConvertPutURLToSQL(r *http.Request, table string) (string, []interface{}, e
 
 	for p, property := range props_values["primary"] {
 		if propVal, ok := property.(string); ok {
+			belongsToTable := FindOriginTable(propVal, joinData)
+
 			if p == 0 {
-				queryPref.WriteString(fmt.Sprintf(" WHERE `%s` = '%v'", propVal, props_values[propVal][p]))
+				queryPref.WriteString(fmt.Sprintf(" WHERE %s.`%s` = '%s'", belongsToTable, propVal, RemoveScientificNotation(props_values[propVal][p])))
 			} else {
-				queryPref.WriteString(fmt.Sprintf(" OR `%s` = '%v'", propVal, props_values[propVal][p]))
+				queryPref.WriteString(fmt.Sprintf(" OR %s.`%s` = '%s'", belongsToTable, propVal, RemoveScientificNotation(props_values[propVal][p])))
 			}
 		} else {
 
