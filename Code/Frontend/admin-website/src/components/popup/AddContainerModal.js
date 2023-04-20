@@ -207,9 +207,11 @@ export default function AddContainerModal({ open, setOpen, onClose}) {
               />
             </Grid>
 
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={12}>
               <TextField
                 fullWidth
+                multiline
+                rows={2}
                 label="Address"
                 id="address"
                 sx={{mt: 3}}
