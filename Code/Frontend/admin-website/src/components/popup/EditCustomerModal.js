@@ -50,7 +50,7 @@ export default function EditCustomerModal(props) {
       
       <Box sx={style}>
         <Typography id="modal-modal-title" variant="h6" component="h2" >
-          Add Customers
+          Edit Customers
         </Typography>
 
         <TextField
