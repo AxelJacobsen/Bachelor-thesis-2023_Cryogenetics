@@ -23,7 +23,6 @@ import {
 } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import EditActModal from './popup/EditActModal';
 import AddActModal from './popup/AddActModal';
 import './TableLayout.css';
 import {stableSort, getComparator} from '../globals/globalFunctions';
@@ -252,12 +251,6 @@ export default function Acts() {
                 )}
               </TableBody>
             </Table>
-            {selectedRow && ( //Checks if there is a selected Row, If this line isnt here, you will get an "Error child is empty" console message.
-          <EditActModal
-            selectedRow={selectedRow}
-            setSelectedRow={setSelectedRow}
-          />
-        )} 
           </TableContainer>
           <TablePagination
             rowsPerPageOptions={[10, 25, 50]}

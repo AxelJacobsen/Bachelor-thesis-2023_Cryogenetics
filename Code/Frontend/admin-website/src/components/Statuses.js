@@ -20,7 +20,6 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-import EditStatusModal from './popup/EditStatusModal';
 import AddStatusModal from './popup/AddStatusModal';
 import { useNavigate } from 'react-router-dom';
 import { TextField } from '@mui/material';
@@ -249,12 +248,6 @@ export default function Statuses() {
               )}
             </TableBody>
           </Table>
-          {selectedRow && ( //Checks if there is a selected Row, If this line isnt here, you will get an "Error child is empty" console message.
-        <EditStatusModal
-          selectedRow={selectedRow}
-          setSelectedRow={setSelectedRow}
-        />
-      )} 
         </TableContainer>
         <TablePagination
           rowsPerPageOptions={[10, 25, 50]}
