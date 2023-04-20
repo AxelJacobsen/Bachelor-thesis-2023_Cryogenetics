@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Box, Button, FormControlLabel, IconButton, Modal, Paper, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel, Toolbar, Tooltip, Typography } from '@mui/material';
+import { Box, Button, FormControlLabel, IconButton, Paper, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel, Toolbar, Tooltip, Typography } from '@mui/material';
 import { TextField } from '@mui/material';
 import { FilterList as FilterListIcon, Print } from '@mui/icons-material';
 import { visuallyHidden } from '@mui/utils';
@@ -174,15 +174,18 @@ export default function Containers() {
 
   const navigate = useNavigate();
 
-  function handleRowClick(rowData) {
-    setSelectedRow(rowData);
-  }
   const handleOpenModal = () => {
     setOpenModal(true);
   };
   
-  function handlePrint(rowData){
-    setSelectedRow(rowData);
+  function handleRowClick(rowData) {
+    // Set the type property to "edit"
+    setSelectedRow({ ...rowData, type: "edit" });
+  }
+  
+  function handlePrint(rowData) {
+    // Set the type property to "print"
+    setSelectedRow({ ...rowData, type: "print" });
   }
 
   const handleRequestSort = (event, property) => {
@@ -303,18 +306,19 @@ export default function Containers() {
                 )}
               </TableBody>
             </Table>
-            {selectedRow && ( //Checks if there is a selected Row, If this line isnt here, you will get an "Error child is empty" console message.
-          <EditContainerModal
-            selectedRow={selectedRow}
-            setSelectedRow={setSelectedRow}
-          />
-        )} 
-        {selectedRow && ( //Checks if there is a selected Row, If this line isnt here, you will get an "Error child is empty" console message.
-          <PrintModal
-            selectedRow={selectedRow}
-            setSelectedRow={setSelectedRow}
-          />
-        )} 
+            {selectedRow && selectedRow.type === "edit" && (
+              <EditContainerModal
+                selectedRow={selectedRow}
+                setSelectedRow={setSelectedRow}
+                onClose={handleModalClose}
+              />
+            )} 
+            {selectedRow && selectedRow.type === "print" && (
+              <PrintModal
+                selectedRow={selectedRow}
+                setSelectedRow={setSelectedRow}
+              />
+            )}
           </TableContainer>
           <TablePagination
             rowsPerPageOptions={[10, 25, 50]}
