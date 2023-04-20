@@ -256,6 +256,7 @@ export default function Models() {
         <EditModelModal
           selectedRow={selectedRow}
           setSelectedRow={setSelectedRow}
+          onClose={handleModalClose}
         />
       )} 
         </TableContainer>
