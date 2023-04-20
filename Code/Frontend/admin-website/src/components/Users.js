@@ -262,6 +262,7 @@ export default function Users() {
         <EditUserModal
           selectedRow={selectedRow}
           setSelectedRow={setSelectedRow}
+          onClose={handleModalClose}
         />
       )} 
         </TableContainer>
