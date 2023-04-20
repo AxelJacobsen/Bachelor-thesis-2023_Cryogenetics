@@ -232,7 +232,7 @@ export default function Statuses() {
                         {row.container_status_name}
                       </TableCell>
                       <TableCell onClick={() => handleRowClick(row)}> 
-                      <Button variant="outlined"> Edit </Button>
+                      <Button variant="container" color="error"> Delete </Button>
                     </TableCell> 
                     </TableRow>
                   );

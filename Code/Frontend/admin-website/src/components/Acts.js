@@ -235,7 +235,7 @@ export default function Acts() {
                         <TableCell align='center'>{row.description}</TableCell>
                         <TableCell align="center">{row.is_active ? "True" : "False"}</TableCell>
                         <TableCell onClick={() => handleRowClick(row)}> 
-                        <Button variant="outlined"> Edit </Button>
+                        <Button variant="container" color="error"> Delete </Button>
                       </TableCell> 
                       </TableRow>
                     );
