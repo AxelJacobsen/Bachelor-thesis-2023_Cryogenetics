@@ -267,7 +267,7 @@ export default function EditCustomerModal(props) {
                 label="Comment"
                 id="comment"
                 multiline
-                options={4}
+                rows={4}
                 sx={{mt: 3}}
                 value={comment}
                 onChange={(event) => setComment(event.target.value)}
