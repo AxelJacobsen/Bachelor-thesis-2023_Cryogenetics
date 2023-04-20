@@ -1,31 +1,15 @@
-import * as React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
+import { Box, Button, FormControlLabel, IconButton, Modal, Paper, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel, Toolbar, Tooltip, Typography } from '@mui/material';
 import { TextField } from '@mui/material';
-import FilterListIcon from '@mui/icons-material/FilterList';
+import { FilterList as FilterListIcon, Print } from '@mui/icons-material';
 import { visuallyHidden } from '@mui/utils';
 import EditContainerModal from './popup/EditContainerModal';
 import AddContainerModal from './popup/AddContainerModal';
+import PrintModal from './popup/PrintModal';
 import './TableLayout.css';
-import {stableSort , getComparator} from '../globals/globalFunctions';
+import { stableSort, getComparator } from '../globals/globalFunctions';
 import fetchData from '../globals/fetchData';
 
 const headCells = [
@@ -132,7 +116,7 @@ function EnhancedTableToolbar({ searchTerm, setSearchTerm }) {
           <IconButton>
             <FilterListIcon />
           </IconButton>
-        </Tooltip>
+        </Tooltip> 
       
         <TextField
         label="Search"
@@ -197,6 +181,9 @@ export default function Containers() {
     setOpenModal(true);
   };
   
+  function handlePrint(rowData){
+    setSelectedRow(rowData);
+  }
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -268,7 +255,7 @@ export default function Containers() {
                           padding="none"
                           align='center'
                         >
-                          {row.container_model_name + '-' + row.temp_id}
+                          {row.liter_capacity + '-' + row.temp_id}
                         </TableCell>
                         <TableCell align='center'>{row.container_sr_number}</TableCell>
                         <TableCell align="center">{row.container_model_name}</TableCell>
@@ -295,9 +282,13 @@ export default function Containers() {
                         </TableCell>
                         <TableCell align="center">{row.production_date}</TableCell>
                         
-                        <TableCell onClick={() => handleRowClick(row)}> 
-                        <Button variant="outlined"> Edit </Button>
-                      </TableCell> 
+                        <TableCell > 
+                        <Button onClick={() => handleRowClick(row)} variant="outlined"> Edit </Button>
+                        </TableCell> 
+
+                        <TableCell > 
+                        <IconButton variant="outlined" title='Print QR code' onClick={() => handlePrint(row)}> <Print/> </IconButton>
+                        </TableCell> 
                       </TableRow>
                     );
                   })}
@@ -314,6 +305,12 @@ export default function Containers() {
             </Table>
             {selectedRow && ( //Checks if there is a selected Row, If this line isnt here, you will get an "Error child is empty" console message.
           <EditContainerModal
+            selectedRow={selectedRow}
+            setSelectedRow={setSelectedRow}
+          />
+        )} 
+        {selectedRow && ( //Checks if there is a selected Row, If this line isnt here, you will get an "Error child is empty" console message.
+          <PrintModal
             selectedRow={selectedRow}
             setSelectedRow={setSelectedRow}
           />

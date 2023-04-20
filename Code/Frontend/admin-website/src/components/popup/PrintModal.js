@@ -1,15 +1,39 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+import { Button } from '@mui/material';
 import QRCode from 'qrcode-generator';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import { useState } from 'react';
 
 
-export default function QrCodes() {
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 700,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
+
+export default function PrintModal( props ) {
+
+  const handleCloseModal = () => {
+    props.setSelectedRow(null);
+  }
+  const handleConfirmModal = async () => {
+    handleDownloadClick();
+  }
+
+  useEffect(() => {
+    // Call handleGenerate when props.selectedRow changes (modal opens)
+    handleGenerate();
+  }, [props.selectedRow]);
   const canvasRef = useRef(null);
-  const valueRef = useRef('') //creating a refernce for TextField Component
   const [inputData,setInputData] = useState('');
-  const isValueEmpty = inputData.trim() === '';
 
  
 
@@ -17,7 +41,7 @@ export default function QrCodes() {
   const handleDownloadClick = () => {
     const data = inputData;
     const downloadLink = document.createElement('a');
-    downloadLink.setAttribute('download', data+'.png');
+    downloadLink.setAttribute('download','Conatiner '+ data+'.png');
     downloadLink.setAttribute('href', canvasRef.current.toDataURL('image/png').replace('image/png', 'image/octet-stream'));
     downloadLink.click();
   };
@@ -25,12 +49,14 @@ export default function QrCodes() {
  
   // Handle download button click
   const handleGenerate = () => {
-    setInputData(valueRef.current.value)
-    return generateQRCode(valueRef.current.value) //on clicking button accesing current value of TextField and outputing it to console 
-    };
+    const data = `${props.selectedRow.container_sr_number}`;
+    const id =`${props.selectedRow.liter_capacity}-${props.selectedRow.temp_id}`
+    setInputData(data);
+    return generateQRCode(data,id);
+  };
 
 
-  const generateQRCode = (data) => {
+  const generateQRCode = (data,id) => {
     const qr = QRCode(0, 'H');
     qr.addData(data);
     qr.make();
@@ -57,18 +83,26 @@ export default function QrCodes() {
       ctx.fillStyle = 'black';
       ctx.font = '100px Inter';
       ctx.textAlign = 'center'; // Center text horizontally
-      ctx.fillText(data, qrX + qrSize / 4, qrY + qrSize);
+      ctx.fillText(id, qrX + qrSize / 4, qrY + qrSize + 100);
     };
     img.src = imageDataUrl;
   }
 
   return (
+    <Modal open={Boolean(props.selectedRow)} onClose={handleCloseModal}  aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+      
+      <Box sx={style}>
+        <Typography id="modal-modal-title" variant="h6" component="h2" >
+          Print QR code
+        </Typography>
 
-    
-    <div>
-      <TextField required id="nrText" label={"What #NR?"} variant="outlined" inputRef={valueRef} sx={{ m: 2 }} onChange={() => {handleGenerate(valueRef)}}/>
-      <canvas ref={canvasRef} width={512} height={700} />
-      <Button onClick={() => {handleDownloadClick()}} variant='outlined' disabled={isValueEmpty}>Download QR code</Button>
-    </div>
+        <canvas ref={canvasRef} width={512} height={700} />
+
+        <Button variant="contained" sx={{ m: 2 }} color="error" onClick={handleCloseModal}>Cancel</Button>
+
+        <Button variant="contained" sx={{ m: 2 }} color="success" onClick={handleConfirmModal}>Confirm and Download</Button>
+        </Box>
+      
+    </Modal>
   );
 }
