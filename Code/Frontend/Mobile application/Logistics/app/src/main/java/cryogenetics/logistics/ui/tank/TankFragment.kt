@@ -213,6 +213,7 @@ class TankFragment : Fragment() {
                 container_status_name = model.entries.find { it.key == "container_status_name" }?.value.toString(),
                 invoice = model.entries.find { it.key == "invoice" }?.value.toString(),
                 last_filled = model.entries.find { it.key == "last_filled" }?.value.toString(),
+                // TODO:
                 liter_capacity = model.entries.find { it.key == "liter_capacity" }?.value.toString(),
                 location_id = model.entries.find { it.key == "location_id" }?.value.toString(),
                 location_name = model.entries.find { it.key == "location_name" }?.value.toString(),
@@ -238,3 +239,4 @@ class TankFragment : Fragment() {
     }
 
 }
+

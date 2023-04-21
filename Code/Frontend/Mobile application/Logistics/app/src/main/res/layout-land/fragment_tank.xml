@@ -95,6 +95,7 @@
 
 
                 <ImageButton
+                    android:id="@+id/ibCamera"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:adjustViewBounds="true"

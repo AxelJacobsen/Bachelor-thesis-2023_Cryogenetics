@@ -81,6 +81,7 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
                 <ImageButton
+                    android:id="@+id/ibCamera"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:src="@drawable/camera_icon"
@@ -92,6 +93,16 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/searchView"
                     android:contentDescription="TODO" />
+                <FrameLayout
+                    android:id="@+id/fragment_container"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@color/red"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

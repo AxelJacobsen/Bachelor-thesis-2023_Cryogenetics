@@ -66,9 +66,13 @@ dependencies {
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.0'
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jackson_version"
     implementation "com.fasterxml.jackson.core:jackson-databind:$jackson_version"
+    implementation 'com.google.mlkit:barcode-scanning:17.1.0'
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.camera:camera-core:1.0.2'
+    implementation 'androidx.camera:camera-lifecycle:1.0.2'
+    implementation 'androidx.camera:camera-view:1.1.0-beta02'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
