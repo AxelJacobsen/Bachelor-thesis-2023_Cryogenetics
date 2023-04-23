@@ -69,12 +69,8 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		fmt.Println("sql: ", SQL)
-		fmt.Println("args: ", sqlArgs)
-
 		res, err := globals.QueryJSON(globals.DB, SQL, sqlArgs, w)
 		if err != nil {
-			fmt.Println("err: ", err)
 			http.Error(w, "Error fetching data."+err.Error(), http.StatusInternalServerError)
 			return
 		}

@@ -259,6 +259,8 @@ func ConvertUrlToSql(r *http.Request, joinData map[string][]string, keys []strin
 		sqlJoin   string
 	)
 
+	table := joinData["main"][0]
+
 	for _, key := range keys {
 		// Extract values from data
 		data := joinData[key]
@@ -288,8 +290,23 @@ func ConvertUrlToSql(r *http.Request, joinData map[string][]string, keys []strin
 	urlData := r.URL.Query()
 	var queryWhere strings.Builder
 
+	// Declare start- and end date for later
+	var (
+		startDates []string
+		endDates   []string
+	)
+
 	// Iterate each key (field name) and value (filter after)
 	for k, v := range urlData {
+
+		// Save and skip over start- and end date fields
+		if k == "start_date" {
+			startDates = v
+			continue
+		} else if k == "end_date" {
+			endDates = v
+			continue
+		}
 
 		// Find which table the given field belongs to
 		belongsToTable := ""
@@ -307,7 +324,7 @@ func ConvertUrlToSql(r *http.Request, joinData map[string][]string, keys []strin
 
 		// If not found, assume the field belongs to the main table
 		if belongsToTable == "" {
-			belongsToTable = joinData["main"][0]
+			belongsToTable = table
 		}
 
 		// If found, add field and table to query string
@@ -328,14 +345,38 @@ func ConvertUrlToSql(r *http.Request, joinData map[string][]string, keys []strin
 	// Combine all SQL statements into one
 	SQL := fmt.Sprintf(
 		"SELECT %s FROM %s %s ",
-		sqlSelect,           //what we want
-		joinData["main"][0], //what is the main table
-		sqlJoin,             //where do we get extra data
+		sqlSelect, //what we want
+		table,     //what is the main table
+		sqlJoin,   //where do we get extra data
 	)
 
 	// Append filters to SQL query
 	if queryWhere.String() != "" {
 		SQL += " WHERE " + queryWhere.String()
+	}
+
+	// Append start- and end date to SQL query
+	if startDates != nil && endDates != nil {
+		// Ensure the "WHERE" part has been added...
+		firstWhere := queryWhere.String() == ""
+
+		// ...and add the ranges
+		for i, startDate := range startDates {
+			// (Stop if the current startDate doesn't have a corresponding endDate)
+			if i >= len(endDates) {
+				break
+			}
+
+			endDate := endDates[i]
+			if firstWhere {
+				SQL += " WHERE "
+				firstWhere = false
+			} else {
+				SQL += " OR "
+			}
+
+			SQL += table + ".date BETWEEN '" + startDate + "' AND '" + endDate + "'"
+		}
 	}
 
 	return SQL, sqlArgs, nil
