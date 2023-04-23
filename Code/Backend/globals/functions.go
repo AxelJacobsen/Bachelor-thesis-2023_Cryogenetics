@@ -317,8 +317,23 @@ func ConvertUrlToSql(r *http.Request, joinData map[string][]string, keys []strin
 				if queryWhere.String() != "" {
 					queryWhere.WriteString(" OR")
 				}
-				queryWhere.WriteString(fmt.Sprintf(" %s.%s = ?", belongsToTable, k))
-				sqlArgs = append(sqlArgs, vd)
+				// Check if the value says to exclude values rather than include
+				if vd[:4] == "not_" {
+					vd = vd[4:]
+					if vd == "null" || vd == "NULL" || vd == "" {
+						queryWhere.WriteString(fmt.Sprintf(" %s.%s IS NOT NULL", belongsToTable, k))
+					} else {
+						queryWhere.WriteString(fmt.Sprintf(" %s.%s != ?", belongsToTable, k))
+						sqlArgs = append(sqlArgs, vd)
+					}
+				} else {
+					if vd == "null" || vd == "NULL" || vd == "" {
+						queryWhere.WriteString(fmt.Sprintf(" %s.%s IS NULL", belongsToTable, k))
+					} else {
+						queryWhere.WriteString(fmt.Sprintf(" %s.%s = ?", belongsToTable, k))
+						sqlArgs = append(sqlArgs, vd)
+					}
+				}
 			}
 		}
 	}
