@@ -127,6 +127,31 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+	// DELETE method
+	case http.MethodDelete:
+		joinData, keys = constants.SetJoinData(joinData, keys, activeTable)
+
+		// Get query
+		sqlQuery, sqlArgs, err := globals.ConvertDeleteURLToSQL(r, joinData, keys)
+		if err != nil {
+			http.Error(w, "Error converting url to sql.", http.StatusUnprocessableEntity)
+			return
+		}
+
+		res, err := globals.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
+		if err != nil {
+			http.Error(w, "Error deleting data.", http.StatusInternalServerError)
+			return
+		}
+
+		// Set header and encode to writer
+		w.Header().Set("Content-Type", "application/json")
+		err = json.NewEncoder(w).Encode(res)
+		if err != nil {
+			http.Error(w, "Error encoding data.", http.StatusInternalServerError)
+			return
+		}
+
 	default:
 		http.Error(w, "Method not allowed, read the documentation for more information.", http.StatusMethodNotAllowed)
 		return

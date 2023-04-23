@@ -309,23 +309,7 @@ func ConvertUrlToSql(r *http.Request, joinData map[string][]string, keys []strin
 		}
 
 		// Find which table the given field belongs to
-		belongsToTable := ""
-		for t, tf := range joinData {
-			for _, s := range tf {
-				if k == s {
-					belongsToTable = t
-					break
-				}
-			}
-			if belongsToTable != "" {
-				break
-			}
-		}
-
-		// If not found, assume the field belongs to the main table
-		if belongsToTable == "" {
-			belongsToTable = table
-		}
+		belongsToTable := FindOriginTable(k, joinData)
 
 		// If found, add field and table to query string
 		if belongsToTable != "" {
@@ -582,4 +566,134 @@ func ConvertPutURLToSQL(r *http.Request, joinData map[string][]string, keys []st
 	// Return
 	queryPref.WriteString(";")
 	return queryPref.String(), args, nil
+}
+
+/**
+ *	Takes an http request and returns an SQL query with values sepperate
+ *	The SQL query DELETES entries in the given table.
+ *
+ *	@param r - a pointer to the http request
+ *	@param joinData - a map where the key is a string representing the table name and any foreign key references, and the value is a slice containing:
+ *		- the name of the table
+ *		- the name of the primary key for that table
+ *		- any data values requested from that table
+ *	@param keys - a slice of strings representing the keys in the joinData map
+ *
+ *	@returns - an SQL string with placeholders
+ *	@returns - a list of values to fit the SQL query
+ *  @returns - any potential errors thrown
+ */
+func ConvertDeleteURLToSQL(r *http.Request, joinData map[string][]string, keys []string) (string, []interface{}, error) {
+	table := joinData["main"][0] // The table which the request is aimed at
+
+	// DELETE statement
+	query := fmt.Sprintf("DELETE P FROM %s P", table)
+	var args []interface{}
+
+	// JOIN statement
+	for _, key := range keys {
+		if key == "main" {
+			continue
+		}
+
+		// Extract values from data
+		data := joinData[key]
+		tableName := data[0]
+		primaryKey := data[1]
+
+		// Use P rather than the main table name
+		if tableName == table {
+			tableName = "P"
+		}
+
+		// Extract target table name from key
+		targetTableName := strings.Split(key, ":")[0]
+
+		// Add left join
+		query += fmt.Sprintf(
+			"\nLEFT JOIN %s ON %s.%s = %s.%s",
+			targetTableName,
+			tableName,
+			primaryKey,
+			targetTableName,
+			primaryKey,
+		)
+	}
+
+	// Decode body
+	var data []map[string]interface{}
+	err := json.NewDecoder(r.Body).Decode(&data)
+	if err != nil {
+		println("error decode")
+		return "", nil, err
+	}
+
+	// Set up start- and end date variables for later
+	var (
+		startDates []string
+		endDates   []string
+	)
+
+	// Iterate query keys- and values
+	urlQuery := r.URL.Query()
+	var queryWhere strings.Builder
+	for k, v := range urlQuery {
+		// Save and skip over start- and end date fields
+		if k == "start_date" {
+			startDates = v
+			continue
+		} else if k == "end_date" {
+			endDates = v
+			continue
+		}
+
+		// Find which table the given field belongs to
+		belongsToTable := FindOriginTable(k, joinData)
+		if belongsToTable == table {
+			belongsToTable = "P"
+		}
+
+		// If found, add field and table to query string
+		if belongsToTable != "" {
+			for _, vd := range v {
+				if queryWhere.String() != "" {
+					queryWhere.WriteString(" OR")
+				}
+				queryWhere.WriteString(fmt.Sprintf("\n\t%s.%s = ?", belongsToTable, k))
+				args = append(args, vd)
+			}
+		}
+	}
+
+	// Add WHERE statement
+	if queryWhere.String() != "" {
+		query += "\nWHERE" + queryWhere.String()
+	}
+
+	// Append start- and end date to SQL query
+	if startDates != nil && endDates != nil {
+		// Ensure the "WHERE" part has been added...
+		firstWhere := queryWhere.String() == ""
+
+		// ...and add the ranges
+		for i, startDate := range startDates {
+			// (Stop if the current startDate doesn't have a corresponding endDate)
+			if i >= len(endDates) {
+				break
+			}
+
+			endDate := endDates[i]
+			if firstWhere {
+				query += "\nWHERE"
+				firstWhere = false
+			} else {
+				query += " OR"
+			}
+
+			query += "\n\tP.date BETWEEN '" + startDate + "' AND '" + endDate + "'"
+		}
+	}
+
+	// Return
+	return query, args, nil
 }
