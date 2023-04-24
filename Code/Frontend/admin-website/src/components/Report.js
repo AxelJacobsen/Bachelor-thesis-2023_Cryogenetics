@@ -3,7 +3,6 @@ import { Button, MenuItem,Select } from '@mui/material';
 import fetchData from '../globals/fetchData';
 
 export default function Report() {
-    const [data, setData] = React.useState([]);
     const [filteredData, setFilteredData] = React.useState([]);
     const [selectedMonth, setSelectedMonth] = useState('');
     const [selectedYear, setSelectedYear] = useState('');
@@ -37,12 +36,12 @@ export default function Report() {
 
     const url = `/api/transaction?start_date=${startDateString}&end_date=${endDateString}`;
     try {
-        const [response, filteredData] = await Promise.all([
-            fetchData(url, 'GET'), 
+        const [filteredData] = await Promise.all([
             fetchData(url, 'GET').then(data => 
               data
+              //Remove all transactions without clients
                 .filter(transaction => transaction.client_id !== null)
-                .filter(transaction => transaction.act === "Sent out" || transaction.act === "Returned")
+                //.filter(transaction => transaction.act === "Sent out" || transaction.act === "Returned")
                 .sort((a, b) => {
                   // Sort by container_sr_number
                   if (a.container_sr_number < b.container_sr_number) {
@@ -65,9 +64,7 @@ export default function Report() {
                   };
                 })
             )
-          ]);
-    
-        setData(response);
+          ]);   
         setFilteredData(filteredData);
       
         // Create CSV header row
@@ -112,6 +109,13 @@ export default function Report() {
   function createSectionPerClient(client) {
     // Sort transactions by date in ascending order
     const sortedTransactions = client.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    // Find all unique container_sr_numbers
+    const containerSrNumbers = new Set(sortedTransactions.map(transaction => transaction.container_sr_number));
+
+    // Find container_sr_numbers that do not have any transactions with 'act' property equal to "Returned" or "Sent out"
+    const containerSrNumbersWithoutAct = [...containerSrNumbers].filter(containerSrNumber => !sortedTransactions
+    .some(transaction => transaction.container_sr_number === containerSrNumber && (transaction.act === 'Returned' || transaction.act === 'Sent out')));
   
     // Create empty row with client name
     const clientRow = `${client[0].client_name},,,,`;
@@ -125,29 +129,38 @@ export default function Report() {
       const date = transaction.date;
       const endDate = SetEndDate(transaction.transaction_id,transaction.container_sr_number, transaction.date); // Replace with actual value from SetEndDate() function
       const location = transaction.container_status_name === 'At client' ? 'At client' : transaction.location_name;
-  
-      // Check if transaction_act is "Sent out" and it's the first transaction
-    if (index === 0 && transaction.act === 'Sent out' && !containerSrNumbersSet.has(transaction.container_sr_number)) {
-        // Add the container_sr_number to the Set to keep track of unique values
-        containerSrNumbersSet.add(transaction.container_sr_number);
+      const endDatefromString = `${endDateString.slice(8, 10)}/${endDateString.slice(5, 7)}/${endDateString.slice(0, 4)}`;
+      const startDatefromString = `${startDateString.slice(8, 10)}/${startDateString.slice(5, 7)}/${startDateString.slice(0, 4)}`;
 
-        const day = startDateString.slice(8, 10);
-        const month = startDateString.slice(5, 7);
-        const year = startDateString.slice(0, 4);
-        let startDate = `${day}/${month}/${year}`;
-        console.log(startDateString)
-        console.log(startDate)
-        // Create an additional row with "Sent out" and location as transaction_act and location_name respectively
-        const stayHomeRow = `,${capacityTempId},${startDate},${date},${transaction.location_name}`;
-        // Create the regular row with endDate as transaction.date
-        const regularRow = `,${capacityTempId},${date},${endDate},${location}`;
-        return [stayHomeRow, regularRow].join('\n');
-      } else {
-        // Create regular row with endDate as transaction.date
-        return [`,${capacityTempId},${date},${endDate},${location}`];
-      }
+
+    
+    // Check if first transaction_act is "Sent out" and the sr nuber is unique
+    if (index === 0 && transaction.act === 'Sent out' && !containerSrNumbersSet.has(transaction.container_sr_number)) {
+      // Add the container_sr_number to the Set to keep track of unique values
+      containerSrNumbersSet.add(transaction.container_sr_number);
+
+      // Create an additional row with for "stationary up until transaction.date"
+      const stayHomeRow = `,${capacityTempId},${startDatefromString},${date},${transaction.location_name}`;
+      // Create the regular row with endDate as transaction.date
+      const regularRow = `,${capacityTempId},${date},${endDate},${location}`;
+      return [stayHomeRow, regularRow].join('\n');
+    } 
+    else if(containerSrNumbersWithoutAct.includes(transaction.container_sr_number)&&!containerSrNumbersSet.has(transaction.container_sr_number)){
+      // Add the container_sr_number to the Set to keep track of unique values
+      containerSrNumbersSet.add(transaction.container_sr_number);
+
+      return [`,${capacityTempId},${startDatefromString},${endDatefromString},${transaction.location_name}`];
+    } else if(!containerSrNumbersSet.has(transaction.container_sr_number)){
+      // Add the container_sr_number to the Set to keep track of unique values
+      containerSrNumbersSet.add(transaction.container_sr_number);
+      // Create regular row with endDate as transaction.date and startDate as 
+      return [`,${capacityTempId},${startDatefromString},${endDate},${location}`];
+
+    } else if(!containerSrNumbersWithoutAct.includes(transaction.container_sr_number)) {
+      // Create regular row with endDate as transaction.date
+      return [`,${capacityTempId},${date},${endDate},${location}`];
+    }
     }).join('\n');
-    console.log(csvData)
   
     return clientRow + '\n' + csvData + '\n';
   }
