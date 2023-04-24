@@ -1,6 +1,5 @@
 package cryogenetics.logistics.ui.tankfill
 
-import CameraFragment
 import android.Manifest
 import android.app.Activity
 import android.content.ContentValues
@@ -27,6 +26,7 @@ import com.google.mlkit.vision.common.InputImage
 import cryogenetics.logistics.R
 import cryogenetics.logistics.databinding.FragmentTankFillingBinding
 import cryogenetics.logistics.ui.inventory.mini.MiniInventoryFragment
+import cryogenetics.logistics.ui.tank.CameraFragment
 
 
 class TankFillFragment : Fragment() {
@@ -70,13 +70,6 @@ class TankFillFragment : Fragment() {
 
         barcodeScanner = BarcodeScanning.getClient(barcodeScannerOptions!!)
 
-        binding.bSearch.setOnClickListener {
-            if (imageUri != null) {
-                Toast.makeText(requireContext(), "galleryActivityResultLauncher failed", Toast.LENGTH_LONG).show()
-            } else {
-                scanQR()
-            }
-        }
 
         binding.ibCamera?.setOnClickListener {
             if (checkCameraPermission()){
@@ -97,17 +90,6 @@ class TankFillFragment : Fragment() {
             }
         }
 
-        /*
-        binding.firstRowFirst.setOnClickListener {
-            menuFunctionality("transaction")
-        }
-        binding.firstRowSecond.setOnClickListener {
-            menuFunctionality("maintenance")
-        }
-        binding.secondRowFirst.setOnClickListener {
-            menuFunctionality("")
-        }
-        */
         childFragmentManager.beginTransaction()
             .replace(R.id.flMiniInventoryRecycler, MiniInventoryFragment())
             .commit()
@@ -117,42 +99,6 @@ class TankFillFragment : Fragment() {
             .commit()
     }
 
-    private fun scanQR() {
-        Log.d(TAG, "scanQR scanQR")
-        try {
-            val inputImage = InputImage.fromFilePath(requireContext(), imageUri!!)
-            val barcodeResult = barcodeScanner!!.process(inputImage)
-                .addOnSuccessListener { barcodes ->
-                    extraxctBarcodeQrCodeInfo(barcodes)
-                }
-                .addOnFailureListener{ e ->
-                    Log.d(TAG, "scanQR err", e)
-                    Toast.makeText(requireContext(), "Scan failed, ${e.message}", Toast.LENGTH_LONG).show()
-                }
-        } catch (e: Exception) {
-
-        }
-    }
-
-    private fun extraxctBarcodeQrCodeInfo(barcodes: List<Barcode>) {
-        for (barcode in barcodes) {
-            val bound = barcode.boundingBox
-            val corner = barcode.cornerPoints
-
-            val rawValue = barcode.rawValue
-            Log.d(TAG, "extraxctBarcodeQrCodeInfo raw: $rawValue")
-
-            /*
-            val valueType = barcode.valueType
-            when (valueType) {
-                Barcode.TYPE_WIFI -> {
-                    val typeWifi = barcode.wifi
-
-                }
-            }
-             */
-        }
-    }
 
     private fun pickImageGallery(){
         val intent = Intent(Intent.ACTION_PICK)
@@ -175,15 +121,6 @@ class TankFillFragment : Fragment() {
         } else {
             Toast.makeText(requireContext(), "galleryActivityResultLauncher failed", Toast.LENGTH_LONG).show()
         }
-    }
-
-    private fun navigateToNewFragment() {
-        val newFragment = CameraFragment()
-        val transaction = parentFragmentManager.beginTransaction()
-
-        transaction.replace(R.id.fragment_container, newFragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
     }
 
     private fun pickImageCamera() {
@@ -227,17 +164,6 @@ class TankFillFragment : Fragment() {
         val camRes = (ContextCompat.checkSelfPermission(requireContext(),
             Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
 
-        /*val storeRes = (ContextCompat.checkSelfPermission(requireContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
-
-        if (camRes && storeRes) {
-            println("BIG SUCCESS")
-            return true
-        } else {
-            println("BIG FAAIL")
-            return false
-        }
-         */
         return camRes
     }
 
@@ -258,22 +184,19 @@ class TankFillFragment : Fragment() {
                     val cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED
                     val storageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED
 
-                    if (cameraAccepted && storageAccepted) {
+                    if (cameraAccepted && storageAccepted)
                         pickImageCamera()
-                    } else {
+                    else
                         Toast.makeText(requireContext(), "Camera and storage permissions are required", Toast.LENGTH_LONG).show()
-                    }
                 }
             }
             STORAGE_REQUEST_CODE -> {
                 if (grantResults.isNotEmpty()) {
                     val storageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED
-
-                    if (storageAccepted) {
+                    if (storageAccepted)
                         pickImageGallery()
-                    } else {
+                     else
                         Toast.makeText(requireContext(), "Camera and storage permissions are required", Toast.LENGTH_LONG).show()
-                    }
                 }
             }
         }

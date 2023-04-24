@@ -1,4 +1,4 @@
-package cryogenetics.logistics.functions
+package cryogenetics.logistics.ui.actLog.functions
 
 class Functions {
     companion object {

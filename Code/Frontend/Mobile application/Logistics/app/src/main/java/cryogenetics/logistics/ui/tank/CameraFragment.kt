@@ -1,15 +1,18 @@
+package cryogenetics.logistics.ui.tank
+
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.ImageFormat
+import android.graphics.PixelFormat
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
-import android.media.Image
 import android.media.ImageReader
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.util.Size
 import android.view.*
@@ -24,10 +27,12 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import cryogenetics.logistics.R
 import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
+import cryogenetics.logistics.databinding.FragmentCameraBinding
 
 class CameraFragment : Fragment() {
+
+    private var _binding : FragmentCameraBinding? = null
+    private val binding get() = _binding!!
 
     private var cameraDevice: CameraDevice? = null
     private lateinit var previewRequestBuilder: CaptureRequest.Builder
@@ -42,33 +47,19 @@ class CameraFragment : Fragment() {
     private val PERMISSIONS_REQUEST_CAMERA = 0
     private var previewSize: Size? = null
 
-    private val cameraDeviceStateCallback = object : CameraDevice.StateCallback() {
-        override fun onOpened(camera: CameraDevice) {
-            cameraDevice = camera
-            createCameraPreviewSession()
-        }
-
-        override fun onDisconnected(camera: CameraDevice) {
-            cameraDevice?.close()
-        }
-
-        override fun onError(camera: CameraDevice, error: Int) {
-            cameraDevice?.close()
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        return inflater.inflate(R.layout.fragment_camera, container, false)
+        _binding = FragmentCameraBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewFinder = view.findViewById<TextureView>(R.id.view_finder)
-        captureButton = view.findViewById(R.id.capture_button)
+        //captureButton = view.findViewById(R.id.capture_button)
 
         barcodeScannerOptions = BarcodeScannerOptions.Builder()
             .setBarcodeFormats(Barcode.FORMAT_ALL_FORMATS)
@@ -79,7 +70,7 @@ class CameraFragment : Fragment() {
         startCamera()
     }
 
-
+    @SuppressLint("WrongConstant")
     private fun startCamera() {
         val manager = requireActivity().getSystemService(Context.CAMERA_SERVICE) as CameraManager
         try {
@@ -93,18 +84,27 @@ class CameraFragment : Fragment() {
             val characteristics = manager.getCameraCharacteristics(cameraId)
             val streamConfigurationMap = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)!!
 
+            // TODO : ADD GetDeviceRotation and rotate preview and result correctly.
             // Select a preview size and configure the image reader
             previewSize = streamConfigurationMap.getOutputSizes(SurfaceTexture::class.java).maxByOrNull { it.width * it.height }!!
-            imageReader = ImageReader.newInstance(previewSize!!.width, previewSize!!.height, ImageFormat.JPEG, 1).apply {
+            imageReader = ImageReader.newInstance(previewSize!!.width, previewSize!!.height, PixelFormat.RGBA_8888, 60).apply {
                 setOnImageAvailableListener({ reader ->
-                    val image = reader.acquireNextImage()
-                    // Process the image here
-
-                    //val ttt = image.planes
-                    // https://stackoverflow.com/questions/62363100/detach-image-produced-from-imagereader
-
-                    //println(image)
-                    scanQR(image, image.width, image.height)
+                    val image = reader.acquireLatestImage() ?: return@setOnImageAvailableListener
+                    val planes = image.planes
+                    val buffer = planes[0].buffer
+                    val offset = 0
+                    val pixelStride = planes[0].pixelStride
+                    val rowStride = planes[0].rowStride
+                    val rowPadding: Int = rowStride - pixelStride * previewSize!!.width
+                    // create bitmap
+                    val bitmap = Bitmap.createBitmap(
+                        previewSize!!.width + rowPadding / pixelStride,
+                        previewSize!!.height,
+                        Bitmap.Config.ARGB_8888
+                    )
+                    bitmap.copyPixelsFromBuffer(buffer)
+                    binding.captureButton.setImageBitmap(bitmap)
+                    //scanQR(bitmap)
                     image.close()
                 }, null)
             }
@@ -124,25 +124,20 @@ class CameraFragment : Fragment() {
         }
     }
 
-    private fun scanQR(image: Image, width: Int, height: Int) {
+
+    private fun getImageUri(inContext: Context, inImage: Bitmap): Uri? {
+        val bytes = ByteArrayOutputStream()
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, "Title", null)
+        return Uri.parse(path)
+    }
+
+    private fun scanQR(bitMap: Bitmap) {
         Log.d(TAG, "scanQR scanQR")
-        val detet = ImagePreprocessor()
-        val bitmap : Bitmap? = detet.preprocessImage(image, width, height)
+        Log.d(TAG, "bitMap $bitMap")
 
-        val context: Context = requireContext()// your context
-
-        val outputStream = ByteArrayOutputStream()
-        bitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-
-        val imagePath = "my_image.jpg" // name of the file you want to save
-        val file = File(context.cacheDir, imagePath)
-
-        val fileOutputStream = FileOutputStream(file)
-        fileOutputStream.write(outputStream.toByteArray())
-        fileOutputStream.flush()
-        fileOutputStream.close()
-
-        val uri = Uri.fromFile(file)
+        val uri = getImageUri(requireContext(), bitMap)
+        Log.d(TAG, "uri $uri")
 
         try {
             val inputImage = InputImage.fromFilePath(requireContext(), uri!!)
@@ -155,7 +150,7 @@ class CameraFragment : Fragment() {
                     Toast.makeText(requireContext(), "Scan failed, ${e.message}", Toast.LENGTH_LONG).show()
                 }
         } catch (e: Exception) {
-
+            Log.d(TAG, "scanQR big fail", e)
         }
     }
 
@@ -174,14 +169,29 @@ class CameraFragment : Fragment() {
             when (valueType) {
                 Barcode.TYPE_WIFI -> {
                     val typeWifi = barcode.wifi
-
                 }
             }
 
         }
     }
 
+    private val cameraDeviceStateCallback = object : CameraDevice.StateCallback() {
+        override fun onOpened(camera: CameraDevice) {
+            cameraDevice = camera
+            createCameraPreviewSession()
+        }
+
+        override fun onDisconnected(camera: CameraDevice) {
+            cameraDevice?.close()
+        }
+
+        override fun onError(camera: CameraDevice, error: Int) {
+            cameraDevice?.close()
+        }
+    }
+
     private fun createCameraPreviewSession() {
+        // TODO : ADD GetDeviceRotation and rotate preview and result correctly.
         try {
             val surfaceTexture = viewFinder.surfaceTexture
             surfaceTexture?.setDefaultBufferSize(previewSize!!.width, previewSize!!.height)
@@ -213,6 +223,7 @@ class CameraFragment : Fragment() {
             e.printStackTrace()
         }
     }
+
     override fun onDestroy() {
         super.onDestroy()
         cameraDevice?.close()
