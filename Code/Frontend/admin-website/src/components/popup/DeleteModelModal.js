@@ -12,19 +12,20 @@ const style = {
   p: 4,
 };
 
-export default function DeleteStatusModal(props) {
+export default function DeleteModelModal(props) {
 
   const handleCloseModal = () => {
     props.onClose();
     props.setSelectedRow(null);
   }
+  console.log(props.selectedRow)
   
 
   const handleConfirmModal = async () => {
     try {
-      const url = "/api/container_status?container_status_name="+props.selectedRow.container_status_name
+      const url = "/api/container_model?container_model_name="+props.selectedRow.container_model_name
       const data = [{
-        container_status_name: props.selectedRow.container_status_name
+        container_model_name: props.selectedRow.container_model_name
       }];      
       await fetchData(url, 'DELETE', data);
       handleCloseModal()
@@ -37,11 +38,11 @@ export default function DeleteStatusModal(props) {
     <Modal open={Boolean(props.selectedRow)} onClose={handleCloseModal}  aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
       <Box sx={style}>
         <Typography id="modal-modal-title" variant="h6" component="h2">
-          DELETE MODEL?
+          DELETE STATUS?
         </Typography>
 
         <Typography id="modal-modal-title" variant="h6" component="h2">
-          ONLY DO THIS IF THE MODEL IS UNUSED!
+          ONLY DO THIS IF THE STATUS IS UNUSED!
         </Typography>
         
         <Button variant="contained" sx={{ m: 2 }} color="error" onClick={handleCloseModal}>
