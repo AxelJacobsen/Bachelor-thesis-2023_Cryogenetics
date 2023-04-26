@@ -159,7 +159,7 @@ func TestConvertPostURLToSQL(t *testing.T) {
 		expectedSqlArgs  []interface{}
 		expectedErr      string
 	}{
-		// GET
+		// POST
 		{ // The "normal" path.
 			name: "normal",
 			r: httptest.NewRequest(
@@ -259,6 +259,212 @@ func TestConvertPostURLToSQL(t *testing.T) {
 			sqlQuery, sqlArgs, err := globals.ConvertPostURLToSQL(
 				subtest.r,
 				subtest.table,
+			)
+
+			// Verify error
+			if err == nil {
+				if subtest.expectedErr != "" {
+					t.Errorf("Expected error '%v' but got '%v'!", subtest.expectedErr, err)
+				}
+			} else if err.Error() != subtest.expectedErr {
+				t.Errorf("Expected error '%v' but got '%v'!", subtest.expectedErr, err)
+			}
+
+			// Verify query
+			if sqlQuery != subtest.expectedSqlQuery {
+				t.Errorf("Expected '%s' but got '%s'!", subtest.expectedSqlQuery, sqlQuery)
+			}
+
+			// Verify args length
+			if len(sqlArgs) != len(subtest.expectedSqlArgs) {
+				t.Errorf("Expected slice '%v' had different length than given slice '%v'!", subtest.expectedSqlArgs, sqlArgs)
+			} else {
+				// Verify args values
+				expectedSqlArgsC := make([]interface{}, len(subtest.expectedSqlArgs))
+				copy(expectedSqlArgsC, subtest.expectedSqlArgs) // Make a temporary copy which elements are removed from once found
+				for _, sqlArg := range sqlArgs {
+					found := false
+					for j, expectedSqlArgC := range expectedSqlArgsC {
+						if reflect.DeepEqual(sqlArg, expectedSqlArgC) || reflect.DeepEqual(sqlArg, fmt.Sprintf("%v", expectedSqlArgC)) {
+							expectedSqlArgsC = append(expectedSqlArgsC[:j], expectedSqlArgsC[j+1:]...)
+							found = true
+							break
+						}
+					}
+
+					if !found {
+						t.Errorf("Given value '%v' was not found in expected value(s) '%v'!", sqlArg, subtest.expectedSqlArgs)
+					}
+				}
+
+				if len(expectedSqlArgsC) > 0 {
+					t.Errorf("Expected value(s) '%v' were not found in given value(s) '%v'", expectedSqlArgsC, sqlArgs)
+				}
+			}
+		})
+	}
+}
+
+/**
+ *	Tester for the ConvertPostURLToSQL function.
+ */
+func TestConvertPutURLToSQL(t *testing.T) {
+	activeTable := "container"
+	jd := make(map[string][]string)
+	jd["main"] = append(jd["main"], activeTable, "", "*") //WHAT TABLE IS THE SQL REQUEST FOR?
+
+	var k []string
+	k = []string{"main"}
+
+	jd, k = constants.SetJoinData(jd, k, activeTable)
+
+	// Set up subtests
+	subtests := []struct {
+		name             string
+		r                *http.Request
+		kwargs           []string
+		expectedSqlQuery string
+		expectedSqlArgs  []interface{}
+		expectedErr      string
+	}{
+		// POST
+		{ // The "normal" path.
+			name: "normal",
+			r: httptest.NewRequest(
+				http.MethodPost,
+				"localhost:8080/api/container",
+				strings.NewReader(`[
+					{
+						"primary": "temp_id",
+						"address": "Test",
+						"client_id": 4,
+						"comment": "Leaking",
+						"container_model_name": "verySmall60",
+						"container_status_name": "At client",
+						"country_iso3": "USA",
+						"invoice": "2023-03-09",
+						"last_filled": "2014-03-12",
+						"location_id": 2,
+						"maintenance_needed": 0,
+						"production_date": "2023-03-15",
+						"temp_id": 1
+					}
+				]`),
+			),
+			kwargs:           make([]string, 0),
+			expectedSqlQuery: "UPDATE container LEFT JOIN client ON container.client_id = client.client_id LEFT JOIN location ON container.location_id = location.location_id LEFT JOIN container_model ON container.container_model_name = container_model.container_model_name  SET container.`address` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`client_id` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`comment` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`container_model_name` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`container_status_name` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`country_iso3` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`invoice` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`last_filled` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`location_id` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`maintenance_needed` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`production_date` = CASE WHEN container.`temp_id` = ? THEN ? END WHERE container.`temp_id` = '1';",
+			expectedSqlArgs: []interface{}{
+				1,
+				"2023-03-15",
+				1,
+				"verySmall60",
+				1,
+				"Test",
+				1,
+				4,
+				1,
+				"At client",
+				1,
+				"USA",
+				1,
+				"2023-03-09",
+				1,
+				"2014-03-12",
+				1,
+				0,
+				1,
+				2,
+				1,
+				"Leaking",
+			},
+			expectedErr: "",
+		},
+		{ // Normal path with access to foreign keys.
+			name: "normal(alterForeignKeys)",
+			r: httptest.NewRequest(
+				http.MethodPost,
+				"localhost:8080/api/container",
+				strings.NewReader(`[
+					{
+						"primary": "temp_id",
+						"address": "Test",
+						"client_id": 4,
+						"comment": "Leaking",
+						"container_model_name": "verySmall60",
+						"container_status_name": "At client",
+						"country_iso3": "USA",
+						"invoice": "2023-03-09",
+						"last_filled": "2014-03-12",
+						"location_id": 2,
+						"maintenance_needed": 0,
+						"production_date": "2023-03-15",
+						"temp_id": 1
+					}
+				]`),
+			),
+			kwargs:           []string{"alterForeignTables"},
+			expectedSqlQuery: "UPDATE container LEFT JOIN client ON container.client_id = client.client_id LEFT JOIN location ON container.location_id = location.location_id LEFT JOIN container_model ON container.container_model_name = container_model.container_model_name  SET container.`address` = CASE WHEN container.`temp_id` = ? THEN ? END, client.`client_id` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`comment` = CASE WHEN container.`temp_id` = ? THEN ? END, container_model.`container_model_name` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`container_status_name` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`country_iso3` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`invoice` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`last_filled` = CASE WHEN container.`temp_id` = ? THEN ? END, location.`location_id` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`maintenance_needed` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`production_date` = CASE WHEN container.`temp_id` = ? THEN ? END WHERE container.`temp_id` = '1';",
+			expectedSqlArgs: []interface{}{
+				1,
+				"2023-03-15",
+				1,
+				"verySmall60",
+				1,
+				"Test",
+				1,
+				4,
+				1,
+				"At client",
+				1,
+				"USA",
+				1,
+				"2023-03-09",
+				1,
+				"2014-03-12",
+				1,
+				0,
+				1,
+				2,
+				1,
+				"Leaking",
+			},
+			expectedErr: "",
+		},
+		{ // No body.
+			name: "no body",
+			r: httptest.NewRequest(
+				http.MethodPost,
+				"localhost:8080/api/container",
+				strings.NewReader(``),
+			),
+			kwargs:           make([]string, 0),
+			expectedSqlQuery: "",
+			expectedSqlArgs:  []interface{}{},
+			expectedErr:      "EOF",
+		},
+		{ // No body.
+			name: "invalid body",
+			r: httptest.NewRequest(
+				http.MethodPost,
+				"localhost:8080/api/container",
+				strings.NewReader(`this is an invalid body since it doesn't follow JSON formatting :(`),
+			),
+			kwargs:           make([]string, 0),
+			expectedSqlQuery: "",
+			expectedSqlArgs:  []interface{}{},
+			expectedErr:      "invalid character 'h' in literal true (expecting 'r')",
+		},
+	}
+
+	// Test subtests
+	for _, subtest := range subtests {
+		t.Run(subtest.name, func(t *testing.T) {
+			// Run function
+			sqlQuery, sqlArgs, err := globals.ConvertPutURLToSQL(
+				subtest.r,
+				jd,
+				k,
+				subtest.kwargs...,
 			)
 
 			// Verify error

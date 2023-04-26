@@ -484,12 +484,11 @@ func ConvertPutURLToSQL(r *http.Request, joinData map[string][]string, keys []st
 
 	// Get props
 	props_values := flattenMapSlice(data)
-	props := make([]string, len(props_values))
-	i := 0
+	props := make([]string, 0, len(props_values))
 	for k := range props_values {
-		props[i] = k
-		i++
+		props = append(props, k)
 	}
+	sort.Strings(props)
 
 	// TODO: Add exception for when NO values are given
 	// OR primary_key's value isnt found in the JSON data
