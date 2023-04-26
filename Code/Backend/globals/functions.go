@@ -9,6 +9,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -400,18 +401,21 @@ func ConvertPostURLToSQL(r *http.Request, table string) (string, []interface{}, 
 		println(data)
 		return "", nil, err
 	}
-	// Get props string
+	// Get props string and create a sorted list of its keys
 	props_values := flattenMapSlice(data)
-	var propsQuery strings.Builder
-	props := make([]string, len(props_values))
-	i := 0
+	props := make([]string, 0, len(props_values))
 	for k := range props_values {
+		props = append(props, k)
+	}
+	sort.Strings(props)
+
+	// Iterate props_values in order and append to propsQuery
+	var propsQuery strings.Builder
+	for i, k := range props {
 		if i > 0 {
 			propsQuery.WriteString(",")
 		}
 		propsQuery.WriteString(k)
-		props[i] = k
-		i++
 	}
 
 	var args []interface{}

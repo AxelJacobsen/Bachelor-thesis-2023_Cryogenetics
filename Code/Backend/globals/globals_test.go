@@ -5,8 +5,10 @@ import (
 	"backend/globals"
 	"fmt"
 	"net/http"
+	"net/http/httptest"
 	"net/url"
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -106,6 +108,165 @@ func TestConvertUrlToSql(t *testing.T) {
 
 			// Verify error
 			if err != subtest.expectedErr {
+				t.Errorf("Expected error '%v' but got '%v'!", subtest.expectedErr, err)
+			}
+
+			// Verify query
+			if sqlQuery != subtest.expectedSqlQuery {
+				t.Errorf("Expected '%s' but got '%s'!", subtest.expectedSqlQuery, sqlQuery)
+			}
+
+			// Verify args length
+			if len(sqlArgs) != len(subtest.expectedSqlArgs) {
+				t.Errorf("Expected slice '%v' had different length than given slice '%v'!", subtest.expectedSqlArgs, sqlArgs)
+			} else {
+				// Verify args values
+				expectedSqlArgsC := make([]interface{}, len(subtest.expectedSqlArgs))
+				copy(expectedSqlArgsC, subtest.expectedSqlArgs) // Make a temporary copy which elements are removed from once found
+				for _, sqlArg := range sqlArgs {
+					found := false
+					for j, expectedSqlArgC := range expectedSqlArgsC {
+						if reflect.DeepEqual(sqlArg, expectedSqlArgC) || reflect.DeepEqual(sqlArg, fmt.Sprintf("%v", expectedSqlArgC)) {
+							expectedSqlArgsC = append(expectedSqlArgsC[:j], expectedSqlArgsC[j+1:]...)
+							found = true
+							break
+						}
+					}
+
+					if !found {
+						t.Errorf("Given value '%v' was not found in expected value(s) '%v'!", sqlArg, subtest.expectedSqlArgs)
+					}
+				}
+
+				if len(expectedSqlArgsC) > 0 {
+					t.Errorf("Expected value(s) '%v' were not found in given value(s) '%v'", expectedSqlArgsC, sqlArgs)
+				}
+			}
+		})
+	}
+}
+
+/**
+ *	Tester for the ConvertPostURLToSQL function.
+ */
+func TestConvertPostURLToSQL(t *testing.T) {
+	// Set up subtests
+	subtests := []struct {
+		name             string
+		r                *http.Request
+		table            string
+		expectedSqlQuery string
+		expectedSqlArgs  []interface{}
+		expectedErr      string
+	}{
+		// GET
+		{ // The "normal" path.
+			name: "normal",
+			r: httptest.NewRequest(
+				http.MethodPost,
+				"localhost:8080/api/container",
+				strings.NewReader(`[
+					{
+						"address": "Test",
+						"client_id": 3,
+						"comment": "Leaking",
+						"container_model_name": "verySmall60",
+						"container_sr_number": 5,
+						"container_status_name": "At client",
+						"country_iso3": "USA",
+						"invoice": "2023-03-09",
+						"last_filled": "2014-03-12",
+						"location_id": 2,
+						"maintenance_needed": 0,
+						"production_date": "2023-03-15",
+						"temp_id": 1
+					},
+					{
+						"address": "47 Maple Street\r\nManchester, NH 03101",
+						"client_id": 3,
+						"comment": null,
+						"container_model_name": "verySmall60",
+						"container_sr_number": 6,
+						"container_status_name": "At client",
+						"country_iso3": "USA",
+						"invoice": "2023-03-09",
+						"last_filled": "2014-03-12",
+						"location_id": 101,
+						"maintenance_needed": 0,
+						"production_date": "2015-12-03",
+						"temp_id": 13
+					}
+				]`),
+			),
+			expectedSqlQuery: "INSERT INTO `` (address,client_id,comment,container_model_name,container_sr_number,container_status_name,country_iso3,invoice,last_filled,location_id,maintenance_needed,production_date,temp_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?), (?,?,NULL,?,?,?,?,?,?,?,?,?,?)",
+			expectedSqlArgs: []interface{}{
+				"verySmall60",
+				"At client",
+				2,
+				"Test",
+				5,
+				"2023-03-09",
+				1,
+				"Leaking",
+				"USA",
+				"2014-03-12",
+				0,
+				"2023-03-15",
+				3,
+				"verySmall60",
+				"At client",
+				101,
+				"47 Maple Street\r\nManchester, NH 03101",
+				6,
+				"2023-03-09",
+				13,
+				"USA",
+				"2014-03-12",
+				0,
+				"2015-12-03",
+				3,
+			},
+			expectedErr: "",
+		},
+		{ // No body supplied
+			name: "No body",
+			r: httptest.NewRequest(
+				http.MethodPost,
+				"localhost:8080/api/container",
+				strings.NewReader(``),
+			),
+			expectedSqlQuery: "",
+			expectedSqlArgs:  []interface{}{},
+			expectedErr:      "EOF",
+		},
+		{ // Invalid body
+			name: "Invalid body",
+			r: httptest.NewRequest(
+				http.MethodPost,
+				"localhost:8080/api/container",
+				strings.NewReader(`[{]`),
+			),
+			expectedSqlQuery: "",
+			expectedSqlArgs:  []interface{}{},
+			expectedErr:      "invalid character ']' looking for beginning of object key string",
+		},
+	}
+
+	// Test subtests
+	for _, subtest := range subtests {
+		t.Run(subtest.name, func(t *testing.T) {
+			// Run function
+			sqlQuery, sqlArgs, err := globals.ConvertPostURLToSQL(
+				subtest.r,
+				subtest.table,
+			)
+
+			// Verify error
+			if err == nil {
+				if subtest.expectedErr != "" {
+					t.Errorf("Expected error '%v' but got '%v'!", subtest.expectedErr, err)
+				}
+			} else if err.Error() != subtest.expectedErr {
 				t.Errorf("Expected error '%v' but got '%v'!", subtest.expectedErr, err)
 			}
 
