@@ -510,3 +510,113 @@ func TestConvertPutURLToSQL(t *testing.T) {
 		})
 	}
 }
+
+/**
+ *	Tester for the ConvertUrlToSql function.
+ */
+func TestConvertDeleteURLToSQL(t *testing.T) {
+	activeTable := "transaction"
+	jd := make(map[string][]string)
+	jd["main"] = append(jd["main"], activeTable, "", "*")
+
+	var k []string
+	k = []string{"main"}
+
+	jd, k = constants.SetJoinData(jd, k, activeTable)
+
+	// Set up subtests
+	subtests := []struct {
+		name             string
+		r                *http.Request
+		expectedSqlQuery string
+		expectedSqlArgs  []interface{}
+		expectedErr      error
+	}{
+		// DELETE
+		{ // The "normal" path.
+			name: "normal",
+			r: &http.Request{
+				Method: "DELETE",
+				URL:    parseAndVerifyUrl("localhost:8080/api/transaction"),
+			},
+			expectedSqlQuery: "DELETE P FROM transaction P\nLEFT JOIN client ON P.client_id = client.client_id\nLEFT JOIN employee ON P.employee_id = employee.employee_id\nLEFT JOIN location ON P.location_id = location.location_id\nLEFT JOIN container ON P.container_sr_number = container.container_sr_number\nLEFT JOIN container_model ON container.container_model_name = container_model.container_model_name",
+			expectedSqlArgs:  []interface{}{},
+			expectedErr:      nil,
+		},
+		{ // Valid queries
+			name: "valid queries",
+			r: &http.Request{
+				Method: "DELETE",
+				URL:    parseAndVerifyUrl("localhost:8080/api/transaction?liter_capacity=55&temp_id=0"),
+			},
+			expectedSqlQuery: "DELETE P FROM transaction P\nLEFT JOIN client ON P.client_id = client.client_id\nLEFT JOIN employee ON P.employee_id = employee.employee_id\nLEFT JOIN location ON P.location_id = location.location_id\nLEFT JOIN container ON P.container_sr_number = container.container_sr_number\nLEFT JOIN container_model ON container.container_model_name = container_model.container_model_name\nWHERE\n\tcontainer_model.liter_capacity = ? OR\n\tcontainer.temp_id = ?",
+			expectedSqlArgs: []interface{}{
+				55,
+				0,
+			},
+			expectedErr: nil,
+		},
+		{ // Queries of different types
+			name: "queries of different types",
+			r: &http.Request{
+				Method: "DELETE",
+				URL:    parseAndVerifyUrl("localhost:8080/api/transaction?address=thisisanaddress&temp_id=123456789"),
+			},
+			expectedSqlQuery: "DELETE P FROM transaction P\nLEFT JOIN client ON P.client_id = client.client_id\nLEFT JOIN employee ON P.employee_id = employee.employee_id\nLEFT JOIN location ON P.location_id = location.location_id\nLEFT JOIN container ON P.container_sr_number = container.container_sr_number\nLEFT JOIN container_model ON container.container_model_name = container_model.container_model_name\nWHERE\n\tP.address = ? OR\n\tcontainer.temp_id = ?",
+			expectedSqlArgs: []interface{}{
+				"thisisanaddress",
+				123456789,
+			},
+			expectedErr: nil,
+		},
+	}
+
+	// Test subtests
+	for _, subtest := range subtests {
+		t.Run(subtest.name, func(t *testing.T) {
+			// Run function
+			sqlQuery, sqlArgs, err := globals.ConvertDeleteURLToSQL(
+				subtest.r,
+				jd,
+				k,
+			)
+
+			// Verify error
+			if err != subtest.expectedErr {
+				t.Errorf("Expected error '%v' but got '%v'!", subtest.expectedErr, err)
+			}
+
+			// Verify query
+			if sqlQuery != subtest.expectedSqlQuery {
+				t.Errorf("Expected '%s' but got '%s'!", subtest.expectedSqlQuery, sqlQuery)
+			}
+
+			// Verify args length
+			if len(sqlArgs) != len(subtest.expectedSqlArgs) {
+				t.Errorf("Expected slice '%v' had different length than given slice '%v'!", subtest.expectedSqlArgs, sqlArgs)
+			} else {
+				// Verify args values
+				expectedSqlArgsC := make([]interface{}, len(subtest.expectedSqlArgs))
+				copy(expectedSqlArgsC, subtest.expectedSqlArgs) // Make a temporary copy which elements are removed from once found
+				for _, sqlArg := range sqlArgs {
+					found := false
+					for j, expectedSqlArgC := range expectedSqlArgsC {
+						if reflect.DeepEqual(sqlArg, expectedSqlArgC) || reflect.DeepEqual(sqlArg, fmt.Sprintf("%v", expectedSqlArgC)) {
+							expectedSqlArgsC = append(expectedSqlArgsC[:j], expectedSqlArgsC[j+1:]...)
+							found = true
+							break
+						}
+					}
+
+					if !found {
+						t.Errorf("Given value '%v' was not found in expected value(s) '%v'!", sqlArg, subtest.expectedSqlArgs)
+					}
+				}
+
+				if len(expectedSqlArgsC) > 0 {
+					t.Errorf("Expected value(s) '%v' were not found in given value(s) '%v'", expectedSqlArgsC, sqlArgs)
+				}
+			}
+		})
+	}
+}

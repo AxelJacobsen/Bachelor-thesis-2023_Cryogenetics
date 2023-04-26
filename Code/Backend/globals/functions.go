@@ -289,6 +289,12 @@ func ConvertUrlToSql(r *http.Request, joinData map[string][]string, keys []strin
 
 	// Construct SQL WHERE statement
 	urlData := r.URL.Query()
+	urlDataKeys := make([]string, 0, len(urlData))
+	for k := range urlData {
+		urlDataKeys = append(urlDataKeys, k)
+	}
+	sort.Strings(urlDataKeys)
+
 	var queryWhere strings.Builder
 
 	// Declare start- and end date for later
@@ -298,7 +304,8 @@ func ConvertUrlToSql(r *http.Request, joinData map[string][]string, keys []strin
 	)
 
 	// Iterate each key (field name) and value (filter after)
-	for k, v := range urlData {
+	for _, k := range urlDataKeys {
+		v := urlData[k]
 
 		// Save and skip over start- and end date fields
 		if k == "start_date" {
@@ -638,14 +645,6 @@ func ConvertDeleteURLToSQL(r *http.Request, joinData map[string][]string, keys [
 		)
 	}
 
-	// Decode body
-	var data []map[string]interface{}
-	err := json.NewDecoder(r.Body).Decode(&data)
-	if err != nil {
-		println("error decode")
-		return "", nil, err
-	}
-
 	// Set up start- and end date variables for later
 	var (
 		startDates []string
@@ -654,8 +653,15 @@ func ConvertDeleteURLToSQL(r *http.Request, joinData map[string][]string, keys [
 
 	// Iterate query keys- and values
 	urlQuery := r.URL.Query()
+	urlQueryKeys := make([]string, 0, len(urlQuery))
+	for k := range urlQuery {
+		urlQueryKeys = append(urlQueryKeys, k)
+	}
+	sort.Strings(urlQueryKeys)
+
 	var queryWhere strings.Builder
-	for k, v := range urlQuery {
+	for _, k := range urlQueryKeys {
+		v := urlQuery[k]
 		// Save and skip over start- and end date fields
 		if k == "start_date" {
 			startDates = v
