@@ -318,7 +318,7 @@ func ConvertUrlToSql(r *http.Request, joinData map[string][]string, keys []strin
 					queryWhere.WriteString(" OR")
 				}
 				// Check if the value says to exclude values rather than include
-				if vd[:4] == "not_" {
+				if len(vd) > 4 && vd[:4] == "not_" {
 					vd = vd[4:]
 					if vd == "null" || vd == "NULL" || vd == "" {
 						queryWhere.WriteString(fmt.Sprintf(" %s.%s IS NOT NULL", belongsToTable, k))
