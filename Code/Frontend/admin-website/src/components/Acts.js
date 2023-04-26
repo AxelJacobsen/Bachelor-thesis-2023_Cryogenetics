@@ -25,6 +25,7 @@ import { visuallyHidden } from '@mui/utils';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import AddActModal from './popup/AddActModal';
 import EditActModal from './popup/EditActModal';
+import DeleteActModal from './popup/DeleteActModal';
 import './TableLayout.css';
 import {stableSort, getComparator} from '../globals/globalFunctions';
 import fetchData from '../globals/fetchData';
@@ -134,7 +135,6 @@ export default function Acts() {
     try {
       const response = await fetchData('/api/act', 'GET');
       setRows(response);
-      console.log(response)
     } catch (error) {
       console.error(error);
     }
@@ -165,7 +165,6 @@ export default function Acts() {
     setSelectedRow({ ...rowData, type: "edit" });
   }
   function handleDelete(rowData) {
-    setSelectedRow(rowData);
     setSelectedRow({ ...rowData, type: "delete" });
   }
 
@@ -265,7 +264,14 @@ export default function Acts() {
                 setSelectedRow={setSelectedRow}
                 onClose={handleModalClose}
               />
-            )} 
+            )}
+            {selectedRow && selectedRow.type === "delete" && (
+              <DeleteActModal
+                selectedRow={selectedRow}
+                setSelectedRow={setSelectedRow}
+                onClose={handleModalClose}
+              />
+            )}  
           </TableContainer>
           <TablePagination
             rowsPerPageOptions={[10, 25, 50]}

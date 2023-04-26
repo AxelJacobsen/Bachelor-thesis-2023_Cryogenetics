@@ -13,9 +13,6 @@ const fetchData = async (url, method, data) => {
   if (data) {
     options.body = JSON.stringify(data);
   }
-
-  console.log(options.body)
-
   const response = await fetch(url, options);
 
   if (!response.ok) {
