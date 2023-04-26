@@ -26,6 +26,7 @@ import { TextField } from '@mui/material';
 import './TableLayout.css';
 import {stableSort , getComparator} from '../globals/globalFunctions';
 import fetchData from '../globals/fetchData';
+import DeleteStatusModal from './popup/DeleteStatusModal';
 
 
 const headCells = [
@@ -155,8 +156,8 @@ export default function Statuses() {
   };
   
 
-  function handleRowClick(rowData) {
-    setSelectedRow(rowData);
+  function handleDelete(rowData) {
+    setSelectedRow({ ...rowData, type: "delete" });
   }
 
   const handleRequestSort = (event, property) => {
@@ -231,9 +232,9 @@ export default function Statuses() {
                       >
                         {row.container_status_name}
                       </TableCell>
-                      <TableCell onClick={() => handleRowClick(row)}> 
-                      <Button variant="outlined" color="error"> Delete </Button>
-                    </TableCell> 
+                        <TableCell onClick={() => handleDelete(row)}> 
+                        <Button variant="outlined" color="error"> Delete </Button>
+                      </TableCell> 
                     </TableRow>
                   );
                 })}
@@ -248,6 +249,13 @@ export default function Statuses() {
               )}
             </TableBody>
           </Table>
+          {selectedRow && selectedRow.type === "delete" && (
+              <DeleteStatusModal
+                selectedRow={selectedRow}
+                setSelectedRow={setSelectedRow}
+                onClose={handleModalClose}
+              />
+            )}
         </TableContainer>
         <TablePagination
           rowsPerPageOptions={[10, 25, 50]}
