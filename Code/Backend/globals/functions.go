@@ -167,102 +167,110 @@ func QueryJSON(db *sql.DB, query string, queryArgs []interface{}, w http.Respons
 
 //Below creates an "exclusive query" by using AND, could be swapped to "Inclusive" by using OR
 
-/**
- * Takes an http request and returns an SQL query with values separate.
- * The SQL query GETS entries from the given table.
- *
- * @param r - a pointer to the http request
- * @param table - name of the relevant table, (should be added as request header or in the url instead)
- * @param FKeys - SQL query of the foreign keys in the table for joining (e.g.["Client.client_Name AS client_name,"])
- * @param joins - a slice of strings representing the tables to join on (e.g. ["Client ON Container.at_client = Client.client_ID"])
- * @param joinType - a string representing the type of join (e.g. "LEFT JOIN")
- *
- * @returns - an SQL string with placeholders
- * @returns - a list of values to fit the SQL query
- * @returns - any potential errors thrown
- */
-func ConvertUrlToSql(r *http.Request, table string, FKeys []string, joins []string, joinType string) (string, []interface{}, error) {
-	// Get url values
+/*
+ConvertUrlToSql takes an HTTP request and generates an SQL query with values separated based on the parameters provided.
+The SQL query GETS entries from the provided activeTable and its related foreign key tables.
+
+@param r: a pointer to the HTTP request
+@param joinData: a map where the key is a string representing the table name and any foreign key references, and the value is a slice containing:
+- the name of the table
+- the name of the primary key for that table
+- any data values requested from that table
+@param keys: a slice of strings representing the keys in the joinData map
+@param table: The main table which data is being queried from
+
+@returns: a string representing the SQL query with placeholders
+@returns: a slice of interface{} containing the values to fit the SQL query
+@returns: an error if there are any issues with the request or query construction
+*/
+
+func ConvertUrlToSql(r *http.Request, joinData map[string][]string, keys []string) (string, []interface{}, error) {
+	var (
+		sqlArgs   []interface{}
+		sqlSelect string
+		sqlJoin   string
+	)
+
+	for _, key := range keys {
+		// Extract values from data
+		data := joinData[key]
+		tableName := data[0]
+		primaryKey := data[1]
+		dataIWant := data[2:]
+
+		// Extract target table name from key
+		targetTableName := strings.Split(key, ":")[0]
+
+		// Construct SQL JOIN statement
+		if key != "main" {
+			sqlJoin += fmt.Sprintf("LEFT JOIN %s ON %s.%s = %s.%s ", targetTableName, tableName, primaryKey, targetTableName, primaryKey)
+		}
+
+		// Construct SQL SELECT statement
+		for _, val := range dataIWant {
+			if key == "main" {
+				sqlSelect += fmt.Sprintf("%s.%s, ", joinData[key][0], val)
+			} else {
+				sqlSelect += fmt.Sprintf("%s.%s, ", key, val)
+			}
+		}
+	}
+
+	// Construct SQL WHERE statement
 	urlData := r.URL.Query()
-	var emptyRet []interface{}
-	//Empty table name
-	if len(table) <= 0 {
+	var queryWhere strings.Builder
 
-		return "", emptyRet, errors.New("couldn't write to string in SQL constructor")
-	}
+	// Iterate each key (field name) and value (filter after)
+	for k, v := range urlData {
 
-	//Initiate builder
-	var query strings.Builder
-
-	if len(FKeys) > 0 {
-		var tempQuery = "SELECT " + table + ".*"
-		for _, FKey := range FKeys {
-			println(FKey)
-			tempQuery += ", " + FKey
+		// Find which table the given field belongs to
+		belongsToTable := ""
+		for t, tf := range joinData {
+			for _, s := range tf {
+				if k == s {
+					belongsToTable = t
+					break
+				}
+			}
+			if belongsToTable != "" {
+				break
+			}
 		}
-		tempQuery += " FROM " + table + " "
 
-		query.WriteString(tempQuery)
-
-	} else {
-		//Start with basic format
-		query.WriteString(fmt.Sprintf("SELECT %s FROM `%s` ", table+".*", table))
-	}
-
-	//Add joins if specified
-	if len(joins) > 0 {
-		for _, join := range joins {
-			println(join)
-			query.WriteString(fmt.Sprintf("%s %s ", joinType, join))
+		// If not found, assume the field belongs to the main table
+		if belongsToTable == "" {
+			belongsToTable = joinData["main"][0]
 		}
-	}
 
-	//If there are no parameters
-	if len(urlData) <= 0 {
-		//Not necessarily an error, but should still break
-		return query.String(), emptyRet, nil
-	}
-
-	//Add WHERE clause
-	query.WriteString("WHERE ")
-
-	//Prep args container
-	var argList []interface{}
-
-	//Placeholder counter
-	i := 1
-
-	for key, value := range urlData {
-		if len(value) == 1 {
-			//Single value under key
-			argList = append(argList, value[0])
-			_, err := query.WriteString(fmt.Sprintf("%s = ?%d OR ", key, i))
-
-			if err != nil {
-				return "", emptyRet, errors.New("couldn't write to string in SQL constructor")
+		// If found, add field and table to query string
+		if belongsToTable != "" {
+			for _, vd := range v {
+				if queryWhere.String() != "" {
+					queryWhere.WriteString(" OR")
+				}
+				queryWhere.WriteString(fmt.Sprintf(" %s.%s = ?", belongsToTable, k))
+				sqlArgs = append(sqlArgs, vd)
 			}
-
-			i++
-		} else {
-			//Multiple variables under same key
-			for o := 0; o < len(value); o++ {
-				//Stow the actual value to be returned separately
-				argList = append(argList, value[o])
-				//Overwrite inValue with a placeholder to be written into the SQL query
-				value[o] = fmt.Sprintf("?%d", i)
-				i++
-			}
-			//Write formatted placeholder to the query
-			_, err := query.WriteString(fmt.Sprintf("%s IN (%s) OR ", key, strings.Join(value, ", ")))
-			if err != nil {
-				return "", emptyRet, errors.New("couldn't write to string in SQL constructor")
-			}
-
 		}
 	}
 
-	outQuery := query.String()[:len(query.String())-5]
-	return outQuery, argList, nil
+	// Remove trailing comma from SELECT statement
+	sqlSelect = sqlSelect[:len(sqlSelect)-2]
+
+	// Combine all SQL statements into one
+	SQL := fmt.Sprintf(
+		"SELECT %s FROM %s %s ",
+		sqlSelect,           //what we want
+		joinData["main"][0], //what is the main table
+		sqlJoin,             //where do we get extra data
+	)
+
+	// Append filters to SQL query
+	if queryWhere.String() != "" {
+		SQL += " WHERE " + queryWhere.String()
+	}
+
+	return SQL, sqlArgs, nil
 }
 
 /**
@@ -281,9 +289,9 @@ func ConvertPostURLToSQL(r *http.Request, table string) (string, []interface{}, 
 	var data []map[string]interface{}
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
+		println(data)
 		return "", nil, err
 	}
-
 	// Get props string
 	props_values := flattenMapSlice(data)
 	var propsQuery strings.Builder
@@ -342,6 +350,7 @@ func ConvertPutURLToSQL(r *http.Request, table string) (string, []interface{}, e
 
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
+		println("error decode")
 		return "", nil, err
 	}
 
@@ -391,6 +400,8 @@ func ConvertPutURLToSQL(r *http.Request, table string) (string, []interface{}, e
 					queryPref.WriteString(" END")
 				}
 			} else {
+				println("error prop value")
+
 				return "", nil, errors.New("error asserting props_values as string")
 			}
 		}
@@ -404,6 +415,8 @@ func ConvertPutURLToSQL(r *http.Request, table string) (string, []interface{}, e
 				queryPref.WriteString(fmt.Sprintf(" OR `%s` = '%v'", propVal, props_values[propVal][p]))
 			}
 		} else {
+
+			println("error prop value as string")
 			return "", nil, errors.New("error asserting props_values as string")
 		}
 	}

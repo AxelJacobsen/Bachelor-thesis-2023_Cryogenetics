@@ -1,0 +1,9 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <layer-list>
+            <item
+                android:gravity="end"
+                android:drawable="@drawable/down_arrow" />
+        </layer-list>
+    </item>
+</selector>

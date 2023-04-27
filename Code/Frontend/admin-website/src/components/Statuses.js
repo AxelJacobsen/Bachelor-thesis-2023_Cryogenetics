@@ -26,30 +26,13 @@ import { useNavigate } from 'react-router-dom';
 import { TextField } from '@mui/material';
 import './TableLayout.css';
 import {stableSort , getComparator} from '../globals/globalFunctions';
-
-
-
-function createData(Status_Name, Status_IsActive) {
-  return {
-    Status_Name, Status_IsActive
-  };
-}
-
-const rows = [
-  createData("aaaa", true),
-  createData("dddd", true),
-  createData("ssss", true),
-  createData("eeeee", true),
-]; 
+import fetchData from '../globals/fetchData';
 
 
 const headCells = [
   {
-    id: 'Status_Name', numeric: true, disablePadding: true, label: 'Status_Name',
-  },
-  {
-    id: 'Status_IsActive', numeric: true, disablePadding: true, label: 'Status_IsActive', 
-  },
+    id: 'container_status_name', numeric: true, disablePadding: true, label: 'Status Name',
+  }
 ];
 
 function EnhancedTableHead(props) {
@@ -131,7 +114,7 @@ function EnhancedTableToolbar({ searchTerm, setSearchTerm }) {
 
 export default function Statuses() {
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('Status_Name');
+  const [orderBy, setOrderBy] = React.useState('container_status_name');
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -139,12 +122,26 @@ export default function Statuses() {
   const [selectedRow, setSelectedRow] = useState(null);
   const [openModal, setOpenModal] = useState(false);
 
+  const [rows, setRows] = React.useState([]);
+
+  React.useEffect(() => {
+    async function fetchRowData() {
+      try {
+        const response = await fetchData('/api/container_status', 'GET');
+        setRows(response);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchRowData();
+  }, []);
+
   const [searchTerm, setSearchTerm] = useState('');
 
     //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
     const filterRows = (row) => {
       return (
-        row.Status_Name.toLowerCase().includes(searchTerm.toLowerCase()) 
+        row.container_status_name.toLowerCase().includes(searchTerm.toLowerCase()) 
       );
     };
     const filteredRows = rows.filter(filterRows);
@@ -218,7 +215,7 @@ export default function Statuses() {
                       hover
                       role="checkbox"
                       tabIndex={-1}
-                      key={row.Status_Name}
+                      key={row.container_status_name}
                     >
                       
                       <TableCell
@@ -228,9 +225,8 @@ export default function Statuses() {
                         padding="none"
                         align='center'
                       >
-                        {row.Status_Name}
+                        {row.container_status_name}
                       </TableCell>
-                      <TableCell align="center">{row.Status_IsActive ? "True" : "False"}</TableCell>
                       <TableCell onClick={() => handleRowClick(row)}> 
                       <Button variant="outlined"> Edit </Button>
                     </TableCell> 

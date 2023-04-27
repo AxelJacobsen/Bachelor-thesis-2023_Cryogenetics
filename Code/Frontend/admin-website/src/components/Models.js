@@ -26,35 +26,17 @@ import AddModelModal from './popup/AddModelModal';
 import { useNavigate } from 'react-router-dom';
 import './TableLayout.css';
 import {stableSort , getComparator} from '../globals/globalFunctions';
-
-
-
-function createData(Model_Name, Refill_Interval,Liter_Capacity, Model_IsActive) {
-  return {
-    Model_Name, Refill_Interval, Liter_Capacity, Model_IsActive
-  };
-}
-
-
-
-const rows = [
-  createData("ET11",5, 8, true),
-  createData("test",3, 7, true),
-]; 
-
+import fetchData from '../globals/fetchData';
 
 const headCells = [
   {
-    id: 'Model_Name', numeric: false, disablePadding: true, label: 'Model_Name',
+    id: 'container_model_name', numeric: false, disablePadding: true, label: 'Model Name',
   },
   {
-    id: 'Refill_Interval', numeric: true, disablePadding: true, label: 'Refill_Interval',
+    id: 'refill_interval', numeric: true, disablePadding: true, label: 'Refill Interval',
   },
   {
-    id: 'Liter_Capacity', numeric: true, disablePadding: true, label: 'Liter_Capacity', 
-  },
-  {
-    id: 'Model_IsActive', numeric: true, disablePadding: true, label: 'Model_IsActive', 
+    id: 'liter_capacity', numeric: true, disablePadding: true, label: 'Liter Capacity', 
   },
 ];
 
@@ -137,7 +119,7 @@ function EnhancedTableToolbar({ searchTerm, setSearchTerm }) {
 
 export default function Models() {
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('Model_Name');
+  const [orderBy, setOrderBy] = React.useState('container_model_name');
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -145,12 +127,26 @@ export default function Models() {
   const [selectedRow, setSelectedRow] = useState(null);
   const [openModal, setOpenModal] = useState(false);
 
+  const [rows, setRows] = React.useState([]);
+
+  React.useEffect(() => {
+    async function fetchRowData() {
+      try {
+        const response = await fetchData('/api/container_model', 'GET');
+        setRows(response);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchRowData();
+  }, []);
+
   const [searchTerm, setSearchTerm] = useState('');
 
     //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
     const filterRows = (row) => {
       return (
-        row.Model_Name.toLowerCase().includes(searchTerm.toLowerCase()) 
+        row.container_model_name.toLowerCase().includes(searchTerm.toLowerCase()) 
       );
     };
     const filteredRows = rows.filter(filterRows);
@@ -220,7 +216,7 @@ export default function Models() {
                       hover
                       role="checkbox"
                       tabIndex={-1}
-                      key={row.Model_Name}
+                      key={row.container_model_name}
                     >
                       
                       <TableCell
@@ -230,11 +226,10 @@ export default function Models() {
                         padding="none"
                         align='center'
                       >
-                        {row.Model_Name}
+                        {row.container_model_name}
                       </TableCell>
-                      <TableCell align='center'>{row.Refill_Interval}</TableCell>
-                      <TableCell align='center'>{row.Liter_Capacity}</TableCell>
-                      <TableCell align="center">{row.Model_IsActive ? "True" : "False"}</TableCell>
+                      <TableCell align='center'>{row.refill_interval}</TableCell>
+                      <TableCell align='center'>{row.liter_capacity}</TableCell>
                       <TableCell onClick={() => handleRowClick(row)}> 
                       <Button variant="outlined"> Edit </Button>
                     </TableCell> 
