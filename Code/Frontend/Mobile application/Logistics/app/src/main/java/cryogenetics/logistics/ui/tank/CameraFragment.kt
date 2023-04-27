@@ -1,11 +1,6 @@
 package cryogenetics.logistics.ui.tank
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.media.Image
-import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.util.Size
 import android.view.*
@@ -19,7 +14,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import com.google.common.util.concurrent.ListenableFuture
 import cryogenetics.logistics.R
-import java.io.ByteArrayOutputStream
 import cryogenetics.logistics.databinding.FragmentCameraBinding
 
 /**
@@ -58,7 +52,7 @@ class CameraFragment : Fragment() {
     private fun startCamera() {
         cameraProviderFuture.addListener({
             try {
-                var cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+                val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
                 bindCameraPreview(cameraProvider)
             } catch (ex: Exception) {
                 Log.e("CameraProviderFuture", "Couldn't bind camera preview")
@@ -74,16 +68,16 @@ class CameraFragment : Fragment() {
         previewView.implementationMode = PreviewView.ImplementationMode.PERFORMANCE // COMPATIBLE => TextureView, PERFORMANCE => SurfaceView
 
         // Bind preview
-        var preview: Preview = Preview.Builder().build()
+        val preview: Preview = Preview.Builder().build()
         preview.setSurfaceProvider(previewView.surfaceProvider)
 
         // Select camera (front/back)
-        var cameraSelector: CameraSelector = CameraSelector.Builder()
+        val cameraSelector: CameraSelector = CameraSelector.Builder()
             .requireLensFacing(CameraSelector.LENS_FACING_BACK) // LENS_FACING_BACK => back camera, LENS_FACING_FRONT => front camera
             .build()
 
         // Set up image analyzer
-        var imageAnalasys: ImageAnalysis = ImageAnalysis.Builder()
+        val imageAnalasys: ImageAnalysis = ImageAnalysis.Builder()
             .setTargetResolution(Size(1280, 720))
             .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
             .build()
@@ -101,6 +95,6 @@ class CameraFragment : Fragment() {
         )
 
         // Bind analyzer and preview to selected camera
-        var camera: androidx.camera.core.Camera = cameraProvider.bindToLifecycle(this as LifecycleOwner, cameraSelector, imageAnalasys, preview)
+        val camera: androidx.camera.core.Camera = cameraProvider.bindToLifecycle(this as LifecycleOwner, cameraSelector, imageAnalasys, preview)
     }
 }
