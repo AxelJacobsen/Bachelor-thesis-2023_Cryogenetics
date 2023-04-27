@@ -1,36 +1,20 @@
-import * as React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
+import { Box, Button, FormControlLabel, IconButton, Paper, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel, Toolbar, Tooltip, Typography } from '@mui/material';
 import { TextField } from '@mui/material';
-import FilterListIcon from '@mui/icons-material/FilterList';
+import { FilterList as FilterListIcon, Print } from '@mui/icons-material';
 import { visuallyHidden } from '@mui/utils';
 import EditContainerModal from './popup/EditContainerModal';
 import AddContainerModal from './popup/AddContainerModal';
+import PrintModal from './popup/PrintModal';
 import './TableLayout.css';
-import {stableSort , getComparator} from '../globals/globalFunctions';
+import { stableSort, getComparator } from '../globals/globalFunctions';
 import fetchData from '../globals/fetchData';
 
 const headCells = [
   {
-    id: 'id', numeric: false, disablePadding: true, label: 'id',
+    id: 'container_id', numeric: false, disablePadding: true, label: 'id',
   },
   {
     id: 'container_sr_number', numeric: false, disablePadding: true, label: 'SerialNr',
@@ -132,7 +116,7 @@ function EnhancedTableToolbar({ searchTerm, setSearchTerm }) {
           <IconButton>
             <FilterListIcon />
           </IconButton>
-        </Tooltip>
+        </Tooltip> 
       
         <TextField
         label="Search"
@@ -157,17 +141,23 @@ export default function Containers() {
 
   const [rows, setRows] = React.useState([]);
 
-  React.useEffect(() => {
-    async function fetchRowData() {
-      try {
-        const response = await fetchData('/api/container', 'GET');
-        setRows(response);
-      } catch (error) {
-        console.error(error);
-      }
+
+  async function fetchRowData() {
+    try {
+      const response = await fetchData('/api/container', 'GET');
+      setRows(response);
+    } catch (error) {
+      console.error(error);
     }
+  }
+  
+  React.useEffect(() => {
     fetchRowData();
   }, []);
+  
+  const handleModalClose = () => {
+    fetchRowData();
+  };
 
     //DEFINE WHAT THE COLLUMNS ARE FILTERED IN SEARCH
     const filterRows = (row) => {
@@ -184,13 +174,19 @@ export default function Containers() {
 
   const navigate = useNavigate();
 
-  function handleRowClick(rowData) {
-    setSelectedRow(rowData);
-  }
   const handleOpenModal = () => {
     setOpenModal(true);
   };
   
+  function handleRowClick(rowData) {
+    // Set the type property to "edit"
+    setSelectedRow({ ...rowData, type: "edit" });
+  }
+  
+  function handlePrint(rowData) {
+    // Set the type property to "print"
+    setSelectedRow({ ...rowData, type: "print" });
+  }
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -252,7 +248,7 @@ export default function Containers() {
                         hover
                         role="checkbox"
                         tabIndex={-1}
-                        key={row.id}
+                        key={row.container_sr_number}
                       >
                         
                         <TableCell
@@ -262,7 +258,7 @@ export default function Containers() {
                           padding="none"
                           align='center'
                         >
-                          {row.id}
+                          {row.liter_capacity + '-' + row.temp_id}
                         </TableCell>
                         <TableCell align='center'>{row.container_sr_number}</TableCell>
                         <TableCell align="center">{row.container_model_name}</TableCell>
@@ -289,9 +285,13 @@ export default function Containers() {
                         </TableCell>
                         <TableCell align="center">{row.production_date}</TableCell>
                         
-                        <TableCell onClick={() => handleRowClick(row)}> 
-                        <Button variant="outlined"> Edit </Button>
-                      </TableCell> 
+                        <TableCell > 
+                        <Button onClick={() => handleRowClick(row)} variant="outlined"> Edit </Button>
+                        </TableCell> 
+
+                        <TableCell > 
+                        <IconButton variant="outlined" title='Print QR code' onClick={() => handlePrint(row)}> <Print/> </IconButton>
+                        </TableCell> 
                       </TableRow>
                     );
                   })}
@@ -306,12 +306,19 @@ export default function Containers() {
                 )}
               </TableBody>
             </Table>
-            {selectedRow && ( //Checks if there is a selected Row, If this line isnt here, you will get an "Error child is empty" console message.
-          <EditContainerModal
-            selectedRow={selectedRow}
-            setSelectedRow={setSelectedRow}
-          />
-        )} 
+            {selectedRow && selectedRow.type === "edit" && (
+              <EditContainerModal
+                selectedRow={selectedRow}
+                setSelectedRow={setSelectedRow}
+                onClose={handleModalClose}
+              />
+            )} 
+            {selectedRow && selectedRow.type === "print" && (
+              <PrintModal
+                selectedRow={selectedRow}
+                setSelectedRow={setSelectedRow}
+              />
+            )}
           </TableContainer>
           <TablePagination
             rowsPerPageOptions={[10, 25, 50]}
@@ -327,7 +334,7 @@ export default function Containers() {
       
       <div className = "grid-child-buttons">
         <Button variant='contained' color='success' onClick={handleOpenModal}> Add container </Button>
-        <AddContainerModal open={openModal} setOpen={setOpenModal} />
+        <AddContainerModal open={openModal} setOpen={setOpenModal} onClose={handleModalClose}/>
         <Button variant='contained' onClick={handleModel_NameClick}> Models Overview </Button>
         <Button variant='contained' onClick={handleStatusClick}> Status Overview </Button>
       </div>

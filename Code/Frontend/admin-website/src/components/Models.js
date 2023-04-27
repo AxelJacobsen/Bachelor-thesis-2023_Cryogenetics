@@ -23,6 +23,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import EditModelModal from './popup/EditModelModal';
 import AddModelModal from './popup/AddModelModal';
+import DeleteModelModal from './popup/DeleteModelModal';
 import { useNavigate } from 'react-router-dom';
 import './TableLayout.css';
 import {stableSort , getComparator} from '../globals/globalFunctions';
@@ -129,17 +130,22 @@ export default function Models() {
 
   const [rows, setRows] = React.useState([]);
 
-  React.useEffect(() => {
-    async function fetchRowData() {
-      try {
-        const response = await fetchData('/api/container_model', 'GET');
-        setRows(response);
-      } catch (error) {
-        console.error(error);
-      }
+  async function fetchRowData() {
+    try {
+      const response = await fetchData('/api/container_model', 'GET');
+      setRows(response);
+    } catch (error) {
+      console.error(error);
     }
+  }
+
+  React.useEffect(() => {
     fetchRowData();
   }, []);
+
+  const handleModalClose = () => {
+    fetchRowData();
+  }
 
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -156,7 +162,10 @@ export default function Models() {
   };
 
   function handleRowClick(rowData) {
-    setSelectedRow(rowData);
+    setSelectedRow({ ...rowData, type: "edit" });
+  }
+  function handleDelete(rowData) {
+    setSelectedRow({ ...rowData, type: "delete" });
   }
 
   const handleRequestSort = (event, property) => {
@@ -232,7 +241,10 @@ export default function Models() {
                       <TableCell align='center'>{row.liter_capacity}</TableCell>
                       <TableCell onClick={() => handleRowClick(row)}> 
                       <Button variant="outlined"> Edit </Button>
-                    </TableCell> 
+                      </TableCell> 
+                      <TableCell onClick={() => handleDelete(row)}> 
+                      <Button variant="outlined" color="error"> Delete </Button>
+                      </TableCell> 
                     </TableRow>
                   );
                 })}
@@ -247,12 +259,20 @@ export default function Models() {
               )}
             </TableBody>
           </Table>
-          {selectedRow && ( //Checks if there is a selected Row, If this line isnt here, you will get an "Error child is empty" console message.
+          {selectedRow && selectedRow.type === "edit" &&( //Checks if there is a selected Row, If this line isnt here, you will get an "Error child is empty" console message.
         <EditModelModal
           selectedRow={selectedRow}
           setSelectedRow={setSelectedRow}
+          onClose={handleModalClose}
         />
       )} 
+      {selectedRow && selectedRow.type === "delete" && (
+              <DeleteModelModal
+                selectedRow={selectedRow}
+                setSelectedRow={setSelectedRow}
+                onClose={handleModalClose}
+              />
+            )} 
         </TableContainer>
         <TablePagination
           rowsPerPageOptions={[10, 25, 50]}
@@ -267,7 +287,7 @@ export default function Models() {
       </div>
       <div className = "grid-child-buttons">
         <Button variant='contained' color='success' onClick={handleOpenModal}> Add Model </Button>
-        <AddModelModal open={openModal} setOpen={setOpenModal} />
+        <AddModelModal open={openModal} setOpen={setOpenModal} onClose={handleModalClose}/>
         <Button variant='contained' onClick={handleContainerClick}> Back to Container screen </Button>
       </div>
     </div>

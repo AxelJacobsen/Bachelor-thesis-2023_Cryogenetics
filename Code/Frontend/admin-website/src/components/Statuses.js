@@ -20,13 +20,13 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-import EditStatusModal from './popup/EditStatusModal';
 import AddStatusModal from './popup/AddStatusModal';
 import { useNavigate } from 'react-router-dom';
 import { TextField } from '@mui/material';
 import './TableLayout.css';
 import {stableSort , getComparator} from '../globals/globalFunctions';
 import fetchData from '../globals/fetchData';
+import DeleteStatusModal from './popup/DeleteStatusModal';
 
 
 const headCells = [
@@ -124,17 +124,22 @@ export default function Statuses() {
 
   const [rows, setRows] = React.useState([]);
 
-  React.useEffect(() => {
-    async function fetchRowData() {
-      try {
-        const response = await fetchData('/api/container_status', 'GET');
-        setRows(response);
-      } catch (error) {
-        console.error(error);
-      }
+  async function fetchRowData() {
+    try {
+      const response = await fetchData('/api/container_status', 'GET');
+      setRows(response);
+    } catch (error) {
+      console.error(error);
     }
+  }
+
+  React.useEffect(() => {
     fetchRowData();
   }, []);
+
+  const handleModalClose = () => {
+    fetchRowData();
+  }
 
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -151,8 +156,8 @@ export default function Statuses() {
   };
   
 
-  function handleRowClick(rowData) {
-    setSelectedRow(rowData);
+  function handleDelete(rowData) {
+    setSelectedRow({ ...rowData, type: "delete" });
   }
 
   const handleRequestSort = (event, property) => {
@@ -227,9 +232,9 @@ export default function Statuses() {
                       >
                         {row.container_status_name}
                       </TableCell>
-                      <TableCell onClick={() => handleRowClick(row)}> 
-                      <Button variant="outlined"> Edit </Button>
-                    </TableCell> 
+                        <TableCell onClick={() => handleDelete(row)}> 
+                        <Button variant="outlined" color="error"> Delete </Button>
+                      </TableCell> 
                     </TableRow>
                   );
                 })}
@@ -244,12 +249,13 @@ export default function Statuses() {
               )}
             </TableBody>
           </Table>
-          {selectedRow && ( //Checks if there is a selected Row, If this line isnt here, you will get an "Error child is empty" console message.
-        <EditStatusModal
-          selectedRow={selectedRow}
-          setSelectedRow={setSelectedRow}
-        />
-      )} 
+          {selectedRow && selectedRow.type === "delete" && (
+              <DeleteStatusModal
+                selectedRow={selectedRow}
+                setSelectedRow={setSelectedRow}
+                onClose={handleModalClose}
+              />
+            )}
         </TableContainer>
         <TablePagination
           rowsPerPageOptions={[10, 25, 50]}
@@ -264,7 +270,7 @@ export default function Statuses() {
       </div>
       <div className = "grid-child-buttons">
         <Button variant='contained' color='success' onClick={handleOpenModal}> Add Status </Button>
-        <AddStatusModal open={openModal} setOpen={setOpenModal} />
+        <AddStatusModal open={openModal} setOpen={setOpenModal} onClose={handleModalClose}/>
         <Button variant='contained' onClick={handleContainerClick}> Back to Container screen </Button>
       </div>
     </div>

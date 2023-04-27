@@ -91,7 +91,7 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 
 		res, err := globals.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
 		if err != nil {
-			http.Error(w, "Error posting data."+err.Error(), http.StatusInternalServerError)
+			http.Error(w, "Error posting data."+err.Error(), http.StatusConflict)
 			return
 		}
 
@@ -104,18 +104,43 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	// PUT method
 	case http.MethodPut:
+		joinData, keys = constants.SetJoinData(joinData, keys, activeTable)
+
 		/// SEND REQUEST TO GENERIC PUT REQUEST, RECIEVE AS "res, err"
-		sqlQuery, sqlArgs, err := globals.ConvertPutURLToSQL(r, activeTable)
+		sqlQuery, sqlArgs, err := globals.ConvertPutURLToSQL(r, joinData, keys)
 		if err != nil {
 			http.Error(w, "Error converting url to sql.", http.StatusUnprocessableEntity)
 			return
 		}
-		println("SQL: " + sqlQuery)
 
 		res, err := globals.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
 		if err != nil {
-			fmt.Println("err: ", err)
 			http.Error(w, "Error putting data.", http.StatusInternalServerError)
+			return
+		}
+
+		// Set header and encode to writer
+		w.Header().Set("Content-Type", "application/json")
+		err = json.NewEncoder(w).Encode(res)
+		if err != nil {
+			http.Error(w, "Error encoding data.", http.StatusInternalServerError)
+			return
+		}
+
+	// DELETE method
+	case http.MethodDelete:
+		joinData, keys = constants.SetJoinData(joinData, keys, activeTable)
+
+		// Get query
+		sqlQuery, sqlArgs, err := globals.ConvertDeleteURLToSQL(r, joinData, keys)
+		if err != nil {
+			http.Error(w, "Error converting url to sql.", http.StatusUnprocessableEntity)
+			return
+		}
+
+		res, err := globals.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
+		if err != nil {
+			http.Error(w, "Error deleting data.", http.StatusInternalServerError)
 			return
 		}
 
@@ -165,7 +190,7 @@ func CreateDataHandler(w http.ResponseWriter, r *http.Request) {
 		case "container":
 			tables = append(tables, "container_status", "client", "location", "container_model")
 		case "employee":
-			tables = append(tables, "location")
+			tables = append(tables, "location", "employee")
 		}
 
 	} else {
