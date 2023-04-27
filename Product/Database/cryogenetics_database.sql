@@ -77,7 +77,7 @@ INSERT INTO `admin` (`admin_id`, `email`, `password_hash`) VALUES
 
 CREATE TABLE `client` (
   `client_id` int(11) NOT NULL,
-  `client_name` varchar(64) NOT NULL
+  `client_name` varchar(64) NOT NULL UNIQUE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
