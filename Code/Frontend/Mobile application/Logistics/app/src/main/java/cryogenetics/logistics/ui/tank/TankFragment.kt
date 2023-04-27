@@ -88,12 +88,6 @@ class TankFragment : Fragment() {
                     }
                 }
             }
-            // TODO : Remove this, its only for debugging
-            if (searchResults.isNotEmpty()) {
-                for (model in searchResults) {
-                    println("model.values " + model.values)
-                }
-            }
         } else {
             Toast.makeText(requireContext(), "No search value entered, or no Tanks added!", Toast.LENGTH_LONG).show()
         }

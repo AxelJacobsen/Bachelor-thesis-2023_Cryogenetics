@@ -21,7 +21,6 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -43,7 +42,8 @@ android {
     }
     namespace 'cryogenetics.logistics'
 }
-//Dont update the packages, leads to duplicate errors
+
+// Dont update the packages, leads to duplicate errors
 dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")

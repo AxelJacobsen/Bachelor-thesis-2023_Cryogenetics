@@ -84,8 +84,8 @@
                             android:id="@+id/clActSpinner"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:translationY="-10dp"
                             android:background="@drawable/rounded_textbox"
+                            android:translationY="-10dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -108,9 +108,9 @@
                             android:id="@+id/tvActTitle"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:gravity="center|start"
                             android:layout_marginStart="15dp"
                             android:background="@drawable/rounded_textbox"
+                            android:gravity="center|start"
                             android:paddingStart="15dp"
                             android:paddingEnd="15dp"
                             android:text="@string/Act"
@@ -137,33 +137,33 @@
                             android:id="@+id/clNoteEditText"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:translationY="-10dp"
                             android:background="@drawable/rounded_textbox"
+                            android:translationY="-10dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tvNoteTitle">
 
-                        <EditText
-                            android:id="@+id/etNote"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:paddingStart="10dp"
-                            android:hint="Write Note"
-                            android:textSize="24sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            <EditText
+                                android:id="@+id/etNote"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:hint="Write Note"
+                                android:paddingStart="10dp"
+                                android:textSize="24sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <TextView
                             android:id="@+id/tvNoteTitle"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
                             android:background="@drawable/rounded_textbox"
                             android:gravity="center|start"
-                            android:layout_marginStart="15dp"
                             android:paddingStart="15dp"
                             android:paddingEnd="15dp"
                             android:text="@string/Note"
@@ -199,8 +199,8 @@
                             android:id="@+id/clStatus"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:translationY="-10dp"
                             android:background="@drawable/rounded_textbox"
+                            android:translationY="-10dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -223,9 +223,9 @@
                             android:id="@+id/tvStatusTitle"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:gravity="center|start"
                             android:layout_marginStart="15dp"
                             android:background="@drawable/rounded_textbox"
+                            android:gravity="center|start"
                             android:paddingStart="15dp"
                             android:paddingEnd="15dp"
                             android:text="@string/status"
@@ -250,8 +250,8 @@
                             android:id="@+id/clMaintStatusSpinner"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:translationY="-10dp"
                             android:background="@drawable/rounded_textbox"
+                            android:translationY="-10dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -274,9 +274,9 @@
                             android:id="@+id/tvMaintStatusTitle"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:gravity="center|start"
                             android:layout_marginStart="15dp"
                             android:background="@drawable/rounded_textbox"
+                            android:gravity="center|start"
                             android:paddingStart="15dp"
                             android:paddingEnd="15dp"
                             android:text="@string/Maintencestatus"
@@ -303,7 +303,7 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginEnd="10dp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/clInvoice"
+                        app:layout_constraintEnd_toStartOf="@+id/clClient"
                         app:layout_constraintHorizontal_weight="0.5"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
@@ -312,8 +312,8 @@
                             android:id="@+id/clSpinnerAffiliatedLab"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:translationY="-10dp"
                             android:background="@drawable/rounded_textbox"
+                            android:translationY="-10dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -336,9 +336,9 @@
                             android:id="@+id/tvTitleAffiliatedLab"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:gravity="center|start"
                             android:layout_marginStart="15dp"
                             android:background="@drawable/rounded_textbox"
+                            android:gravity="center|start"
                             android:paddingStart="15dp"
                             android:paddingEnd="15dp"
                             android:text="@string/Affiliatedlab"
@@ -349,7 +349,7 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/clInvoice"
+                        android:id="@+id/clClient"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginStart="10dp"
@@ -361,58 +361,44 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/cLayoutInvoice"
+                            android:id="@+id/clClientSpinner"
                             android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:translationY="-10dp"
+                            android:layout_height="wrap_content"
                             android:background="@drawable/rounded_textbox"
+                            android:translationY="-10dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/tvTitleInvoice">
+                            app:layout_constraintTop_toBottomOf="@+id/tvClientTitle">
 
-                            <TextView
-                                android:id="@+id/tvInvoice"
+                            <Spinner
+                                android:id="@+id/spinnerClient"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:paddingStart="10dp"
-                                android:text="@string/dateformat"
-                                android:textSize="24sp"
+                                android:background="@drawable/spinner_arrow"
+                                android:minHeight="45dp"
+                                android:spinnerMode="dialog"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toStartOf="@+id/ibInvoice"
+                                app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
-                            <ImageButton
-                                android:id="@+id/ibInvoice"
-                                android:layout_width="wrap_content"
-                                android:layout_height="20dp"
-                                android:layout_marginEnd="7dp"
-                                android:adjustViewBounds="true"
-                                android:background="@null"
-                                android:contentDescription="pencil"
-                                android:scaleType="fitCenter"
-                                android:src="@drawable/calendar"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toEndOf="@+id/tvInvoice"
-                                app:layout_constraintTop_toTopOf="parent" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <TextView
-                            android:id="@+id/tvTitleInvoice"
+                            android:id="@+id/tvClientTitle"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:gravity="center|start"
                             android:layout_marginStart="15dp"
                             android:background="@drawable/rounded_textbox"
+                            android:gravity="center|start"
                             android:paddingStart="15dp"
                             android:paddingEnd="15dp"
-                            android:text="@string/Invoicedate"
+                            android:text="@string/client"
                             android:textSize="24sp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
+
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -440,44 +426,44 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:id="@+id/clEditTextAddress"
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/clEditTextAddress"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/rounded_textbox"
+                            android:translationY="-10dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvTitleAddress">
+
+                            <EditText
+                                android:id="@+id/etAddress"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:translationY="-10dp"
-                                android:background="@drawable/rounded_textbox"
+                                android:gravity="center_vertical"
+                                android:hint="@string/write_address"
+                                android:paddingStart="10dp"
+                                android:textSize="24sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/tvTitleAddress">
-
-                                <EditText
-                                    android:id="@+id/etAddress"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="center_vertical"
-                                    android:paddingStart="10dp"
-                                    android:hint="@string/write_address"
-                                    android:textSize="24sp"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
-                            </androidx.constraintlayout.widget.ConstraintLayout>
-
-                            <TextView
-                                android:id="@+id/tvTitleAddress"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/rounded_textbox"
-                                android:gravity="center|start"
-                                android:layout_marginStart="15dp"
-                                android:paddingStart="15dp"
-                                android:paddingEnd="15dp"
-                                android:text="@string/Address"
-                                android:textSize="24sp"
-                                app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <TextView
+                            android:id="@+id/tvTitleAddress"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:background="@drawable/rounded_textbox"
+                            android:gravity="center|start"
+                            android:paddingStart="15dp"
+                            android:paddingEnd="15dp"
+                            android:text="@string/Address"
+                            android:textSize="24sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -498,8 +484,8 @@
                             android:id="@+id/cLayoutLastFilled"
                             android:layout_width="0dp"
                             android:layout_height="0dp"
-                            android:translationY="-10dp"
                             android:background="@drawable/rounded_textbox"
+                            android:translationY="-10dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -538,9 +524,9 @@
                             android:id="@+id/tvTitleLastFilled"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:gravity="center|start"
                             android:layout_marginStart="15dp"
                             android:background="@drawable/rounded_textbox"
+                            android:gravity="center|start"
                             android:paddingStart="15dp"
                             android:paddingEnd="15dp"
                             android:text="@string/Lastfilled"
@@ -577,8 +563,8 @@
                             android:id="@+id/clEditTextComment"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:translationY="-10dp"
                             android:background="@drawable/rounded_textbox"
+                            android:translationY="-10dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -589,8 +575,8 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_vertical"
-                                android:paddingStart="10dp"
                                 android:hint="@string/writeCommentHere"
+                                android:paddingStart="10dp"
                                 android:textSize="24sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -602,9 +588,9 @@
                             android:id="@+id/tvTitleComment"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
                             android:background="@drawable/rounded_textbox"
                             android:gravity="center|start"
-                            android:layout_marginStart="15dp"
                             android:paddingStart="15dp"
                             android:paddingEnd="15dp"
                             android:text="@string/comment"
