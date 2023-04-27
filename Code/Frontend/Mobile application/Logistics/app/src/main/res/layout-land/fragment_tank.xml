@@ -34,7 +34,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_margin="4dp"
-                android:background="@color/white"
+                android:background="@drawable/rounded_textbox"
                 android:gravity="center_vertical"
                 android:hint="@string/write_here"
                 android:inputType="text"
@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginEnd="4dp"
-                android:backgroundTint="@color/white"
+                android:backgroundTint="@color/softGrey"
                 android:gravity="center"
                 android:maxLines="1"
                 android:text="@string/search"
@@ -95,6 +95,7 @@
 
 
                 <ImageButton
+                    android:id="@+id/ibCamera"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:adjustViewBounds="true"
@@ -495,7 +496,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/firstRowFirst"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="60dp"
                     android:layout_marginStart="5dip"
                     android:layout_marginTop="5dip"
                     android:layout_marginEnd="2.5dip"
@@ -510,7 +511,7 @@
                     <ImageView
                         android:id="@+id/ivFirstRowFirst"
                         android:layout_width="0dp"
-                        android:layout_height="60dp"
+                        android:layout_height="0dp"
                         android:src="@drawable/recieve_from_user"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/tvFirstRowFirst"
@@ -551,10 +552,11 @@
                         android:id="@+id/ivFirstRowSecond"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
+                        android:layout_margin="4dp"
                         android:src="@drawable/maint_color_menu"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/tvFirstRowSecond"
-                        app:layout_constraintHorizontal_weight="0.4"
+                        app:layout_constraintHorizontal_weight="0.3"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -587,7 +589,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/secondRowFirst"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="60dp"
                     android:layout_marginStart="5dip"
                     android:layout_marginTop="5dip"
                     android:layout_marginEnd="2.5dip"
@@ -602,7 +604,8 @@
                     <ImageView
                         android:id="@+id/ivSecondRowFirst"
                         android:layout_width="0dp"
-                        android:layout_height="60dp"
+                        android:layout_height="0dp"
+                        android:layout_margin="4dp"
                         android:src="@drawable/cancel"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/tvSecondRowFirst"
@@ -626,7 +629,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/secondRowSecond"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="60dp"
                     android:layout_marginStart="2.5dip"
                     android:layout_marginTop="5dip"
                     android:layout_marginEnd="2.5dip"
@@ -641,7 +644,8 @@
                     <ImageView
                         android:id="@+id/ivSecondRowSecond"
                         android:layout_width="0dp"
-                        android:layout_height="60dp"
+                        android:layout_height="0dp"
+                        android:layout_margin="4dp"
                         android:src="@drawable/cancel"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/tvSecondRowSecond"
@@ -665,7 +669,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/secondRowThird"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="60dp"
                     android:layout_marginStart="2.5dip"
                     android:layout_marginTop="5dip"
                     android:layout_marginEnd="2.5dip"
@@ -680,7 +684,8 @@
                     <ImageView
                         android:id="@+id/ivSecondRowThird"
                         android:layout_width="0dp"
-                        android:layout_height="60dp"
+                        android:layout_height="0dp"
+                        android:layout_margin="4dp"
                         android:src="@drawable/cancel"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/tvSecondRowThird"
@@ -704,7 +709,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/secondRowFourth"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="60dp"
                     android:layout_marginStart="2.5dip"
                     android:layout_marginTop="5dip"
                     android:layout_marginEnd="5dip"
@@ -719,7 +724,8 @@
                     <ImageView
                         android:id="@+id/ivSecondRowFourth"
                         android:layout_width="0dp"
-                        android:layout_height="60dp"
+                        android:layout_height="0dp"
+                        android:layout_margin="4dp"
                         android:src="@drawable/cancel"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/tvSecondRowFourth"
@@ -769,8 +775,10 @@
                 android:background="@color/softGrey"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/menuInventory">
+                app:layout_constraintTop_toBottomOf="@+id/menuInventory"
+                app:layout_constraintVertical_bias="0.0">
 
             </FrameLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,11 +13,9 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
+import InputLabel from '@mui/material/InputLabel';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
@@ -100,7 +98,12 @@ EnhancedTableHead.propTypes = {
 };
 
 // EnhancedTableToolbar function takes in props and renders the toolbar with filtering and button functionality
-function EnhancedTableToolbar({ searchTerm, setSearchTerm }) {
+function EnhancedTableToolbar({ searchTerm, setSearchTerm, startDate, setStartDate, endDate, setEndDate, onDatesChange }) {
+  // Function to handle click on the "Apply" button
+  const handleApplyClick = () => {
+  onDatesChange(startDate, endDate);
+  };
+
   return (
     <Toolbar
       sx={{
@@ -117,11 +120,25 @@ function EnhancedTableToolbar({ searchTerm, setSearchTerm }) {
           Transactions
         </Typography>
 
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
+        <TextField
+          id="StartDate"
+          type="date"
+          sx={{ ml: 2, width: 200 }}
+          required
+          value={startDate}
+          onChange={(event) => setStartDate(event.target.value)}
+        />
+        <TextField
+          id="EndDate"
+          type="date"
+          sx={{ ml: 2, width: 200 }}
+          required
+          value={endDate}
+          onChange={(event) => setEndDate(event.target.value)}
+        />
+        <Button variant="contained" onClick={handleApplyClick} sx={{ ml: 2 }}>
+          Apply
+        </Button>
 
         <TextField
         label="Search"
@@ -141,6 +158,9 @@ export default function Transactions() {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [searchTerm, setSearchTerm] = React.useState('');
+  const [startDate,setStartDate] = React.useState("")
+  const [endDate,setEndDate] = React.useState("")
+
 
   const [rows, setRows] = React.useState([]);
 
@@ -148,7 +168,12 @@ export default function Transactions() {
     async function fetchRowData() {
       try {
         const response = await fetchData('/api/transaction', 'GET');
-        setRows(response);
+        if (response == null){
+          console.log('No data available.'); // Log error message instead of returning JSX
+        }
+        else {
+          setRows(response); // Update "rows" state with fetched data
+        }
       } catch (error) {
         console.error(error);
       }
@@ -168,6 +193,46 @@ export default function Transactions() {
     );
   };
   const filteredRows = rows.filter(filterRows);
+
+  // Function to be called when both start and end dates are changed
+  const handleDatesChange = async (start, end) => {
+    // Check if both start and end dates are selected
+    if (start && end) {
+      // Convert start and end dates to Date objects
+      const startDateObj = new Date(start);
+      const endDateObj = new Date(end);
+
+      // Compare start and end dates
+      if (startDateObj <= endDateObj) {
+        try {
+          const response = await fetchData(`/api/transaction?start_date=${start}&end_date=${end}`, 'GET');
+          if (response == null){
+            alert("No data available for that time period.");
+          }
+          else {
+            setRows(response); // Update "rows" state with fetched data
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      } else {
+        // Show an error message or perform any other action to handle invalid dates
+        alert("End date must be after start date.");
+      }
+    } else {
+      try {
+        const response = await fetchData('/api/transaction', 'GET');
+        if (response == null){
+          console.log('No data available.'); // Log error message instead of returning JSX
+        }
+        else {
+          setRows(response); // Update "rows" state with fetched data
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -201,7 +266,7 @@ export default function Transactions() {
     <Box sx={{ width: '100%' }}>
     <div className = "grid-container">
       <div className = "grid-child table"><Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
+        <EnhancedTableToolbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate} onDatesChange={handleDatesChange} />
           <TableContainer>
             <Table
               sx={{ minWidth: 750 }}

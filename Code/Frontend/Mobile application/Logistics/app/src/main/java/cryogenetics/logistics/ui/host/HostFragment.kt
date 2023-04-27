@@ -1,5 +1,6 @@
 package cryogenetics.logistics.ui.host
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -77,19 +78,19 @@ class HostFragment : Fragment() {
 
         // Set onclick listeners
         binding.clDashboard.setOnClickListener {
-            openAndAddFragment(DashFragment(), "Dashboard")
+            openAndAddFragment(DashFragment(), "Dashboard", R.drawable.dashboard)
         }
         binding.clTank.setOnClickListener {
-            openAndAddFragment(TankFragment(), "Tank")
+            openAndAddFragment(TankFragment(), "Tank", R.drawable.tank)
         }
         binding.clTankFilling.setOnClickListener {
-            openAndAddFragment(TankFillFragment(), "Tank Filling")
+            openAndAddFragment(TankFillFragment(), "Tank Filling", R.drawable.fill)
         }
         binding.clLog.setOnClickListener {
-            openAndAddFragment(ActLogFragment(), "Log")
+            openAndAddFragment(ActLogFragment(), "Log", R.drawable.recent_transactions)
         }
         binding.clInventory.setOnClickListener {
-            openAndAddFragment(InventoryFragment(), "Inventory")
+            openAndAddFragment(InventoryFragment(), "Inventory", R.drawable.inventory)
         }
     }
 
@@ -99,15 +100,15 @@ class HostFragment : Fragment() {
      *  @param fragment - The fragment.
      *  @param name - The name to display on the tab.
      */
-    fun openAndAddFragment(fragment: Fragment, name: String) {
+    fun openAndAddFragment(fragment: Fragment, name: String, picRef: Int) {
         // Create the fragment and replace the current one with it
         childFragmentManager.beginTransaction()
             .replace(R.id.mainContent, fragment)
             .commit()
 
         // Add it to the list of fragments
-        var data = mAdapter.dataList.toMutableList()
-        data.add(TaskItem(name, fragment))
+        val data = mAdapter.dataList.toMutableList()
+        data.add(TaskItem(name, fragment, picRef))
         mAdapter.updateData(data)
 
         /* IN CASE THE FRAGMENT MUST BE OPENED BY THE PARENT ACTIVITY

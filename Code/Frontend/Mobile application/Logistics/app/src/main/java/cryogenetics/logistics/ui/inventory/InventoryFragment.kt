@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
 import cryogenetics.logistics.databinding.FragmentInventoryBinding
-import cryogenetics.logistics.functions.Functions.Companion.enforceNumberFormat
+import cryogenetics.logistics.ui.actLog.functions.Functions.Companion.enforceNumberFormat
 
 
 class InventoryFragment : Fragment() {

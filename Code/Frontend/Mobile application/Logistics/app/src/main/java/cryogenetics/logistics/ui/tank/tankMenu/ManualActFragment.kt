@@ -13,6 +13,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import cryogenetics.logistics.api.Api
 import cryogenetics.logistics.api.Api.Companion.makeBackendRequest
 import cryogenetics.logistics.databinding.FragmentTankManualActBinding
 import cryogenetics.logistics.ui.tank.TankData
@@ -25,21 +26,19 @@ class ManualActFragment : Fragment() {
     private var _binding: FragmentTankManualActBinding? = null
     private val binding get() = _binding!!
     private lateinit var lastFillDateListener: DatePickerDialog.OnDateSetListener
-    private lateinit var invoiceDateListener: DatePickerDialog.OnDateSetListener
     private lateinit var mTank: TankData
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
 
         mTank = arguments?.getParcelable("tankData")!!
-        /* todo: delete */
 
+        /* todo: delete */
         println("data" + mTank)
         println("datatata")
         println(mTank.address)
-
 
         _binding = FragmentTankManualActBinding.inflate(inflater, container, false)
         return binding.root
@@ -51,7 +50,6 @@ class ManualActFragment : Fragment() {
         if (mTank.temp_id != null) {
             binding.etAddress.setText(mTank.address)
             binding.etNote.setText(mTank.comment)
-            binding.tvInvoice.text = mTank.invoice
             binding.tvLastFilled.text = mTank.last_filled
             //binding.spinnerStatus.setSelection(mTank.container_status_name)
             //println("dTank.maintenance_needed!!.toInt()" + mTank.maintenance_needed!!.toInt())
@@ -60,34 +58,30 @@ class ManualActFragment : Fragment() {
         }
 
         // create an OnDateSetListener
-        lastFillDateListener = datePickListener("lastFillDateListener")
-        invoiceDateListener = datePickListener("invoiceDateListener")
+        lastFillDateListener = datePickListener()
 
         // when you click on the button, show DatePickerDialog that is set with OnDateSetListener
         binding.tvLastFilled.setOnClickListener { datePickDiag(lastFillDateListener) }
         binding.ibLastFilled.setOnClickListener { datePickDiag(lastFillDateListener) }
-        binding.tvInvoice.setOnClickListener { datePickDiag(invoiceDateListener) }
-        binding.clInvoice.setOnClickListener { datePickDiag(invoiceDateListener) }
 
-        val customList = listOf(
+        val actList = listOf(
             "null", "Internal", "Sent out", "Returned", "Refilled",
-            "Linked", "Unlinked", "Maint. need", "Maint. compl", "Sold", "Discarded")
-        val customList1 = listOf("In use", "Quarantine", "Available", "At Client", "Disposed")
-        val customList2 = listOf("Hamar", "Trondheim")
-        val customList3 = listOf("Maintained", "Needs Maintenance")
-        spinnerArrayAdapter(customList, binding.spinnerAct)
-        spinnerArrayAdapter(customList1, binding.spinnerStatus)
-        spinnerArrayAdapter(customList2, binding.spinnerAffiliatedLab)
-        spinnerArrayAdapter(customList3, binding.spinnerMaintStatus)
+            "Linked", "Unlinked", "Maint. need", "Maint. compl", "Sold", "Discarded"
+        )
+        val statusList = listOf("In use", "Quarantine", "Available", "At Client", "Disposed")
+        val affiliatedLabList = listOf("Hamar", "Trondheim")
+        val maintStatusList = listOf("Maintained", "Needs Maintenance")
+        //val clientList = fetchLocationData()
+        spinnerArrayAdapter(actList, binding.spinnerAct)
+        spinnerArrayAdapter(statusList, binding.spinnerStatus)
+        spinnerArrayAdapter(affiliatedLabList, binding.spinnerAffiliatedLab)
+        spinnerArrayAdapter(maintStatusList, binding.spinnerMaintStatus)
+        //spinnerArrayAdapter(clientList, binding.spinnerClient!!)
 
         binding.bConfirm.setOnClickListener {
             println(getDateTime())
             if (binding.spinnerAct.selectedItem.toString() == "null") {
-                Toast.makeText(
-                    requireContext(),
-                    "Act is not entered, cannot be null!",
-                    Toast.LENGTH_LONG
-                ).show()
+                Toast.makeText(requireContext(), "Act is not entered, cannot be null!", Toast.LENGTH_LONG).show()
                 println("act " + binding.spinnerAct.selectedItem.toString())
 
             } else {
@@ -110,7 +104,7 @@ class ManualActFragment : Fragment() {
                         "container_sr_number" to mTank.container_sr_number.toString(), // Primary
                         "primary" to "container_sr_number", // Must be after Primary-key srNumb
                         "comment" to binding.etNote.text.toString(),
-                        "client_id" to 1,  // TODO: add client correctly
+                        "client_name" to "First rate fish",  // TODO: add client correctly
                         "location_id" to binding.spinnerAffiliatedLab.selectedItemPosition,
                         //"location_name" to binding.spinnerAffiliatedLab.selectedItem.toString(),
                         // TODO: maybe change to location_id"location_name" to binding.spinnerAffiliatedLab.selectedItem.toString(),
@@ -118,18 +112,52 @@ class ManualActFragment : Fragment() {
                         "container_status_name" to binding.spinnerStatus.selectedItem.toString(),
                         "maintenance_needed" to binding.spinnerMaintStatus.selectedItemPosition,
                         "last_filled" to binding.tvLastFilled.text.toString(),
-                        "invoice" to binding.tvInvoice.text.toString(),
+                        "client_name" to binding.spinnerClient!!.selectedItem.toString(),
                     )
                 )
 
                 val result1 = makeBackendRequest("transaction", actData, "POST")
                 val result2 = makeBackendRequest("container", dankData, "PUT")
                 println("res1" + result1.toString() + "res2" + result2.toString())
-                Toast.makeText(requireContext(), "res1" + result1.toString() + "res2" + result2.toString(), Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(),
+                    "res1" + result1.toString() + "res2" + result2.toString(),
+                    Toast.LENGTH_LONG).show()
 
             }
 
         }
+    }
+
+    private fun fetchLocationData(): List<String> {
+        val urlDataString = Api.fetchJsonData("http://10.0.2.2:8080/api/location")
+        val fetchedData = Api.parseJsonArray(urlDataString)
+        println("fetchedData: " + fetchedData)
+        val results = mutableListOf<String>()
+        if (fetchedData.isNotEmpty()) {
+            for (model in fetchedData) {
+                for (key in model.keys) {
+                    if (key == "location_name")
+                        println("model.values.toString() " + model.values.toString())
+                }
+                if (model.values.toString() == "location_name") {
+                    println("location_name " + model.values.toString() + " model.values " + model.values.toString())
+                    results.add(model.values.toString())
+                } else
+                    println("location_name2xd " + model.values.toString())
+
+                for (value in results) {
+                    println("result: " + value)
+                }
+            }
+        } else {
+            Toast.makeText(
+                requireContext(),
+                "No search value entered, or no Tanks added!",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+
+        return results
     }
 
     /**
@@ -144,7 +172,7 @@ class ManualActFragment : Fragment() {
         /** TODO: Delete this and drop null? */
         {
             override fun getDropDownView(
-                position: Int, convertView: View?, parent: ViewGroup
+                position: Int, convertView: View?, parent: ViewGroup,
             ): View {
                 val view: TextView =
                     super.getDropDownView(position, convertView, parent) as TextView
@@ -179,13 +207,13 @@ class ManualActFragment : Fragment() {
     /**
      * Common onDateSetListener body.
      */
-    private fun datePickListener(listenerRef: String): DatePickerDialog.OnDateSetListener {
+    private fun datePickListener(): DatePickerDialog.OnDateSetListener {
         val listener =
             DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
                 cal.set(Calendar.YEAR, year)
                 cal.set(Calendar.MONTH, monthOfYear)
                 cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                updateDateInView(listenerRef)
+                updateDateInView()
             }
         return listener
     }
@@ -193,16 +221,9 @@ class ManualActFragment : Fragment() {
     /**
      * Updates date in textView
      */
-    private fun updateDateInView(listenerRef: String) {
+    private fun updateDateInView() {
         val myFormat = "dd/MM/yyyy" // mention the format you need, needs to be big M, small d/y.
         val sdf = SimpleDateFormat(myFormat, Locale.US)
-        when (listenerRef) {
-            "lastFillDateListener" -> {
-                binding.tvLastFilled.text = sdf.format(cal.time)
-            }
-            "invoiceDateListener" -> {
-                binding.tvInvoice.text = sdf.format(cal.time)
-            }
-        }
+        binding.tvLastFilled.text = sdf.format(cal.time)
     }
 }

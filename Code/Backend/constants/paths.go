@@ -25,7 +25,7 @@ const MOBILE_LOGIN_PATH = BASE_USER_PATH + "/login"    // "/api/user/login"
 const WEB_LOGIN_PATH = BASE_USER_PATH + "/admin/login" // "/api/user/admin/login"
 const WEB_PRIMARY_PATH = BASE_USER_PATH + "/admin"     // "/api/user/admin"
 const WEB_ADMIN_PATH = BASE_PATH + "/getAdmins"        // "/api/getAdmins"
-const SHARED_CREATE_PATH = BASE_PATH + "/create"       // "/api/create/container" or "/api/create/transactions"
+const SHARED_CREATE_PATH = BASE_PATH + "/create"       // "/api/create/container" or "/api/create/transactions" or "/api/create/employee"
 const PUBLIC_STATUS_PATH = BASE_PATH + "/status"       // "/api/status"
 
 // Database

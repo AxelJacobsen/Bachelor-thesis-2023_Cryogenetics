@@ -136,17 +136,22 @@ export default function Users() {
 
   const [rows, setRows] = React.useState([]);
 
-  React.useEffect(() => {
-    async function fetchRowData() {
-      try {
-        const response = await fetchData('/api/employee', 'GET');
-        setRows(response);
-      } catch (error) {
-        console.error(error);
-      }
+  async function fetchRowData() {
+    try {
+      const response = await fetchData('/api/employee', 'GET');
+      setRows(response);
+    } catch (error) {
+      console.error(error);
     }
+  }
+
+  React.useEffect(() => {
     fetchRowData();
   }, []);
+
+  const handleModalClose = () => {
+    fetchRowData();
+  }
 
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -257,6 +262,7 @@ export default function Users() {
         <EditUserModal
           selectedRow={selectedRow}
           setSelectedRow={setSelectedRow}
+          onClose={handleModalClose}
         />
       )} 
         </TableContainer>
@@ -273,7 +279,7 @@ export default function Users() {
       </div>
       <div className = "grid-child-buttons">
         <Button variant='contained' color='success' onClick={handleOpenModal}> Add user </Button>
-        <AddUserModal open={openModal} setOpen={setOpenModal} />
+        <AddUserModal open={openModal} setOpen={setOpenModal} onClose={handleModalClose}/>
       </div>
     </div>
       <FormControlLabel

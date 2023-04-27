@@ -32,12 +32,9 @@ export default function AddActModal({ open, setOpen, onClose }) {
         is_active: 1
       }];      
       await fetchData("/api/act", 'POST', data);
-      setActName('');
-      setActDescription('');
-      setOpen(false);
-      onClose();
+      handleCloseModal()
     } catch (error) {
-      console.error(error);
+      alert(`Error: ${error.message}`);
     }
   }
 
@@ -66,7 +63,7 @@ export default function AddActModal({ open, setOpen, onClose }) {
         <Button variant="contained" sx={{ m: 2 }} color="error" onClick={handleCloseModal}>
           Cancel
         </Button>
-        <Button variant="contained" sx={{ m: 2 }} color="success" onClick={handleConfirmModal}>
+        <Button variant="contained" sx={{ m: 2 }} color="success" onClick={handleConfirmModal} disabled={!actName || !actDescription}>
           Confirm
         </Button>
       </Box>

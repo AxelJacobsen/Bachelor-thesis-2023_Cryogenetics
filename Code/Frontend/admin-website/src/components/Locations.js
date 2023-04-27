@@ -125,17 +125,22 @@ export default function Locations() {
 
   const [rows, setRows] = React.useState([]);
 
-  React.useEffect(() => {
-    async function fetchRowData() {
-      try {
-        const response = await fetchData('/api/location', 'GET');
-        setRows(response);
-      } catch (error) {
-        console.error(error);
-      }
+  async function fetchRowData() {
+    try {
+      const response = await fetchData('/api/location', 'GET');
+      setRows(response);
+    } catch (error) {
+      console.error(error);
     }
+  }
+
+  React.useEffect(() => {
     fetchRowData();
   }, []);
+
+  const handleModalClose = () => {
+    fetchRowData();
+  }
 
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -242,6 +247,7 @@ export default function Locations() {
           <EditLocationModal
             selectedRow={selectedRow}
             setSelectedRow={setSelectedRow}
+            onClose={handleModalClose}
           />
         )} 
           </TableContainer>
@@ -258,7 +264,7 @@ export default function Locations() {
       </div>
       <div className = "grid-child-buttons">
         <Button variant='contained' color='success' onClick={handleOpenModal}> Add customer </Button>
-        <AddLocationModal open={openModal} setOpen={setOpenModal} />
+        <AddLocationModal open={openModal} setOpen={setOpenModal} onClose={handleModalClose} />
       </div>
     </div>
       <FormControlLabel

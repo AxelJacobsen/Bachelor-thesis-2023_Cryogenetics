@@ -1,34 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/clTaskItem"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+    android:layout_height="match_parent"
+    android:layout_marginStart="4dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
+    android:layout_marginEnd="4dp"
+    android:background="@drawable/rectangle_rounded"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+    <ImageView
+        android:id="@+id/ivCurTaskItem"
+        android:layout_width="48dp"
+        android:layout_height="0dp"
+        android:layout_margin="2dp"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/taskItemtv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/cancel" />
 
     <TextView
         android:id="@+id/taskItemtv"
-        android:layout_width="140dp"
-        android:layout_height="match_parent"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="2dp"
-        android:background="@drawable/rectangle_rounded"
-        android:text="taskItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="111dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginEnd="3dp"
+        android:gravity="center_vertical"
+        android:text="@string/none"
         android:textSize="24dp"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/taskItemX"
+        app:layout_constraintStart_toEndOf="@+id/ivCurTaskItem"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/taskItemX"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/taskItemtv"
-        app:layout_constraintEnd_toEndOf="@+id/taskItemtv"
-        app:layout_constraintTop_toTopOf="@+id/taskItemtv"
-        app:srcCompat="@drawable/cancel" />
+        android:layout_width="48dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/taskItemtv"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/cancel"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
