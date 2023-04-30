@@ -62,6 +62,43 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 	// GET method
 	case http.MethodGet:
 		joinData, keys = constants.SetJoinData(joinData, keys, activeTable)
+
+		// For fetching columns
+		if len(args) > 0 && args[1] == "columns" {
+			sql := `SELECT COLUMN_NAME
+			FROM INFORMATION_SCHEMA.COLUMNS
+			WHERE TABLE_NAME = ?`
+			args := []interface{}{activeTable}
+
+			// Query
+			res, err := globals.QueryJSON(globals.DB, sql, args, w)
+			if err != nil {
+				http.Error(w, "Error fetching columns for the given table "+err.Error(), http.StatusUnprocessableEntity)
+				return
+			}
+
+			// Add joins (if applicable)
+			if len(args) > 1 && args[2] == "all" {
+				for _, k := range keys {
+					if k == "main" {
+						continue
+					}
+
+					joinedTableName := strings.Split(k, ":")[0]
+					res = append(res, map[string]interface{}{"COLUMN_NAME": joinedTableName})
+				}
+			}
+
+			// Writeback
+			w.Header().Set("Content-Type", "application/json")
+			err = json.NewEncoder(w).Encode(res)
+			if err != nil {
+				http.Error(w, "Error encoding data.", http.StatusInternalServerError)
+			}
+
+			return
+		}
+
 		/// SEND REQUEST TO GENERIC GET REQUEST, RECIEVE AS "res, err"
 		SQL, sqlArgs, err := globals.ConvertUrlToSql(r, joinData, keys)
 		if err != nil {
