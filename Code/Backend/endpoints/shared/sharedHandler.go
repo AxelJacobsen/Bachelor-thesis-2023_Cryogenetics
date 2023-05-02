@@ -64,21 +64,21 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 		joinData, keys = constants.SetJoinData(joinData, keys, activeTable)
 
 		// For fetching columns
-		if len(args) > 0 && args[1] == "columns" {
-			sql := `SELECT COLUMN_NAME
+		if len(args) > 1 && args[1] == "columns" {
+			sqlQuery := `SELECT COLUMN_NAME, COLUMN_TYPE, COLUMN_KEY
 			FROM INFORMATION_SCHEMA.COLUMNS
 			WHERE TABLE_NAME = ?`
-			args := []interface{}{activeTable}
+			sqlArgs := []interface{}{activeTable}
 
 			// Query
-			res, err := globals.QueryJSON(globals.DB, sql, args, w)
+			res, err := globals.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
 			if err != nil {
 				http.Error(w, "Error fetching columns for the given table "+err.Error(), http.StatusUnprocessableEntity)
 				return
 			}
 
 			// Add joins (if applicable)
-			if len(args) > 1 && args[2] == "all" {
+			if len(args) > 2 && args[2] == "all" {
 				for _, k := range keys {
 					if k == "main" {
 						continue
