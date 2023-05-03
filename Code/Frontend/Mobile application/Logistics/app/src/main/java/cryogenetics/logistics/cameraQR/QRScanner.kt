@@ -1,4 +1,4 @@
-package cryogenetics.logistics.ui.tank
+package cryogenetics.logistics.cameraQR
 
 import android.graphics.ImageFormat.*
 import android.util.Log

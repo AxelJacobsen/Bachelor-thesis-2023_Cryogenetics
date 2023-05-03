@@ -1,53 +1,37 @@
 package cryogenetics.logistics.ui.tankfill
 
-import android.Manifest
-import android.app.Activity
-import android.content.ContentValues
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
-import com.google.mlkit.vision.common.InputImage
 import cryogenetics.logistics.R
+import cryogenetics.logistics.api.Api
+import cryogenetics.logistics.api.ApiUrl
+import cryogenetics.logistics.cameraQR.CamAccess
 import cryogenetics.logistics.databinding.FragmentTankFillingBinding
 import cryogenetics.logistics.ui.inventory.mini.MiniInventoryFragment
-import cryogenetics.logistics.ui.tank.CameraFragment
-
+import cryogenetics.logistics.cameraQR.CameraFragment
+import cryogenetics.logistics.ui.tank.OnItemClickListener
 
 class TankFillFragment : Fragment() {
 
+    private lateinit var viewModel: TankViewModel
+    private lateinit var inventoryData: List<Map<String, Any>>
+    private lateinit var camFrag: CameraFragment
 
-    companion object {
-        private const val CAMERA_REQUEST_CODE = 100
-        private const val STORAGE_REQUEST_CODE = 101
-
-        private const val TAG = "MAIN_TAG"
-    }
-
-    private lateinit var cameraPermissions: Array<String>
-    private lateinit var storagePermissions: Array<String>
-    private var imageUri: Uri? = null
     private var barcodeScannerOptions: BarcodeScannerOptions? = null
     private var barcodeScanner: BarcodeScanner? = null
-
     private var _binding : FragmentTankFillingBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: TankViewModel
+    private var qrCodes: MutableList<String> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,9 +44,9 @@ class TankFillFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        cameraPermissions = arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        storagePermissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        inventoryData = fetchInventoryData()
+        inventoryData = listOf(mapOf())
+        camFrag = CameraFragment(mOnFoundProductListener)
 
         barcodeScannerOptions = BarcodeScannerOptions.Builder()
             .setBarcodeFormats(Barcode.FORMAT_ALL_FORMATS)
@@ -70,23 +54,17 @@ class TankFillFragment : Fragment() {
 
         barcodeScanner = BarcodeScanning.getClient(barcodeScannerOptions!!)
 
-
-        binding.ibCamera?.setOnClickListener {
-            if (checkCameraPermission()){
+        binding.ibCamera.setOnClickListener {
+            if (CamAccess.checkCameraPermission(requireContext())){
                 //if (checkStoragePermission()){
-                binding.fragmentContainer?.visibility = View.VISIBLE
+                binding.flFillFragment.visibility = View.VISIBLE
                 childFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, CameraFragment())
+                    .replace(R.id.flFillFragment, CameraFragment(mOnFoundProductListener))
                     .commit()
-                println("checkSTORagePermission success")
-                /*} else {
-                    println("checkSTORagePermission fail")
-                    requestStoragePermission()
-                }*/
+                println("checkSTORagePermission success") // TODO: LOG.D
             } else {
-                println("checkCameraPermission fail")
-                requestCameraPermission()
-                //requestStoragePermission()
+                println("checkCameraPermission fail") // TODO: LOG.D
+                CamAccess.requestCameraPermission(requireActivity())
             }
         }
 
@@ -94,113 +72,66 @@ class TankFillFragment : Fragment() {
             .replace(R.id.flMiniInventoryRecycler, MiniInventoryFragment())
             .commit()
 
-        childFragmentManager.beginTransaction() // TODO: Change Fragment to refilled tanks
-            .replace(R.id.flRefilledTanksRecycler, MiniInventoryFragment())
-            .commit()
+        // initialize the recyclerView
+        binding.recyclerRefilledTanks.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerRefilledTanks.setHasFixedSize(true)
+
+        //Create a list of references
+        val viewIds = listOf(
+            R.id.tvInventoryNr,
+            R.id.tvInventoryClient,
+            R.id.tvInventoryLastFill,
+            R.id.tvInventoryNoti
+        )
+        //Create adapter
+        binding.recyclerRefilledTanks.adapter = TankFillAdapter(
+            inventoryData as MutableList<Map<String, Any>>, viewIds)
+        binding.recyclerRefilledTanks.visibility = View.VISIBLE
     }
 
-
-    private fun pickImageGallery(){
-        val intent = Intent(Intent.ACTION_PICK)
-
-        intent.type = "image/*"
-        galleryActivityResultLauncher.launch(intent)
+    private fun fetchInventoryData(): List<Map<String, Any>> {
+        val urlDataString = Api.fetchJsonData(ApiUrl.urlContainer)
+        return Api.parseJsonArray(urlDataString)
     }
 
-    private val galleryActivityResultLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ){ result ->
-        if (result.resultCode == Activity.RESULT_OK){
-            val data = result.data
-
-            imageUri = data?.data
-            Log.d(TAG, ": galleryActivityResultLauncher imageUri: $imageUri")
-
-            binding.ibCamera?.setImageURI(imageUri) // TODO: LINK TO IMAGEVIEW
-
-        } else {
-            Toast.makeText(requireContext(), "galleryActivityResultLauncher failed", Toast.LENGTH_LONG).show()
+    private val mOnFoundProductListener = object : OnItemClickListener {
+        override fun onClick(model: Map<String, Any>) {
+            println("MODELLO" + model)
+            // add model to adapter
         }
-    }
 
-    private fun pickImageCamera() {
-        val contentValues = ContentValues()
-        contentValues.put(MediaStore.Images.Media.TITLE, "Sample image title")
-        contentValues.put(MediaStore.Images.Media.DESCRIPTION, "Sample image description")
-
-        imageUri = requireContext().contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
-        requireActivity().startActivityFromFragment(TankFillFragment(), intent, CAMERA_REQUEST_CODE)
-        startActivity(intent)
-        //requireActivity().startActivityForResult(intent, CAMERA_REQUEST_CODE)
-        cameraActivityResultLauncher.launch(intent)
-    }
-
-
-    private val cameraActivityResultLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val data = result.data
-
-            Log.d(TAG, ": cameraActivityResultLauncher - imageUri: $imageUri")
-            binding.ibCamera?.setImageURI(imageUri) // TODO: LINK IMAGEVIEW
-        }
-    }
-
-    private fun checkStoragePermission(): Boolean {
-        val storg = (ContextCompat.checkSelfPermission(requireContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
-        return storg
-    }
-
-    private fun requestStoragePermission() {
-        ActivityCompat.requestPermissions(requireActivity(), storagePermissions, STORAGE_REQUEST_CODE)
-    }
-
-    private fun checkCameraPermission(): Boolean {
-        val camRes = (ContextCompat.checkSelfPermission(requireContext(),
-            Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED)
-
-        return camRes
-    }
-
-    private fun requestCameraPermission() {
-        ActivityCompat.requestPermissions(requireActivity(), cameraPermissions, CAMERA_REQUEST_CODE)
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray,
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        when(requestCode) {
-            CAMERA_REQUEST_CODE -> {
-                if (grantResults.isNotEmpty()) {
-                    val cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED
-                    val storageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED
-
-                    if (cameraAccepted && storageAccepted)
-                        pickImageCamera()
-                    else
-                        Toast.makeText(requireContext(), "Camera and storage permissions are required", Toast.LENGTH_LONG).show()
-                }
+        override fun onFoundQR(serialNr: String) {
+            if (qrCodes.contains(serialNr)) {
+                return
             }
-            STORAGE_REQUEST_CODE -> {
-                if (grantResults.isNotEmpty()) {
-                    val storageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED
-                    if (storageAccepted)
-                        pickImageGallery()
-                     else
-                        Toast.makeText(requireContext(), "Camera and storage permissions are required", Toast.LENGTH_LONG).show()
+            qrCodes.add(serialNr)
+            if (inventoryData.isNotEmpty()) {
+                for (model in inventoryData) {
+                    if (model.values.toString().contains(serialNr)) {
+                        /*
+                        initTankData(model)
+                        binding.flTankCameraFragment?.visibility = View.GONE
+                        binding.bottomDetails.visibility = View.VISIBLE
+                        binding.rightMenuAndContent.visibility = View.VISIBLE
+                         */
+                        //camFrag.onPaus()
+                        break
+                    }
                 }
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "No search value entered, or no Tanks added!",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
+
+        override fun onStopCam() {
+            binding.flFillFragment?.visibility = View.GONE
+        }
     }
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

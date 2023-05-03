@@ -3,7 +3,6 @@ package cryogenetics.logistics.api
 import android.content.ContentValues.TAG
 import android.os.StrictMode
 import android.util.Log
-import io.ktor.client.request.*
 import org.json.JSONArray
 import org.json.JSONException
 import java.io.BufferedReader
@@ -102,7 +101,7 @@ class Api {
             val legalMethods = listOf<String>("POST", "PUT")
 
             // Define the base URL for your backend server
-            val baseUrl = "http://10.0.2.2:8080/api/"
+            val baseUrl = ApiUrl.urlBase
 
             //Check if provided method is allowed
             if (!legalMethods.contains(method.uppercase())){

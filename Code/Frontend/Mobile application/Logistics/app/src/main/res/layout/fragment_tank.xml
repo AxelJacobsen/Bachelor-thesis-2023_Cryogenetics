@@ -12,28 +12,30 @@
         android:id="@+id/leftSearchAndInfo"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/red"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/rightMenuAndContent"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent=".33">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/searchView"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/black"
+            android:layout_height="80dp"
+            app:layout_constraintBottom_toTopOf="@+id/bottomCameraAndInfo"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.12"
+            app:layout_constraintHeight_percent="0.15"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/bottomCameraAndInfo">
+            app:layout_constraintTop_toTopOf="parent">
 
             <EditText
                 android:id="@+id/edSearchValue"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_margin="4dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
+                android:layout_marginEnd="4dp"
                 android:background="@drawable/rounded_textbox"
                 android:gravity="center_vertical"
                 android:hint="@string/write_here"
@@ -68,7 +70,9 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="0.3"
                 app:layout_constraintStart_toEndOf="@+id/edSearchValue"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="@color/black"
+                app:strokeWidth="2dp"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -76,7 +80,6 @@
             android:id="@+id/bottomCameraAndInfo"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@color/teal_200"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -86,13 +89,11 @@
                 android:id="@+id/midCamera"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:background="@color/teal_200"
+                app:layout_constraintBottom_toTopOf="@+id/bottomDetails"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHeight_percent="0.4"
+                app:layout_constraintVertical_weight="1"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/bottomDetails">
-
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageButton
                     android:id="@+id/ibCamera"
@@ -108,6 +109,16 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <FrameLayout
+                    android:id="@+id/flTankCameraFragment"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -115,10 +126,12 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@color/black"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/midCamera">
+                app:layout_constraintTop_toBottomOf="@+id/midCamera"
+                app:layout_constraintVertical_weight="1.5">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/bottomDetails0"
@@ -149,7 +162,7 @@
                         app:autoSizeTextType="uniform"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/tvTankId"
-                        app:layout_constraintHorizontal_weight="0.5"
+                        app:layout_constraintHorizontal_weight="1"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -236,7 +249,7 @@
                     android:layout_marginTop="2dip"
                     android:layout_marginEnd="2dip"
                     android:background="@color/white"
-                    app:layout_constraintBottom_toTopOf="@+id/bottomDetails3"
+                    app:layout_constraintBottom_toTopOf="@+id/bottomDetails21"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/bottomDetails1"
@@ -284,6 +297,61 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/bottomDetails21"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="2dip"
+                    android:layout_marginTop="2dip"
+                    android:layout_marginEnd="2dip"
+                    android:background="@color/white"
+                    app:layout_constraintBottom_toTopOf="@+id/bottomDetails3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/bottomDetails2"
+                    app:layout_constraintVertical_weight="0.8">
+
+                    <TextView
+                        android:id="@+id/tvAffiliated"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:gravity="start|center_vertical"
+                        android:maxLines="1"
+                        android:padding="5dp"
+                        android:text="@string/affiliated"
+                        android:textColor="@color/black"
+                        app:autoSizeMaxTextSize="32sp"
+                        app:autoSizeMinTextSize="12sp"
+                        app:autoSizeStepGranularity="2sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tvAffiliatedLab"
+                        app:layout_constraintHorizontal_weight="0.6"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvAffiliatedLab"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:gravity="end|center_vertical"
+                        android:maxLines="2"
+                        android:paddingStart="2dp"
+                        android:paddingEnd="5dp"
+                        android:text="@string/none"
+                        android:textColor="@color/black"
+                        app:autoSizeMaxTextSize="32sp"
+                        app:autoSizeMinTextSize="12sp"
+                        app:autoSizeStepGranularity="2sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintStart_toEndOf="@+id/tvAffiliated"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/bottomDetails3"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -294,7 +362,7 @@
                     app:layout_constraintBottom_toTopOf="@+id/bottomDetails4"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/bottomDetails2"
+                    app:layout_constraintTop_toBottomOf="@+id/bottomDetails21"
                     app:layout_constraintVertical_weight="0.8">
 
                     <TextView
@@ -447,28 +515,54 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/searchResult"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:visibility="invisible"
                 android:background="@color/white"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/bottomCameraAndInfo"/>
+                app:layout_constraintTop_toTopOf="@+id/bottomCameraAndInfo">
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_Search_Result"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@color/white"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toTopOf="@+id/ib_cancel_Search"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/ib_cancel_Search"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="TODO"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/cancel"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/recycler_Search_Result" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- android:visibility="gone" -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rightMenuAndContent"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/cryoBlue"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="1"
+        app:layout_constraintHorizontal_weight="2"
         app:layout_constraintStart_toEndOf="@+id/leftSearchAndInfo"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -546,7 +640,6 @@
                     app:layout_constraintHorizontal_weight="0.5"
                     app:layout_constraintStart_toEndOf="@id/firstRowFirst"
                     app:layout_constraintTop_toTopOf="parent">
-
 
                     <ImageView
                         android:id="@+id/ivFirstRowSecond"
@@ -766,7 +859,7 @@
                 android:background="@color/cryoBlue"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"></FrameLayout>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <FrameLayout
                 android:id="@+id/miniLog"
@@ -778,9 +871,8 @@
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/menuInventory"
-                app:layout_constraintVertical_bias="0.0">
+                app:layout_constraintVertical_bias="0.0"/>
 
-            </FrameLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

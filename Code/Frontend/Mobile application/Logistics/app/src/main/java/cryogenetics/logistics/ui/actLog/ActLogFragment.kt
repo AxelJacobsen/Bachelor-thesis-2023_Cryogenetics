@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
+import cryogenetics.logistics.api.ApiUrl
 import cryogenetics.logistics.databinding.FragmentActLogBinding
 import cryogenetics.logistics.databinding.FragmentHostBinding
 import cryogenetics.logistics.ui.filters.FilterAdapter
@@ -178,7 +179,7 @@ class ActLogFragment : Fragment() {
     }
 
     private fun fetchActLogData() :  List<Map<String, Any>>{
-        val urlDataString = Api.fetchJsonData("http://10.0.2.2:8080/api/transaction")
+        val urlDataString = Api.fetchJsonData(ApiUrl.urlTransaction)
         return Api.parseJsonArray(urlDataString)
     }
 

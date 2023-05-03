@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
+import cryogenetics.logistics.api.ApiUrl
 import cryogenetics.logistics.databinding.FragmentMiniInventoryBinding
 import cryogenetics.logistics.ui.inventory.*
 
@@ -71,7 +72,6 @@ class MiniInventoryFragment : Fragment() {
         }
 
         //Create a list of references
-
         val viewIds = listOf(
             R.id.tvInventoryNr,
             R.id.tvInventoryClient,
@@ -94,7 +94,7 @@ class MiniInventoryFragment : Fragment() {
     }
 
     private fun fetchInventoryData() :  List<Map<String, Any>>{
-        val urlDataString = Api.fetchJsonData("http://10.0.2.2:8080/api/container")
+        val urlDataString = Api.fetchJsonData(ApiUrl.urlContainer)
         return Api.parseJsonArray(urlDataString)
     }
 
