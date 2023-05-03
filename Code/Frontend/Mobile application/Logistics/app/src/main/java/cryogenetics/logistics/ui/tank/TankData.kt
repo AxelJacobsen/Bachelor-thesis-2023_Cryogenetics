@@ -19,7 +19,7 @@ data class TankData(
     val maintenance_needed: String?,
     val production_date: String?,
     val refill_interval: String?,
-    val temp_id: String?
+    val id: String?
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
@@ -56,7 +56,7 @@ data class TankData(
         parcel.writeString(maintenance_needed)
         parcel.writeString(production_date)
         parcel.writeString(refill_interval)
-        parcel.writeString(temp_id)
+        parcel.writeString(id)
     }
 
     override fun describeContents(): Int {

@@ -30,7 +30,7 @@
     <string name="inv">inventory</string>
     <string name="ivo">invoice</string>
     <string name="rId">responsible_id</string>
-    <string name="id">temp_id</string>
+    <string name="id">id</string>
     <string name="lFi">last_filled</string>
     <string name="mod">model</string>
     <string name="sign">Sign</string>

@@ -327,7 +327,7 @@ class TankFragment : Fragment() {
             println("MODELLO" + model)
             initTankData(model)
 
-            binding.tvTankId.text = dTank.temp_id
+            binding.tvTankId.text = dTank.id
             binding.tvTankStatus.text = dTank.container_status_name
             binding.tvTankLocation.text = dTank.address
             binding.tvTankClient.text = dTank.client_name
@@ -385,15 +385,15 @@ class TankFragment : Fragment() {
             maintenance_needed = tank.entries.find { it.key == "maintenance_needed" }?.value.toString(),
             production_date = tank.entries.find { it.key == "production_date" }?.value.toString(),
             refill_interval = tank.entries.find { it.key == "refill_interval" }?.value.toString(),
-            temp_id = tank.entries.find { it.key == "temp_id" }?.value.toString()
+            id = tank.entries.find { it.key == "id" }?.value.toString()
         )
 
-        binding.tvTankId.text = dTank.temp_id
+        binding.tvTankId.text = dTank.id
         binding.tvTankStatus.text = dTank.container_status_name
         binding.tvTankLocation.text = dTank.address
         binding.tvTankClient.text = dTank.client_name
         binding.tvTankLastFilled.text = dTank.last_filled
-        binding.tvAffiliatedLab?.text = dTank.location_name
+        binding.tvAffiliatedLab.text = dTank.location_name
         binding.tvTankNote.text = dTank.comment
     }
 

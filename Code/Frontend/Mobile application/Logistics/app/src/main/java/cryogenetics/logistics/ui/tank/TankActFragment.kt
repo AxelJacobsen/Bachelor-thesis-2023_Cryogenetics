@@ -60,7 +60,7 @@ class ActFragment (
         binding.ibInvoiceDate.setOnClickListener { datePickDiag(invoiceDateListener) }
 
         // Check if mTank was successfully initialized
-        if (mTank.temp_id != null) {
+        if (mTank.id != null) {
             if(fetchSpinnerData(ApiUrl.urlLocation, "location_name", locationNames,
                     "location_id", locationIds))
                 spinnerArrayAdapter(locationNames, binding.spinnerAffiliatedLab)
