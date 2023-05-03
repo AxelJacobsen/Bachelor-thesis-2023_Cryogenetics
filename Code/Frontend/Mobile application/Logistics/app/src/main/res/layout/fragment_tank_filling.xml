@@ -93,8 +93,9 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/searchView"
                     android:contentDescription="TODO" />
+
                 <FrameLayout
-                    android:id="@+id/fragment_container"
+                    android:id="@+id/flFillFragment"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:background="@color/red"
@@ -102,7 +103,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -140,7 +141,6 @@
                     android:id="@+id/rightMenuFirstRow"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@color/cryoBlue"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -150,7 +150,7 @@
                         android:id="@+id/clMenuFirst"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:background="#8B1E23"
+                        android:background="@drawable/button_transaction"
                         android:layout_marginStart="5dip"
                         android:layout_marginTop="5dip"
                         android:layout_marginBottom="5dip"
@@ -165,6 +165,7 @@
                             android:id="@+id/ivMenuFirst"
                             android:layout_width="0dp"
                             android:layout_height="60dp"
+                            android:padding="3dp"
                             android:src="@drawable/cancel_all_screenshot"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -175,7 +176,8 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="@string/transaction"
+                            android:padding="3dp"
+                            android:text="Cancel all"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/ivMenuFirst" />
@@ -190,7 +192,8 @@
                         android:layout_marginTop="5dip"
                         android:layout_marginBottom="5dip"
                         android:layout_marginEnd="2.5dip"
-                        android:background="#FE9800"
+
+                        android:background="@drawable/button_undo"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/clMenuThird"
                         app:layout_constraintHorizontal_weight="0.3"
@@ -201,6 +204,7 @@
                             android:id="@+id/ivMenuSecond"
                             android:layout_width="0dp"
                             android:layout_height="60dp"
+                            android:padding="3dp"
                             android:src="@drawable/undo"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -208,10 +212,11 @@
 
                         <TextView
                             android:id="@+id/tvMenuSecond"
+                            android:padding="3dp"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="@string/transaction"
+                            android:text="Undo"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/ivMenuSecond" />
@@ -225,7 +230,7 @@
                         android:layout_marginTop="5dip"
                         android:layout_marginBottom="5dip"
                         android:layout_marginEnd="2.5dip"
-                        android:background="#2EA0AF"
+                        android:background="@drawable/button_remove_all"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/clMenuForth"
                         app:layout_constraintHorizontal_weight="0.3"
@@ -236,6 +241,7 @@
                             android:id="@+id/ivMenuThird"
                             android:layout_width="0dp"
                             android:layout_height="60dp"
+                            android:padding="3dp"
                             android:src="@drawable/remove_selected"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -245,8 +251,9 @@
                             android:id="@+id/tvMenuThird"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:padding="3dp"
                             android:gravity="center"
-                            android:text="@string/transaction"
+                            android:text="Remove selected"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/ivMenuThird" />
@@ -260,7 +267,7 @@
                         android:layout_marginTop="5dip"
                         android:layout_marginBottom="5dip"
                         android:layout_marginEnd="5dip"
-                        android:background="#2A673B"
+                        android:background="@drawable/button_confirm2"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_weight="0.3"
@@ -271,6 +278,7 @@
                             android:id="@+id/ivMenuForth"
                             android:layout_width="0dp"
                             android:layout_height="60dp"
+                            android:padding="3dp"
                             android:src="@drawable/finish_screenshot"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -280,8 +288,9 @@
                             android:id="@+id/tvMenuForth"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:padding="3dp"
                             android:gravity="center"
-                            android:text="@string/transaction"
+                            android:text="Finish"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/ivMenuForth" />
@@ -302,6 +311,7 @@
                     android:id="@+id/textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="3dp"
                     android:text="Refilled Tanks"
                     android:textSize="32sp"
                     android:textColor="@color/black"
@@ -309,10 +319,11 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <FrameLayout
-                    android:id="@+id/flRefilledTanksRecycler"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerRefilledTanks"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
+                    android:padding="3dp"
                     android:background="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
