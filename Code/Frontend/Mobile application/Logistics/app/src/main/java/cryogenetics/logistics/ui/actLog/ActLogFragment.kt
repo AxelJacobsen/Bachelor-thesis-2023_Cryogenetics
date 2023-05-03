@@ -101,7 +101,7 @@ class ActLogFragment : Fragment() {
         // Attach listener to filter button
         bFilter.setOnClickListener {
 
-            // If filter state hasn't been initialized yet, initialize it.
+            // If filterState hasn't been initialized yet, initialize it.
             if (!::filterState.isInitialized) {
                 addTableToFilters("http://10.0.2.2:8080/api/container_status", "status", listOf("container_status_name"))
                 addTableToFilters("http://10.0.2.2:8080/api/act", "act", listOf("act_name"))
@@ -109,10 +109,22 @@ class ActLogFragment : Fragment() {
                 addTableToFilters("http://10.0.2.2:8080/api/container_model", "size", listOf("liter_capacity"))
             }
 
+            // Create filter fragment with an initial filter state
             val fragment = FilterFragment (
-                {filterState = it.toMutableMap()},
+                {},
                 filterState
             )
+
+            // Add its on apply function
+            fragment.onApply = {
+                Log.d("state: ", it.toString())
+                filterState = it.toMutableMap()
+
+                // Close the fragment
+                childFragmentManager.commit {
+                    remove(fragment)
+                }
+            }
 
             childFragmentManager.commit {
                 setReorderingAllowed(true)

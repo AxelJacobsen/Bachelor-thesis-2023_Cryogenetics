@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
 import java.security.KeyStore.Entry
@@ -24,13 +25,16 @@ class FilterFragment (
     private lateinit var bFilterReset: Button
     private lateinit var bFilterApply: Button
 
+    private lateinit var etDateStart: EditText
+    private lateinit var etDateEnd: EditText
+
     private lateinit var rvFilterStatus: RecyclerView
     private lateinit var rvFilterAct: RecyclerView
     private lateinit var rvFilterLocations: RecyclerView
     private lateinit var rvFilterSize: RecyclerView
 
-    private var adapters: MutableMap<RecyclerView, FilterAdapter> = mutableMapOf()
-    private var shorthands: MutableMap<RecyclerView, String> = mutableMapOf()
+    private var adapters: MutableMap<View, FilterAdapter> = mutableMapOf()
+    private var shorthands: MutableMap<View, String> = mutableMapOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,12 +52,17 @@ class FilterFragment (
         bFilterReset    = view.findViewById(R.id.bFilterReset)
         bFilterApply    = view.findViewById(R.id.bFilterApply)
 
+        etDateStart = view.findViewById(R.id.etDateStart)
+        etDateEnd = view.findViewById(R.id.etDateEnd)
+
         rvFilterStatus      = view.findViewById(R.id.rvFilterStatus)
         rvFilterAct         = view.findViewById(R.id.rvFilterAct)
         rvFilterLocations   = view.findViewById(R.id.rvFilterLocations)
         rvFilterSize        = view.findViewById(R.id.rvFilterSize)
 
         // Add recyclerViews & attach adapters
+        addEditText(etDateStart, "dateStart")
+        addEditText(etDateEnd, "dateEnd")
         addRecyclerview(rvFilterStatus, "status")
         addRecyclerview(rvFilterAct, "act")
         addRecyclerview(rvFilterLocations, "locations")
@@ -61,8 +70,17 @@ class FilterFragment (
 
         // On reset
         bFilterReset.setOnClickListener {
-            for (adapter in adapters)
-                adapter.value.updateData(adapter.value.dataList.map { Pair(it.first, false) })
+            for (v in shorthands) {
+                when (v.key) {
+                    is RecyclerView -> {
+                        val adapter = adapters[v.key]
+                        adapter?.updateData(adapter.dataList.map { Pair(it.first, false) })
+                    }
+                    is EditText -> {
+                        (v.key as EditText).setText("")
+                    }
+                }
+            }
         }
 
         // On apply
@@ -79,20 +97,30 @@ class FilterFragment (
      */
     private fun addRecyclerview(recyclerView: RecyclerView, shorthand: String) {
         shorthands[recyclerView] = shorthand
-        val adapter = FilterAdapter(
-            initialState[shorthand]?.toList()?.map { it.first to (it.second=="true")} ?: emptyList()
-        )
+        val adapter = FilterAdapter(initialState[shorthand]?.toList()?.map { it.first to (it.second=="true")} ?: emptyList())
         adapters[recyclerView] = adapter
         recyclerView.adapter = adapter
     }
 
+    private fun addEditText(editText: EditText, shorthand: String) {
+        shorthands[editText] = shorthand
+        editText.setText(initialState[shorthand]?.get("text") ?: "")
+    }
+
     /**
      *  Gets the current filter state.
-     *  The filter state is in the format "filterName" : ("checkboxName" : "true"/"false").
+     *  The filter state is in the format "shorthand" : ("subElementName" : "true"/"false"/other).
      *
      *  @return The current filter state.
      */
     private fun getFilterState() : Map<String, Map<String, String>> {
-        return shorthands.map { it.value to (adapters[it.key]?.getCheckboxStatesAsString() ?: emptyMap()) }.toMap()
+        val filterStates = shorthands.map {
+            it.value to ( when (it.key) {
+                is RecyclerView -> adapters[it.key]?.getCheckboxStatesAsString() ?: emptyMap<String, String>()
+                is EditText -> mapOf("text" to (it.key as EditText).text.toString())
+                else -> emptyMap<String, String>()
+            } ) as Map<String, String>
+        }.toMap()
+        return filterStates
     }
 }
