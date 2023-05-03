@@ -1,11 +1,9 @@
 package cryogenetics.logistics.ui.actLog
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import android.widget.Button
-import android.widget.PopupWindow
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
@@ -15,12 +13,9 @@ import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
 import cryogenetics.logistics.api.ApiUrl
 import cryogenetics.logistics.databinding.FragmentActLogBinding
-import cryogenetics.logistics.databinding.FragmentHostBinding
-import cryogenetics.logistics.ui.filters.FilterAdapter
-import cryogenetics.logistics.ui.filters.FilterFragment
+import cryogenetics.logistics.ui.filters.FilterManager
 import cryogenetics.logistics.ui.inventory.ActLogViewModel
 import cryogenetics.logistics.ui.inventory.JsonAdapter
-import cryogenetics.logistics.ui.taskmanager.TaskManagerAdapter
 
 
 class ActLogFragment : Fragment() {
@@ -37,8 +32,11 @@ class ActLogFragment : Fragment() {
     private lateinit var mProductListAdapter: JsonAdapter
     private lateinit var bFilter: Button
 
-    private lateinit var filterState: MutableMap<String, Map<String, String>>
     private lateinit var mAdapter: ActLogAdapter
+    private lateinit var mActLogFilterFragment: ActLogFilterFragment
+
+    private var filterManager: FilterManager = FilterManager()
+    private var filterManagerInitialized: Boolean = false
 
     private val mOnProductClickListener =
         AdapterView.OnItemClickListener { parent, view, position, id ->
@@ -80,61 +78,34 @@ class ActLogFragment : Fragment() {
         // Attach listener to filter button
         bFilter.setOnClickListener {
 
-            // If filterState hasn't been initialized yet, initialize it.
-            if (!::filterState.isInitialized) {
-                addTableToFilters("http://10.0.2.2:8080/api/container_status", "container_status_name", listOf("container_status_name"))
-                addTableToFilters("http://10.0.2.2:8080/api/act", "act", listOf("act_name"))
-                addTableToFilters("http://10.0.2.2:8080/api/location", "location_name", listOf("location_name"))
-                addTableToFilters("http://10.0.2.2:8080/api/container_model", "liter_capacity", listOf("liter_capacity"))
-            }
-
             // Create filter fragment with an initial filter state
-            val fragment = FilterFragment (
-                {},
-                filterState
-            )
+            if (!::mActLogFilterFragment.isInitialized) {
+                mActLogFilterFragment = ActLogFilterFragment(
+                    {},
+                    filterManager
+                )
 
-            // Add its on apply function
-            fragment.onApply = {
-                filterState = it.toMutableMap()
+                // Add its on apply function
+                mActLogFilterFragment.onApply = {
+                    // Close the fragment
+                    childFragmentManager.commit {
+                        hide(mActLogFilterFragment)
+                    }
 
-                // Close the fragment
-                childFragmentManager.commit {
-                    remove(fragment)
+                    fetchActLogData(filterManager.getUrl(ApiUrl.urlTransaction))
                 }
 
-                fetchActLogData(getUrlFromState(filterState))
-                Log.d("url: ", getUrlFromState(filterState))
-            }
-
-            childFragmentManager.commit {
-                setReorderingAllowed(true)
-                add(R.id.actLogFragment, fragment)
+                childFragmentManager.commit {
+                    setReorderingAllowed(true)
+                    add(R.id.actLogFragment, mActLogFilterFragment)
+                }
+            } else {
+                childFragmentManager.commit {
+                    setReorderingAllowed(true)
+                    show(mActLogFilterFragment)
+                }
             }
         }
-    }
-
-    /**
-     *  Adds a database table to the list of filters.
-     *
-     *  @param url - Url to get the table.
-     *  @param name - What to name the table.
-     *  @param dbIncludeColumns - Which columns to pick data from. If left empty, picks from all.
-     *  @param default - The default value of the filters, i.e. "true" if all checkboxes should start checked.
-     */
-    private fun addTableToFilters(url: String, name: String, dbIncludeColumns: List<String> = emptyList(), default: String = "false") {
-        // Fetch fields
-        val fields: List<String> = Api.parseJsonArray(Api.fetchJsonData(url))
-            .fold(emptyList()) { acc, e ->
-                acc + e.filter { dbIncludeColumns.isEmpty() || dbIncludeColumns.contains(it.key) }.values.map { it.toString() }
-            }
-
-        // Verify that filterState is initialized
-        if (!::filterState.isInitialized)
-            filterState = mutableMapOf()
-
-        // Add fields to filterState
-        filterState[name] = fields.associateWith { default }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -147,55 +118,6 @@ class ActLogFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    /**
-     *  Gets the columns of a given table from the database.
-     *
-     *  @param table - The table.
-     *
-     *  @return All columns associated with the given table in the format (name, type, keytype).
-     */
-    private fun getColumns(table: String) : List<Triple<String,String,String>> {
-        var jsonRaw: String
-        try {
-            jsonRaw = Api.fetchJsonData("http://10.0.2.2:8080/api/$table/columns")
-        } catch (e: Exception) {
-            return emptyList()
-        }
-        val jsonParsed = Api.parseJsonArray(jsonRaw)
-        return jsonParsed.map { Triple(
-            it["COLUMN_NAME"].toString(),
-            it["COLUMN_TYPE"].toString(),
-            it["COLUMN_KEY"].toString()
-        ) }
-    }
-
-    /**
-     *  Gets the url from a given filter state.
-     *
-     *  @param state - The state.
-     *
-     *  @return The url.
-     */
-    private fun getUrlFromState(state: Map<String, Map<String, String>>) : String {
-        var url = "${ApiUrl.urlTransaction}?"
-
-        // Add states to URL
-        for (column in state) { // column = Pair(columnName, fields)
-            val fields = column.value
-            for (field in fields) { // field = Pair(fieldName, value)
-                val value = field.value
-                url += when (value) {
-                    "true" -> "${column.key}=${field.key}&"
-                    "false" -> ""
-                    "" -> ""
-                    else -> "${column.key}=${field.value}&"
-                }
-            }
-        }
-
-        return url
     }
 
     /**

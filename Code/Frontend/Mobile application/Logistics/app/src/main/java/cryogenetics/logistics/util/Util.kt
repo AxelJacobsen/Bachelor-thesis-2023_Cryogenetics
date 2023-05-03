@@ -2,6 +2,7 @@ package cryogenetics.logistics.util
 
 import android.content.Context
 import cryogenetics.logistics.R
+import cryogenetics.logistics.api.Api
 import java.lang.reflect.Modifier
 
 class Util {
@@ -45,6 +46,28 @@ class Util {
 
             // Otherwise, if no correlating string resource was found, return ""
             return ""
+        }
+
+        /**
+         *  Gets the columns of a given table from the database.
+         *
+         *  @param table - The table.
+         *
+         *  @return All columns associated with the given table in the format (name, type, keytype).
+         */
+        private fun getColumns(table: String) : List<Triple<String,String,String>> {
+            var jsonRaw: String
+            try {
+                jsonRaw = Api.fetchJsonData("http://10.0.2.2:8080/api/$table/columns")
+            } catch (e: Exception) {
+                return emptyList()
+            }
+            val jsonParsed = Api.parseJsonArray(jsonRaw)
+            return jsonParsed.map { Triple(
+                it["COLUMN_NAME"].toString(),
+                it["COLUMN_TYPE"].toString(),
+                it["COLUMN_KEY"].toString()
+            ) }
         }
     }
 }

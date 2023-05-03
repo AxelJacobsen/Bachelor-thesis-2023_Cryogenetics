@@ -4,10 +4,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
 
-    android:id="@+id/filterFragment"
+    android:id="@+id/actLogFilterFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.filters.FilterFragment"
+    tools:context=".ui.actLog.ActLogFilterFragment"
 
     android:background="@color/cryoBlue">
 
@@ -19,7 +19,7 @@
         app:layout_constraintEnd_toEndOf="@+id/filterLocations"
         app:layout_constraintStart_toStartOf="@+id/filterLocations"
         app:layout_constraintTop_toBottomOf="@+id/filterLocations"
-        tools:context=".ui.filters.FilterFragment">
+        tools:context=".ui.actLog.ActLogFilterFragment">
 
         <TextView
             android:id="@+id/tvSizeTitle"
@@ -38,7 +38,7 @@
             android:background="@drawable/rounded_textbox"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvSizeTitle"
-            tools:context=".ui.filters.FilterFragment">
+            tools:context=".ui.actLog.ActLogFilterFragment">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvFilterSize"
@@ -47,7 +47,7 @@
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="2"
-                tools:listitem="@layout/filter_item" />
+                tools:listitem="@layout/checkbox_item" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -59,7 +59,7 @@
         android:layout_marginStart="24dp"
         app:layout_constraintStart_toEndOf="@+id/filterAct"
         app:layout_constraintTop_toTopOf="@+id/filterAct"
-        tools:context=".ui.filters.FilterFragment">
+        tools:context=".ui.actLog.ActLogFilterFragment">
 
         <TextView
             android:id="@+id/tvLocationsTitle"
@@ -78,7 +78,7 @@
             android:background="@drawable/rounded_textbox"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvLocationsTitle"
-            tools:context=".ui.filters.FilterFragment">
+            tools:context=".ui.actLog.ActLogFilterFragment">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvFilterLocations"
@@ -87,7 +87,7 @@
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="2"
-                tools:listitem="@layout/filter_item" />
+                tools:listitem="@layout/checkbox_item" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -99,7 +99,7 @@
         android:layout_marginStart="24dp"
         app:layout_constraintStart_toEndOf="@+id/filterDate"
         app:layout_constraintTop_toTopOf="@+id/filterDate"
-        tools:context=".ui.filters.FilterFragment">
+        tools:context=".ui.actLog.ActLogFilterFragment">
 
         <TextView
             android:id="@+id/tvActTitle"
@@ -118,7 +118,7 @@
             android:background="@drawable/rounded_textbox"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvActTitle"
-            tools:context=".ui.filters.FilterFragment">
+            tools:context=".ui.actLog.ActLogFilterFragment">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvFilterAct"
@@ -127,7 +127,7 @@
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="2"
-                tools:listitem="@layout/filter_item" />
+                tools:listitem="@layout/checkbox_item" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -170,7 +170,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/filterDate"
-        tools:context=".ui.filters.FilterFragment">
+        tools:context=".ui.actLog.ActLogFilterFragment">
 
         <TextView
             android:id="@+id/tvStatusTitle"
@@ -189,7 +189,7 @@
             android:background="@drawable/rounded_textbox"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvStatusTitle"
-            tools:context=".ui.filters.FilterFragment">
+            tools:context=".ui.actLog.ActLogFilterFragment">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvFilterStatus"
@@ -198,7 +198,7 @@
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="2"
-                tools:listitem="@layout/filter_item" />
+                tools:listitem="@layout/checkbox_item" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -211,7 +211,7 @@
         android:layout_marginTop="40dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:context=".ui.filters.FilterFragment">
+        tools:context=".ui.actLog.ActLogFilterFragment">
 
         <TextView
             android:id="@+id/tvDateTitle"
@@ -230,7 +230,7 @@
             android:background="@drawable/rounded_textbox"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvDateTitle"
-            tools:context=".ui.filters.FilterFragment">
+            tools:context=".ui.actLog.ActLogFilterFragment">
 
             <EditText
                 android:id="@+id/etDateStart"
