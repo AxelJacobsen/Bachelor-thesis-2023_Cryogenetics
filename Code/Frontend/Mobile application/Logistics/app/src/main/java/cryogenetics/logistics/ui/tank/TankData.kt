@@ -38,15 +38,29 @@ data class TankData(
         parcel.readString(),
         parcel.readString(),
         parcel.readString()
-    ) {
+    )
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(address)
+        parcel.writeString(client_id)
+        parcel.writeString(client_name)
+        parcel.writeString(comment)
+        parcel.writeString(container_model_name)
+        parcel.writeString(container_sr_number)
+        parcel.writeString(container_status_name)
+        parcel.writeString(invoice)
+        parcel.writeString(last_filled)
+        parcel.writeString(liter_capacity)
+        parcel.writeString(location_id)
+        parcel.writeString(location_name)
+        parcel.writeString(maintenance_needed)
+        parcel.writeString(production_date)
+        parcel.writeString(refill_interval)
+        parcel.writeString(temp_id)
     }
 
     override fun describeContents(): Int {
-        TODO("Not yet implemented")
-    }
-
-    override fun writeToParcel(dest: Parcel, flags: Int) {
-        TODO("Not yet implemented")
+        return 0
     }
 
     companion object CREATOR : Parcelable.Creator<TankData> {

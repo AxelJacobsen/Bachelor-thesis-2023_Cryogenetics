@@ -21,8 +21,6 @@ class MiniActLogAdapter(
         init {
             //Propagate views with textViews based on their ID provided by the fragment
             for (viewId in viewIds) {
-                Log.e(TAG, "viewId: $viewId")
-
                 val textView = view.findViewById<TextView>(viewId)
                 //If views are filled with nulls it breaks
                 if (textView != null){
