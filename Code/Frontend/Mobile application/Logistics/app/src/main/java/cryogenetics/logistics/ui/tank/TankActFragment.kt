@@ -118,7 +118,7 @@ class ActFragment (
                     "container_sr_number" to mTank.container_sr_number.toString(), // Primary
                     "primary" to "container_sr_number", // Must be after Primary-key srNumb
                     "container_status_name" to "In use",
-                    "client_name" to binding.spinnerClient!!.selectedItem.toString(),
+                    "client_id" to clientIds[binding.spinnerClient!!.selectedItemPosition],
                 ))
                 val result1 = makeBackendRequest("transaction", actDatas, "POST")
                 val result2 = makeBackendRequest("container", tankDatas, "PUT")
@@ -219,7 +219,7 @@ class ActFragment (
                     "primary" to "container_sr_number", // Must be after Primary-key srNumb
                     "container_status_name" to "Available",
                     "address" to "",
-                    "client_name" to binding.spinnerClient.selectedItem.toString()
+                    "client_id" to clientIds[binding.spinnerClient!!.selectedItemPosition],
                 ))
                 val result1 = makeBackendRequest("transaction", actDatas, "POST")
                 val result2 = makeBackendRequest("container", tankDatas, "PUT")
@@ -369,7 +369,7 @@ class ActFragment (
             "container_sr_number" to mTank.container_sr_number.toString(), // Primary
             "primary" to "container_sr_number", // Must be after Primary-key srNumb
             "comment" to binding.etNote.text.toString(),
-            "client_name" to binding.spinnerClient!!.selectedItem.toString(),
+            "client_id" to clientIds[binding.spinnerClient!!.selectedItemPosition],
             "location_id" to locationIds[binding.spinnerAffiliatedLab.selectedItemPosition],
             "address" to binding.etAddress.text.toString(),
             "container_status_name" to binding.spinnerStatus.selectedItem.toString(),
