@@ -38,6 +38,7 @@ class ActLogFragment : Fragment() {
     private lateinit var bFilter: Button
 
     private lateinit var filterState: MutableMap<String, Map<String, String>>
+    private lateinit var mAdapter: ActLogAdapter
 
     private val mOnProductClickListener =
         AdapterView.OnItemClickListener { parent, view, position, id ->
@@ -73,40 +74,18 @@ class ActLogFragment : Fragment() {
         // initialize the recyclerView
         binding.recyclerViewActLog.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewActLog.setHasFixedSize(true)
-
-        // initialize the recyclerView-adapter
-        val itemList = mutableListOf<Map<String, Any>>()
-        //Fetch json data and add to itemlist
-
-        for (model in fetchActLogData()) {
-            itemList.add(model)
-        }
-
-        //Create a list of references
         bFilter = view.findViewById(R.id.bFilter)
-
-        val viewIds = listOf(
-            R.id.tvActLogRNr,
-            R.id.tvActLogRTime,
-            R.id.tvActLogRClient,
-            R.id.tvActLogRLocation,
-            R.id.tvActLogRAct,
-            R.id.tvActLogRComment,
-            R.id.tvActLogRSign,
-            R.id.tvActLogRStatus
-        )
-        //Create adapter
-        binding.recyclerViewActLog.adapter = ActLogAdapter(itemList, viewIds)
+        fetchActLogData()
 
         // Attach listener to filter button
         bFilter.setOnClickListener {
 
             // If filterState hasn't been initialized yet, initialize it.
             if (!::filterState.isInitialized) {
-                addTableToFilters("http://10.0.2.2:8080/api/container_status", "status", listOf("container_status_name"))
+                addTableToFilters("http://10.0.2.2:8080/api/container_status", "container_status_name", listOf("container_status_name"))
                 addTableToFilters("http://10.0.2.2:8080/api/act", "act", listOf("act_name"))
-                addTableToFilters("http://10.0.2.2:8080/api/location", "locations", listOf("location_name"))
-                addTableToFilters("http://10.0.2.2:8080/api/container_model", "size", listOf("liter_capacity"))
+                addTableToFilters("http://10.0.2.2:8080/api/location", "location_name", listOf("location_name"))
+                addTableToFilters("http://10.0.2.2:8080/api/container_model", "liter_capacity", listOf("liter_capacity"))
             }
 
             // Create filter fragment with an initial filter state
@@ -117,13 +96,15 @@ class ActLogFragment : Fragment() {
 
             // Add its on apply function
             fragment.onApply = {
-                Log.d("state: ", it.toString())
                 filterState = it.toMutableMap()
 
                 // Close the fragment
                 childFragmentManager.commit {
                     remove(fragment)
                 }
+
+                fetchActLogData(getUrlFromState(filterState))
+                Log.d("url: ", getUrlFromState(filterState))
             }
 
             childFragmentManager.commit {
@@ -137,15 +118,15 @@ class ActLogFragment : Fragment() {
      *  Adds a database table to the list of filters.
      *
      *  @param url - Url to get the table.
-     *  @param shorthand - The shorthand or "name" of the table, frontend only.
-     *  @param acceptedKeys - Which keys or "columns" to fetch, if none are given, everything is fetched.
+     *  @param name - What to name the table.
+     *  @param dbIncludeColumns - Which columns to pick data from. If left empty, picks from all.
      *  @param default - The default value of the filters, i.e. "true" if all checkboxes should start checked.
      */
-    private fun addTableToFilters(url: String, shorthand: String, acceptedKeys: List<String> = emptyList(), default: String = "false") {
+    private fun addTableToFilters(url: String, name: String, dbIncludeColumns: List<String> = emptyList(), default: String = "false") {
         // Fetch fields
         val fields: List<String> = Api.parseJsonArray(Api.fetchJsonData(url))
             .fold(emptyList()) { acc, e ->
-                acc + e.filter { acceptedKeys.isEmpty() || acceptedKeys.contains(it.key) }.values.map { it.toString() }
+                acc + e.filter { dbIncludeColumns.isEmpty() || dbIncludeColumns.contains(it.key) }.values.map { it.toString() }
             }
 
         // Verify that filterState is initialized
@@ -153,7 +134,7 @@ class ActLogFragment : Fragment() {
             filterState = mutableMapOf()
 
         // Add fields to filterState
-        filterState[shorthand] = fields.associateWith { default }
+        filterState[name] = fields.associateWith { default }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -190,9 +171,67 @@ class ActLogFragment : Fragment() {
         ) }
     }
 
-    private fun fetchActLogData() :  List<Map<String, Any>>{
-        val urlDataString = Api.fetchJsonData(ApiUrl.urlTransaction)
-        return Api.parseJsonArray(urlDataString)
+    /**
+     *  Gets the url from a given filter state.
+     *
+     *  @param state - The state.
+     *
+     *  @return The url.
+     */
+    private fun getUrlFromState(state: Map<String, Map<String, String>>) : String {
+        var url = "${ApiUrl.urlTransaction}?"
+
+        // Add states to URL
+        for (column in state) { // column = Pair(columnName, fields)
+            val fields = column.value
+            for (field in fields) { // field = Pair(fieldName, value)
+                val value = field.value
+                url += when (value) {
+                    "true" -> "${column.key}=${field.key}&"
+                    "false" -> ""
+                    "" -> ""
+                    else -> "${column.key}=${field.value}&"
+                }
+            }
+        }
+
+        return url
+    }
+
+    /**
+     *  Fetches act log data and updates the adapter.
+     *
+     *  @param forceUrl - url to fetch data from. If left empty, data is fetched from the default url.
+     */
+    private fun fetchActLogData(forceUrl: String = "") {
+        // Fetch and parse data
+        val url = if (forceUrl=="") ApiUrl.urlTransaction else forceUrl
+        val urlDataString = Api.fetchJsonData(url)
+        val parsedData = Api.parseJsonArray(urlDataString)
+
+        // Create a list out of it
+        val itemList = mutableListOf<Map<String, Any>>()
+        for (model in parsedData)
+            itemList.add(model)
+
+        // If the adapter doesn't exist, create it
+        if (binding.recyclerViewActLog.adapter == null) {
+            val viewIds = listOf(
+                R.id.tvActLogRNr,
+                R.id.tvActLogRTime,
+                R.id.tvActLogRClient,
+                R.id.tvActLogRLocation,
+                R.id.tvActLogRAct,
+                R.id.tvActLogRComment,
+                R.id.tvActLogRSign,
+                R.id.tvActLogRStatus
+            )
+            mAdapter = ActLogAdapter(itemList, viewIds)
+            binding.recyclerViewActLog.adapter = mAdapter
+        // Otherwise, update its data
+        } else {
+            mAdapter.updateData(itemList)
+        }
     }
 
 }

@@ -61,12 +61,12 @@ class FilterFragment (
         rvFilterSize        = view.findViewById(R.id.rvFilterSize)
 
         // Add recyclerViews & attach adapters
-        addEditText(etDateStart, "dateStart")
-        addEditText(etDateEnd, "dateEnd")
-        addRecyclerview(rvFilterStatus, "status")
+        addEditText(etDateStart, "start_date")
+        addEditText(etDateEnd, "end_date")
+        addRecyclerview(rvFilterStatus, "container_status_name")
         addRecyclerview(rvFilterAct, "act")
-        addRecyclerview(rvFilterLocations, "locations")
-        addRecyclerview(rvFilterSize, "size")
+        addRecyclerview(rvFilterLocations, "location_name")
+        addRecyclerview(rvFilterSize, "liter_capacity")
 
         // On reset
         bFilterReset.setOnClickListener {
@@ -90,7 +90,7 @@ class FilterFragment (
     }
 
     /**
-     *  Adds a recyclerView to the list of recyclerViews and gives it an adapter.
+     *  Adds a recyclerView to the list of views and gives it an adapter.
      *
      *  @param recyclerView - The recyclerView.
      *  @param shorthand - The shorthand or "name" of the recyclerView.
@@ -102,6 +102,12 @@ class FilterFragment (
         recyclerView.adapter = adapter
     }
 
+    /**
+     *  Adds an editText to the list of views.
+     *
+     *  @param editText - The editText.
+     *  @param shorthand - The shorthand or "name" of the editText.
+     */
     private fun addEditText(editText: EditText, shorthand: String) {
         shorthands[editText] = shorthand
         editText.setText(initialState[shorthand]?.get("text") ?: "")
