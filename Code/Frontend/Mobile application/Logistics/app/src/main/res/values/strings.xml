@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Logistics</string>
-
     <string name="sDashboard">Dashboard</string>
     <string name="sTank">Tank</string>
     <string name="sTankFilling">Tank filling</string>
