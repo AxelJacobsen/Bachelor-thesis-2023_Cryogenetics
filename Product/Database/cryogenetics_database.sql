@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 27, 2023 at 12:27 PM
+-- Generation Time: May 03, 2023 at 12:06 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.0.15
 
@@ -40,12 +40,14 @@ CREATE TABLE `act` (
 INSERT INTO `act` (`act_name`, `description`, `is_active`) VALUES
 ('Discarded', 'The container has been discarded due to age or damage.', 1),
 ('Internal', 'The container has been transferred to another warehouse.', 1),
+('Linked', 'When a client is linked to a tank.', 1),
 ('Maint compl', 'The container has completed maintenance.', 1),
 ('Maint need', 'The container has damages and requires maintenance.', 1),
-('Refilled', 'The container has been refilled filled.', 1),
+('Refilled', 'The container has been filled.', 1),
 ('Returned', 'The container has returned from the customer', 1),
 ('Sent out', 'The container has been sent out to the customer.', 1),
-('Sold', 'The container has been sold to an external client.', 1);
+('Sold', 'The container has been sold to an external client.', 1),
+('Unlinked', 'When a client is unlinked from a tank.', 1);
 
 -- --------------------------------------------------------
 
@@ -85,11 +87,11 @@ CREATE TABLE `client` (
 --
 
 INSERT INTO `client` (`client_id`, `client_name`) VALUES
-(5, 'Canada fish'),
-(4, 'First rate fish'),
 (1, 'Greg\'s fish'),
-(3, 'Hugh\'s haul'),
 (2, 'Lars\' lox'),
+(3, 'Hugh\'s haul'),
+(4, 'First rate fish'),
+(5, 'Canada fish'),
 (6, 'Salmon sages');
 
 -- --------------------------------------------------------
@@ -104,11 +106,11 @@ CREATE TABLE `container` (
   `country_iso3` varchar(3) COLLATE utf8mb4_danish_ci NOT NULL,
   `last_filled` date DEFAULT NULL,
   `container_status_name` varchar(32) COLLATE utf8mb4_danish_ci NOT NULL,
-  `client_name` varchar(64) COLLATE utf8mb4_danish_ci NOT NULL,
+  `client_id` int(11) DEFAULT NULL,
   `address` varchar(64) COLLATE utf8mb4_danish_ci DEFAULT NULL,
   `location_id` int(11) DEFAULT NULL,
   `invoice` date DEFAULT NULL,
-  `temp_id` varchar(8) COLLATE utf8mb4_danish_ci DEFAULT NULL,
+  `id` varchar(8) COLLATE utf8mb4_danish_ci DEFAULT NULL,
   `comment` varchar(512) COLLATE utf8mb4_danish_ci DEFAULT NULL,
   `maintenance_needed` tinyint(1) NOT NULL DEFAULT 0,
   `production_date` date DEFAULT NULL
@@ -118,12 +120,11 @@ CREATE TABLE `container` (
 -- Dumping data for table `container`
 --
 
-INSERT INTO `container` (`container_sr_number`, `container_model_name`, `country_iso3`, `last_filled`, `container_status_name`, `client_name`, `address`, `location_id`, `invoice`, `temp_id`, `comment`, `maintenance_needed`, `production_date`) VALUES
-('1', 'verySmall60', 'USA', '2014-03-12', 'At client', 'Canada fish', 'Test', 1, '2023-03-09', '1', 'Leaking', 0, '2023-03-15'),
-('111111111', 'verySmall60', 'USA', '2014-03-12', 'At client', 'Canada fish', '47 Maple Street\r\nManchester, NH 03101', 101, '2023-03-09', '13', NULL, 0, '2015-12-03'),
-('123456789', 'large200', 'NOR', '0000-00-00', 'In use', 'First rate fish', 'nullgata', 0, '0000-00-00', '12', 'nulltullxd2', 0, '2005-12-01'),
-('2222222222', 'small100', 'CHL', '2023-03-23', 'In use', 'Canada fish', 'Salmon Sages\r\nAvenida Providencia 2309\r\nProvidencia, Santiago, C', 0, '2023-03-18', '67', NULL, 0, '1994-12-22'),
-('55', 'large200', '', '2023-04-11', 'At client', 'Canada fish', NULL, 0, NULL, '2', NULL, 0, '2023-04-11');
+INSERT INTO `container` (`container_sr_number`, `container_model_name`, `country_iso3`, `last_filled`, `container_status_name`, `client_id`, `address`, `location_id`, `invoice`, `id`, `comment`, `maintenance_needed`, `production_date`) VALUES
+('1', 'verySmall60', 'USA', '2014-03-12', 'At client', 3, 'Test', NULL, '2023-03-09', '1', 'Leaking', 0, '2023-03-15'),
+('111111111', 'verySmall60', 'USA', '2014-03-12', 'At client', 3, '47 Maple Street\r\nManchester, NH 03101', NULL, '2023-03-09', '13', NULL, 0, '2015-12-03'),
+('123456789', 'large200', 'NOR', '2023-03-07', 'Available', NULL, NULL, 1, NULL, '12', NULL, 0, '2005-12-01'),
+('2222222222', 'small100', 'CHL', '2023-03-23', 'In use', 6, 'Salmon Sages\r\nAvenida Providencia 2309\r\nProvidencia, Santiago, C', NULL, '2023-03-18', '67', NULL, 0, '1994-12-22');
 
 -- --------------------------------------------------------
 
@@ -164,7 +165,7 @@ CREATE TABLE `container_status` (
 INSERT INTO `container_status` (`container_status_name`) VALUES
 ('At client'),
 ('Available'),
-('Discarded'),
+('Disposed'),
 ('In use'),
 ('Quarantine'),
 ('Sold');
@@ -188,10 +189,10 @@ CREATE TABLE `employee` (
 --
 
 INSERT INTO `employee` (`employee_id`, `employee_name`, `employee_alias`, `login_code`, `location_id`) VALUES
-(1, 'Lars L. Ruud', 'LLR', 101, 0),
-(2, 'Jonas Ødegaar', 'JØ', 102, 1),
-(3, 'Per Pilk', 'PP', 111, 0),
-(4, 'Jonathan Brando', 'JB', 810, 1),
+(1, 'Lars L. Ruud', 'LLR', 101, 1),
+(2, 'Jonas Ødegaar', 'JØ', 102, 2),
+(3, 'Per Pilk', 'PP', 111, 1),
+(4, 'Jonathan Brando', 'JB', 810, 2),
 (101, 'Jesse Ehrmantraut', 'JE', 444, 101),
 (102, 'Walter Fring', 'WF', 555, 101),
 (103, 'Huell McGill', 'HM', 666, 101),
@@ -214,8 +215,8 @@ CREATE TABLE `location` (
 --
 
 INSERT INTO `location` (`location_id`, `location_name`) VALUES
-(0, 'Norway: Hamar'),
-(1, 'Norway: Trondheim'),
+(1, 'Norway: Hamar'),
+(2, 'Norway: Trondheim'),
 (101, 'USA: New Hampshire'),
 (201, 'Canada: Black Creek'),
 (301, 'Chile: Puerto Montt');
@@ -234,20 +235,18 @@ CREATE TABLE `transaction` (
   `location_id` int(11) DEFAULT NULL,
   `container_sr_number` varchar(32) COLLATE utf8mb4_danish_ci DEFAULT NULL,
   `comment` varchar(512) COLLATE utf8mb4_danish_ci DEFAULT NULL,
-  `date` datetime NOT NULL,
-  `act` varchar(32) COLLATE utf8mb4_danish_ci NOT NULL,
-  `container_status_name` varchar(60) COLLATE utf8mb4_danish_ci NOT NULL
+  `date` date NOT NULL,
+  `act` varchar(32) COLLATE utf8mb4_danish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
 -- Dumping data for table `transaction`
 --
 
-INSERT INTO `transaction` (`transaction_id`, `employee_id`, `client_id`, `address`, `location_id`, `container_sr_number`, `comment`, `date`, `act`, `container_status_name`) VALUES
-(101, 103, 3, '123 Warehouse Lane\r\nMerrimack, NH 03054', 101, '123456789', 'Sent container to customer', '2023-03-08 12:22:18', 'Sent out', 'At client'),
-(102, 1, NULL, '456 Lagerveien\r\nHamar, 2316', 0, '111111111', 'Patched hole underneath container, used duct tape so might not last. ', '2023-03-16 05:27:28', 'Maint compl', 'Available'),
-(103, 101, 5, '1010 Main Street West\r\nNorth Bay, ON P1B 2W1', 201, '2222222222', 'Recieved container from customer', '2023-03-08 17:47:13', 'Returned', 'Quarantine'),
-(106, 103, 1, 'nullgata', 0, '123456789', 'commtentadis', '2023-04-27 11:07:54', 'Refilled', 'In use');
+INSERT INTO `transaction` (`transaction_id`, `employee_id`, `client_id`, `address`, `location_id`, `container_sr_number`, `comment`, `date`, `act`) VALUES
+(101, 103, 3, '123 Warehouse Lane\r\nMerrimack, NH 03054', 101, '123456789', 'Sent container to customer', '2023-03-08', 'Sent out'),
+(102, 1, NULL, '456 Lagerveien\r\nHamar, 2316', 1, '111111111', 'Patched hole underneath container, used duct tape so might not last. ', '2023-03-16', 'Maint compl'),
+(103, 101, 5, '1010 Main Street West\r\nNorth Bay, ON P1B 2W1', 201, '2222222222', 'Recieved container from customer', '2023-03-08', 'Returned');
 
 --
 -- Indexes for dumped tables
@@ -269,8 +268,7 @@ ALTER TABLE `admin`
 -- Indexes for table `client`
 --
 ALTER TABLE `client`
-  ADD PRIMARY KEY (`client_id`),
-  ADD UNIQUE KEY `client_name` (`client_name`);
+  ADD PRIMARY KEY (`client_id`);
 
 --
 -- Indexes for table `container`
@@ -279,7 +277,7 @@ ALTER TABLE `container`
   ADD PRIMARY KEY (`container_sr_number`),
   ADD KEY `container_fk1` (`container_model_name`),
   ADD KEY `container_fk2` (`container_status_name`),
-  ADD KEY `container_fk3` (`client_name`),
+  ADD KEY `container_fk3` (`client_id`),
   ADD KEY `container_fk4` (`location_id`);
 
 --
@@ -316,8 +314,7 @@ ALTER TABLE `transaction`
   ADD KEY `transaction_fk2` (`employee_id`),
   ADD KEY `transaction_fk3` (`client_id`),
   ADD KEY `transaction_fk4` (`container_sr_number`),
-  ADD KEY `transaction_fk5` (`location_id`),
-  ADD KEY `transaction_fk6` (`container_status_name`);
+  ADD KEY `transaction_fk5` (`location_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -351,7 +348,7 @@ ALTER TABLE `location`
 -- AUTO_INCREMENT for table `transaction`
 --
 ALTER TABLE `transaction`
-  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
+  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
 
 --
 -- Constraints for dumped tables
@@ -363,7 +360,7 @@ ALTER TABLE `transaction`
 ALTER TABLE `container`
   ADD CONSTRAINT `container_fk1` FOREIGN KEY (`container_model_name`) REFERENCES `container_model` (`container_model_name`) ON UPDATE CASCADE,
   ADD CONSTRAINT `container_fk2` FOREIGN KEY (`container_status_name`) REFERENCES `container_status` (`container_status_name`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `container_fk3` FOREIGN KEY (`client_name`) REFERENCES `client` (`client_name`),
+  ADD CONSTRAINT `container_fk3` FOREIGN KEY (`client_id`) REFERENCES `client` (`client_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `container_fk4` FOREIGN KEY (`location_id`) REFERENCES `location` (`location_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
@@ -380,8 +377,7 @@ ALTER TABLE `transaction`
   ADD CONSTRAINT `transaction_fk2` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `transaction_fk3` FOREIGN KEY (`client_id`) REFERENCES `client` (`client_id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `transaction_fk4` FOREIGN KEY (`container_sr_number`) REFERENCES `container` (`container_sr_number`),
-  ADD CONSTRAINT `transaction_fk5` FOREIGN KEY (`location_id`) REFERENCES `location` (`location_id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `transaction_fk6` FOREIGN KEY (`container_status_name`) REFERENCES `container_status` (`container_status_name`);
+  ADD CONSTRAINT `transaction_fk5` FOREIGN KEY (`location_id`) REFERENCES `location` (`location_id`) ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
