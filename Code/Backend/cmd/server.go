@@ -98,8 +98,6 @@ func main() {
 		constants.SHARED_CREATE_PATH: shared.CreateDataHandler,
 		constants.MOBILE_LOGIN_PATH:  mobile.HandlerMobileLogin,
 		constants.WEB_LOGIN_PATH:     web.HandlerWebLogin,
-		constants.WEB_PRIMARY_PATH:   web.HandlerWebDashboard,
-		constants.WEB_ADMIN_PATH:     web.HandlerAdmins,
 
 		constants.PUBLIC_STATUS_PATH: status.HandlerStatus,
 	}
