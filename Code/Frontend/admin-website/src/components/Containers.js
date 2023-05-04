@@ -258,7 +258,7 @@ export default function Containers() {
                           padding="none"
                           align='center'
                         >
-                          {row.liter_capacity + '-' + row.temp_id}
+                          {row.liter_capacity + '-' + row.id}
                         </TableCell>
                         <TableCell align='center'>{row.container_sr_number}</TableCell>
                         <TableCell align="center">{row.container_model_name}</TableCell>

@@ -86,7 +86,7 @@ export default function EditCustomerModal(props) {
         last_filled: lastFilled || null,
         address: address || null,
         invoice: invoice || null,
-        temp_id: parseInt(tempId) ,
+        id: parseInt(tempId) ,
         comment: comment || null,
         maintenance_needed: maintenanceNeeded,
         production_date: productionDate,
@@ -244,7 +244,7 @@ export default function EditCustomerModal(props) {
                 fullWidth
                 required
                 type={"number"}
-                label="Temp ID"
+                label="ID"
                 id="temp-id"
                 sx={{mt: 3}}
                 value={tempId}

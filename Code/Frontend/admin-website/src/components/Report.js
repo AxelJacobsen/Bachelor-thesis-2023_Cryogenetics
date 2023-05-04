@@ -125,7 +125,7 @@ export default function Report() {
   
     // Create CSV data rows
     const csvData = sortedTransactions.map((transaction, index) => {
-      const capacityTempId = transaction.liter_capacity + '-' + transaction.temp_id;
+      const capacityTempId = transaction.liter_capacity + '-' + transaction.id;
       const date = transaction.date;
       const endDate = SetEndDate(transaction.transaction_id,transaction.container_sr_number, transaction.date); // Replace with actual value from SetEndDate() function
       const location = transaction.container_status_name === 'At client' ? 'At client' : transaction.location_name;
