@@ -50,7 +50,7 @@ export default function PrintModal( props ) {
   // Handle download button click
   const handleGenerate = () => {
     const data = `${props.selectedRow.container_sr_number}`;
-    const id =`${props.selectedRow.liter_capacity}-${props.selectedRow.temp_id}`
+    const id =`${props.selectedRow.liter_capacity}-${props.selectedRow.id}`
     setInputData(data);
     return generateQRCode(data,id);
   };
