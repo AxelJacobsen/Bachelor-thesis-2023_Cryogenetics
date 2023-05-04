@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
@@ -22,6 +23,7 @@ import cryogenetics.logistics.ui.tank.TankFragment
 import cryogenetics.logistics.ui.tankfill.TankFillFragment
 import cryogenetics.logistics.ui.taskmanager.TaskItem
 import cryogenetics.logistics.ui.taskmanager.TaskManagerAdapter
+import cryogenetics.logistics.util.Util
 import io.reactivex.Flowable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -41,6 +43,7 @@ class HostFragment : Fragment() {
     private lateinit var viewModel: HostViewModel
     private lateinit var mAdapter: TaskManagerAdapter
     private lateinit var tvUsername: TextView
+    private lateinit var ibLogout: ImageButton
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,6 +59,7 @@ class HostFragment : Fragment() {
 
         // Fetch components
         tvUsername = view.findViewById(R.id.tvUsername)
+        ibLogout = view.findViewById(R.id.ibLogout)
 
         // Set username text
         val key = stringPreferencesKey("employee_name")
@@ -65,6 +69,11 @@ class HostFragment : Fragment() {
             }
         runBlocking (Dispatchers.IO) {
             tvUsername.text = flow.first()
+        }
+
+        // Set logout onclick
+        ibLogout.setOnClickListener {
+            Util.restartApp(requireContext(), null)
         }
 
         // Set up adapter

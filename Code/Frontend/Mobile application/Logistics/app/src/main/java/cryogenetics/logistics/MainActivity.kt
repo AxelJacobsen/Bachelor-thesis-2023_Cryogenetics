@@ -28,10 +28,5 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.activityMain, LoginFragment())
                 .commitNow()
         }
-        /*if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.activityMain, HostFragment.newInstance())
-                .commitNow()
-        }*/
     }
 }

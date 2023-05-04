@@ -278,7 +278,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageButton"
+            app:layout_constraintEnd_toStartOf="@+id/ibLogout"
             app:layout_constraintStart_toEndOf="@+id/topbarTabs"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -297,7 +297,7 @@
 
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/ibLogout"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:adjustViewBounds="true"

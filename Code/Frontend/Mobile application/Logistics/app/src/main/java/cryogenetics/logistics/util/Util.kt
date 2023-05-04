@@ -1,14 +1,19 @@
 package cryogenetics.logistics.util
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import cryogenetics.logistics.MainActivity
 import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
 import cryogenetics.logistics.dataStore
 import kotlinx.coroutines.delay
 import java.lang.reflect.Modifier
+
 
 class Util {
     companion object {
@@ -100,5 +105,19 @@ class Util {
             }
             delay(2000) // Fake loading time. TODO: Remove this line
         }
+
+        /**
+         *  Restarts the app.
+         */
+        fun restartApp(context: Context, nextIntent: Intent?) {
+            val intent = Intent(context, MainActivity::class.java)
+            intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(intent)
+            if (context is Activity) {
+                context.finish()
+            }
+            Runtime.getRuntime().exit(0)
+        }
+
     }
 }
