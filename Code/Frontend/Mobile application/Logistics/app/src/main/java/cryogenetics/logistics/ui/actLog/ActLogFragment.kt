@@ -15,12 +15,8 @@ import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
 import cryogenetics.logistics.api.ApiUrl
 import cryogenetics.logistics.databinding.FragmentActLogBinding
-import cryogenetics.logistics.databinding.FragmentHostBinding
-import cryogenetics.logistics.ui.filters.FilterAdapter
 import cryogenetics.logistics.ui.filters.FilterFragment
 import cryogenetics.logistics.ui.inventory.ActLogViewModel
-import cryogenetics.logistics.ui.inventory.JsonAdapter
-import cryogenetics.logistics.ui.taskmanager.TaskManagerAdapter
 
 
 class ActLogFragment : Fragment() {
@@ -32,9 +28,7 @@ class ActLogFragment : Fragment() {
     private var _binding : FragmentActLogBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var inventoryList: RecyclerView
     private lateinit var viewModel: ActLogViewModel
-    private lateinit var mProductListAdapter: JsonAdapter
     private lateinit var bFilter: Button
 
     private lateinit var filterState: MutableMap<String, Map<String, String>>

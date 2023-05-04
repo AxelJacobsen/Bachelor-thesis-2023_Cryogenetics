@@ -11,9 +11,7 @@ import cryogenetics.logistics.R
 
 class JsonAdapter(
     private val itemList: MutableList<Map<String, Any>>,
-    private val viewIds: List<Int>,
-    private val mProductList: ArrayList<InventoryDataModel> = ArrayList()
-
+    private val viewIds: List<Int>
 ) : RecyclerView.Adapter<JsonAdapter.ViewHolder>() {
 
     class ViewHolder(view: View, viewIds: List<Int>) : RecyclerView.ViewHolder(view) {
@@ -37,7 +35,7 @@ class JsonAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         //Create a view based on the parent viewgroup
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.inventory_recycler_item, parent, false)
+            .inflate(R.layout.tank_fill_confirm_recycler, parent, false)
         return ViewHolder(view, viewIds)
     }
 
@@ -56,6 +54,7 @@ class JsonAdapter(
             //Finally find correct json data and fill textview
             val text = item[tTag]?.toString() ?: ""
             textView.text = text
+
         }
     }
 

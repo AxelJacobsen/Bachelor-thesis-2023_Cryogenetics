@@ -13,9 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
+import cryogenetics.logistics.api.ApiCalls
 import cryogenetics.logistics.api.ApiUrl
 import cryogenetics.logistics.databinding.FragmentInventoryBinding
-import cryogenetics.logistics.ui.actLog.functions.Functions.Companion.enforceNumberFormat
+import cryogenetics.logistics.functions.Functions.Companion.enforceNumberFormat
 
 
 class InventoryFragment : Fragment() {
@@ -24,7 +25,7 @@ class InventoryFragment : Fragment() {
         fun newInstance() = InventoryFragment()
     }
 
-    private var _binding : FragmentInventoryBinding? = null
+    private var _binding: FragmentInventoryBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var inventoryList: RecyclerView
@@ -55,7 +56,7 @@ class InventoryFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentInventoryBinding.inflate(inflater, container, false)
         return binding.root
@@ -72,17 +73,17 @@ class InventoryFragment : Fragment() {
         val itemList = mutableListOf<Map<String, Any>>()
 
         //Fetch json data and add to itemlist
-        val fetchedData = fetchInventoryData()
+        val fetchedData = ApiCalls.fetchInventoryData()
 
-        if (fetchedData.isNotEmpty()){
+        if (fetchedData.isNotEmpty()) {
             for (model in fetchedData) {
                 print("HERE!")
                 print(model)
                 val updatedModel = enforceNumberFormat(model)
                 print(updatedModel)
-                if (updatedModel.isNotEmpty()){
+                if (updatedModel.isNotEmpty()) {
                     itemList.add(updatedModel)
-                } else{
+                } else {
                     itemList.add(model)
                 }
             }
@@ -92,17 +93,19 @@ class InventoryFragment : Fragment() {
 
         //Create a list of references
         val viewIds = listOf(
-                R.id.tvInventoryNr,
-                R.id.tvInventoryClient,
-                R.id.tvInventoryLocation,
-                R.id.tvInventoryInvoice,
-                R.id.tvInventoryLastFill,
-                R.id.tvInventoryNoti,
-                R.id.tvInventoryStatus
-                )
+            R.id.tvInventoryNr,
+            R.id.tvInventoryLocation,
+            R.id.tvInventoryLastFill,
+            R.id.tvInventoryClient,
+            R.id.tvInventoryStatus,
+            R.id.tvInventorySerialNr,
+            R.id.tvInventoryInvoice,
+            R.id.tvInventoryNoti,
+        )
         //Create adapter
         binding.InventoryRecycler.adapter = InventoryAdapter(itemList, viewIds)
-}
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -113,11 +116,6 @@ class InventoryFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun fetchInventoryData() :  List<Map<String, Any>>{
-        val urlDataString = Api.fetchJsonData(ApiUrl.urlContainer)
-        return Api.parseJsonArray(urlDataString)
     }
 
 }

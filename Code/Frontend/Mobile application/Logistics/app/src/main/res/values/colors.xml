@@ -13,6 +13,5 @@
     <color name="red">#FF0000</color>
     <color name="yellow">#FFEB3B</color>
     <color name="tabGrey">#FFD8D8D8</color>
-
-
+    <color name="seeThruGrey">#66474747</color>
 </resources>

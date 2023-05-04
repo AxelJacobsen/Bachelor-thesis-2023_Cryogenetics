@@ -47,7 +47,7 @@ class CameraFragment(
         previewView = view.findViewById(R.id.preview_view)
         cameraProviderFuture = ProcessCameraProvider.getInstance(this.requireContext())
 
-        binding.ibCancelCam?.setOnClickListener {
+        binding.ibCancelCam.setOnClickListener {
             mOnProductClickListener.onStopCam()
             onPaus()
         }

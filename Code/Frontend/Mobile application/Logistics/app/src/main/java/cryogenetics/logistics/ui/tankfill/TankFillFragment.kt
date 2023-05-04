@@ -1,6 +1,8 @@
 package cryogenetics.logistics.ui.tankfill
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,28 +10,29 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.mlkit.vision.barcode.BarcodeScanner
-import com.google.mlkit.vision.barcode.BarcodeScannerOptions
-import com.google.mlkit.vision.barcode.BarcodeScanning
-import com.google.mlkit.vision.barcode.common.Barcode
 import cryogenetics.logistics.R
-import cryogenetics.logistics.api.Api
-import cryogenetics.logistics.api.ApiUrl
+import cryogenetics.logistics.api.ApiCalls
 import cryogenetics.logistics.cameraQR.CamAccess
-import cryogenetics.logistics.databinding.FragmentTankFillingBinding
-import cryogenetics.logistics.ui.inventory.mini.MiniInventoryFragment
 import cryogenetics.logistics.cameraQR.CameraFragment
+import cryogenetics.logistics.databinding.FragmentTankFillingBinding
+import cryogenetics.logistics.functions.Functions
+import cryogenetics.logistics.ui.confirm.ConfirmFragment
+import cryogenetics.logistics.ui.inventory.mini.MiniInventoryFragment
 import cryogenetics.logistics.ui.tank.OnItemClickListener
+import cryogenetics.logistics.ui.tank.SearchAdapter
 
 class TankFillFragment : Fragment() {
 
     private lateinit var viewModel: TankViewModel
     private lateinit var inventoryData: List<Map<String, Any>>
     private lateinit var camFrag: CameraFragment
+    private lateinit var mAdapter: TankFillAdapter
+    private lateinit var mListener: OnItemClickListener
 
-    private var barcodeScannerOptions: BarcodeScannerOptions? = null
-    private var barcodeScanner: BarcodeScanner? = null
-    private var _binding : FragmentTankFillingBinding? = null
+
+    private val tankData: MutableList<Map<String, Any>> = mutableListOf()
+    private var dList: MutableList<Map<String, Any>> = mutableListOf()
+    private var _binding: FragmentTankFillingBinding? = null
     private val binding get() = _binding!!
     private var qrCodes: MutableList<String> = mutableListOf()
 
@@ -44,19 +47,36 @@ class TankFillFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        inventoryData = fetchInventoryData()
-        inventoryData = listOf(mapOf())
+        inventoryData = ApiCalls.fetchInventoryData()
         camFrag = CameraFragment(mOnFoundProductListener)
+        mListener = mOnFoundProductListener
 
-        barcodeScannerOptions = BarcodeScannerOptions.Builder()
-            .setBarcodeFormats(Barcode.FORMAT_ALL_FORMATS)
-            .build()
+        binding.bSearch.setOnClickListener {
+            val searchRes = Functions.searchContainer(
+                requireContext(),
+                inventoryData,
+                binding.edSearchValue.text.toString()
+            )
 
-        barcodeScanner = BarcodeScanning.getClient(barcodeScannerOptions!!)
+            // initialize the recyclerView
+            binding.recyclerSearchResult.layoutManager = LinearLayoutManager(requireContext())
+            binding.recyclerSearchResult.setHasFixedSize(true)
+
+            //Create a list of references
+            val viewIds = listOf(
+                R.id.tvInventoryNr,
+                R.id.tvInventoryClient,
+                R.id.tvInventoryLastFill,
+                R.id.tvInventoryNoti
+            )
+            //Create adapter
+            binding.recyclerSearchResult.adapter =
+                SearchAdapter(searchRes, viewIds, mOnFoundProductListener)
+            binding.searchResult.visibility = View.VISIBLE
+        }
 
         binding.ibCamera.setOnClickListener {
-            if (CamAccess.checkCameraPermission(requireContext())){
-                //if (checkStoragePermission()){
+            if (CamAccess.checkCameraPermission(requireContext())) {
                 binding.flFillFragment.visibility = View.VISIBLE
                 childFragmentManager.beginTransaction()
                     .replace(R.id.flFillFragment, CameraFragment(mOnFoundProductListener))
@@ -64,8 +84,33 @@ class TankFillFragment : Fragment() {
                 println("checkSTORagePermission success") // TODO: LOG.D
             } else {
                 println("checkCameraPermission fail") // TODO: LOG.D
+                // TODO: TOAST
                 CamAccess.requestCameraPermission(requireActivity())
             }
+        }
+
+        binding.clMenuFirst.setOnClickListener {
+            tankData.clear()
+            dataSetChange()
+        }
+        binding.clMenuSecond.setOnClickListener {
+            tankData.remove(tankData.last())
+            dataSetChange()
+        }
+        binding.clMenuThird.setOnClickListener {
+            removeSelected()
+        }
+        binding.clMenuForth.setOnClickListener {
+
+            childFragmentManager.beginTransaction()
+                .replace(R.id.flConfirm, ConfirmFragment(
+                    tankData, mOnFoundProductListener, "TankFillOverView"), "Conf")
+                .commit()
+
+            //postMultipleRefill()
+        }
+        binding.ibCancelSearch.setOnClickListener {
+            binding.searchResult.visibility = View.GONE
         }
 
         childFragmentManager.beginTransaction()
@@ -84,37 +129,59 @@ class TankFillFragment : Fragment() {
             R.id.tvInventoryNoti
         )
         //Create adapter
-        binding.recyclerRefilledTanks.adapter = TankFillAdapter(
-            inventoryData as MutableList<Map<String, Any>>, viewIds)
+        mAdapter = TankFillAdapter(tankData, viewIds, mOnFoundProductListener)
+        binding.recyclerRefilledTanks.adapter = mAdapter
         binding.recyclerRefilledTanks.visibility = View.VISIBLE
     }
 
-    private fun fetchInventoryData(): List<Map<String, Any>> {
-        val urlDataString = Api.fetchJsonData(ApiUrl.urlContainer)
-        return Api.parseJsonArray(urlDataString)
+
+    private fun addTankToList(model: Map<String, Any>) {
+        if (tankData.contains(model) || model.isEmpty()) {
+            Toast.makeText(
+                requireContext(),
+                "Could not add tank to list, check if it is already added!",
+                Toast.LENGTH_LONG
+            ).show()
+            Log.d("TAG", "Could not add tank to list! Model: $model")
+        } else {
+            tankData.add(model)
+            dataSetChange()
+        }
+    }
+
+    private fun removeSelected() {
+        for (item in dList)
+            tankData.remove(item)
+
+        dList.clear()
+        dataSetChange()
     }
 
     private val mOnFoundProductListener = object : OnItemClickListener {
         override fun onClick(model: Map<String, Any>) {
-            println("MODELLO" + model)
-            // add model to adapter
+            addTankToList(model)
+        }
+
+        override fun onClickTankFill(model: Map<String, Any>, ref: String) = when (ref) {
+            "bComment" -> {
+                println("onCommentClick bComment " + model)
+            }
+            "bDetails" -> {
+                println("onCommentClick bDetails " + model)
+            }
+            else -> {}
         }
 
         override fun onFoundQR(serialNr: String) {
-            if (qrCodes.contains(serialNr)) {
+            if (qrCodes.contains(serialNr))
                 return
-            }
+
             qrCodes.add(serialNr)
             if (inventoryData.isNotEmpty()) {
                 for (model in inventoryData) {
                     if (model.values.toString().contains(serialNr)) {
-                        /*
-                        initTankData(model)
-                        binding.flTankCameraFragment?.visibility = View.GONE
-                        binding.bottomDetails.visibility = View.VISIBLE
-                        binding.rightMenuAndContent.visibility = View.VISIBLE
-                         */
-                        //camFrag.onPaus()
+                        addTankToList(model)
+                        camFrag.onPaus()
                         break
                     }
                 }
@@ -128,10 +195,45 @@ class TankFillFragment : Fragment() {
         }
 
         override fun onStopCam() {
-            binding.flFillFragment?.visibility = View.GONE
+            binding.flFillFragment.visibility = View.GONE
+        }
+
+        override fun onChecked(map: Map<String, Any>, itemBool: Boolean) {
+            if (itemBool)
+                if (!dList.contains(map))
+                    dList.add(map)
+                else
+                    if (dList.contains(map))
+                        dList.remove(map)
+        }
+
+        override fun onCancelConfirm() {
+            val swipe = childFragmentManager.findFragmentByTag("Conf")
+                ?: throw RuntimeException("Could not find Tag")
+
+            childFragmentManager.beginTransaction()
+                .remove(swipe)
+                .commit()
+            childFragmentManager.popBackStack()
+        }
+
+        override fun displayActData() {
+            val swipe = childFragmentManager.findFragmentByTag("Conf")
+                ?: throw RuntimeException("Could not find Tag")
+
+            childFragmentManager.beginTransaction()
+                .remove(swipe)
+                .replace(R.id.flConfirm, ConfirmFragment(
+                    tankData, mListener, "PostData"), "post")
+                .commit()
+            childFragmentManager.popBackStack()
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    private fun dataSetChange() {
+        mAdapter.notifyDataSetChanged()
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

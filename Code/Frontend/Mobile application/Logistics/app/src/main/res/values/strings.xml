@@ -84,6 +84,8 @@
     <string name="disposeType">Dispose type</string>
     <string name="details">Details</string>
     <string name="nr">nr</string>
+    <string name="Confirm">Confirm</string>
+    <string name="can_you_confirm">Can you confirm?</string>
 
 
 </resources>

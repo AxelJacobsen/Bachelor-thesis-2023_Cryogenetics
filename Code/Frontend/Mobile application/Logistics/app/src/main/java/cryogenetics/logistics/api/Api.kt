@@ -11,7 +11,6 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class Api {
-    val baseUrl = "http://10.0.2.2:8080/api/"
     companion object {
         /**
          * Gets json string from url

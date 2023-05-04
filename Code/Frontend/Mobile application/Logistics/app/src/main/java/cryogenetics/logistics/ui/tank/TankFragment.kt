@@ -13,10 +13,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
+import cryogenetics.logistics.api.ApiCalls
 import cryogenetics.logistics.api.ApiUrl
 import cryogenetics.logistics.cameraQR.CamAccess
 import cryogenetics.logistics.cameraQR.CameraFragment
 import cryogenetics.logistics.databinding.FragmentTankBinding
+import cryogenetics.logistics.functions.Functions
 import cryogenetics.logistics.ui.actLog.mini.MiniActLogFragment
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -45,14 +47,14 @@ class TankFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        inventoryData = fetchInventoryData()
+        inventoryData = ApiCalls.fetchInventoryData()
         camFrag = CameraFragment(mOnFoundProductListener)
         binding.bSearch.setOnClickListener {
-            val searchRes = searchContainer(inventoryData, binding.edSearchValue.text.toString())
+            val searchRes = Functions.searchContainer(requireContext(), inventoryData, binding.edSearchValue.text.toString())
 
             // initialize the recyclerView
-            binding.recyclerSearchResult?.layoutManager = LinearLayoutManager(requireContext())
-            binding.recyclerSearchResult?.setHasFixedSize(true)
+            binding.recyclerSearchResult.layoutManager = LinearLayoutManager(requireContext())
+            binding.recyclerSearchResult.setHasFixedSize(true)
 
             //Create a list of references
             val viewIds = listOf(
@@ -62,14 +64,14 @@ class TankFragment : Fragment() {
                 R.id.tvInventoryNoti
             )
             //Create adapter
-            binding.recyclerSearchResult?.adapter =
+            binding.recyclerSearchResult.adapter =
                 SearchAdapter(searchRes, viewIds, mOnFoundProductListener)
             binding.searchResult.visibility = View.VISIBLE
         }
 
         binding.ibCamera.setOnClickListener {
             if (CamAccess.checkCameraPermission(requireContext())) {
-                binding.flTankCameraFragment?.visibility = View.VISIBLE
+                binding.flTankCameraFragment.visibility = View.VISIBLE
                 qrCodes.clear()
                 if (!camFrag.onRes()) {
                     childFragmentManager.beginTransaction()
@@ -82,7 +84,9 @@ class TankFragment : Fragment() {
                 CamAccess.requestCameraPermission(requireActivity())
             }
         }
-
+        binding.ibCancelSearch.setOnClickListener {
+            binding.searchResult.visibility = View.GONE
+        }
         binding.firstRowFirst.setOnClickListener {
             menuFunctionality("transaction")
         }
@@ -104,31 +108,6 @@ class TankFragment : Fragment() {
         childFragmentManager.beginTransaction()
             .replace(R.id.miniLog, MiniActLogFragment())
             .commit()
-    }
-
-    private fun searchContainer(
-        fetchedData: List<Map<String, Any>>,
-        searchValue: String = ""
-    ): MutableList<Map<String, Any>> {
-        val searchResults = mutableListOf<Map<String, Any>>()
-        if (fetchedData.isNotEmpty() && searchValue != ""){
-            for (model in fetchedData) {
-                for (value in model.values) {
-                    if (value.toString().contains(binding.edSearchValue.text)) {
-                        searchResults.add(model)
-                        break
-                    }
-                }
-            }
-        } else {
-            Toast.makeText(requireContext(), "No search value entered, or no Tanks added!", Toast.LENGTH_LONG).show()
-        }
-        return searchResults
-    }
-
-    private fun fetchInventoryData(): List<Map<String, Any>> {
-        val urlDataString = Api.fetchJsonData(ApiUrl.urlContainer)
-        return Api.parseJsonArray(urlDataString)
     }
 
     /**
@@ -377,7 +356,7 @@ class TankFragment : Fragment() {
             container_model_name = tank.entries.find { it.key == "container_model_name" }?.value.toString(),
             container_sr_number = tank.entries.find { it.key == "container_sr_number" }?.value.toString(),
             container_status_name = tank.entries.find { it.key == "container_status_name" }?.value.toString(),
-            invoice = tank.entries.find { it.key == "invoice" }?.value.toString(),
+            invoice = getRightDate(tank.entries.find { it.key == "invoice" }?.value.toString()),
             last_filled = getRightDate(tank.entries.find { it.key == "last_filled" }?.value.toString()),
             liter_capacity = tank.entries.find { it.key == "liter_capacity" }?.value.toString(),
             location_id = tank.entries.find { it.key == "location_id" }?.value.toString(),
