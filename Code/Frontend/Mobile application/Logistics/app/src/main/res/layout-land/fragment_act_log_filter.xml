@@ -16,9 +16,8 @@
         android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="@+id/actLogFilterLocations"
-        app:layout_constraintStart_toStartOf="@+id/actLogFilterLocations"
-        app:layout_constraintTop_toBottomOf="@+id/actLogFilterLocations"
+        app:layout_constraintStart_toStartOf="@+id/actLogFilterAct"
+        app:layout_constraintTop_toBottomOf="@+id/actLogFilterAct"
         tools:context=".ui.actLog.ActLogFilterFragment">
 
         <TextView
@@ -53,7 +52,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/actLogFilterLocations"
-        android:layout_width="140dp"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         app:layout_constraintStart_toEndOf="@+id/actLogFilterAct"
