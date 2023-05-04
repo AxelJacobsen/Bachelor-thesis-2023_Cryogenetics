@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
 
 class ActLogAdapter(
-    private val itemList: MutableList<Map<String, Any>>,
+    private var itemList: List<Map<String, Any>>,
     private val viewIds: List<Int>
 ) : RecyclerView.Adapter<ActLogAdapter.ViewHolder>() {
 
@@ -61,5 +61,10 @@ class ActLogAdapter(
 
     override fun getItemCount(): Int {
         return itemList.size
+    }
+
+    fun updateData(newData: List<Map<String, Any>>) {
+        itemList = newData
+        notifyDataSetChanged()
     }
 }

@@ -1,11 +1,9 @@
 package cryogenetics.logistics.ui.actLog
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import android.widget.Button
-import android.widget.PopupWindow
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
@@ -15,9 +13,9 @@ import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
 import cryogenetics.logistics.api.ApiUrl
 import cryogenetics.logistics.databinding.FragmentActLogBinding
-import cryogenetics.logistics.ui.filters.FilterFragment
+import cryogenetics.logistics.ui.filters.FilterManager
 import cryogenetics.logistics.ui.inventory.ActLogViewModel
-
+import cryogenetics.logistics.ui.inventory.JsonAdapter
 
 class ActLogFragment : Fragment() {
 
@@ -31,7 +29,10 @@ class ActLogFragment : Fragment() {
     private lateinit var viewModel: ActLogViewModel
     private lateinit var bFilter: Button
 
-    private lateinit var filterState: MutableMap<String, Map<String, String>>
+    private lateinit var mAdapter: ActLogAdapter
+    private lateinit var mActLogFilterFragment: ActLogFilterFragment
+
+    private var filterManager: FilterManager = FilterManager()
 
     private val mOnProductClickListener =
         AdapterView.OnItemClickListener { parent, view, position, id ->
@@ -67,75 +68,40 @@ class ActLogFragment : Fragment() {
         // initialize the recyclerView
         binding.recyclerViewActLog.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewActLog.setHasFixedSize(true)
-
-        // initialize the recyclerView-adapter
-        val itemList = mutableListOf<Map<String, Any>>()
-        //Fetch json data and add to itemlist
-
-        for (model in fetchActLogData()) {
-            itemList.add(model)
-        }
-
-        //Create a list of references
         bFilter = view.findViewById(R.id.bFilter)
-
-        val viewIds = listOf(
-            R.id.tvActLogRNr,
-            R.id.tvActLogRTime,
-            R.id.tvActLogRClient,
-            R.id.tvActLogRLocation,
-            R.id.tvActLogRAct,
-            R.id.tvActLogRComment,
-            R.id.tvActLogRSign,
-            R.id.tvActLogRStatus
-        )
-        //Create adapter
-        binding.recyclerViewActLog.adapter = ActLogAdapter(itemList, viewIds)
+        fetchActLogData()
 
         // Attach listener to filter button
         bFilter.setOnClickListener {
 
-            // If filter state hasn't been initialized yet, initialize it.
-            if (!::filterState.isInitialized) {
-                addTableToFilters("http://10.0.2.2:8080/api/container_status", "status", listOf("container_status_name"))
-                addTableToFilters("http://10.0.2.2:8080/api/act", "act", listOf("act_name"))
-                addTableToFilters("http://10.0.2.2:8080/api/location", "locations", listOf("location_name"))
-                addTableToFilters("http://10.0.2.2:8080/api/container_model", "size", listOf("liter_capacity"))
-            }
+            // Create filter fragment with an initial filter state
+            if (!::mActLogFilterFragment.isInitialized) {
+                mActLogFilterFragment = ActLogFilterFragment(
+                    {},
+                    filterManager
+                )
 
-            val fragment = FilterFragment (
-                {filterState = it.toMutableMap()},
-                filterState
-            )
+                // Add its on apply function
+                mActLogFilterFragment.onApply = {
+                    // Close the fragment
+                    childFragmentManager.commit {
+                        hide(mActLogFilterFragment)
+                    }
 
-            childFragmentManager.commit {
-                setReorderingAllowed(true)
-                add(R.id.actLogFragment, fragment)
+                    fetchActLogData(filterManager.getUrl(ApiUrl.urlTransaction))
+                }
+
+                childFragmentManager.commit {
+                    setReorderingAllowed(true)
+                    add(R.id.actLogFragment, mActLogFilterFragment)
+                }
+            } else {
+                childFragmentManager.commit {
+                    setReorderingAllowed(true)
+                    show(mActLogFilterFragment)
+                }
             }
         }
-    }
-
-    /**
-     *  Adds a database table to the list of filters.
-     *
-     *  @param url - Url to get the table.
-     *  @param shorthand - The shorthand or "name" of the table, frontend only.
-     *  @param acceptedKeys - Which keys or "columns" to fetch, if none are given, everything is fetched.
-     *  @param default - The default value of the filters, i.e. "true" if all checkboxes should start checked.
-     */
-    private fun addTableToFilters(url: String, shorthand: String, acceptedKeys: List<String> = emptyList(), default: String = "false") {
-        // Fetch fields
-        val fields: List<String> = Api.parseJsonArray(Api.fetchJsonData(url))
-            .fold(emptyList()) { acc, e ->
-                acc + e.filter { acceptedKeys.isEmpty() || acceptedKeys.contains(it.key) }.values.map { it.toString() }
-            }
-
-        // Verify that filterState is initialized
-        if (!::filterState.isInitialized)
-            filterState = mutableMapOf()
-
-        // Add fields to filterState
-        filterState[shorthand] = fields.associateWith { default }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -151,30 +117,38 @@ class ActLogFragment : Fragment() {
     }
 
     /**
-     *  Gets the columns of a given table from the database.
+     *  Fetches act log data and updates the adapter.
      *
-     *  @param table - The table.
-     *
-     *  @return All columns associated with the given table in the format (name, type, keytype).
+     *  @param forceUrl - url to fetch data from. If left empty, data is fetched from the default url.
      */
-    private fun getColumns(table: String) : List<Triple<String,String,String>> {
-        var jsonRaw: String
-        try {
-            jsonRaw = Api.fetchJsonData("http://10.0.2.2:8080/api/$table/columns")
-        } catch (e: Exception) {
-            return emptyList()
+    private fun fetchActLogData(forceUrl: String = "") {
+        // Fetch and parse data
+        val url = if (forceUrl=="") ApiUrl.urlTransaction else forceUrl
+        val urlDataString = Api.fetchJsonData(url)
+        val parsedData = Api.parseJsonArray(urlDataString)
+
+        // Create a list out of it
+        val itemList = mutableListOf<Map<String, Any>>()
+        for (model in parsedData)
+            itemList.add(model)
+
+        // If the adapter doesn't exist, create it
+        if (binding.recyclerViewActLog.adapter == null) {
+            val viewIds = listOf(
+                R.id.tvActLogRNr,
+                R.id.tvActLogRTime,
+                R.id.tvActLogRClient,
+                R.id.tvActLogRLocation,
+                R.id.tvActLogRAct,
+                R.id.tvActLogRComment,
+                R.id.tvActLogRSign,
+                R.id.tvActLogRStatus
+            )
+            mAdapter = ActLogAdapter(itemList, viewIds)
+            binding.recyclerViewActLog.adapter = mAdapter
+        // Otherwise, update its data
+        } else {
+            mAdapter.updateData(itemList)
         }
-        val jsonParsed = Api.parseJsonArray(jsonRaw)
-        return jsonParsed.map { Triple(
-            it["COLUMN_NAME"].toString(),
-            it["COLUMN_TYPE"].toString(),
-            it["COLUMN_KEY"].toString()
-        ) }
     }
-
-    private fun fetchActLogData() :  List<Map<String, Any>>{
-        val urlDataString = Api.fetchJsonData(ApiUrl.urlTransaction)
-        return Api.parseJsonArray(urlDataString)
-    }
-
 }

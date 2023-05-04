@@ -1,27 +1,19 @@
 package cryogenetics.logistics.ui.filters
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
-import cryogenetics.logistics.ui.taskmanager.TaskItem
-import cryogenetics.logistics.ui.taskmanager.TaskManagerAdapter
 
 /**
  *  Adapter for filter lists mainly consisting of checkboxes.
  */
-class FilterAdapter(
+class CheckboxAdapter(
     var dataList: List<Pair<String, Boolean>>//,           // Initial list of tabs.
     //val onClick: (String, Int) -> Unit,   // On click (each tab)
-): RecyclerView.Adapter<FilterAdapter.ItemViewHolder>() {
+): RecyclerView.Adapter<CheckboxAdapter.ItemViewHolder>() {
     inner class ItemViewHolder(view: View): RecyclerView.ViewHolder(view){
         val mCheckBox: CheckBox
 
@@ -34,7 +26,7 @@ class FilterAdapter(
     private val checkboxStates = mutableMapOf<String, Boolean>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.filter_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.checkbox_item, parent, false)
         return  ItemViewHolder(view)
     }
 

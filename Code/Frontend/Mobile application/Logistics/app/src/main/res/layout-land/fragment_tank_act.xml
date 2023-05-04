@@ -88,7 +88,7 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/tvActTitle">
+                            app:layout_constraintTop_toBottomOf="@+id/tvActLogTitleAct">
 
                             <Spinner
                                 android:id="@+id/spinnerAct"
@@ -104,7 +104,7 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <TextView
-                            android:id="@+id/tvActTitle"
+                            android:id="@+id/tvActLogTitleAct"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="15dp"
@@ -205,7 +205,7 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/tvStatusTitle">
+                            app:layout_constraintTop_toBottomOf="@+id/tvInventoryTitleStatus">
 
                             <Spinner
                                 android:id="@+id/spinnerStatus"
@@ -221,7 +221,7 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <TextView
-                            android:id="@+id/tvStatusTitle"
+                            android:id="@+id/tvInventoryTitleStatus"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="15dp"
@@ -386,7 +386,7 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/tvClientTitle">
+                            app:layout_constraintTop_toBottomOf="@+id/tvInventoryTitleClient">
 
                             <Spinner
                                 android:id="@+id/spinnerClient"
@@ -403,7 +403,7 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <TextView
-                            android:id="@+id/tvClientTitle"
+                            android:id="@+id/tvInventoryTitleClient"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="15dp"

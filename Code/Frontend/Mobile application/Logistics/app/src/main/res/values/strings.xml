@@ -87,5 +87,7 @@
     <string name="Confirm">Confirm</string>
     <string name="can_you_confirm">Can you confirm?</string>
 
+    <string name="login_id_formatError_message">Invalid ID format</string>
+    <string name="login_id_loginError_message">Unregistered ID, contact an administrator</string>
 
 </resources>
