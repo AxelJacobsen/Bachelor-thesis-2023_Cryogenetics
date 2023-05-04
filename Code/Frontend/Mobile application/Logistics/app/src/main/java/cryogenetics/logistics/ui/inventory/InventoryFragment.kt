@@ -15,11 +15,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
+import cryogenetics.logistics.api.ApiCalls
 import cryogenetics.logistics.api.ApiUrl
 import cryogenetics.logistics.databinding.FragmentInventoryBinding
-import cryogenetics.logistics.ui.actLog.functions.Functions.Companion.enforceNumberFormat
 import cryogenetics.logistics.ui.filters.FilterManager
-
+import cryogenetics.logistics.functions.Functions.Companion.enforceNumberFormat
 
 class InventoryFragment : Fragment() {
 
@@ -27,7 +27,7 @@ class InventoryFragment : Fragment() {
         fun newInstance() = InventoryFragment()
     }
 
-    private var _binding : FragmentInventoryBinding? = null
+    private var _binding: FragmentInventoryBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var inventoryList: RecyclerView
@@ -64,7 +64,7 @@ class InventoryFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentInventoryBinding.inflate(inflater, container, false)
         return binding.root
@@ -81,7 +81,6 @@ class InventoryFragment : Fragment() {
 
         // Attach listener to filter button
         bFilter.setOnClickListener {
-
             // Create filter fragment with an initial filter state
             if (!::mInventoryFilterFragment.isInitialized) {
                 mInventoryFilterFragment = InventoryFilterFragment(
@@ -110,18 +109,6 @@ class InventoryFragment : Fragment() {
                 }
             }
         }
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        viewModel = ViewModelProvider(this).get(InventoryViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     /**

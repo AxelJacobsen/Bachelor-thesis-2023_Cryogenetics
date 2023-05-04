@@ -18,13 +18,14 @@ import cryogenetics.logistics.api.Api
 import cryogenetics.logistics.api.Api.Companion.makeBackendRequest
 import cryogenetics.logistics.api.ApiUrl
 import cryogenetics.logistics.databinding.FragmentTankActBinding
+import cryogenetics.logistics.functions.Functions
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class ActFragment (
-    private val actReference : String = ""
-        ) : Fragment() {
+class ActFragment(
+    private val actReference: String = "",
+) : Fragment() {
 
     private var cal = Calendar.getInstance()
     private var _binding: FragmentTankActBinding? = null
@@ -60,7 +61,7 @@ class ActFragment (
         binding.ibInvoiceDate.setOnClickListener { datePickDiag(invoiceDateListener) }
 
         // Check if mTank was successfully initialized
-        if (mTank.temp_id != null) {
+        if (mTank.id != null) {
             if(fetchSpinnerData(ApiUrl.urlLocation, "location_name", locationNames,
                     "location_id", locationIds))
                 spinnerArrayAdapter(locationNames, binding.spinnerAffiliatedLab)
@@ -78,13 +79,14 @@ class ActFragment (
             spinnerArrayAdapter(listOf("Maintained", "Needs Maintenance"), binding.SpinnerAllMaintCompl)
             spinnerArrayAdapter(listOf("Maint need", "Maint compl"), binding.spinnerMaintType)
             spinnerArrayAdapter(listOf("Discarded", "Sold"), binding.spinnerDisposeType)
-
+            val index = mTank.location_id!!.toInt()
             binding.etAddress.setText(mTank.address!!.toString())
             binding.etNote.setText(mTank.comment!!.toString())
             binding.tvLastFilled.text = mTank.last_filled!!.toString()
             binding.tvInvoiceDate.text = mTank.invoice!!.toString()
             binding.spinnerMaintType.setSelection(mTank.maintenance_needed!!.toInt())
-            //binding.spinnerAffiliatedLab!!.setSelection(mTank.location_id!!.toInt())
+            println("getIndex(binding.spinnerAffiliatedLab, mTank.location_name.toString()) " + getIndex(binding.spinnerAffiliatedLab, mTank.location_name.toString()))
+            binding.spinnerAffiliatedLab.setSelection(getIndex(binding.spinnerAffiliatedLab, mTank.location_name.toString()))
             //Since location_id is not auto-incremented, this does not work as intended
 
             actHandler(actReference)
@@ -93,13 +95,23 @@ class ActFragment (
             println("Failed to initialize")
         }
     }
+
+    private fun getIndex(spinner: Spinner, myString: String): Int {
+        for (i in 0 until spinner.count) {
+            if (spinner.getItemAtPosition(i).toString().equals(myString, ignoreCase = true)) {
+                return i
+            }
+        }
+        return 0
+    }
+
     private fun actHandler(type: String) = when (type) {
         "Linked" -> {
             binding.clRowOne.visibility = View.GONE
             binding.clRowTwo.visibility = View.GONE
             binding.clAffiliatedLab.visibility = View.INVISIBLE
             binding.clRowFour.visibility = View.GONE
-            binding.clRowFourOne?.visibility = View.GONE
+            binding.clRowFourOne.visibility = View.GONE
 
             binding.bConfirm.setOnClickListener {
                 val actDatas = listOf(mapOf(
@@ -111,14 +123,14 @@ class ActFragment (
                     "location_id" to mTank.location_id.toString(),
                     "address" to  mTank.address.toString(),
                     "container_status_name" to "In use",
-                    "date" to getDateTime().toString(),
+                    "date" to Functions.getDateTime().toString(),
                 ))
 
                 val tankDatas = listOf(mapOf(
                     "container_sr_number" to mTank.container_sr_number.toString(), // Primary
                     "primary" to "container_sr_number", // Must be after Primary-key srNumb
                     "container_status_name" to "In use",
-                    "client_name" to binding.spinnerClient!!.selectedItem.toString(),
+                    "client_id" to clientIds[binding.spinnerClient!!.selectedItemPosition],
                 ))
                 val result1 = makeBackendRequest("transaction", actDatas, "POST")
                 val result2 = makeBackendRequest("container", tankDatas, "PUT")
@@ -145,7 +157,7 @@ class ActFragment (
                     "location_id" to mTank.location_id.toString(),
                     "address" to  binding.etAddress.text.toString(),
                     "container_status_name" to "At client",
-                    "date" to getDateTime().toString(),
+                    "date" to Functions.getDateTime().toString(),
                 ))
 
                 val tankDatas = listOf(mapOf(
@@ -178,7 +190,7 @@ class ActFragment (
                     "location_id" to mTank.location_id.toString(), // TODO: change this to users location
                     "address" to "",
                     "container_status_name" to "Quarantine", // TODO: Should this be available or Quarantine?
-                    "date" to getDateTime().toString(),
+                    "date" to Functions.getDateTime().toString(),
                 ))
 
                 val tankDatas = listOf(mapOf(
@@ -208,10 +220,10 @@ class ActFragment (
                     "comment" to binding.etComment.text.toString(),
                     "employee_id" to 103, // TODO: Fix after log in is added
                     "client_id" to mTank.client_id.toString(),
-                    "location_id" to mTank.location_id.toString(), // TODO: change this to users location
+                    "location_id" to locationIds[binding.spinnerAffiliatedLab.selectedItemPosition],
                     "address" to "",
                     "container_status_name" to "Available",
-                    "date" to getDateTime().toString(),
+                    "date" to Functions.getDateTime().toString(),
                 ))
 
                 val tankDatas = listOf(mapOf(
@@ -219,7 +231,7 @@ class ActFragment (
                     "primary" to "container_sr_number", // Must be after Primary-key srNumb
                     "container_status_name" to "Available",
                     "address" to "",
-                    "client_name" to binding.spinnerClient.selectedItem.toString()
+                    "client_id" to clientIds[binding.spinnerClient!!.selectedItemPosition],
                 ))
                 val result1 = makeBackendRequest("transaction", actDatas, "POST")
                 val result2 = makeBackendRequest("container", tankDatas, "PUT")
@@ -249,7 +261,7 @@ class ActFragment (
                     "location_id" to mTank.location_id.toString(),
                     "address" to mTank.address.toString(),
                     "container_status_name" to mTank.container_status_name.toString(),
-                    "date" to getDateTime().toString(),
+                    "date" to Functions.getDateTime().toString(),
                 ))
 
                 val tankDatas = listOf(mapOf(
@@ -284,15 +296,13 @@ class ActFragment (
                     "location_id" to mTank.location_id.toString(),
                     "address" to mTank.address.toString(),
                     "container_status_name" to mTank.container_status_name.toString(),
-                    "date" to getDateTime().toString(),
+                    "date" to Functions.getDateTime().toString(),
                 ))
-
-                println("postRightDate(LocalDate.now().toString()).toString()" + postRightDate(LocalDate.now().toString()).toString())
 
                 val tankDatas = listOf(mapOf(
                     "container_sr_number" to mTank.container_sr_number.toString(), // Primary
                     "primary" to "container_sr_number", // Must be after Primary-key srNumb
-                    "last_filled" to postRightDate(LocalDate.now().toString()).toString(),
+                    "last_filled" to Functions.getDate().toString(),
                 ))
                 val result1 = makeBackendRequest("transaction", actDatas, "POST")
                 val result2 = makeBackendRequest("container", tankDatas, "PUT")
@@ -320,7 +330,7 @@ class ActFragment (
                     "location_id" to mTank.location_id.toString(),
                     "address" to mTank.address.toString(),
                     "container_status_name" to mTank.container_status_name.toString(),
-                    "date" to getDateTime().toString(),
+                    "date" to Functions.getDateTime().toString(),
                 ))
 
                 val tankDatas = listOf(mapOf(
@@ -356,11 +366,11 @@ class ActFragment (
             "act" to binding.spinnerAct.selectedItem.toString(),
             "comment" to binding.etComment.text.toString(),
             "employee_id" to 103, // TODO: Fix after log in is added
-            "client_id" to clientIds[binding.spinnerClient!!.selectedItemPosition],
+            "client_id" to clientIds[binding.spinnerClient.selectedItemPosition],
             "location_id" to locationIds[binding.spinnerAffiliatedLab.selectedItemPosition],
             "address" to binding.etAddress.text.toString(),
             "container_status_name" to binding.spinnerStatus.selectedItem.toString(),
-            "date" to getDateTime().toString()
+            "date" to Functions.getDateTime().toString()
         ))
     }
 
@@ -369,13 +379,13 @@ class ActFragment (
             "container_sr_number" to mTank.container_sr_number.toString(), // Primary
             "primary" to "container_sr_number", // Must be after Primary-key srNumb
             "comment" to binding.etNote.text.toString(),
-            "client_name" to binding.spinnerClient!!.selectedItem.toString(),
+            "client_id" to clientIds[binding.spinnerClient.selectedItemPosition],
             "location_id" to locationIds[binding.spinnerAffiliatedLab.selectedItemPosition],
             "address" to binding.etAddress.text.toString(),
             "container_status_name" to binding.spinnerStatus.selectedItem.toString(),
-            "maintenance_needed" to (binding.spinnerMaintType!!.selectedItemPosition),
+            "maintenance_needed" to (binding.spinnerMaintType.selectedItemPosition),
             "last_filled" to postRightDate(binding.tvLastFilled.text.toString()).toString(),
-            "invoice" to postRightDate(binding.tvInvoiceDate?.text.toString()).toString(),
+            "invoice" to postRightDate(binding.tvInvoiceDate.text.toString()).toString(),
         ))
     }
 
@@ -420,7 +430,8 @@ class ActFragment (
         spinner.adapter = object : ArrayAdapter<String>(requireContext(),
             androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, list
         ) {
-            override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup,
+            override fun getDropDownView(
+                position: Int, convertView: View?, parent: ViewGroup,
             ): View {
                 val view: TextView = super.getDropDownView(position, convertView, parent) as TextView
                 //set the color of elements to black
@@ -428,13 +439,6 @@ class ActFragment (
                 return view
             }
         }
-    }
-
-    private fun getDateTime(): String? {
-        val myFormat = "yyyy-MM-dd HH:mm:ss"
-        val dateFormat = SimpleDateFormat(myFormat, Locale.US)
-        val date = Date()
-        return dateFormat.format(date)
     }
 
     /**

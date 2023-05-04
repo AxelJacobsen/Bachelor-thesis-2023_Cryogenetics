@@ -10,8 +10,7 @@ import android.widget.AdapterView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
-import cryogenetics.logistics.api.Api
-import cryogenetics.logistics.api.ApiUrl
+import cryogenetics.logistics.api.ApiCalls
 import cryogenetics.logistics.databinding.FragmentMiniInventoryBinding
 import cryogenetics.logistics.ui.inventory.*
 
@@ -67,7 +66,7 @@ class MiniInventoryFragment : Fragment() {
         val itemList = mutableListOf<Map<String, Any>>()
         //Fetch json data and add to itemlist
 
-        for (model in fetchInventoryData()) {
+        for (model in ApiCalls.fetchInventoryData()) {
             itemList.add(model)
         }
 
@@ -91,11 +90,6 @@ class MiniInventoryFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun fetchInventoryData() :  List<Map<String, Any>>{
-        val urlDataString = Api.fetchJsonData(ApiUrl.urlContainer)
-        return Api.parseJsonArray(urlDataString)
     }
 
 }

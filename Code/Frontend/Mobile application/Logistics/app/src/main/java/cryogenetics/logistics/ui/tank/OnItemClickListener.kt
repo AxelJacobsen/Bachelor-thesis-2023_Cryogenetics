@@ -7,4 +7,8 @@ interface OnItemClickListener {
     fun onClick(model: Map<String, Any>)
     fun onFoundQR(serialNr: String)
     fun onStopCam()
+    fun onChecked(map: Map<String, Any>, itemBool: Boolean) {}
+    fun onClickTankFill(model: Map<String, Any>, ref: String) {}
+    fun onCancelConfirm() {}
+    fun displayActData() {}
 }

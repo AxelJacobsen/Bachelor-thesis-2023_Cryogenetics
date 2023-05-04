@@ -30,7 +30,7 @@
     <string name="inv">inventory</string>
     <string name="ivo">invoice</string>
     <string name="rId">responsible_id</string>
-    <string name="id">temp_id</string>
+    <string name="id">id</string>
     <string name="lFi">last_filled</string>
     <string name="mod">model</string>
     <string name="sign">Sign</string>
@@ -84,6 +84,8 @@
     <string name="disposeType">Dispose type</string>
     <string name="details">Details</string>
     <string name="nr">nr</string>
+    <string name="Confirm">Confirm</string>
+    <string name="can_you_confirm">Can you confirm?</string>
 
     <string name="login_id_formatError_message">Invalid ID format</string>
     <string name="login_id_loginError_message">Unregistered ID, contact an administrator</string>

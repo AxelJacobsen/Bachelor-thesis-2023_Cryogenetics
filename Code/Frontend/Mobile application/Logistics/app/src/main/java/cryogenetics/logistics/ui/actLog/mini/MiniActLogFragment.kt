@@ -22,9 +22,7 @@ class MiniActLogFragment : Fragment() {
     private var _binding : FragmentMiniActLogBinding? = null
     private val binding get() = _binding!!
 
-    //private lateinit var actLogList: RecyclerView
     private lateinit var viewModel: MiniActLogViewModel
-    //private lateinit var mProductListAdapter: JsonAdapter
 
     private val mOnProductClickListener =
         AdapterView.OnItemClickListener { parent, view, position, id ->

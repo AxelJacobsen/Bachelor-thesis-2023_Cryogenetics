@@ -17,7 +17,6 @@ import cryogenetics.logistics.ui.filters.FilterManager
 import cryogenetics.logistics.ui.inventory.ActLogViewModel
 import cryogenetics.logistics.ui.inventory.JsonAdapter
 
-
 class ActLogFragment : Fragment() {
 
     companion object {
@@ -27,9 +26,7 @@ class ActLogFragment : Fragment() {
     private var _binding : FragmentActLogBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var inventoryList: RecyclerView
     private lateinit var viewModel: ActLogViewModel
-    private lateinit var mProductListAdapter: JsonAdapter
     private lateinit var bFilter: Button
 
     private lateinit var mAdapter: ActLogAdapter

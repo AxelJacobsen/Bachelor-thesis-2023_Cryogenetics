@@ -5,13 +5,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
+import cryogenetics.logistics.ui.tank.OnItemClickListener
 
 class TankFillAdapter(
     private val itemList: MutableList<Map<String, Any>>,
-    private val viewIds: List<Int>
+    private val viewIds: List<Int>,
+    private val mOnProductClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<TankFillAdapter.ViewHolder>() {
 
     class ViewHolder(view: View, viewIds: List<Int>) : RecyclerView.ViewHolder(view) {
@@ -42,6 +46,20 @@ class TankFillAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = itemList[position]
+        val itemCB: CheckBox = holder.itemView.findViewById(R.id.cbRefilledTanks)
+        val bComment: Button = holder.itemView.findViewById(R.id.bComment)
+        val bDetails: Button = holder.itemView.findViewById(R.id.bDetails)
+        itemCB.isChecked = false
+
+        itemCB.setOnCheckedChangeListener { _, isChecked ->
+            mOnProductClickListener.onChecked(itemList[position], isChecked)
+        }
+        bComment.setOnClickListener {
+            mOnProductClickListener.onClickTankFill(itemList[holder.adapterPosition], "bComment")
+        }
+        bDetails.setOnClickListener {
+            mOnProductClickListener.onClickTankFill(itemList[holder.adapterPosition], "bDetails")
+        }
         //Iterate the view list constructed in above function
         for ((viewId, textView) in holder.views) {
             // Normally viewId would be used, however it doesn't match the json data we receive
@@ -58,6 +76,11 @@ class TankFillAdapter(
 
         }
     }
+
+    fun updateData(model: Map<String, Any>) {
+        itemList.add(model)
+    }
+
 
     override fun getItemCount(): Int {
         return itemList.size
