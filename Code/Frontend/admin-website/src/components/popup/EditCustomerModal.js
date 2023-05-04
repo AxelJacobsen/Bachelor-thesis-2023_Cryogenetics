@@ -2,8 +2,8 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import TextField from '@mui/material/TextField';
-import { Button } from '@mui/material';
+import { Button,  TextField } from '@mui/material';
+import fetchData from '../../globals/fetchData';
 
 const style = {
   position: 'absolute',
@@ -19,26 +19,53 @@ const style = {
 
 
 export default function EditCustomerModal(props) {
+  const [name, setName] = React.useState("");
 
+  React.useEffect(() => {
+    setName(props.selectedRow.client_name || "");
+    
+  }, [props.selectedRow]);
 
-  function handleCloseModal() {
+  const handleCloseModal = () => {
     props.setSelectedRow(null);
+    props.onClose()
+    setName("");
+  }
+  const handleConfirmModal = async () => {
+    try {
+      const data = [{
+        primary: "client_id",
+        client_id: props.selectedRow.client_id,
+        client_name: name,
+      }];      
+      await fetchData("/api/client", 'PUT', data);
+      handleCloseModal()
+    } catch (error) {
+      alert(`Error: ${error.message}`);
+    }
   }
 
   return (
     <Modal open={Boolean(props.selectedRow)} onClose={handleCloseModal}  aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
       
       <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2" >
-            Edit Customers
-          </Typography>
-          <TextField id="nrText" label={props.selectedRow.nr} variant="outlined" sx={{ m: 2 }}/>
+        <Typography id="modal-modal-title" variant="h6" component="h2" >
+          Edit Customers
+        </Typography>
 
+        <TextField
+          fullWidth
+          label="Client name"
+          id="client-name"
+          sx={{mt: 3}}
+          value={name}
+          onChange={(event) => setName(event.target.value)}
+        />
           
 
         <Button variant="contained" sx={{ m: 2 }} color="error" onClick={handleCloseModal}>Cancel</Button>
 
-        <Button variant="contained" sx={{ m: 2 }} color="success" onClick={handleCloseModal}>Confirm</Button>
+        <Button variant="contained" sx={{ m: 2 }} color="success" onClick={handleConfirmModal} disabled={!name}>Confirm</Button>
         </Box>
       
     </Modal>
