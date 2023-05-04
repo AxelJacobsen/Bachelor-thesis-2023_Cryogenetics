@@ -36,7 +36,6 @@ class ActLogFragment : Fragment() {
     private lateinit var mActLogFilterFragment: ActLogFilterFragment
 
     private var filterManager: FilterManager = FilterManager()
-    private var filterManagerInitialized: Boolean = false
 
     private val mOnProductClickListener =
         AdapterView.OnItemClickListener { parent, view, position, id ->
@@ -155,5 +154,4 @@ class ActLogFragment : Fragment() {
             mAdapter.updateData(itemList)
         }
     }
-
 }
