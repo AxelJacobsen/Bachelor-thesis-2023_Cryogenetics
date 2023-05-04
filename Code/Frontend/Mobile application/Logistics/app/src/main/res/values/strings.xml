@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Logistics</string>
-
     <string name="sDashboard">Dashboard</string>
     <string name="sTank">Tank</string>
     <string name="sTankFilling">Tank filling</string>
@@ -31,7 +30,7 @@
     <string name="inv">inventory</string>
     <string name="ivo">invoice</string>
     <string name="rId">responsible_id</string>
-    <string name="id">temp_id</string>
+    <string name="id">id</string>
     <string name="lFi">last_filled</string>
     <string name="mod">model</string>
     <string name="sign">Sign</string>
@@ -80,6 +79,13 @@
     </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="affiliated">Affilated lab:</string>
+    <string name="maintenanceType">Maintenance type</string>
+    <string name="disposeType">Dispose type</string>
+    <string name="details">Details</string>
+    <string name="nr">nr</string>
+    <string name="Confirm">Confirm</string>
+    <string name="can_you_confirm">Can you confirm?</string>
 
 
 </resources>

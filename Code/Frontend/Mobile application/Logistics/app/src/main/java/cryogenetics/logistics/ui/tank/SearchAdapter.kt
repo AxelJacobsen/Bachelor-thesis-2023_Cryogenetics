@@ -1,12 +1,14 @@
 package cryogenetics.logistics.ui.tank
 
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
@@ -23,8 +25,6 @@ class SearchAdapter(
         init {
             //Propagate views with textViews based on their ID provided by the fragment
             for (viewId in viewIds) {
-                Log.e(TAG, "viewId: $viewId")
-
                 val textView = view.findViewById<TextView>(viewId)
                 //If views are filled with nulls it breaks
                 if (textView != null) {

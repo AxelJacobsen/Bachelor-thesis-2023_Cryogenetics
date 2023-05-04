@@ -1,323 +1,501 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tankFillFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.tankfill.TankFillFragment"
+    tools:ignore="MissingDefaultResource">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/tankFillFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.tankfill.TankFillFragment"
-        tools:ignore="MissingDefaultResource">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/leftSearchAndInfo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/rightMenuAndContent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/leftSearchAndInfo"
+            android:id="@+id/searchView"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/softGrey"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_height="80dp"
+            app:layout_constraintBottom_toTopOf="@+id/bottomCameraAndInfo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.15"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent=".33">
+            app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/topSearchAndCam"
+            <EditText
+                android:id="@+id/edSearchValue"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:background="@color/teal_200"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHeight_percent="0.45"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="6dp"
+                android:background="@drawable/rounded_textbox"
+                android:gravity="center_vertical"
+                android:hint="@string/write_here"
+                android:inputType="text"
+                android:paddingStart="5dp"
+                android:textColor="@color/black"
+                app:autoSizeMaxTextSize="100sp"
+                app:autoSizeMinTextSize="12sp"
+                app:autoSizeStepGranularity="2sp"
+                app:autoSizeTextType="uniform"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/bSearch"
+                app:layout_constraintHorizontal_weight="0.7"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/searchView"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:background="@color/black"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHeight_percent="0.2"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+            <Button
+                android:id="@+id/bSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginEnd="4dp"
+                android:backgroundTint="@color/softGrey"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@string/search"
+                android:textColor="@color/black"
+                app:autoSizeMaxTextSize="100sp"
+                app:autoSizeMinTextSize="12sp"
+                app:autoSizeStepGranularity="2sp"
+                app:autoSizeTextType="uniform"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="0.3"
+                app:layout_constraintStart_toEndOf="@+id/edSearchValue"
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="@color/black"
+                app:strokeWidth="2dp" />
 
-                    <EditText
-                        android:id="@+id/edSearchValue"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_margin="4dp"
-                        android:paddingStart="5dp"
-                        android:background="@color/white"
-                        android:gravity="center_vertical"
-                        android:hint="@string/write_here"
-                        android:textColor="@color/black"
-                        app:autoSizeMaxTextSize="100sp"
-                        app:autoSizeMinTextSize="12sp"
-                        app:autoSizeStepGranularity="2sp"
-                        app:autoSizeTextType="uniform"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/bSearch"
-                        app:layout_constraintHorizontal_weight="0.7"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:inputType="text" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <Button
-                        android:id="@+id/bSearch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_marginEnd="4dp"
-                        android:gravity="center"
-                        android:maxLines="1"
-                        android:text="@string/search"
-                        android:textColor="@color/black"
-                        android:backgroundTint="@color/white"
-                        app:autoSizeMaxTextSize="100sp"
-                        app:autoSizeMinTextSize="12sp"
-                        app:autoSizeStepGranularity="2sp"
-                        app:autoSizeTextType="uniform"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_weight="0.3"
-                        app:layout_constraintStart_toEndOf="@+id/edSearchValue"
-                        app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bottomCameraAndInfo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/searchView">
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/midCamera"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@+id/bottomDetails"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_weight="1">
+
                 <ImageButton
                     android:id="@+id/ibCamera"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:src="@drawable/camera_icon"
-                    android:background="@android:color/transparent"
-                    android:scaleType="centerInside"
                     android:adjustViewBounds="true"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="TODO"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/camera_icon"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/searchView"
-                    android:contentDescription="TODO" />
-                <FrameLayout
-                    android:id="@+id/fragment_container"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:background="@color/red"
-                    android:visibility="invisible"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <FrameLayout
-                android:id="@+id/flMiniInventoryRecycler"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/topSearchAndCam" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/rightMenuAndContent"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/softGrey"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="1"
-            app:layout_constraintStart_toEndOf="@+id/leftSearchAndInfo"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/rightMenu"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/rightMenuFirstRow"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:background="@color/cryoBlue"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_weight="1">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/clMenuFirst"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="#8B1E23"
-                        android:layout_marginStart="5dip"
-                        android:layout_marginTop="5dip"
-                        android:layout_marginBottom="5dip"
-                        android:layout_marginEnd="2.5dip"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/clMenuSecond"
-                        app:layout_constraintHorizontal_weight="0.3"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <ImageView
-                            android:id="@+id/ivMenuFirst"
-                            android:layout_width="0dp"
-                            android:layout_height="60dp"
-                            android:src="@drawable/cancel_all_screenshot"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/tvMenuFirst"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/transaction"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/ivMenuFirst" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/clMenuSecond"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="2.5dip"
-                        android:layout_marginTop="5dip"
-                        android:layout_marginBottom="5dip"
-                        android:layout_marginEnd="2.5dip"
-                        android:background="#FE9800"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/clMenuThird"
-                        app:layout_constraintHorizontal_weight="0.3"
-                        app:layout_constraintStart_toEndOf="@+id/clMenuFirst"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <ImageView
-                            android:id="@+id/ivMenuSecond"
-                            android:layout_width="0dp"
-                            android:layout_height="60dp"
-                            android:src="@drawable/undo"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/tvMenuSecond"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/transaction"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/ivMenuSecond" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/clMenuThird"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="2.5dip"
-                        android:layout_marginTop="5dip"
-                        android:layout_marginBottom="5dip"
-                        android:layout_marginEnd="2.5dip"
-                        android:background="#2EA0AF"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/clMenuForth"
-                        app:layout_constraintHorizontal_weight="0.3"
-                        app:layout_constraintStart_toEndOf="@+id/clMenuSecond"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <ImageView
-                            android:id="@+id/ivMenuThird"
-                            android:layout_width="0dp"
-                            android:layout_height="60dp"
-                            android:src="@drawable/remove_selected"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/tvMenuThird"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/transaction"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/ivMenuThird" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/clMenuForth"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="2.5dip"
-                        android:layout_marginTop="5dip"
-                        android:layout_marginBottom="5dip"
-                        android:layout_marginEnd="5dip"
-                        android:background="#2A673B"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_weight="0.3"
-                        app:layout_constraintStart_toEndOf="@+id/clMenuThird"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <ImageView
-                            android:id="@+id/ivMenuForth"
-                            android:layout_width="0dp"
-                            android:layout_height="60dp"
-                            android:src="@drawable/finish_screenshot"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/tvMenuForth"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/transaction"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/ivMenuForth" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/rightContentAndLog"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rightMenu">
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Refilled Tanks"
-                    android:textSize="32sp"
-                    android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <FrameLayout
-                    android:id="@+id/flRefilledTanksRecycler"
+                    android:id="@+id/flFillFragment"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/bottomDetails"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/black"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/midCamera"
+                app:layout_constraintVertical_weight="1.5">
+
+                <FrameLayout
+                    android:id="@+id/flMiniInventoryRecycler"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:background="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView" />
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/searchResult"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/bottomCameraAndInfo">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_Search_Result"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@color/white"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toTopOf="@+id/ib_cancel_Search"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/ib_cancel_Search"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="TODO"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/cancel"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/recycler_Search_Result" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rightMenuAndContent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/cryoBlue"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="1"
+        app:layout_constraintHorizontal_weight="2"
+        app:layout_constraintStart_toEndOf="@+id/leftSearchAndInfo"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/rightMenu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/rightMenuFirstRow"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_weight="1">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clMenuFirst"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dip"
+                    android:layout_marginTop="5dip"
+                    android:layout_marginEnd="2.5dip"
+                    android:layout_marginBottom="5dip"
+                    android:background="@drawable/button_transaction"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/clMenuSecond"
+                    app:layout_constraintHorizontal_weight="0.3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/ivMenuFirst"
+                        android:layout_width="0dp"
+                        android:layout_height="60dp"
+                        android:padding="3dp"
+                        android:src="@drawable/cancel_all_screenshot"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvMenuFirst"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="3dp"
+                        android:text="Cancel all"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/ivMenuFirst" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clMenuSecond"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2.5dip"
+                    android:layout_marginTop="5dip"
+                    android:layout_marginEnd="2.5dip"
+                    android:layout_marginBottom="5dip"
+
+                    android:background="@drawable/button_undo"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/clMenuThird"
+                    app:layout_constraintHorizontal_weight="0.3"
+                    app:layout_constraintStart_toEndOf="@+id/clMenuFirst"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/ivMenuSecond"
+                        android:layout_width="0dp"
+                        android:layout_height="60dp"
+                        android:padding="3dp"
+                        android:src="@drawable/undo"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvMenuSecond"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="3dp"
+                        android:text="Undo"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/ivMenuSecond" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clMenuThird"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2.5dip"
+                    android:layout_marginTop="5dip"
+                    android:layout_marginEnd="2.5dip"
+                    android:layout_marginBottom="5dip"
+                    android:background="@drawable/button_remove_all"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/clMenuForth"
+                    app:layout_constraintHorizontal_weight="0.3"
+                    app:layout_constraintStart_toEndOf="@+id/clMenuSecond"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/ivMenuThird"
+                        android:layout_width="0dp"
+                        android:layout_height="60dp"
+                        android:padding="3dp"
+                        android:src="@drawable/remove_selected"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvMenuThird"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="3dp"
+                        android:text="Remove selected"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/ivMenuThird" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clMenuForth"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2.5dip"
+                    android:layout_marginTop="5dip"
+                    android:layout_marginEnd="5dip"
+                    android:layout_marginBottom="5dip"
+                    android:background="@drawable/button_confirm2"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_weight="0.3"
+                    app:layout_constraintStart_toEndOf="@+id/clMenuThird"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/ivMenuForth"
+                        android:layout_width="0dp"
+                        android:layout_height="60dp"
+                        android:padding="3dp"
+                        android:src="@drawable/finish_screenshot"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvMenuForth"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="3dp"
+                        android:text="Finish"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/ivMenuForth" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/rightContentAndLog"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rightMenu">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="Refilled Tanks"
+                android:textColor="@color/black"
+                android:textSize="32sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/rounded_textbox_soft"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/tableLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_textbox_soft"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <CheckBox
+                        android:id="@+id/cbRefilledTanks"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="25dp"
+                        android:gravity="center"
+                        android:visibility="invisible"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tvInventoryNr"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvInventoryNr"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:tag="@string/id"
+                        android:text="@string/hashNr"
+                        android:textColor="@color/black"
+                        android:textSize="32sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tvInventoryLastFill"
+                        app:layout_constraintHorizontal_weight="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/cbRefilledTanks"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvInventoryLastFill"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:maxLines="1"
+                        android:tag="@string/lFi"
+                        android:text="@string/last_filled"
+                        android:textColor="@color/black"
+                        android:textSize="32sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/bComment"
+                        app:layout_constraintHorizontal_weight="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/tvInventoryNr"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/bComment"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_margin="2dip"
+                        android:visibility="invisible"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/bDetails"
+                        app:layout_constraintHorizontal_weight="0.6"
+                        app:layout_constraintStart_toEndOf="@+id/tvInventoryLastFill"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/bDetails"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginEnd="25dp"
+                        android:visibility="invisible"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_weight="0.6"
+                        app:layout_constraintStart_toEndOf="@+id/bComment"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerRefilledTanks"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:padding="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <FrameLayout
+        android:id="@+id/flConfirm"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

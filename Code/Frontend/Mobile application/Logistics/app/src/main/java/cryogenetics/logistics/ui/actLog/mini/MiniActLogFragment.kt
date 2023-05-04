@@ -8,11 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
+import cryogenetics.logistics.api.ApiUrl
 import cryogenetics.logistics.databinding.FragmentMiniActLogBinding
-import cryogenetics.logistics.ui.inventory.*
 
 class MiniActLogFragment : Fragment() {
 
@@ -23,9 +22,7 @@ class MiniActLogFragment : Fragment() {
     private var _binding : FragmentMiniActLogBinding? = null
     private val binding get() = _binding!!
 
-    //private lateinit var actLogList: RecyclerView
     private lateinit var viewModel: MiniActLogViewModel
-    //private lateinit var mProductListAdapter: JsonAdapter
 
     private val mOnProductClickListener =
         AdapterView.OnItemClickListener { parent, view, position, id ->
@@ -98,7 +95,7 @@ class MiniActLogFragment : Fragment() {
     }
 
     private fun fetchActLogData() :  List<Map<String, Any>>{
-        val urlDataString = Api.fetchJsonData("http://10.0.2.2:8080/api/transaction")
+        val urlDataString = Api.fetchJsonData(ApiUrl.urlTransaction)
         return Api.parseJsonArray(urlDataString)
     }
 
