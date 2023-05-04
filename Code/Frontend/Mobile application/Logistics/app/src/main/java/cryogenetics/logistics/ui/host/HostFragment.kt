@@ -1,14 +1,11 @@
 package cryogenetics.logistics.ui.host
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -16,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
 import cryogenetics.logistics.dataStore
 import cryogenetics.logistics.databinding.FragmentHostBinding
+import cryogenetics.logistics.functions.Functions
 import cryogenetics.logistics.ui.actLog.ActLogFragment
 import cryogenetics.logistics.ui.inventory.InventoryFragment
 import cryogenetics.logistics.ui.dash.DashFragment
@@ -23,8 +21,6 @@ import cryogenetics.logistics.ui.tank.TankFragment
 import cryogenetics.logistics.ui.tankfill.TankFillFragment
 import cryogenetics.logistics.ui.taskmanager.TaskItem
 import cryogenetics.logistics.ui.taskmanager.TaskManagerAdapter
-import cryogenetics.logistics.util.Util
-import io.reactivex.Flowable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -73,7 +69,7 @@ class HostFragment : Fragment() {
 
         // Set logout onclick
         ibLogout.setOnClickListener {
-            Util.restartApp(requireContext(), null)
+            Functions.restartApp(requireContext(), null)
         }
 
         // Set up adapter

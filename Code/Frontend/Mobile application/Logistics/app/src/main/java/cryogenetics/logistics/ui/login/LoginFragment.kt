@@ -1,7 +1,6 @@
 package cryogenetics.logistics.ui.login
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,11 +13,9 @@ import androidx.datastore.preferences.core.*
 import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
 import cryogenetics.logistics.api.ApiUrl
-import cryogenetics.logistics.dataStore
+import cryogenetics.logistics.functions.Functions
 import cryogenetics.logistics.ui.host.HostFragment
-import cryogenetics.logistics.util.Util
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.Dispatchers.Unconfined
 
 
@@ -67,7 +64,7 @@ class LoginFragment : Fragment() {
                             bLogin.visibility = View.GONE
                             pbLogin.visibility = View.VISIBLE
                         }
-                        Util.storeMap(loginAttempt.second[0], requireContext())
+                        Functions.storeMap(loginAttempt.second[0], requireContext())
 
                         runBlocking {
                             // Once the storing is complete, exit login screen...
