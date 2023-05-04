@@ -1,0 +1,844 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.tank.ActFragment"
+    tools:ignore="MissingDefaultResource">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvManualAct"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/ManualAct"
+                android:textColor="@color/black"
+                android:textSize="36sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvManualActDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/manualActDescription"
+                android:textColor="@color/black"
+                app:autoSizeMaxTextSize="48sp"
+                app:autoSizeMinTextSize="12sp"
+                app:autoSizeStepGranularity="2sp"
+                app:autoSizeTextType="uniform"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvManualAct" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvManualActDescription">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clRowOne"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintBottom_toTopOf="@+id/clRowTwo"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/clfActs"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/clNote"
+                        app:layout_constraintHorizontal_weight="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/clActSpinner"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/rounded_textbox"
+                            android:translationY="-10dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvActLogTitleAct">
+
+                            <Spinner
+                                android:id="@+id/spinnerAct"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/spinner_arrow"
+                                android:minHeight="45dp"
+                                android:spinnerMode="dialog"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <TextView
+                            android:id="@+id/tvActLogTitleAct"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:background="@drawable/rounded_textbox"
+                            android:gravity="center|start"
+                            android:paddingStart="15dp"
+                            android:paddingEnd="15dp"
+                            android:text="@string/Act"
+                            android:textSize="24sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/clNote"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="20dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_weight="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/clfActs"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/clNoteEditText"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/rounded_textbox"
+                            android:translationY="-10dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvNoteTitle">
+
+                            <EditText
+                                android:id="@+id/etNote"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:hint="Write Note"
+                                android:maxLines="1"
+                                android:paddingStart="10dp"
+                                android:textSize="24sp"
+                                android:inputType="text"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <TextView
+                            android:id="@+id/tvNoteTitle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:background="@drawable/rounded_textbox"
+                            android:gravity="center|start"
+                            android:paddingStart="15dp"
+                            android:paddingEnd="15dp"
+                            android:text="@string/Note"
+                            android:textSize="24sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clRowTwo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toTopOf="@+id/clRowThree"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/clRowOne">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/clTankStatus"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintHorizontal_weight="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/clInvoiceDate">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/clStatus"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/rounded_textbox"
+                            android:translationY="-10dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvInventoryTitleStatus">
+
+                            <Spinner
+                                android:id="@+id/spinnerStatus"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/spinner_arrow"
+                                android:minHeight="45dp"
+                                android:spinnerMode="dialog"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <TextView
+                            android:id="@+id/tvInventoryTitleStatus"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:background="@drawable/rounded_textbox"
+                            android:gravity="center|start"
+                            android:paddingStart="15dp"
+                            android:paddingEnd="15dp"
+                            android:text="@string/status"
+                            android:textSize="24sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/clInvoiceDate"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="20dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_weight="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/clTankStatus"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/clInvoiceDatelayout"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:background="@drawable/rounded_textbox"
+                            android:translationY="-10dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvInvoiceDateTitle">
+
+                            <TextView
+                                android:id="@+id/tvInvoiceDate"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:paddingStart="10dp"
+                                android:text="@string/dateformat"
+                                android:textSize="24sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/ibInvoiceDate"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <ImageButton
+                                android:id="@+id/ibInvoiceDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="20dp"
+                                android:layout_marginEnd="7dp"
+                                android:adjustViewBounds="true"
+                                android:background="@null"
+                                android:contentDescription="pencil"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/calendar"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/tvInvoiceDate"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <TextView
+                            android:id="@+id/tvInvoiceDateTitle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:background="@drawable/rounded_textbox"
+                            android:gravity="center|start"
+                            android:paddingStart="15dp"
+                            android:paddingEnd="15dp"
+                            android:text="@string/inovice"
+                            android:textSize="24sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clRowThree"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toTopOf="@+id/clRowFour"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/clRowTwo">
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/clAffiliatedLab"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/clClient"
+                        app:layout_constraintHorizontal_weight="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/clSpinnerAffiliatedLab"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/rounded_textbox"
+                            android:translationY="-10dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvTitleAffiliatedLab">
+
+                            <Spinner
+                                android:id="@+id/spinnerAffiliatedLab"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/spinner_arrow"
+                                android:minHeight="45dp"
+                                android:spinnerMode="dialog"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <TextView
+                            android:id="@+id/tvTitleAffiliatedLab"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:background="@drawable/rounded_textbox"
+                            android:gravity="center|start"
+                            android:paddingStart="15dp"
+                            android:paddingEnd="15dp"
+                            android:text="@string/Affiliatedlab"
+                            android:textSize="24sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/clClient"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="20dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_weight="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/clAffiliatedLab"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/clClientSpinner"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/rounded_textbox"
+                            android:translationY="-10dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvInventoryTitleClient">
+
+                            <Spinner
+                                android:id="@+id/spinnerClient"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/spinner_arrow"
+                                android:minHeight="45dp"
+                                android:spinnerMode="dialog"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <TextView
+                            android:id="@+id/tvInventoryTitleClient"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:background="@drawable/rounded_textbox"
+                            android:gravity="center|start"
+                            android:paddingStart="15dp"
+                            android:paddingEnd="15dp"
+                            android:text="@string/client"
+                            android:textSize="24sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clRowFour"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toTopOf="@+id/clRowFourOne"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_weight="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/clRowThree">
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/clAddress"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/clLastFilled"
+                        app:layout_constraintHorizontal_weight="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/clEditTextAddress"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/rounded_textbox"
+                            android:translationY="-10dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvTitleAddress">
+
+                            <EditText
+                                android:id="@+id/etAddress"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:hint="@string/write_address"
+                                android:paddingStart="10dp"
+                                android:textSize="24sp"
+                                android:inputType="text"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <TextView
+                            android:id="@+id/tvTitleAddress"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:background="@drawable/rounded_textbox"
+                            android:gravity="center|start"
+                            android:paddingStart="15dp"
+                            android:paddingEnd="15dp"
+                            android:text="@string/Address"
+                            android:textSize="24sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/clLastFilled"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="20dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_weight="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/clAddress"
+                        app:layout_constraintTop_toTopOf="parent">
+
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/cLayoutLastFilled"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:background="@drawable/rounded_textbox"
+                            android:translationY="-10dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvTitleLastFilled">
+
+                            <TextView
+                                android:id="@+id/tvLastFilled"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:paddingStart="10dp"
+                                android:text="@string/dateformat"
+                                android:textSize="24sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/ibLastFilled"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <ImageButton
+                                android:id="@+id/ibLastFilled"
+                                android:layout_width="wrap_content"
+                                android:layout_height="20dp"
+                                android:layout_marginEnd="7dp"
+                                android:adjustViewBounds="true"
+                                android:background="@null"
+                                android:contentDescription="pencil"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/calendar"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/tvLastFilled"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <TextView
+                            android:id="@+id/tvTitleLastFilled"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:background="@drawable/rounded_textbox"
+                            android:gravity="center|start"
+                            android:paddingStart="15dp"
+                            android:paddingEnd="15dp"
+                            android:text="@string/Lastfilled"
+                            android:textSize="24sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clRowFourOne"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toTopOf="@+id/clRowFive"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/clRowFour">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/clMaintType"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:visibility="invisible"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/clAllMaintCompl"
+                        app:layout_constraintHorizontal_weight="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/clMaintTypeSpinner"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/rounded_textbox"
+                            android:translationY="-10dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvMaintTypeTitle">
+
+                            <Spinner
+                                android:id="@+id/spinnerMaintType"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/spinner_arrow"
+                                android:minHeight="45dp"
+                                android:spinnerMode="dialog"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <TextView
+                            android:id="@+id/tvMaintTypeTitle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:background="@drawable/rounded_textbox"
+                            android:gravity="center|start"
+                            android:paddingStart="15dp"
+                            android:paddingEnd="15dp"
+                            android:text="@string/maintenanceType"
+                            android:textSize="24sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/clDisposeType"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/clAllMaintCompl"
+                        app:layout_constraintHorizontal_weight="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/clDisposeTypeSpinner"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/rounded_textbox"
+                            android:translationY="-10dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvDisposeTypeTitle">
+
+                            <Spinner
+                                android:id="@+id/spinnerDisposeType"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/spinner_arrow"
+                                android:minHeight="45dp"
+                                android:spinnerMode="dialog"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <TextView
+                            android:id="@+id/tvDisposeTypeTitle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:background="@drawable/rounded_textbox"
+                            android:gravity="center|start"
+                            android:paddingStart="15dp"
+                            android:paddingEnd="15dp"
+                            android:text="@string/disposeType"
+                            android:textSize="24sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/clAllMaintCompl"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="20dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_weight="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/clMaintType"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/clAllMaintComplSpinner"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/rounded_textbox"
+                            android:translationY="-10dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvAllMaintComplTitle">
+
+                            <Spinner
+                                android:id="@+id/SpinnerAllMaintCompl"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/spinner_arrow"
+                                android:minHeight="45dp"
+                                android:spinnerMode="dialog"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <TextView
+                            android:id="@+id/tvAllMaintComplTitle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:background="@drawable/rounded_textbox"
+                            android:gravity="center|start"
+                            android:paddingStart="15dp"
+                            android:paddingEnd="15dp"
+                            android:text="@string/Maintencestatus"
+                            android:textSize="24sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clRowFive"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toTopOf="@+id/clConfirmCancelRow"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/clRowFourOne">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/clComment"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_weight="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/clEditTextComment"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/rounded_textbox"
+                            android:translationY="-10dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tvTitleComment">
+
+                            <EditText
+                                android:id="@+id/etComment"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:hint="@string/writeCommentHere"
+                                android:paddingStart="10dp"
+                                android:textSize="24sp"
+                                android:inputType="text"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <TextView
+                            android:id="@+id/tvTitleComment"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:background="@drawable/rounded_textbox"
+                            android:gravity="center|start"
+                            android:paddingStart="15dp"
+                            android:paddingEnd="15dp"
+                            android:text="@string/comment"
+                            android:textSize="24sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clConfirmCancelRow"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/clRowFive">
+
+                    <Button
+                        android:id="@+id/bCancel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/button_cancel"
+                        android:text="Cancel"
+                        android:textColor="@color/black"
+                        app:autoSizeMaxTextSize="100sp"
+                        app:autoSizeMinTextSize="12sp"
+                        app:autoSizeStepGranularity="2sp"
+                        app:autoSizeTextType="uniform"
+                        app:backgroundTint="@null"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/bConfirm"
+                        app:layout_constraintHorizontal_weight="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/bConfirm"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@drawable/button_confirm"
+                        android:gravity="center"
+                        android:text="Register manual act"
+                        android:textColor="@color/black"
+                        app:autoSizeMaxTextSize="100sp"
+                        app:autoSizeMinTextSize="12sp"
+                        app:autoSizeStepGranularity="2sp"
+                        app:autoSizeTextType="uniform"
+                        app:backgroundTint="@null"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_weight="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/bCancel"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

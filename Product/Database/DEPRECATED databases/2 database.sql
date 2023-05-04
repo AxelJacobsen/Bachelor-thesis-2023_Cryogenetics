@@ -234,17 +234,18 @@ CREATE TABLE `transaction` (
   `container_sr_number` varchar(32) COLLATE utf8mb4_danish_ci DEFAULT NULL,
   `comment` varchar(512) COLLATE utf8mb4_danish_ci DEFAULT NULL,
   `date` date NOT NULL,
-  `act` varchar(32) COLLATE utf8mb4_danish_ci NOT NULL
+  `act` varchar(32) COLLATE utf8mb4_danish_ci NOT NULL,
+  `container_status_name` varchar(60) COLLATE utf8mb4_danish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
 -- Dumping data for table `transaction`
 --
 
-INSERT INTO `transaction` (`transaction_id`, `employee_id`, `client_id`, `address`, `location_id`, `container_sr_number`, `comment`, `date`, `act`) VALUES
-(101, 103, 3, '123 Warehouse Lane\r\nMerrimack, NH 03054', 101, '123456789', 'Sent container to customer', '2023-03-08', 'Sent out'),
-(102, 1, NULL, '456 Lagerveien\r\nHamar, 2316', 1, '111111111', 'Patched hole underneath container, used duct tape so might not last. ', '2023-03-16', 'Maint. completed'),
-(103, 101, 5, '1010 Main Street West\r\nNorth Bay, ON P1B 2W1', 201, '2222222222', 'Recieved container from customer', '2023-03-08', 'Returned');
+INSERT INTO `transaction` (`transaction_id`, `employee_id`, `client_id`, `address`, `location_id`, `container_sr_number`, `comment`, `date`, `act`, `container_status_name`) VALUES
+(101, 103, 3, '123 Warehouse Lane\r\nMerrimack, NH 03054', 101, '123456789', 'Sent container to customer', '2023-03-08', 'Sent out', 'At client'),
+(102, 1, NULL, '456 Lagerveien\r\nHamar, 2316', 1, '111111111', 'Patched hole underneath container, used duct tape so might not last. ', '2023-03-16', 'Maint. completed', 'At client'),
+(103, 101, 5, '1010 Main Street West\r\nNorth Bay, ON P1B 2W1', 201, '2222222222', 'Recieved container from customer', '2023-03-08', 'Returned', 'At client');
 
 --
 -- Indexes for dumped tables
@@ -376,6 +377,7 @@ ALTER TABLE `transaction`
   ADD CONSTRAINT `transaction_fk3` FOREIGN KEY (`client_id`) REFERENCES `client` (`client_id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `transaction_fk4` FOREIGN KEY (`container_sr_number`) REFERENCES `container` (`container_sr_number`),
   ADD CONSTRAINT `transaction_fk5` FOREIGN KEY (`location_id`) REFERENCES `location` (`location_id`) ON UPDATE CASCADE;
+  ADD KEY `transaction_fk6` (`container_status_name`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -7,15 +7,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.Button
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
+import cryogenetics.logistics.api.ApiCalls
+import cryogenetics.logistics.api.ApiUrl
 import cryogenetics.logistics.databinding.FragmentInventoryBinding
+import cryogenetics.logistics.ui.filters.FilterManager
 import cryogenetics.logistics.functions.Functions.Companion.enforceNumberFormat
-
 
 class InventoryFragment : Fragment() {
 
@@ -23,12 +27,18 @@ class InventoryFragment : Fragment() {
         fun newInstance() = InventoryFragment()
     }
 
-    private var _binding : FragmentInventoryBinding? = null
+    private var _binding: FragmentInventoryBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var inventoryList: RecyclerView
     private lateinit var viewModel: InventoryViewModel
     private lateinit var mProductListAdapter: JsonAdapter
+
+    private lateinit var bFilter: Button
+
+    private var filterManager: FilterManager = FilterManager()
+    private lateinit var mInventoryFilterFragment: InventoryFilterFragment
+    private lateinit var mAdapter: InventoryAdapter
 
     //private var modelToBeUpdated: Stack<InventoryDataModel> = Stack()
 
@@ -54,7 +64,7 @@ class InventoryFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentInventoryBinding.inflate(inflater, container, false)
         return binding.root
@@ -66,31 +76,60 @@ class InventoryFragment : Fragment() {
         // initialize the recyclerView
         binding.InventoryRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.InventoryRecycler.setHasFixedSize(true)
+        bFilter = view.findViewById(R.id.bFilter)
+        fetchInventoryData()
 
-        // initialize the recyclerView-adapter
-        val itemList = mutableListOf<Map<String, Any>>()
+        // Attach listener to filter button
+        bFilter.setOnClickListener {
+            // Create filter fragment with an initial filter state
+            if (!::mInventoryFilterFragment.isInitialized) {
+                mInventoryFilterFragment = InventoryFilterFragment(
+                    {},
+                    filterManager
+                )
 
-        //Fetch json data and add to itemlist
-        val fetchedData = fetchInventoryData()
+                // Add its on apply function
+                mInventoryFilterFragment.onApply = {
+                    // Close the fragment
+                    childFragmentManager.commit {
+                        hide(mInventoryFilterFragment)
+                    }
 
-        if (fetchedData.isNotEmpty()){
-            for (model in fetchedData) {
-                print("HERE!")
-                print(model)
-                val updatedModel = enforceNumberFormat(model)
-                print(updatedModel)
-                if (updatedModel.isNotEmpty()){
-                    itemList.add(updatedModel)
-                } else{
-                    itemList.add(model)
+                    fetchInventoryData(filterManager.getUrl(ApiUrl.urlContainer))
+                }
+
+                childFragmentManager.commit {
+                    setReorderingAllowed(true)
+                    add(R.id.inventoryFragment, mInventoryFilterFragment)
+                }
+            } else {
+                childFragmentManager.commit {
+                    setReorderingAllowed(true)
+                    show(mInventoryFilterFragment)
                 }
             }
-        } else {
-            Log.e(TAG, "Fetched no data")
         }
+    }
 
-        //Create a list of references
-        val viewIds = listOf(
+    /**
+     *  Fetches act log data and updates the adapter.
+     *
+     *  @param forceUrl - url to fetch data from. If left empty, data is fetched from the default url.
+     */
+    private fun fetchInventoryData(forceUrl: String = "") {
+        // Fetch and parse data
+        val url = if (forceUrl=="") ApiUrl.urlContainer else forceUrl
+        val urlDataString = Api.fetchJsonData(url)
+        val parsedData = Api.parseJsonArray(urlDataString)
+
+        // Create a list out of it
+        val itemList = mutableListOf<Map<String, Any>>()
+        for (model in parsedData)
+            itemList.add( if (model.isNotEmpty()) enforceNumberFormat(model) else model )
+
+        // If the adapter doesn't exist, create it
+        if (binding.InventoryRecycler.adapter == null) {
+            val viewIds = listOf(
                 R.id.tvInventoryNr,
                 R.id.tvInventoryClient,
                 R.id.tvInventoryLocation,
@@ -98,46 +137,12 @@ class InventoryFragment : Fragment() {
                 R.id.tvInventoryLastFill,
                 R.id.tvInventoryNoti,
                 R.id.tvInventoryStatus
-                )
-        //Create adapter
-        //val adapter = JsonAdapter(itemList, viewIds)
-        //mProductListAdapter = adapter
-        binding.InventoryRecycler.adapter = InventoryAdapter(itemList, viewIds)
-
-        //inventoryList.adapter = InventoryAdapter(itemList, viewIds)
-
-        //POST EXAMPLE, make sure all fields that are non-nullable are provided
-        /*
-        val dataList = listOf(
-
-            mapOf(  "serial_number" to 123321, "country_iso3" to "KYS",
-                    "model" to "large200", "status" to "Quarantine")
-        )
-
-        //PUT EXAMPLE, primary must be identical to a provided field
-        val dataList = listOf(
-            mapOf("address" to "Wow this is one ugly container", "model" to "large200", "primary" to "model"),
-            mapOf("address" to "TestAdresse", "model" to "verySmall60", "primary" to "model")
-        )
-        */
-        //NEED TO UPDATE URL TO MATCH LOCAL VERISON OF BACKEND
-        //makeBackendRequest("user/container", dataList, "POST")
+            )
+            mAdapter = InventoryAdapter(itemList, viewIds)
+            binding.InventoryRecycler.adapter = mAdapter
+            // Otherwise, update its data
+        } else {
+            mAdapter.updateData(itemList)
+        }
     }
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        viewModel = ViewModelProvider(this).get(InventoryViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    private fun fetchInventoryData() :  List<Map<String, Any>>{
-        val urlDataString = Api.fetchJsonData("http://10.0.2.2:8080/api/container")
-        return Api.parseJsonArray(urlDataString)
-    }
-
 }

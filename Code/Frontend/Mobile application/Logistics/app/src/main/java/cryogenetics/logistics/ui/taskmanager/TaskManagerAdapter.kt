@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 
@@ -19,9 +20,14 @@ class TaskManagerAdapter(
     inner class ItemViewHolder(view: View): RecyclerView.ViewHolder(view){
         val tvName: TextView
         val ivX: ImageView
+        val ivCur: ImageView
+        val constL: ConstraintLayout
+
         init {
             tvName = view.findViewById(cryogenetics.logistics.R.id.taskItemtv)
             ivX = view.findViewById(cryogenetics.logistics.R.id.taskItemX)
+            ivCur = view.findViewById(cryogenetics.logistics.R.id.ivCurTaskItem)
+            constL = view.findViewById(cryogenetics.logistics.R.id.clTaskItem)
         }
     }
 
@@ -34,8 +40,9 @@ class TaskManagerAdapter(
         // Set up behavior of tabs
         val item = dataList[holder.adapterPosition]
         holder.tvName.text = item.name
+        holder.ivCur.setImageResource(item.picRef)
 
-        holder.tvName.setOnClickListener {
+        holder.constL.setOnClickListener {
             onClick(item.fragment, holder.adapterPosition)
         }
 

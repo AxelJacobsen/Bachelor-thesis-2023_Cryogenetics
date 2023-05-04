@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
 
 class ActLogAdapter(
-    private val itemList: MutableList<Map<String, Any>>,
+    private var itemList: List<Map<String, Any>>,
     private val viewIds: List<Int>
 ) : RecyclerView.Adapter<ActLogAdapter.ViewHolder>() {
 
@@ -21,8 +21,6 @@ class ActLogAdapter(
         init {
             //Propagate views with textViews based on their ID provided by the fragment
             for (viewId in viewIds) {
-                Log.e(TAG, "viewId: $viewId")
-
                 val textView = view.findViewById<TextView>(viewId)
                 //If views are filled with nulls it breaks
                 if (textView != null){
@@ -63,5 +61,10 @@ class ActLogAdapter(
 
     override fun getItemCount(): Int {
         return itemList.size
+    }
+
+    fun updateData(newData: List<Map<String, Any>>) {
+        itemList = newData
+        notifyDataSetChanged()
     }
 }

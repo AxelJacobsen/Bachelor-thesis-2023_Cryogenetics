@@ -11,7 +11,6 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class Api {
-    val baseUrl = "http://10.0.2.2:8080/api/"
     companion object {
         /**
          * Gets json string from url
@@ -95,13 +94,13 @@ class Api {
          * @param dataList List of json data in Map format
          * @param method Request method
          */
-        fun makeBackendRequest(endpoint: String, dataList: List<Map<String, Any>>, method: String) {
+        fun makeBackendRequest(endpoint: String, dataList: List<Map<String, Any>>, method: String): Int {
             //Lists legal methods, can be expanded on if more methods following the same format are
             // accommodated for.
             val legalMethods = listOf<String>("POST", "PUT")
 
             // Define the base URL for your backend server
-            val baseUrl = "http://10.0.2.2:8080/api/"
+            val baseUrl = ApiUrl.urlBase
 
             //Check if provided method is allowed
             if (!legalMethods.contains(method.uppercase())){
@@ -110,19 +109,18 @@ class Api {
 
             // Construct the URL for the endpoint you want to hit
             val endpointUrl = URL(baseUrl + endpoint)
+            println(endpointUrl)
 
             //Turn the Map into a json string
-            var jsonString = generateJson(dataList)
+            val jsonString = generateJson(dataList)
             if (jsonString.isEmpty()){
                 Log.e(TAG, "Couldn't construct json string")
             }
 
             // Open a connection to the endpoint URL
             val connection: HttpURLConnection = endpointUrl.openConnection() as HttpURLConnection
-
             // Set the request method
             connection.requestMethod = method.uppercase()
-
             // Set the request headers
             connection.setRequestProperty("Content-Type", "application/json")
 
@@ -130,10 +128,12 @@ class Api {
             val outputStreamWriter = OutputStreamWriter(connection.outputStream)
             outputStreamWriter.write(jsonString)
             outputStreamWriter.flush()
-
+            val response = connection.responseCode
             // Close the connection and output stream writer
             outputStreamWriter.close()
             connection.disconnect()
+            println(jsonString)
+            return response
         }
 
         /**

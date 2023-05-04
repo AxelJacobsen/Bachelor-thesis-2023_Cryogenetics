@@ -258,8 +258,8 @@ ALTER TABLE `transaction`
 ALTER TABLE `container`
   ADD CONSTRAINT `container_fk1` FOREIGN KEY (`model`) REFERENCES `container_model` (`model_name`) ON UPDATE CASCADE,
   ADD CONSTRAINT `container_fk2` FOREIGN KEY (`status`) REFERENCES `container_status` (`status_name`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `container_fk3` FOREIGN KEY (`at_client`) REFERENCES `client` (`client_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `container_fk4` FOREIGN KEY (`at_inventory`) REFERENCES `location` (`location_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `container_fk3` FOREIGN KEY (`at_client`) REFERENCES `client` (`client_name`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `container_fk4` FOREIGN KEY (`at_inventory`) REFERENCES `location` (`location_name`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Begrensninger for tabell `employee`

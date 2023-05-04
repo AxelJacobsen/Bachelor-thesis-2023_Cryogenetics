@@ -1,13 +1,20 @@
 package cryogenetics.logistics.ui.host
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.TextView
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
+import cryogenetics.logistics.dataStore
 import cryogenetics.logistics.databinding.FragmentHostBinding
 import cryogenetics.logistics.ui.actLog.ActLogFragment
 import cryogenetics.logistics.ui.inventory.InventoryFragment
@@ -16,6 +23,13 @@ import cryogenetics.logistics.ui.tank.TankFragment
 import cryogenetics.logistics.ui.tankfill.TankFillFragment
 import cryogenetics.logistics.ui.taskmanager.TaskItem
 import cryogenetics.logistics.ui.taskmanager.TaskManagerAdapter
+import cryogenetics.logistics.util.Util
+import io.reactivex.Flowable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
 
 class HostFragment : Fragment() {
 
@@ -28,6 +42,8 @@ class HostFragment : Fragment() {
 
     private lateinit var viewModel: HostViewModel
     private lateinit var mAdapter: TaskManagerAdapter
+    private lateinit var tvUsername: TextView
+    private lateinit var ibLogout: ImageButton
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +56,25 @@ class HostFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Fetch components
+        tvUsername = view.findViewById(R.id.tvUsername)
+        ibLogout = view.findViewById(R.id.ibLogout)
+
+        // Set username text
+        val key = stringPreferencesKey("employee_name")
+        val flow: Flow<String> = requireContext().dataStore.data
+            .map {
+                it[key] ?: "No name found"
+            }
+        runBlocking (Dispatchers.IO) {
+            tvUsername.text = flow.first()
+        }
+
+        // Set logout onclick
+        ibLogout.setOnClickListener {
+            Util.restartApp(requireContext(), null)
+        }
 
         // Set up adapter
         var taskManagerData: List<TaskItem> = mutableListOf<TaskItem>()
@@ -72,24 +107,21 @@ class HostFragment : Fragment() {
         recyclerView.adapter = mAdapter
         mAdapter.updateData(taskManagerData)
 
-        // Find components
-        //mIvDashboard    = view.findViewById(cryogenetics.logistics.R.id.ivDashboard)
-
         // Set onclick listeners
         binding.clDashboard.setOnClickListener {
-            openAndAddFragment(DashFragment(), "Dashboard")
+            openAndAddFragment(DashFragment(), "Dashboard", R.drawable.dashboard)
         }
         binding.clTank.setOnClickListener {
-            openAndAddFragment(TankFragment(), "Tank")
+            openAndAddFragment(TankFragment(), "Tank", R.drawable.tank)
         }
         binding.clTankFilling.setOnClickListener {
-            openAndAddFragment(TankFillFragment(), "Tank Filling")
+            openAndAddFragment(TankFillFragment(), "Tank Filling", R.drawable.fill)
         }
         binding.clLog.setOnClickListener {
-            openAndAddFragment(ActLogFragment(), "Log")
+            openAndAddFragment(ActLogFragment(), "Log", R.drawable.recent_transactions)
         }
         binding.clInventory.setOnClickListener {
-            openAndAddFragment(InventoryFragment(), "Inventory")
+            openAndAddFragment(InventoryFragment(), "Inventory", R.drawable.inventory)
         }
     }
 
@@ -99,15 +131,15 @@ class HostFragment : Fragment() {
      *  @param fragment - The fragment.
      *  @param name - The name to display on the tab.
      */
-    fun openAndAddFragment(fragment: Fragment, name: String) {
+    fun openAndAddFragment(fragment: Fragment, name: String, picRef: Int) {
         // Create the fragment and replace the current one with it
         childFragmentManager.beginTransaction()
             .replace(R.id.mainContent, fragment)
             .commit()
 
         // Add it to the list of fragments
-        var data = mAdapter.dataList.toMutableList()
-        data.add(TaskItem(name, fragment))
+        val data = mAdapter.dataList.toMutableList()
+        data.add(TaskItem(name, fragment, picRef))
         mAdapter.updateData(data)
 
         /* IN CASE THE FRAGMENT MUST BE OPENED BY THE PARENT ACTIVITY

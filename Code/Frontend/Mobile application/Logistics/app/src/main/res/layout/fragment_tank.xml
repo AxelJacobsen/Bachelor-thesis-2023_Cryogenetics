@@ -12,433 +12,557 @@
         android:id="@+id/leftSearchAndInfo"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/red"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/rightMenuAndContent"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent=".33">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/topSearchAndCam"
+            android:id="@+id/searchView"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/teal_200"
+            android:layout_height="80dp"
+            app:layout_constraintBottom_toTopOf="@+id/bottomCameraAndInfo"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.45"
+            app:layout_constraintHeight_percent="0.15"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/searchView"
+            <EditText
+                android:id="@+id/edSearchValue"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:background="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHeight_percent="0.2"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/rounded_textbox"
+                android:gravity="center_vertical"
+                android:hint="@string/write_here"
+                android:inputType="text"
+                android:paddingStart="5dp"
+                android:textColor="@color/black"
+                app:autoSizeMaxTextSize="100sp"
+                app:autoSizeMinTextSize="12sp"
+                app:autoSizeStepGranularity="2sp"
+                app:autoSizeTextType="uniform"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/bSearch"
+                app:layout_constraintHorizontal_weight="0.7"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <EditText
-                    android:id="@+id/edSearchValue"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_margin="4dp"
-                    android:paddingStart="5dp"
-                    android:background="@color/white"
-                    android:gravity="center_vertical"
-                    android:hint="@string/write_here"
-                    android:textColor="@color/black"
-                    app:autoSizeMaxTextSize="100sp"
-                    app:autoSizeMinTextSize="12sp"
-                    app:autoSizeStepGranularity="2sp"
-                    app:autoSizeTextType="uniform"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/bSearch"
-                    app:layout_constraintHorizontal_weight="0.7"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:inputType="text" />
-
-                <Button
-                    android:id="@+id/bSearch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_marginEnd="4dp"
-                    android:gravity="center"
-                    android:maxLines="1"
-                    android:text="@string/search"
-                    android:textColor="@color/black"
-                    android:backgroundTint="@color/white"
-                    app:autoSizeMaxTextSize="100sp"
-                    app:autoSizeMinTextSize="12sp"
-                    app:autoSizeStepGranularity="2sp"
-                    app:autoSizeTextType="uniform"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_weight="0.3"
-                    app:layout_constraintStart_toEndOf="@+id/edSearchValue"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-            <ImageButton
-                android:layout_width="0dp"
+            <Button
+                android:id="@+id/bSearch"
+                android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:src="@drawable/camera_icon"
-                android:background="@android:color/transparent"
-                android:scaleType="centerInside"
-                android:adjustViewBounds="true"
+                android:layout_marginEnd="4dp"
+                android:backgroundTint="@color/softGrey"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@string/search"
+                android:textColor="@color/black"
+                app:autoSizeMaxTextSize="100sp"
+                app:autoSizeMinTextSize="12sp"
+                app:autoSizeStepGranularity="2sp"
+                app:autoSizeTextType="uniform"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/searchView"
-                android:contentDescription="TODO" />
+                app:layout_constraintHorizontal_weight="0.3"
+                app:layout_constraintStart_toEndOf="@+id/edSearchValue"
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="@color/black"
+                app:strokeWidth="2dp"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/bottomDetails"
+            android:id="@+id/bottomCameraAndInfo"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/topSearchAndCam">
+            app:layout_constraintTop_toBottomOf="@+id/searchView">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/bottomDetails0"
+                android:id="@+id/midCamera"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginStart="2dip"
-                android:layout_marginTop="2dip"
-                android:layout_marginEnd="2dip"
-                android:background="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/bottomDetails1"
+                app:layout_constraintBottom_toTopOf="@+id/bottomDetails"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintVertical_weight="1"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_chainStyle="packed"
-                app:layout_constraintVertical_weight="1">
+                app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/tv00"
+                <ImageButton
+                    android:id="@+id/ibCamera"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:gravity="start|center_vertical"
-                    android:text="@string/current_container"
-                    android:textColor="@color/black"
-                    android:padding="5dp"
-                    app:autoSizeMaxTextSize="32sp"
-                    app:autoSizeMinTextSize="12sp"
-                    app:autoSizeStepGranularity="2sp"
-                    app:autoSizeTextType="uniform"
-                    app:layout_constraintHorizontal_weight="0.5"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="TODO"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/camera_icon"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/tv01"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/tv01"
+                <FrameLayout
+                    android:id="@+id/flTankCameraFragment"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:maxLines="1"
-                    android:padding="5dp"
-                    android:gravity="end|center_vertical"
-                    android:text="@string/_000_0000"
-                    android:textColor="@color/black"
-                    app:autoSizeMaxTextSize="32sp"
-                    app:autoSizeMinTextSize="12sp"
-                    app:autoSizeStepGranularity="2sp"
-                    app:autoSizeTextType="uniform"
-                    app:layout_constraintHorizontal_weight="1"
+                    android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/tv00"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/bottomDetails1"
+                android:id="@+id/bottomDetails"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginStart="2dip"
-                android:layout_marginTop="2dip"
-                android:layout_marginEnd="2dip"
-                android:background="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/bottomDetails2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/bottomDetails0"
-                app:layout_constraintVertical_weight="0.8">
-
-                <TextView
-                    android:id="@+id/tv10"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:maxLines="1"
-                    android:padding="5dp"
-                    android:gravity="start|center_vertical"
-                    android:text="@string/status"
-                    android:textColor="@color/black"
-                    app:autoSizeMaxTextSize="32sp"
-                    app:autoSizeMinTextSize="12sp"
-                    app:autoSizeStepGranularity="2sp"
-                    app:autoSizeTextType="uniform"
-                    app:layout_constraintHorizontal_weight="0.5"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/tv11"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv11"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:maxLines="1"
-                    android:padding="5dp"
-                    android:gravity="end|center_vertical"
-                    android:text="@string/none"
-                    android:textColor="@color/black"
-                    app:autoSizeMaxTextSize="32sp"
-                    app:autoSizeMinTextSize="12sp"
-                    app:autoSizeStepGranularity="2sp"
-                    app:autoSizeTextType="uniform"
-                    app:layout_constraintHorizontal_weight="1"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/tv10"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/bottomDetails2"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="2dip"
-                android:layout_marginTop="2dip"
-                android:layout_marginEnd="2dip"
-                android:background="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/bottomDetails3"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/bottomDetails1"
-                app:layout_constraintVertical_weight="0.8">
-
-                <TextView
-                    android:id="@+id/tv20"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:maxLines="1"
-                    android:padding="5dp"
-                    android:gravity="start|center_vertical"
-                    android:text="@string/location"
-                    android:textColor="@color/black"
-                    app:autoSizeMaxTextSize="32sp"
-                    app:autoSizeMinTextSize="12sp"
-                    app:autoSizeStepGranularity="2sp"
-                    app:autoSizeTextType="uniform"
-                    app:layout_constraintHorizontal_weight="0.5"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/tv21"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv21"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:maxLines="2"
-                    android:paddingStart="2dp"
-                    android:paddingEnd="5dp"
-                    android:gravity="end|center_vertical"
-                    android:text="@string/none"
-                    android:textColor="@color/black"
-                    app:autoSizeMaxTextSize="32sp"
-                    app:autoSizeMinTextSize="12sp"
-                    app:autoSizeStepGranularity="2sp"
-                    app:autoSizeTextType="uniform"
-                    app:layout_constraintHorizontal_weight="1"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/tv20"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/bottomDetails3"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="2dip"
-                android:layout_marginTop="2dip"
-                android:layout_marginEnd="2dip"
-                android:background="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/bottomDetails4"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/bottomDetails2"
-                app:layout_constraintVertical_weight="0.8">
-
-                <TextView
-                    android:id="@+id/tv30"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:maxLines="1"
-                    android:padding="5dp"
-                    android:gravity="start|center_vertical"
-                    android:text="@string/client"
-                    android:textColor="@color/black"
-                    app:autoSizeMaxTextSize="32sp"
-                    app:autoSizeMinTextSize="12sp"
-                    app:autoSizeStepGranularity="2sp"
-                    app:autoSizeTextType="uniform"
-                    app:layout_constraintHorizontal_weight="0.5"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/tv31"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv31"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:maxLines="1"
-                    android:padding="5dp"
-                    android:gravity="end|center_vertical"
-                    android:text="@string/none"
-                    android:textColor="@color/black"
-                    app:autoSizeMaxTextSize="32sp"
-                    app:autoSizeMinTextSize="12sp"
-                    app:autoSizeStepGranularity="2sp"
-                    app:autoSizeTextType="uniform"
-                    app:layout_constraintHorizontal_weight="1"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/tv30"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/bottomDetails4"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="2dip"
-                android:layout_marginTop="2dip"
-                android:layout_marginEnd="2dip"
-                android:background="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/bottomDetails7"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/bottomDetails3"
-                app:layout_constraintVertical_weight="0.8">
-
-                <TextView
-                    android:id="@+id/tv40"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:maxLines="1"
-                    android:padding="5dp"
-                    android:gravity="start|center_vertical"
-                    android:text="@string/last_filled"
-                    android:textColor="@color/black"
-                    app:autoSizeMaxTextSize="32sp"
-                    app:autoSizeMinTextSize="12sp"
-                    app:autoSizeStepGranularity="2sp"
-                    app:autoSizeTextType="uniform"
-                    app:layout_constraintHorizontal_weight="0.5"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/tv41"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv41"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:maxLines="1"
-                    android:padding="5dp"
-                    android:gravity="end|center_vertical"
-                    android:text="@string/none"
-                    android:textColor="@color/black"
-                    app:autoSizeMaxTextSize="32sp"
-                    app:autoSizeMinTextSize="12sp"
-                    app:autoSizeStepGranularity="2sp"
-                    app:autoSizeTextType="uniform"
-                    app:layout_constraintHorizontal_weight="1"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/tv40"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/bottomDetails7"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="2dip"
-                android:layout_marginTop="2dip"
-                android:layout_marginEnd="2dip"
-                android:layout_marginBottom="2dip"
-                android:background="@color/white"
+                android:background="@color/black"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/bottomDetails4"
-                app:layout_constraintVertical_weight="1.2">
+                app:layout_constraintTop_toBottomOf="@+id/midCamera"
+                app:layout_constraintVertical_weight="1.5">
 
-                <TextView
-                    android:id="@+id/tv70"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/bottomDetails0"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:maxLines="1"
-                    android:padding="5dp"
-                    android:gravity="start|center_vertical"
-                    android:text="@string/comment"
-                    android:textColor="@color/black"
-                    app:autoSizeMaxTextSize="32sp"
-                    app:autoSizeMinTextSize="12sp"
-                    app:autoSizeStepGranularity="2sp"
-                    app:autoSizeTextType="uniform"
-                    app:layout_constraintHorizontal_weight="0.5"
+                    android:layout_marginStart="2dip"
+                    android:layout_marginTop="2dip"
+                    android:layout_marginEnd="2dip"
+                    android:background="@color/white"
+                    app:layout_constraintBottom_toTopOf="@+id/bottomDetails1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    app:layout_constraintVertical_weight="1">
+
+                    <TextView
+                        android:id="@+id/tv00"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:gravity="start|center_vertical"
+                        android:padding="5dp"
+                        android:text="@string/current_container"
+                        android:textColor="@color/black"
+                        app:autoSizeMaxTextSize="32sp"
+                        app:autoSizeMinTextSize="12sp"
+                        app:autoSizeStepGranularity="2sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tvTankId"
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvTankId"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:gravity="end|center_vertical"
+                        android:maxLines="1"
+                        android:padding="5dp"
+                        android:text="@string/_000_0000"
+                        android:textColor="@color/black"
+                        app:autoSizeMaxTextSize="32sp"
+                        app:autoSizeMinTextSize="12sp"
+                        app:autoSizeStepGranularity="2sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintStart_toEndOf="@+id/tv00"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/bottomDetails1"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="2dip"
+                    android:layout_marginTop="2dip"
+                    android:layout_marginEnd="2dip"
+                    android:background="@color/white"
+                    app:layout_constraintBottom_toTopOf="@+id/bottomDetails2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/bottomDetails0"
+                    app:layout_constraintVertical_weight="0.8">
+
+                    <TextView
+                        android:id="@+id/tv10"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:gravity="start|center_vertical"
+                        android:maxLines="1"
+                        android:padding="5dp"
+                        android:text="@string/status"
+                        android:textColor="@color/black"
+                        app:autoSizeMaxTextSize="32sp"
+                        app:autoSizeMinTextSize="12sp"
+                        app:autoSizeStepGranularity="2sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tvTankStatus"
+                        app:layout_constraintHorizontal_weight="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvTankStatus"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:gravity="end|center_vertical"
+                        android:maxLines="1"
+                        android:padding="5dp"
+                        android:text="@string/none"
+                        android:textColor="@color/black"
+                        app:autoSizeMaxTextSize="32sp"
+                        app:autoSizeMinTextSize="12sp"
+                        app:autoSizeStepGranularity="2sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintStart_toEndOf="@+id/tv10"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/bottomDetails2"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="2dip"
+                    android:layout_marginTop="2dip"
+                    android:layout_marginEnd="2dip"
+                    android:background="@color/white"
+                    app:layout_constraintBottom_toTopOf="@+id/bottomDetails21"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/bottomDetails1"
+                    app:layout_constraintVertical_weight="0.8">
+
+                    <TextView
+                        android:id="@+id/tv20"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:gravity="start|center_vertical"
+                        android:maxLines="1"
+                        android:padding="5dp"
+                        android:text="@string/location"
+                        android:textColor="@color/black"
+                        app:autoSizeMaxTextSize="32sp"
+                        app:autoSizeMinTextSize="12sp"
+                        app:autoSizeStepGranularity="2sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tvTankLocation"
+                        app:layout_constraintHorizontal_weight="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvTankLocation"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:gravity="end|center_vertical"
+                        android:maxLines="2"
+                        android:paddingStart="2dp"
+                        android:paddingEnd="5dp"
+                        android:text="@string/none"
+                        android:textColor="@color/black"
+                        app:autoSizeMaxTextSize="32sp"
+                        app:autoSizeMinTextSize="12sp"
+                        app:autoSizeStepGranularity="2sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintStart_toEndOf="@+id/tv20"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/bottomDetails21"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="2dip"
+                    android:layout_marginTop="2dip"
+                    android:layout_marginEnd="2dip"
+                    android:background="@color/white"
+                    app:layout_constraintBottom_toTopOf="@+id/bottomDetails3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/bottomDetails2"
+                    app:layout_constraintVertical_weight="0.8">
+
+                    <TextView
+                        android:id="@+id/tvAffiliated"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:gravity="start|center_vertical"
+                        android:maxLines="1"
+                        android:padding="5dp"
+                        android:text="@string/affiliated"
+                        android:textColor="@color/black"
+                        app:autoSizeMaxTextSize="32sp"
+                        app:autoSizeMinTextSize="12sp"
+                        app:autoSizeStepGranularity="2sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tvAffiliatedLab"
+                        app:layout_constraintHorizontal_weight="0.6"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvAffiliatedLab"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:gravity="end|center_vertical"
+                        android:maxLines="2"
+                        android:paddingStart="2dp"
+                        android:paddingEnd="5dp"
+                        android:text="@string/none"
+                        android:textColor="@color/black"
+                        app:autoSizeMaxTextSize="32sp"
+                        app:autoSizeMinTextSize="12sp"
+                        app:autoSizeStepGranularity="2sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintStart_toEndOf="@+id/tvAffiliated"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/bottomDetails3"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="2dip"
+                    android:layout_marginTop="2dip"
+                    android:layout_marginEnd="2dip"
+                    android:background="@color/white"
+                    app:layout_constraintBottom_toTopOf="@+id/bottomDetails4"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/bottomDetails21"
+                    app:layout_constraintVertical_weight="0.8">
+
+                    <TextView
+                        android:id="@+id/tv30"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:gravity="start|center_vertical"
+                        android:maxLines="1"
+                        android:padding="5dp"
+                        android:text="@string/client"
+                        android:textColor="@color/black"
+                        app:autoSizeMaxTextSize="32sp"
+                        app:autoSizeMinTextSize="12sp"
+                        app:autoSizeStepGranularity="2sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tvTankClient"
+                        app:layout_constraintHorizontal_weight="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvTankClient"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:gravity="end|center_vertical"
+                        android:maxLines="1"
+                        android:padding="5dp"
+                        android:text="@string/none"
+                        android:textColor="@color/black"
+                        app:autoSizeMaxTextSize="32sp"
+                        app:autoSizeMinTextSize="12sp"
+                        app:autoSizeStepGranularity="2sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintStart_toEndOf="@+id/tv30"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/bottomDetails4"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="2dip"
+                    android:layout_marginTop="2dip"
+                    android:layout_marginEnd="2dip"
+                    android:background="@color/white"
+                    app:layout_constraintBottom_toTopOf="@+id/bottomDetails7"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/bottomDetails3"
+                    app:layout_constraintVertical_weight="0.8">
+
+                    <TextView
+                        android:id="@+id/tv40"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:gravity="start|center_vertical"
+                        android:maxLines="1"
+                        android:padding="5dp"
+                        android:text="@string/last_filled"
+                        android:textColor="@color/black"
+                        app:autoSizeMaxTextSize="32sp"
+                        app:autoSizeMinTextSize="12sp"
+                        app:autoSizeStepGranularity="2sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tvTankLastFilled"
+                        app:layout_constraintHorizontal_weight="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvTankLastFilled"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:gravity="end|center_vertical"
+                        android:maxLines="1"
+                        android:padding="5dp"
+                        android:text="@string/none"
+                        android:textColor="@color/black"
+                        app:autoSizeMaxTextSize="32sp"
+                        app:autoSizeMinTextSize="12sp"
+                        app:autoSizeStepGranularity="2sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintStart_toEndOf="@+id/tv40"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/bottomDetails7"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="2dip"
+                    android:layout_marginTop="2dip"
+                    android:layout_marginEnd="2dip"
+                    android:layout_marginBottom="2dip"
+                    android:background="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/tv71"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/bottomDetails4"
+                    app:layout_constraintVertical_weight="1.2">
+
+                    <TextView
+                        android:id="@+id/tv70"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:gravity="start|center_vertical"
+                        android:maxLines="1"
+                        android:padding="5dp"
+                        android:text="@string/note"
+                        android:textColor="@color/black"
+                        app:autoSizeMaxTextSize="32sp"
+                        app:autoSizeMinTextSize="12sp"
+                        app:autoSizeStepGranularity="2sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tvTankNote"
+                        app:layout_constraintHorizontal_weight="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvTankNote"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:gravity="end|center_vertical"
+                        android:paddingStart="2dp"
+                        android:paddingEnd="5dp"
+                        android:text="@string/none"
+                        android:textColor="@color/black"
+                        app:autoSizeMaxTextSize="32sp"
+                        app:autoSizeMinTextSize="12sp"
+                        app:autoSizeStepGranularity="2sp"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintStart_toEndOf="@+id/tv70"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/searchResult"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/bottomCameraAndInfo">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_Search_Result"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@color/white"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toTopOf="@+id/ib_cancel_Search"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/tv71"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:paddingStart="2dp"
-                    android:paddingEnd="5dp"
-                    android:gravity="end|center_vertical"
-                    android:text="@string/none"
-                    android:textColor="@color/black"
-                    app:autoSizeMaxTextSize="32sp"
-                    app:autoSizeMinTextSize="12sp"
-                    app:autoSizeStepGranularity="2sp"
-                    app:autoSizeTextType="uniform"
-                    app:layout_constraintHorizontal_weight="1"
+                <ImageButton
+                    android:id="@+id/ib_cancel_Search"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="TODO"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/cancel"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/tv70"
-                    app:layout_constraintTop_toTopOf="parent" />
-
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/recycler_Search_Result" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- android:visibility="gone" -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rightMenuAndContent"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/cryoBlue"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="1"
+        app:layout_constraintHorizontal_weight="2"
         app:layout_constraintStart_toEndOf="@+id/leftSearchAndInfo"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -466,12 +590,12 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/firstRowFirst"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="60dp"
                     android:layout_marginStart="5dip"
                     android:layout_marginTop="5dip"
-                    android:layout_marginBottom="5dip"
                     android:layout_marginEnd="2.5dip"
-                    android:background="@color/white"
+                    android:layout_marginBottom="5dip"
+                    android:background="@drawable/rounded_textbox"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/firstRowSecond"
                     app:layout_constraintHorizontal_weight="0.5"
@@ -481,7 +605,7 @@
                     <ImageView
                         android:id="@+id/ivFirstRowFirst"
                         android:layout_width="0dp"
-                        android:layout_height="60dp"
+                        android:layout_height="0dp"
                         android:src="@drawable/recieve_from_user"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/tvFirstRowFirst"
@@ -508,24 +632,24 @@
                     android:layout_height="60dp"
                     android:layout_marginStart="2.5dip"
                     android:layout_marginTop="5dip"
-                    android:layout_marginBottom="5dip"
                     android:layout_marginEnd="5dip"
-                    android:background="@color/white"
+                    android:layout_marginBottom="5dip"
+                    android:background="@drawable/rounded_textbox"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_weight="0.5"
                     app:layout_constraintStart_toEndOf="@id/firstRowFirst"
                     app:layout_constraintTop_toTopOf="parent">
 
-
                     <ImageView
                         android:id="@+id/ivFirstRowSecond"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
+                        android:layout_margin="4dp"
                         android:src="@drawable/maint_color_menu"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/tvFirstRowSecond"
-                        app:layout_constraintHorizontal_weight="0.4"
+                        app:layout_constraintHorizontal_weight="0.3"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -558,12 +682,12 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/secondRowFirst"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="60dp"
                     android:layout_marginStart="5dip"
                     android:layout_marginTop="5dip"
                     android:layout_marginEnd="2.5dip"
                     android:layout_marginBottom="5dip"
-                    android:background="@color/white"
+                    android:background="@drawable/rounded_textbox"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/secondRowSecond"
                     app:layout_constraintHorizontal_weight="1"
@@ -573,7 +697,8 @@
                     <ImageView
                         android:id="@+id/ivSecondRowFirst"
                         android:layout_width="0dp"
-                        android:layout_height="60dp"
+                        android:layout_height="0dp"
+                        android:layout_margin="4dp"
                         android:src="@drawable/cancel"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/tvSecondRowFirst"
@@ -597,12 +722,12 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/secondRowSecond"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="60dp"
                     android:layout_marginStart="2.5dip"
                     android:layout_marginTop="5dip"
                     android:layout_marginEnd="2.5dip"
                     android:layout_marginBottom="5dip"
-                    android:background="@color/white"
+                    android:background="@drawable/rounded_textbox"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/secondRowThird"
                     app:layout_constraintHorizontal_weight="1"
@@ -612,7 +737,8 @@
                     <ImageView
                         android:id="@+id/ivSecondRowSecond"
                         android:layout_width="0dp"
-                        android:layout_height="60dp"
+                        android:layout_height="0dp"
+                        android:layout_margin="4dp"
                         android:src="@drawable/cancel"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/tvSecondRowSecond"
@@ -636,12 +762,12 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/secondRowThird"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="60dp"
                     android:layout_marginStart="2.5dip"
                     android:layout_marginTop="5dip"
                     android:layout_marginEnd="2.5dip"
                     android:layout_marginBottom="5dip"
-                    android:background="@color/white"
+                    android:background="@drawable/rounded_textbox"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/secondRowFourth"
                     app:layout_constraintHorizontal_weight="1"
@@ -651,7 +777,8 @@
                     <ImageView
                         android:id="@+id/ivSecondRowThird"
                         android:layout_width="0dp"
-                        android:layout_height="60dp"
+                        android:layout_height="0dp"
+                        android:layout_margin="4dp"
                         android:src="@drawable/cancel"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/tvSecondRowThird"
@@ -675,12 +802,12 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/secondRowFourth"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="60dp"
                     android:layout_marginStart="2.5dip"
                     android:layout_marginTop="5dip"
                     android:layout_marginEnd="5dip"
                     android:layout_marginBottom="5dip"
-                    android:background="@color/white"
+                    android:background="@drawable/rounded_textbox"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_weight="1"
@@ -690,7 +817,8 @@
                     <ImageView
                         android:id="@+id/ivSecondRowFourth"
                         android:layout_width="0dp"
-                        android:layout_height="60dp"
+                        android:layout_height="0dp"
+                        android:layout_margin="4dp"
                         android:src="@drawable/cancel"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/tvSecondRowFourth"
@@ -731,7 +859,7 @@
                 android:background="@color/cryoBlue"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"></FrameLayout>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <FrameLayout
                 android:id="@+id/miniLog"
@@ -740,10 +868,11 @@
                 android:background="@color/softGrey"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/menuInventory">
+                app:layout_constraintTop_toBottomOf="@+id/menuInventory"
+                app:layout_constraintVertical_bias="0.0"/>
 
-            </FrameLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
