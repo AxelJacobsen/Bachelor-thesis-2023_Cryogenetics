@@ -9,4 +9,5 @@ object ApiUrl {
     const val urlStatus : String = "${urlBase}container_status"
     const val urlTransaction : String = "${urlBase}transaction"
     const val urlContainer : String = "${urlBase}container"
+    const val urlEmployee : String = "${urlBase}employee"
 }

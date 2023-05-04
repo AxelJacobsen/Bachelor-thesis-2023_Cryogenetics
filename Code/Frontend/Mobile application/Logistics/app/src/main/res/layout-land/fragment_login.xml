@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/loginFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.login.LoginFragment"
+
+    android:background="@color/softGrey">
+
+
+    <ImageView
+        android:id="@+id/ivLoginLogo"
+        android:layout_width="242dp"
+        android:layout_height="143dp"
+        android:src="@drawable/cryo_logo_white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.100000024" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="246dp"
+        android:layout_height="111dp"
+        app:layout_constraintEnd_toEndOf="@+id/ivLoginLogo"
+        app:layout_constraintStart_toStartOf="@+id/ivLoginLogo"
+        app:layout_constraintTop_toBottomOf="@+id/ivLoginLogo">
+
+        <ProgressBar
+            android:id="@+id/pbLogin"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/etLogin"
+            app:layout_constraintStart_toStartOf="@+id/etLogin"
+            app:layout_constraintTop_toBottomOf="@+id/etLogin" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bLogin"
+            android:layout_width="94dp"
+            android:layout_height="41dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/rectangle_rounded90_bordershadow"
+            android:text="Log in"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="@+id/etLogin"
+            app:layout_constraintStart_toStartOf="@+id/etLogin"
+            app:layout_constraintTop_toBottomOf="@+id/etLogin" />
+
+        <EditText
+            android:id="@+id/etLogin"
+            android:layout_width="158dp"
+            android:layout_height="38dp"
+            android:background="@drawable/rectangle_border"
+            android:ellipsize="start"
+            android:ems="10"
+            android:maxLength="4"
+            android:gravity="center"
+            android:hint="Enter access code"
+            android:inputType="numberSigned"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

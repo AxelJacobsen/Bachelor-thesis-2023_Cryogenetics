@@ -284,14 +284,14 @@
 
             <TextView
                 android:id="@+id/tvUsername"
-                android:autoSizeMaxTextSize="100sp"
+                android:autoSizeMaxTextSize="40sp"
                 android:autoSizeMinTextSize="12sp"
                 android:autoSizeStepGranularity="1sp"
                 android:autoSizeTextType="uniform"
                 android:gravity="center"
                 android:text="@string/usernamePlaceholder"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -85,5 +85,7 @@
     <string name="details">Details</string>
     <string name="nr">nr</string>
 
+    <string name="login_id_formatError_message">Invalid ID format</string>
+    <string name="login_id_loginError_message">Unregistered ID, contact an administrator</string>
 
 </resources>

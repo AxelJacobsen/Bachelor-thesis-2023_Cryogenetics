@@ -1,8 +1,13 @@
 package cryogenetics.logistics.util
 
 import android.content.Context
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
+import cryogenetics.logistics.dataStore
+import kotlinx.coroutines.delay
 import java.lang.reflect.Modifier
 
 class Util {
@@ -68,6 +73,32 @@ class Util {
                 it["COLUMN_TYPE"].toString(),
                 it["COLUMN_KEY"].toString()
             ) }
+        }
+
+        /**
+         *  Stores a map to data/preferences.
+         *
+         *  @param m - The map to store.
+         */
+        suspend fun storeMap(m: Map<String, Any>, context: Context) {
+            for (kvp in m) {
+                when (kvp.value) {
+                    is String -> {
+                        val key = stringPreferencesKey(kvp.key)
+                        context.dataStore.edit {
+                            it[key] = kvp.value as String
+                        }
+                    }
+
+                    is Int -> {
+                        val key = intPreferencesKey(kvp.key)
+                        context.dataStore.edit {
+                            it[key] = kvp.value as Int
+                        }
+                    }
+                }
+            }
+            delay(2000) // Fake loading time. TODO: Remove this line
         }
     }
 }
