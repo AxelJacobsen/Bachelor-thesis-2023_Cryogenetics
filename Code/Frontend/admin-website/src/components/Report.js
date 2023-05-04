@@ -132,8 +132,6 @@ export default function Report() {
       const endDatefromString = `${endDateString.slice(8, 10)}/${endDateString.slice(5, 7)}/${endDateString.slice(0, 4)}`;
       const startDatefromString = `${startDateString.slice(8, 10)}/${startDateString.slice(5, 7)}/${startDateString.slice(0, 4)}`;
 
-
-    
     // Check if first transaction_act is "Sent out" and the sr nuber is unique
     if (index === 0 && transaction.act === 'Sent out' && !containerSrNumbersSet.has(transaction.container_sr_number)) {
       // Add the container_sr_number to the Set to keep track of unique values
@@ -160,6 +158,7 @@ export default function Report() {
       // Create regular row with endDate as transaction.date
       return [`,${capacityTempId},${date},${endDate},${location}`];
     }
+    return []
     }).join('\n');
   
     return clientRow + '\n' + csvData + '\n';
