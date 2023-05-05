@@ -12,7 +12,12 @@ import cryogenetics.logistics.MainActivity
 import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
 import cryogenetics.logistics.dataStore
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
 import java.lang.reflect.Modifier
 import java.util.*
 
@@ -88,6 +93,20 @@ class Functions {
             val dateFormat = SimpleDateFormat(myFormat, Locale.US)
             val date = Date()
             return dateFormat.format(date)
+        }
+
+        fun getAlias(context: Context) : String {
+            var tvUsername = ""
+            // Set username text
+            val key = stringPreferencesKey("employee_alias")
+            val flow: Flow<String> = context.dataStore.data
+                .map {
+                    it[key] ?: "No name found"
+                }
+            runBlocking(Dispatchers.IO) {
+                return@runBlocking flow.first()
+            }
+            return ""
         }
 
         fun getDateTime(): String? {

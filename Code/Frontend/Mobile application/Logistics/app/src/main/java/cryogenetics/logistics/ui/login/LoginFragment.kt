@@ -67,12 +67,7 @@ class LoginFragment : Fragment() {
                         Functions.storeMap(loginAttempt.second[0], requireContext())
 
                         runBlocking {
-                            // Once the storing is complete, exit login screen...
-                            requireActivity().supportFragmentManager.beginTransaction()
-                                .remove(this@LoginFragment)
-                                .commit()
-
-                            // ...and enter HostFragment
+                            // Once the storing is complete, exit login screen and enter HostFragment
                             requireActivity().supportFragmentManager.beginTransaction()
                                 .replace(R.id.activityMain, HostFragment.newInstance())
                                 .commit()
@@ -103,8 +98,8 @@ class LoginFragment : Fragment() {
      */
     private fun validateFormat(idStr: String) : Boolean {
         if (
-            idStr.length != 4 ||                       // Verify length
-            idStr.filter { it.isDigit() }.length != 4  // Verify symbols
+            idStr.length < 3 ||                                     // Verify length
+            idStr.filter { it.isDigit() }.length != idStr.length    // Verify symbols
         )
             return false
         return true

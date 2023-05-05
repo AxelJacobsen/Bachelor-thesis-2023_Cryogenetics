@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
 import cryogenetics.logistics.api.ApiCalls
 import cryogenetics.logistics.databinding.FragmentMiniInventoryBinding
+import cryogenetics.logistics.functions.Functions
 import cryogenetics.logistics.ui.inventory.*
 
 class MiniInventoryFragment : Fragment() {
@@ -66,9 +67,9 @@ class MiniInventoryFragment : Fragment() {
         val itemList = mutableListOf<Map<String, Any>>()
         //Fetch json data and add to itemlist
 
-        for (model in ApiCalls.fetchInventoryData()) {
-            itemList.add(model)
-        }
+        for (model in ApiCalls.fetchInventoryData())
+            itemList.add( if (model.isNotEmpty()) Functions.enforceNumberFormat(model) else model )
+
 
         //Create a list of references
         val viewIds = listOf(

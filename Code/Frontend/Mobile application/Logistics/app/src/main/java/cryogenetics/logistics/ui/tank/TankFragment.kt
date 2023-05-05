@@ -12,9 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import cryogenetics.logistics.R
-import cryogenetics.logistics.api.Api
 import cryogenetics.logistics.api.ApiCalls
-import cryogenetics.logistics.api.ApiUrl
 import cryogenetics.logistics.cameraQR.CamAccess
 import cryogenetics.logistics.cameraQR.CameraFragment
 import cryogenetics.logistics.databinding.FragmentTankBinding
@@ -50,7 +48,11 @@ class TankFragment : Fragment() {
         inventoryData = ApiCalls.fetchInventoryData()
         camFrag = CameraFragment(mOnFoundProductListener)
         binding.bSearch.setOnClickListener {
-            val searchRes = Functions.searchContainer(requireContext(), inventoryData, binding.edSearchValue.text.toString())
+            val searchRes = Functions.searchContainer(
+                requireContext(),
+                inventoryData,
+                binding.edSearchValue.text.toString()
+            )
 
             // initialize the recyclerView
             binding.recyclerSearchResult.layoutManager = LinearLayoutManager(requireContext())
@@ -148,7 +150,7 @@ class TankFragment : Fragment() {
                 println("Linked / Unlinked")
                 val bundle = Bundle()
                 bundle.putParcelable("tankData", dTank)
-                val childFragment2 = ActFragment("Linked")
+                val childFragment2 = ActFragment(mOnFoundProductListener, "Linked")
                 childFragment2.arguments = bundle
                 childFragmentManager.beginTransaction()
                     .replace(binding.menuInventory.id, childFragment2)
@@ -160,7 +162,7 @@ class TankFragment : Fragment() {
                 println("Manage Maintenance")
                 val bundle = Bundle()
                 bundle.putParcelable("tankData", dTank)
-                val childFragment1 = ActFragment("Maintenance")
+                val childFragment1 = ActFragment(mOnFoundProductListener, "Maintenance")
                 childFragment1.arguments = bundle
                 childFragmentManager.beginTransaction()
                     .replace(binding.menuInventory.id, childFragment1)
@@ -174,7 +176,7 @@ class TankFragment : Fragment() {
                 println("Send to client")
                 val bundle = Bundle()
                 bundle.putParcelable("tankData", dTank)
-                val childFragment2 = ActFragment("Sent out")
+                val childFragment2 = ActFragment(mOnFoundProductListener, "Sent out")
                 childFragment2.arguments = bundle
                 childFragmentManager.beginTransaction()
                     .replace(binding.menuInventory.id, childFragment2)
@@ -186,7 +188,7 @@ class TankFragment : Fragment() {
                 println("RefiRefilledll")
                 val bundle = Bundle()
                 bundle.putParcelable("tankData", dTank)
-                val childFragment1 = ActFragment("Refilled")
+                val childFragment1 = ActFragment(mOnFoundProductListener, "Refilled")
                 childFragment1.arguments = bundle
                 childFragmentManager.beginTransaction()
                     .replace(binding.menuInventory.id, childFragment1)
@@ -200,7 +202,7 @@ class TankFragment : Fragment() {
                 println("Return from client")
                 val bundle = Bundle()
                 bundle.putParcelable("tankData", dTank)
-                val childFragment2 = ActFragment("Returned")
+                val childFragment2 = ActFragment(mOnFoundProductListener, "Returned")
                 childFragment2.arguments = bundle
                 childFragmentManager.beginTransaction()
                     .replace(binding.menuInventory.id, childFragment2)
@@ -212,7 +214,7 @@ class TankFragment : Fragment() {
                 println("Dispose")
                 val bundle = Bundle()
                 bundle.putParcelable("tankData", dTank)
-                val childFragment1 = ActFragment("Dispose")
+                val childFragment1 = ActFragment(mOnFoundProductListener, "Dispose")
                 childFragment1.arguments = bundle
                 childFragmentManager.beginTransaction()
                     .replace(binding.menuInventory.id, childFragment1)
@@ -226,7 +228,7 @@ class TankFragment : Fragment() {
                 println("Internal Transfer")
                 val bundle = Bundle()
                 bundle.putParcelable("tankData", dTank)
-                val childFragment1 = ActFragment("Internal")
+                val childFragment1 = ActFragment(mOnFoundProductListener, "Internal")
                 childFragment1.arguments = bundle
                 childFragmentManager.beginTransaction()
                     .replace(binding.menuInventory.id, childFragment1)
@@ -240,7 +242,7 @@ class TankFragment : Fragment() {
                 // TODO: LOCK DOWN THIS MENU UNTIL A TANK IS CHOSEN, to avoid:
                 // TODO: lateinit property dTank has not been initialized
                 bundle.putParcelable("tankData", dTank)
-                val childFragment = ActFragment("Manual")
+                val childFragment = ActFragment(mOnFoundProductListener, "Manual")
                 childFragment.arguments = bundle
                 childFragmentManager.beginTransaction()
                     .replace(binding.menuInventory.id, childFragment)
@@ -326,7 +328,7 @@ class TankFragment : Fragment() {
                 for (model in inventoryData) {
                     if (model.values.toString().contains(serialNr)) {
                         initTankData(model)
-                        binding.flTankCameraFragment?.visibility = View.GONE
+                        binding.flTankCameraFragment.visibility = View.GONE
                         binding.bottomDetails.visibility = View.VISIBLE
                         binding.rightMenuAndContent.visibility = View.VISIBLE
                         camFrag.onPaus()
@@ -342,8 +344,12 @@ class TankFragment : Fragment() {
             }
         }
 
+        override fun updateTankData(tank: List<Map<String, Any>>) {
+            initTankData(tank[0])
+        }
+
         override fun onStopCam() {
-            binding.flTankCameraFragment?.visibility = View.GONE
+            binding.flTankCameraFragment.visibility = View.GONE
         }
     }
 
@@ -378,8 +384,10 @@ class TankFragment : Fragment() {
 
     private fun getRightDate(string: String): String? {
         if (string == "0000-00-00") { // Ensures that formatter doesn't fail if date = 00...
-            Toast.makeText(requireContext(),
-                "Failed to parse date: $string , 'Last filled' was set as today!", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                requireContext(),
+                "Failed to parse date: $string , 'Last filled' was set as today!", Toast.LENGTH_LONG
+            ).show()
             return LocalDate.now().toString()
         }
         val formatterDb = DateTimeFormatter.ofPattern("yyyy-MM-dd")

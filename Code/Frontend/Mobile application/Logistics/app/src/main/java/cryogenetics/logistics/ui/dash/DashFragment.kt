@@ -12,11 +12,6 @@ import cryogenetics.logistics.ui.inventory.mini.MiniInventoryFragment
 
 class DashFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = DashFragment()
-    }
-    // TODO: Fjern eller bruk
-
     private lateinit var viewModel: DashViewModel
 
     override fun onCreateView(
@@ -33,7 +28,7 @@ class DashFragment : Fragment() {
             .replace(R.id.miniInventory, MiniInventoryFragment())
             .commit()
         childFragmentManager.beginTransaction()
-            .replace(R.id.miniLog, MiniActLogFragment())
+            .replace(R.id.miniLog, MiniActLogFragment(true))
             .commit()
 
     }

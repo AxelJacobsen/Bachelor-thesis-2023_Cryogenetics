@@ -28,7 +28,6 @@ class MiniInventoryAdapter(
                 } else {
                     Log.e(TAG, "No textView found with id: $viewId")
                 }
-
             }
         }
     }
@@ -55,7 +54,11 @@ class MiniInventoryAdapter(
             //Finally find correct json data and fill textview
             val text = item[tTag]?.toString() ?: ""
             textView.text = text
-
+            if (tTag == "address") {
+                if (text == "") {
+                    textView.text = itemList[position].entries.find { it.key == "location_name" }?.value.toString()
+                }
+            }
         }
     }
 

@@ -11,7 +11,8 @@ import cryogenetics.logistics.R
 
 class MiniActLogAdapter(
     private val itemList: MutableList<Map<String, Any>>,
-    private val viewIds: List<Int>
+    private val viewIds: List<Int>,
+    private val tvActLogRNrVisible: Boolean = false
 ) : RecyclerView.Adapter<MiniActLogAdapter.ViewHolder>() {
 
     class ViewHolder(view: View, viewIds: List<Int>) : RecyclerView.ViewHolder(view) {
@@ -37,6 +38,9 @@ class MiniActLogAdapter(
         //Create a view based on the parent viewgroup
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.mini_act_log_recycler_item, parent, false)
+
+        if (tvActLogRNrVisible) view.findViewById<TextView>(R.id.tvActLogRNr).visibility = View.VISIBLE
+
         return ViewHolder(view, viewIds)
     }
 
@@ -55,7 +59,11 @@ class MiniActLogAdapter(
             //Finally find correct json data and fill textview
             val text = item[tTag]?.toString() ?: ""
             textView.text = text
-
+            if (tTag == "address") {
+                if (text == "") {
+                    textView.text = itemList[position].entries.find { it.key == "location_name" }?.value.toString()
+                }
+            }
         }
     }
 
