@@ -93,7 +93,6 @@ class CameraFragment(
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST).build()
 
         imageAnalasys.setAnalyzer(ContextCompat.getMainExecutor(this.requireContext()), QRScanner({
-            Log.d("QR Found: ", it)
             mOnProductClickListener.onFoundQR(it)
         }, {
             // QR Not found
