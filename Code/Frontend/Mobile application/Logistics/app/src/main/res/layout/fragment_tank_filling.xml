@@ -217,20 +217,18 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dip"
-                    android:layout_marginTop="5dip"
                     android:layout_marginEnd="2.5dip"
-                    android:layout_marginBottom="5dip"
-                    android:background="@drawable/button_transaction"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:background="@drawable/button_cancel"
+                    app:layout_constraintBottom_toBottomOf="@+id/clMenuThird"
                     app:layout_constraintEnd_toStartOf="@+id/clMenuSecond"
                     app:layout_constraintHorizontal_weight="0.3"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="@+id/clMenuThird">
 
                     <ImageView
                         android:id="@+id/ivMenuFirst"
                         android:layout_width="0dp"
-                        android:layout_height="60dp"
+                        android:layout_height="70dp"
                         android:padding="3dp"
                         android:src="@drawable/cancel_all_screenshot"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -244,6 +242,7 @@
                         android:gravity="center"
                         android:padding="3dp"
                         android:text="Cancel all"
+                        android:textSize="18sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/ivMenuFirst" />
@@ -260,16 +259,16 @@
                     android:layout_marginBottom="5dip"
 
                     android:background="@drawable/button_undo"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/clMenuThird"
                     app:layout_constraintEnd_toStartOf="@+id/clMenuThird"
                     app:layout_constraintHorizontal_weight="0.3"
                     app:layout_constraintStart_toEndOf="@+id/clMenuFirst"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="@+id/clMenuThird">
 
                     <ImageView
                         android:id="@+id/ivMenuSecond"
                         android:layout_width="0dp"
-                        android:layout_height="60dp"
+                        android:layout_height="70dp"
                         android:padding="3dp"
                         android:src="@drawable/undo"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -283,6 +282,7 @@
                         android:gravity="center"
                         android:padding="3dp"
                         android:text="Undo"
+                        android:textSize="18sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/ivMenuSecond" />
@@ -306,7 +306,7 @@
                     <ImageView
                         android:id="@+id/ivMenuThird"
                         android:layout_width="0dp"
-                        android:layout_height="60dp"
+                        android:layout_height="70dp"
                         android:padding="3dp"
                         android:src="@drawable/remove_selected"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -320,6 +320,7 @@
                         android:gravity="center"
                         android:padding="3dp"
                         android:text="Remove selected"
+                        android:textSize="18sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/ivMenuThird" />
@@ -334,16 +335,16 @@
                     android:layout_marginEnd="5dip"
                     android:layout_marginBottom="5dip"
                     android:background="@drawable/button_confirm2"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/clMenuThird"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_weight="0.3"
                     app:layout_constraintStart_toEndOf="@+id/clMenuThird"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="@+id/clMenuThird">
 
                     <ImageView
                         android:id="@+id/ivMenuForth"
                         android:layout_width="0dp"
-                        android:layout_height="60dp"
+                        android:layout_height="70dp"
                         android:padding="3dp"
                         android:src="@drawable/finish_screenshot"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -357,6 +358,7 @@
                         android:gravity="center"
                         android:padding="3dp"
                         android:text="Finish"
+                        android:textSize="18sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/ivMenuForth" />
@@ -387,10 +389,12 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clRefilledTanks"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_margin="10dp"
                 android:background="@drawable/rounded_textbox_soft"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -491,6 +495,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
     <FrameLayout
+        android:id="@+id/flConfirm"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -4,13 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:ignore="MissingDefaultResource">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/tableLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:background="@color/black"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,11 +21,15 @@
             android:id="@+id/tvInventoryNr"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="2dip"
+            android:background="@color/white"
+            android:gravity="start"
             android:maxLines="1"
+            android:padding="3dip"
             android:tag="@string/id"
             android:text="@string/hashNr"
             android:textColor="@color/black"
-            android:textSize="24sp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tvInventoryLastFill"
             app:layout_constraintHorizontal_weight="0.5"
@@ -35,17 +40,21 @@
             android:id="@+id/tvInventoryLastFill"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="2dip"
+            android:background="@color/white"
             android:gravity="start"
             android:maxLines="1"
+            android:padding="3dip"
             android:tag="@string/lFi"
             android:text="@string/last_filled"
             android:textColor="@color/black"
-            android:textSize="24sp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="0.5"
             app:layout_constraintStart_toEndOf="@+id/tvInventoryNr"
             app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
+
