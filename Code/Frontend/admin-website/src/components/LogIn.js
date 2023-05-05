@@ -4,32 +4,55 @@ import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-
 const theme = createTheme();
 const CryogeneticLogo = require('../Images/CryogeneticsLogoWhite.png'); //Fetch Image
 
-export default function LogIn({setIsLoggedIn}) {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const navigate = useNavigate();
-  
-    function handleLogIn(event) {
-      event.preventDefault();
-      // Replace with your authentication logic
-      const isLoggedIn = true;
-      if (isLoggedIn) {
-        setIsLoggedIn(true);
-        navigate('/');
-        console.log(email + password)
-      }
+async function hashPassword(password) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return hashHex;
+}
+
+export default function LogIn({ setIsLoggedIn }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  async function handleLogIn(event) {
+    event.preventDefault();
+
+    // Hash the password
+    const hashedPassword = await hashPassword(password);
+
+    // Make the login request
+    const response = await fetch('/api/user/admin/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: email,
+        password_hash: hashedPassword
+      })
+    });
+
+    if (response.ok) {
+      // The login was successful
+      setIsLoggedIn(true);
+      navigate('/');
+    } else {
+      // The login failed
+      alert('Incorrect email or password.');
     }
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -78,13 +101,6 @@ export default function LogIn({setIsLoggedIn}) {
             >
               Sign In
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-            </Grid>
           </Box>
         </Box>
       </Container>

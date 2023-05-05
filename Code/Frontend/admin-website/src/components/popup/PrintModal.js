@@ -31,7 +31,7 @@ export default function PrintModal( props ) {
   useEffect(() => {
     // Call handleGenerate when props.selectedRow changes (modal opens)
     handleGenerate();
-  }, [props.selectedRow]);
+  }, );
   const canvasRef = useRef(null);
   const [inputData,setInputData] = useState('');
 

@@ -94,14 +94,15 @@ func main() {
 
 	// Route
 	routes := map[string]func(http.ResponseWriter, *http.Request){
-		constants.BASE_PATH:          shared.EndpointHandler,
-		constants.SHARED_CREATE_PATH: shared.CreateDataHandler,
-		constants.MOBILE_LOGIN_PATH:  mobile.HandlerMobileLogin,
-		constants.WEB_LOGIN_PATH:     web.HandlerWebLogin,
-		constants.WEB_PRIMARY_PATH:   web.HandlerWebDashboard,
-		constants.WEB_ADMIN_PATH:     web.HandlerAdmins,
 
-		constants.PUBLIC_STATUS_PATH: status.HandlerStatus,
+		constants.BASE_PATH:                shared.EndpointHandler,
+		constants.SHARED_CREATE_PATH:       shared.CreateDataHandler,
+		constants.MOBILE_LOGIN_PATH:        mobile.HandlerMobileLogin,
+		constants.WEB_LOGIN_PATH:           web.HandlerWebLogin,
+		constants.CRYPTOGRAPHY_PATH:        shared.CryptographyHandler,
+		constants.MOBILE_VERIFICATION_PATH: mobile.HandlerMobileVerification,
+		constants.ADMIN_VERIFICATION_PATH:  web.HandlerVerification,
+		constants.PUBLIC_STATUS_PATH:       status.HandlerStatus,
 	}
 
 	for route, routeTo := range routes {
