@@ -139,7 +139,7 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:padding="8dp"
-                    android:src="@drawable/recent_transactions"
+                    android:src="@drawable/fill"
                     app:layout_constraintBottom_toTopOf="@+id/tvTankFilling"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -178,7 +178,7 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:padding="8dp"
-                    android:src="@drawable/fill"
+                    android:src="@drawable/recent_transactions"
                     app:layout_constraintBottom_toTopOf="@+id/tvLog"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -284,14 +284,14 @@
 
             <TextView
                 android:id="@+id/tvUsername"
-                android:autoSizeMaxTextSize="100sp"
+                android:autoSizeMaxTextSize="40sp"
                 android:autoSizeMinTextSize="12sp"
                 android:autoSizeStepGranularity="1sp"
                 android:autoSizeTextType="uniform"
                 android:gravity="center"
                 android:text="@string/usernamePlaceholder"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

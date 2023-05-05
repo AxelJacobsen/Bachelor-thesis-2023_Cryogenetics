@@ -10,14 +10,14 @@ import android.widget.AdapterView
 import androidx.recyclerview.widget.LinearLayoutManager
 import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
+import cryogenetics.logistics.api.ApiCalls
 import cryogenetics.logistics.api.ApiUrl
 import cryogenetics.logistics.databinding.FragmentMiniActLogBinding
+import cryogenetics.logistics.functions.Functions
 
-class MiniActLogFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = MiniActLogFragment()
-    }
+class MiniActLogFragment (
+    private val tvActLogRNrVisible: Boolean = false
+        ) : Fragment() {
 
     private var _binding : FragmentMiniActLogBinding? = null
     private val binding get() = _binding!!
@@ -59,13 +59,14 @@ class MiniActLogFragment : Fragment() {
         binding.recyclerViewActLog.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewActLog.setHasFixedSize(true)
 
+        if (tvActLogRNrVisible) binding.tvActLogRNr.visibility = View.VISIBLE
+
         // initialize the recyclerView-adapter
         val itemList = mutableListOf<Map<String, Any>>()
         //Fetch json data and add to itemlist
 
-        for (model in fetchActLogData()) {
-            itemList.add(model)
-        }
+        for (model in ApiCalls.fetchActLogData())
+            itemList.add( if (model.isNotEmpty()) Functions.enforceNumberFormat(model) else model )
 
         //Create a list of references
 
@@ -80,7 +81,7 @@ class MiniActLogFragment : Fragment() {
             R.id.tvActLogRStatus
         )
         //Create adapter
-        binding.recyclerViewActLog.adapter = MiniActLogAdapter(itemList, viewIds)
+        binding.recyclerViewActLog.adapter = MiniActLogAdapter(itemList, viewIds, tvActLogRNrVisible)
     }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -92,11 +93,6 @@ class MiniActLogFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun fetchActLogData() :  List<Map<String, Any>>{
-        val urlDataString = Api.fetchJsonData(ApiUrl.urlTransaction)
-        return Api.parseJsonArray(urlDataString)
     }
 
 }

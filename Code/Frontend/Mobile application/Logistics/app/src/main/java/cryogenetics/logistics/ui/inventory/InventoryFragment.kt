@@ -135,6 +135,7 @@ class InventoryFragment : Fragment() {
                 R.id.tvInventoryLocation,
                 R.id.tvInventoryInvoice,
                 R.id.tvInventoryLastFill,
+                R.id.tvInventorySerialNr,
                 R.id.tvInventoryNoti,
                 R.id.tvInventoryStatus
             )

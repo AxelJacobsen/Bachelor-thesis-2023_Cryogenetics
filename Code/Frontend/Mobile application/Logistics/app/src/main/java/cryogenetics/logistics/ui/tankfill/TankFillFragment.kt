@@ -102,12 +102,21 @@ class TankFillFragment : Fragment() {
         }
         binding.clMenuForth.setOnClickListener {
 
-            childFragmentManager.beginTransaction()
-                .replace(R.id.flConfirm, ConfirmFragment(
-                    tankData, mOnFoundProductListener, "TankFillOverView"), "Conf")
-                .commit()
-
-            //postMultipleRefill()
+            if (tankData.size > 0) {
+                childFragmentManager.beginTransaction()
+                    .replace(
+                        R.id.flConfirm, ConfirmFragment(
+                            tankData, mOnFoundProductListener, "TankFillOverView"
+                        ), "Conf"
+                    )
+                    .commit()
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "No tanks has been added yet.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
         }
         binding.ibCancelSearch.setOnClickListener {
             binding.searchResult.visibility = View.GONE
@@ -136,6 +145,7 @@ class TankFillFragment : Fragment() {
 
 
     private fun addTankToList(model: Map<String, Any>) {
+        binding.clRefilledTanks.visibility = View.VISIBLE
         if (tankData.contains(model) || model.isEmpty()) {
             Toast.makeText(
                 requireContext(),
@@ -181,6 +191,7 @@ class TankFillFragment : Fragment() {
                 for (model in inventoryData) {
                     if (model.values.toString().contains(serialNr)) {
                         addTankToList(model)
+                        
                         camFrag.onPaus()
                         break
                     }

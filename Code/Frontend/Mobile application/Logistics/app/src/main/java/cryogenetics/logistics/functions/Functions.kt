@@ -107,6 +107,20 @@ class Functions {
             return dateFormat.format(date)
         }
 
+        fun getAlias(context: Context) : String {
+            var tvUsername = ""
+            // Set username text
+            val key = stringPreferencesKey("employee_alias")
+            val flow: Flow<String> = context.dataStore.data
+                .map {
+                    it[key] ?: "No name found"
+                }
+            runBlocking(Dispatchers.IO) {
+                return@runBlocking flow.first()
+            }
+            return ""
+        }
+
         fun getDateTime(): String? {
             val myFormat = "yyyy-MM-dd HH:mm:ss"
             val dateFormat = SimpleDateFormat(myFormat, Locale.US)

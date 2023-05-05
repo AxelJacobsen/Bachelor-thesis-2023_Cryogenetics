@@ -13,6 +13,7 @@ import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
 import cryogenetics.logistics.api.ApiUrl
 import cryogenetics.logistics.databinding.FragmentActLogBinding
+import cryogenetics.logistics.functions.Functions
 import cryogenetics.logistics.ui.filters.FilterManager
 import cryogenetics.logistics.ui.inventory.ActLogViewModel
 import cryogenetics.logistics.ui.inventory.JsonAdapter
@@ -130,7 +131,7 @@ class ActLogFragment : Fragment() {
         // Create a list out of it
         val itemList = mutableListOf<Map<String, Any>>()
         for (model in parsedData)
-            itemList.add(model)
+            itemList.add( if (model.isNotEmpty()) Functions.enforceNumberFormat(model) else model ) 
 
         // If the adapter doesn't exist, create it
         if (binding.recyclerViewActLog.adapter == null) {
