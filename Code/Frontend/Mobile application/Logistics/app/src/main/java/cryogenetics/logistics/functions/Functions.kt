@@ -408,5 +408,34 @@ class Functions {
             val encodedFixed = encoded.replace("{plus}", "+").replace("{newline}", "\n")
             return Base64.decode(encodedFixed, Base64.URL_SAFE)
         }
+
+        /**
+         *  Fetches the unique number of the device, generating one if none is found.
+         *
+         *  @param context - The context.
+         *
+         *  @return The unique number as a string.
+         */
+        suspend fun fetchUniqueNumber(context: Context) : String {
+            // Fetch unique number from data/preferences
+            val key = stringPreferencesKey("unique_number")
+            val flow: Flow<String> = context.dataStore.data
+                .map {
+                    it[key] ?: ""
+                }
+            var uniqueNumber = runBlocking (Dispatchers.IO) {
+                return@runBlocking flow.first()
+            }
+            if (uniqueNumber != "")
+                return uniqueNumber
+
+            // If unique number was not found, generate a new one and store it
+            uniqueNumber = Random().nextInt(10000).toString()
+            context.dataStore.edit {
+                it[key] = uniqueNumber
+            }
+
+            return uniqueNumber
+        }
     }
 }

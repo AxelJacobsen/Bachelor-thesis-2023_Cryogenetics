@@ -2,13 +2,18 @@ package cryptography
 
 import (
 	"backend/constants"
+	"backend/globals"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
+	"database/sql"
 	"encoding/base64"
 	"errors"
 	"io"
+	"math/big"
+	"net/http/httptest"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -165,4 +170,70 @@ func DecodeBase64(encoded string) ([]byte, error) {
 	encoded_fixed := strings.ReplaceAll(encoded, "{plus}", "+")
 	encoded_fixed = strings.ReplaceAll(encoded_fixed, "{newline}", "\n")
 	return base64.URLEncoding.DecodeString(encoded_fixed)
+}
+
+/**
+ *	Verifies an unique number against the database.
+ *
+ *	@param db - The database.
+ *	@param uniqueNumber - The unique number to check.
+ *
+ *	@return true if the unique number was found in the database.
+ */
+func VerifyUniqueNumber(db *sql.DB, uniqueNumber string) bool {
+	// Fetch matching uniqueNumbers from DB
+	w := httptest.NewRecorder()
+	data, err := globals.QueryJSON(db, "SELECT * FROM `valid_keys` WHERE keyvalue = ?", []interface{}{uniqueNumber}, w)
+	if err != nil {
+		return false
+	}
+
+	// If there are more than one matching entries, return true
+	return len(data) > 0
+}
+
+/**
+ *	Verifies an unique number against the database.
+ *
+ *	@param db - The database.
+ *	@param uniqueNumber - The unique number to check.
+ *
+ *	@return true if the unique number was found in the database.
+ */
+func RequestVerification(db *sql.DB, uniqueNumber string) error {
+	// Fetch matching uniqueNumbers from DB
+	w := httptest.NewRecorder()
+	_, err := globals.QueryJSON(db, "INSERT INTO `requested_keys` (`keyvalue`) VALUES (?)", []interface{}{uniqueNumber}, w)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+/**
+ *	Encrypts and encodes a set of bytes using a public key E and N value.
+ *
+ *	@param publicKeyE - The public exponent of the public key.
+ *	@param publicKeyN - The modulus of the public key.
+ *
+ *	@return The encrypted and encoded string, or an error if something went wrong.
+ */
+func EncryptAndEncode(publicKeyE string, publicKeyN string, bytes []byte) (string, error) {
+	// Convert strings to (big)ints
+	publicKeyEVal, err := strconv.Atoi(publicKeyE)
+	if err != nil {
+		return "", err
+	}
+	publicKeyNVal := new(big.Int)
+	publicKeyNVal.SetString(publicKeyN, 10)
+
+	res, err := Encrypt(
+		bytes,
+		&rsa.PublicKey{N: publicKeyNVal, E: publicKeyEVal},
+	)
+	if err != nil {
+		return "", err
+	}
+
+	return EncodeBase64(res), nil
 }

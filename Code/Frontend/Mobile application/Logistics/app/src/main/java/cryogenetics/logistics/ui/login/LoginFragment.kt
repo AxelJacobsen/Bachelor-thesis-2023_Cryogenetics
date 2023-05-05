@@ -27,6 +27,8 @@ import java.security.interfaces.RSAPublicKey
 import java.security.spec.PKCS8EncodedKeySpec
 import java.util.*
 import android.util.Base64
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import java.nio.charset.StandardCharsets
 
 /**
@@ -44,6 +46,10 @@ class LoginFragment : Fragment() {
     private lateinit var bLogin: AppCompatButton
     private lateinit var etLogin: EditText
     private lateinit var pbLogin: ProgressBar
+    private lateinit var verifyPopup: ConstraintLayout
+    private lateinit var afterVerify: ConstraintLayout
+    private lateinit var tvLoginUniqueNumber: TextView
+    private lateinit var bLoginVerify: AppCompatButton
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,15 +61,42 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        GlobalScope.launch(Unconfined) {
-            val key = verifyDevice()
-            Log.d("key: ", key ?: "none")
-        }
+
+        // TODO: DELETE THIS WHEN DONE TESTING
+        /*GlobalScope.launch(Unconfined) {
+            val preferenceKey = stringPreferencesKey("key_verified")
+            requireContext().dataStore.edit {
+                it[preferenceKey] = ""
+            }
+        }*/
 
         // Fetch components
         bLogin = view.findViewById(R.id.bLogin)
         etLogin = view.findViewById(R.id.etLogin)
         pbLogin = view.findViewById(R.id.pbLogin)
+        verifyPopup = view.findViewById(R.id.verifyPopup)
+        afterVerify = view.findViewById(R.id.afterVerify)
+        tvLoginUniqueNumber = view.findViewById(R.id.tvLoginUniqueNumber)
+        bLoginVerify = view.findViewById(R.id.bLoginVerify)
+
+        // Check if the device is verified
+        verifyPopup.visibility = View.VISIBLE
+        afterVerify.visibility = View.GONE
+        bLoginVerify.setOnClickListener {
+            GlobalScope.launch(Unconfined) {
+                tvLoginUniqueNumber.text = Functions.fetchUniqueNumber(requireContext())
+                val key = verifyDevice()
+                runBlocking {
+                    if (key != null) {
+                        requireActivity().runOnUiThread {
+                            verifyPopup.visibility = View.GONE
+                            afterVerify.visibility = View.VISIBLE
+                        }
+                    }
+                }
+            }
+        }
+        bLoginVerify.performClick()
 
         // Set listeners
         bLogin.setOnClickListener {
@@ -159,6 +192,12 @@ class LoginFragment : Fragment() {
         return Pair(LoginResponse.Success, employeeData)
     }
 
+    /**
+     *  Verifies the device.
+     *  If it has been verified before, returns the stored key. Otherwise, requests a new one.
+     *
+     *  @return The verification key.
+     */
     private suspend fun verifyDevice() : String? {
         // Check if a key is already stored
         val preferenceKey = stringPreferencesKey("key_verified")
@@ -166,17 +205,13 @@ class LoginFragment : Fragment() {
             .map {
                 it[preferenceKey] ?: ""
             }
-        val key: String? = runBlocking (Dispatchers.IO) {
+        var key: String? = runBlocking (Dispatchers.IO) {
             val keyFetched = flow.first()
             if (keyFetched == "")
                 return@runBlocking null
             return@runBlocking keyFetched
         }
 
-        if (key != null)
-            return key
-
-        // -- If the key was not found in storage, request one
         // Fetch DB public key
         val publicKeyDB = Functions.fetchDBPublicKey()
         if (publicKeyDB == null) {
@@ -189,9 +224,25 @@ class LoginFragment : Fragment() {
         val n = (mKeyPair.public as RSAPublicKey).modulus
         val e = (mKeyPair.public as RSAPublicKey).publicExponent
 
-        // Set up data to send...
-        val unique = 123
-        val uniqueEncryptedBytes = Functions.encrypt(unique.toString().toByteArray(), publicKeyDB.encoded)
+        // If key was found earlier, check it
+        if (key != null) {
+            val uniqueEncryptedBytes = Functions.encrypt(key.toByteArray(), publicKeyDB.encoded)
+            val uniqueEncryptedStr = Functions.encodeBase64(uniqueEncryptedBytes)
+
+            val dataSend = listOf(mapOf(
+                "public_key_E"  to e.toString(),
+                "public_key_N"  to n.toString(),
+                "unique_number" to uniqueEncryptedStr
+            ))
+
+            val response = Api.makeBackendRequestWithResponse("user/verification/check", dataSend, "POST")
+            if (response.first == 200)
+                return key
+        }
+
+        // Otherwise, request one
+        key = Functions.fetchUniqueNumber(requireContext())
+        val uniqueEncryptedBytes = Functions.encrypt(key.toByteArray(), publicKeyDB.encoded)
         val uniqueEncryptedStr = Functions.encodeBase64(uniqueEncryptedBytes)
 
         val dataSend = listOf(mapOf(
@@ -200,7 +251,6 @@ class LoginFragment : Fragment() {
             "unique_number" to uniqueEncryptedStr
         ))
 
-        // ...and send it.
         val response = Api.makeBackendRequestWithResponse("user/verification", dataSend, "POST")
         if (response.second == "") {
             Log.e("Database error", "No response when fetching verification key")

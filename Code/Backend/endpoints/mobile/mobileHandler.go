@@ -3,12 +3,10 @@ package mobile
 import (
 	paths "backend/constants"
 	"backend/cryptography"
-	"crypto/rsa"
+	"backend/globals"
 	"encoding/json"
 	"fmt"
-	"math/big"
 	"net/http"
-	"strconv"
 	"strings"
 )
 
@@ -62,7 +60,7 @@ func HandlerMobileVerification(w http.ResponseWriter, r *http.Request) {
 		escapedPath = escapedPath[1:]
 	}
 
-	//args := strings.Split(escapedPath, "/")
+	args := strings.Split(escapedPath, "/")
 	//urlData := r.URL.Query()
 
 	// Switch based on method
@@ -74,14 +72,7 @@ func HandlerMobileVerification(w http.ResponseWriter, r *http.Request) {
 		var data []map[string]interface{}
 		err := json.NewDecoder(r.Body).Decode(&data)
 		if err != nil {
-			fmt.Println("e0: ", err)
 			http.Error(w, "Error decoding body", http.StatusUnprocessableEntity)
-			return
-		}
-
-		if len(data) <= 0 {
-			fmt.Println("e1: ", err)
-			http.Error(w, "No data in body", http.StatusUnprocessableEntity)
 			return
 		}
 
@@ -110,53 +101,43 @@ func HandlerMobileVerification(w http.ResponseWriter, r *http.Request) {
 		// Decode uniquenumber from base64
 		uniqueNumberEncryptedBytes, err := cryptography.DecodeBase64(uniqueNumberEncrypted)
 		if err != nil {
-			fmt.Println("e4: ", err)
 			http.Error(w, "Error decoding unique number from base64", http.StatusUnprocessableEntity)
 			return
 		}
 
-		// Convert strings to (big)ints
-		publicKeyEVal, err := strconv.Atoi(publicKeyE)
-		if err != nil {
-			fmt.Println("e2: ", err)
-			http.Error(w, "Error parsing integer", http.StatusInternalServerError)
-			return
-		}
-		publicKeyNVal := new(big.Int)
-		publicKeyNVal.SetString(publicKeyN, 10)
-
 		// Decrypt unique number
 		uniqueNumberBytes, err := cryptography.Decrypt(uniqueNumberEncryptedBytes)
 		if err != nil {
-			fmt.Println("e3: ", err)
 			http.Error(w, "Error decrypting unique number", http.StatusUnprocessableEntity)
 			return
 		}
 
-		////////////////////////////////////////////////
-		// ...verification on web frontend happens... //
-		////////////////////////////////////////////////
-
-		// Writeback
-		res, err := cryptography.Encrypt(
-			uniqueNumberBytes,
-			&rsa.PublicKey{N: publicKeyNVal, E: publicKeyEVal},
-		)
-		if err != nil {
-			fmt.Println("e5: ", err)
-			http.Error(w, "Error encrypting data.", http.StatusInternalServerError)
+		if len(data) <= 0 {
+			http.Error(w, "No data in body", http.StatusUnprocessableEntity)
 			return
 		}
 
-		resb64 := cryptography.EncodeBase64(res)
+		// If we're just checking if the number is already verified...
+		if len(args) > 1 && args[1] == "check" {
+			if cryptography.VerifyUniqueNumber(globals.DB, string(uniqueNumberBytes)) {
+				// Writeback an OK message
+				w.Header().Set("Content-Type", "application/json")
+				err = json.NewEncoder(w).Encode("Key recognized")
+				if err != nil {
+					http.Error(w, "Error encoding OK message", http.StatusInternalServerError)
+				}
+			} else {
+				http.Error(w, "Invalid .", http.StatusUnprocessableEntity)
+			}
+			return
 
-		w.Header().Set("Content-Type", "application/json")
-		err = json.NewEncoder(w).Encode(resb64)
-		if err != nil {
-			fmt.Println("e6: ", err)
-			http.Error(w, "Error encoding data.", http.StatusInternalServerError)
+		} else {
+			// Request verification
+			err := cryptography.RequestVerification(globals.DB, string(uniqueNumberBytes))
+			if err != nil {
+				http.Error(w, "Error requesting access", http.StatusInternalServerError)
+			}
+			return
 		}
-
-		return
 	}
 }
