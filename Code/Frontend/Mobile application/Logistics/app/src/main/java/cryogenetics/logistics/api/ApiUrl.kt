@@ -10,4 +10,5 @@ object ApiUrl {
     const val urlTransaction : String = "${urlBase}transaction"
     const val urlContainer : String = "${urlBase}container"
     const val urlEmployee : String = "${urlBase}employee"
+    const val urlCryptography : String = "${urlBase}cryptography"
 }

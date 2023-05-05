@@ -90,4 +90,6 @@
     <string name="login_id_formatError_message">Invalid ID format</string>
     <string name="login_id_loginError_message">Unregistered ID, contact an administrator</string>
 
+    <string name="login_unverified_warning_message">This device has not been verified. Contact an administrator to verify the device.</string>
+
 </resources>

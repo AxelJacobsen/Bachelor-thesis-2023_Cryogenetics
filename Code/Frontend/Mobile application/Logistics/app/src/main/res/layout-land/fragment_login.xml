@@ -12,62 +12,142 @@
     android:background="@color/softGrey">
 
 
-    <ImageView
-        android:id="@+id/ivLoginLogo"
-        android:layout_width="242dp"
-        android:layout_height="143dp"
-        android:src="@drawable/cryo_logo_white"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/verifyPopup"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/cryoBlue"
+        android:elevation="2dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.100000024" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="246dp"
-        android:layout_height="111dp"
-        app:layout_constraintEnd_toEndOf="@+id/ivLoginLogo"
-        app:layout_constraintStart_toStartOf="@+id/ivLoginLogo"
-        app:layout_constraintTop_toBottomOf="@+id/ivLoginLogo">
+        <TextView
+            android:id="@+id/tvLoginUniqueNumberTitle"
+            android:layout_width="183dp"
+            android:layout_height="31dp"
+            android:gravity="center"
+            android:text="Your unique identifier is"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tvLoginWarningUnverified"
+            app:layout_constraintStart_toStartOf="@+id/tvLoginWarningUnverified"
+            app:layout_constraintTop_toBottomOf="@+id/tvLoginWarningUnverified"
+            app:layout_constraintVertical_bias="0.07999998" />
 
-        <ProgressBar
-            android:id="@+id/pbLogin"
-            style="?android:attr/progressBarStyle"
+        <TextView
+            android:id="@+id/tvLoginUniqueNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="@+id/etLogin"
-            app:layout_constraintStart_toStartOf="@+id/etLogin"
-            app:layout_constraintTop_toBottomOf="@+id/etLogin" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/bLogin"
-            android:layout_width="94dp"
-            android:layout_height="41dp"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/rectangle_rounded90_bordershadow"
-            android:text="Log in"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="@+id/etLogin"
-            app:layout_constraintStart_toStartOf="@+id/etLogin"
-            app:layout_constraintTop_toBottomOf="@+id/etLogin" />
-
-        <EditText
-            android:id="@+id/etLogin"
-            android:layout_width="158dp"
-            android:layout_height="38dp"
             android:background="@drawable/rectangle_border"
-            android:ellipsize="start"
-            android:ems="10"
-            android:maxLength="4"
             android:gravity="center"
-            android:hint="Enter access code"
-            android:inputType="numberSigned"
+            android:text="TextView"
+            android:textSize="48sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tvLoginWarningUnverified"
+            app:layout_constraintStart_toStartOf="@+id/tvLoginWarningUnverified"
+            app:layout_constraintTop_toBottomOf="@+id/tvLoginUniqueNumberTitle"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/tvLoginWarningUnverified"
+            android:layout_width="481dp"
+            android:layout_height="77dp"
+            android:gravity="center"
+            android:text="@string/login_unverified_warning_message"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.050000012" />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bLoginVerify"
+            android:layout_width="98dp"
+            android:layout_height="41dp"
+            android:background="@drawable/rectangle_rounded90_bordershadow"
+            android:text="Try again"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tvLoginUniqueNumber"
+            app:layout_constraintStart_toStartOf="@+id/tvLoginUniqueNumber"
+            app:layout_constraintTop_toBottomOf="@+id/tvLoginUniqueNumber"
+            app:layout_constraintVertical_bias="0.17000002" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/afterVerify"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/ivLoginLogo"
+            android:layout_width="242dp"
+            android:layout_height="143dp"
+            android:src="@drawable/cryo_logo_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.18" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="246dp"
+            android:layout_height="111dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintEnd_toEndOf="@+id/ivLoginLogo"
+            app:layout_constraintStart_toStartOf="@+id/ivLoginLogo"
+            app:layout_constraintTop_toBottomOf="@+id/ivLoginLogo">
+
+            <ProgressBar
+                android:id="@+id/pbLogin"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@+id/etLogin"
+                app:layout_constraintStart_toStartOf="@+id/etLogin"
+                app:layout_constraintTop_toBottomOf="@+id/etLogin" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/bLogin"
+                android:layout_width="94dp"
+                android:layout_height="41dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/rectangle_rounded90_bordershadow"
+                android:text="Log in"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="@+id/etLogin"
+                app:layout_constraintStart_toStartOf="@+id/etLogin"
+                app:layout_constraintTop_toBottomOf="@+id/etLogin" />
+
+            <EditText
+                android:id="@+id/etLogin"
+                android:layout_width="158dp"
+                android:layout_height="38dp"
+                android:background="@drawable/rectangle_border"
+                android:ellipsize="start"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="Enter access code"
+                android:inputType="numberSigned"
+                android:maxLength="4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
