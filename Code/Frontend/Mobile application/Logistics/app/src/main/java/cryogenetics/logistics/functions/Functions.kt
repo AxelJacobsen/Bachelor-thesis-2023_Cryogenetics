@@ -12,6 +12,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import cryogenetics.logistics.MainActivity
 import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
+import cryogenetics.logistics.api.ApiUrl
 import cryogenetics.logistics.dataStore
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -21,12 +22,14 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import java.lang.reflect.Modifier
+import java.math.BigInteger
 import java.security.KeyFactory
 import java.security.KeyPair
 import java.security.KeyPairGenerator
 import java.security.PrivateKey
 import java.security.PublicKey
 import java.security.spec.PKCS8EncodedKeySpec
+import java.security.spec.RSAPublicKeySpec
 import java.security.spec.X509EncodedKeySpec
 import java.util.*
 import javax.crypto.Cipher
@@ -210,6 +213,34 @@ class Functions {
                 context.finish()
             }
             Runtime.getRuntime().exit(0)
+        }
+
+        /**
+         *  Fetches the public key of the database.
+         *
+         *  @return The public key. If none was found, returns null.
+         */
+        fun fetchDBPublicKey() : PublicKey? {
+            // Fetch from DB
+            var data: String
+            try {
+                data = Api.fetchJsonData(ApiUrl.urlCryptography)
+            } catch (e: Exception) {
+                return null
+            }
+
+            // Parse
+            val dataParsed = Api.parseJsonArray(data)
+            if (dataParsed.isEmpty())
+                return null
+
+            // Convert to PublicKey object
+            val keyFactory = KeyFactory.getInstance("RSA")
+            val publicKeySpec = RSAPublicKeySpec (
+                BigInteger(dataParsed[0]["N"] as String),
+                BigInteger(dataParsed[0]["E"] as String)
+            )
+            return keyFactory.generatePublic(publicKeySpec)
         }
 
         /**

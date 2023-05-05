@@ -4,7 +4,6 @@ import (
 	"backend/constants"
 	"crypto/rand"
 	"crypto/rsa"
-	"crypto/sha512"
 	"crypto/x509"
 	"errors"
 	"io"
@@ -94,8 +93,9 @@ func generatePrivateKey(bits int, seedgen io.Reader) (*rsa.PrivateKey, error) {
  */
 func Encrypt(bytes []byte, publicKey *rsa.PublicKey) ([]byte, error) {
 	// Encrypt
-	hash := sha512.New()
-	cipher, err := rsa.EncryptOAEP(hash, rand.Reader, publicKey, bytes, nil)
+	//hash := sha512.New()
+	//cipher, err := rsa.EncryptOAEP(hash, rand.Reader, publicKey, bytes, nil)
+	cipher, err := rsa.EncryptPKCS1v15(rand.Reader, publicKey, bytes)
 	if err != nil {
 		return nil, err
 	}
@@ -127,8 +127,9 @@ func Decrypt(bytes []byte, privateKey ...*rsa.PrivateKey) ([]byte, error) {
 	}
 
 	// Decrypt
-	hash := sha512.New()
-	deciphered, err := rsa.DecryptOAEP(hash, rand.Reader, key, bytes, nil)
+	//hash := sha512.New()
+	//deciphered, err := rsa.DecryptOAEP(hash, rand.Reader, key, bytes, nil)
+	deciphered, err := rsa.DecryptPKCS1v15(rand.Reader, key, bytes)
 	if err != nil {
 		return nil, err
 	}

@@ -18,6 +18,7 @@ import cryogenetics.logistics.functions.Functions
 import cryogenetics.logistics.ui.host.HostFragment
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Unconfined
+import java.security.interfaces.RSAPublicKey
 import java.util.*
 
 
@@ -145,5 +146,35 @@ class LoginFragment : Fragment() {
 
         // Return
         return Pair(LoginResponse.Success, employeeData)
+    }
+
+    private fun verifyDevice() {
+        // TESTING
+        val pk = Functions.fetchDBPublicKey()
+        if (pk != null) {
+            GlobalScope.launch(Unconfined) {
+                val mKeyPair = Functions.fetchKeyPair(requireContext()) ?: return@launch
+                val n = (mKeyPair.public as RSAPublicKey).modulus
+                val e = (mKeyPair.public as RSAPublicKey).publicExponent
+                val unique = 123
+                val bytes = unique.toString().toByteArray()
+                val uniqueEncrypted = Functions.encrypt(bytes, pk.encoded)
+                val uniqueEncryptedStr = String(Base64.getEncoder().encode(uniqueEncrypted))
+
+                val dataSend = listOf(
+                    mapOf(  "public_key_E" to e.toString(),
+                        "public_key_N" to n.toString(),
+                        "unique_number" to uniqueEncryptedStr)
+                )
+
+                Log.d("sent: ", uniqueEncryptedStr)
+                Log.d("encodeTest: ", (Base64.getEncoder().encode("123".toByteArray()).toString()))
+
+                val url = "user/verification"
+                val response = Api.makeBackendRequestWithResponse(url, dataSend, "POST")
+                Log.d("responseCode: ", response.first.toString())
+                Log.d("response: ", response.second)
+            }
+        }
     }
 }

@@ -57,6 +57,7 @@ class Api {
             try {
                 jsonArray = JSONArray(jsonText)
             } catch (e: JSONException) {
+                Log.e("Error: ", e.message ?: "nope")
                 Log.e(TAG, "Error parsing jsonText as jsonArray")
                 return mutableListOf<Map<String, Any>>()
             }
@@ -129,11 +130,71 @@ class Api {
             outputStreamWriter.write(jsonString)
             outputStreamWriter.flush()
             val response = connection.responseCode
+
             // Close the connection and output stream writer
             outputStreamWriter.close()
             connection.disconnect()
             println(jsonString)
             return response
+        }
+
+        /**
+         * Performs a PUT or POST request to backend, while fetching the response.
+         *
+         * Takes the endpoint to contact which handles the table in the backend, sends json data in
+         * the form of a List<Map<String, Any>> where the key is the json table name
+         *
+         * @param endpoint String representation of the backend endpoint to send request to
+         * @param dataList List of json data in Map format
+         * @param method Request method
+         *
+         * @return A pair of the response code and string.
+         */
+        fun makeBackendRequestWithResponse(endpoint: String, dataList: List<Map<String, Any>>, method: String): Pair<Int, String> {
+            //Lists legal methods, can be expanded on if more methods following the same format are
+            // accommodated for.
+            val legalMethods = listOf<String>("POST", "PUT")
+
+            // Define the base URL for your backend server
+            val baseUrl = ApiUrl.urlBase
+
+            //Check if provided method is allowed
+            if (!legalMethods.contains(method.uppercase())){
+                Log.e(TAG, "Illegal method in API call")
+            }
+
+            // Construct the URL for the endpoint you want to hit
+            val endpointUrl = URL(baseUrl + endpoint)
+            println(endpointUrl)
+
+            //Turn the Map into a json string
+            val jsonString = generateJson(dataList)
+            if (jsonString.isEmpty()){
+                Log.e(TAG, "Couldn't construct json string")
+            }
+
+            // Open a connection to the endpoint URL
+            val connection: HttpURLConnection = endpointUrl.openConnection() as HttpURLConnection
+            // Set the request method
+            connection.requestMethod = method.uppercase()
+            // Set the request headers
+            connection.setRequestProperty("Content-Type", "application/json")
+
+            // Send the request body
+            val outputStreamWriter = OutputStreamWriter(connection.outputStream)
+            outputStreamWriter.write(jsonString)
+            outputStreamWriter.flush()
+            var response = ""
+
+            try {
+                val inputStream = connection.inputStream
+                response = inputStream.bufferedReader().use(BufferedReader::readText)
+            } catch (e: Exception) {}
+
+            // Close the connection and output stream writer
+            outputStreamWriter.close()
+            connection.disconnect()
+            return Pair(connection.responseCode, response)
         }
 
         /**

@@ -267,7 +267,6 @@ func CreateDataHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not allowed, read the documentation for more information.", http.StatusMethodNotAllowed)
 		return
 	}
-
 }
 
 /**
@@ -298,7 +297,10 @@ func CryptographyHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Marshal data to JSON
-		responseJSON, err := json.Marshal(privateKey.PublicKey)
+		responseJSON, err := json.Marshal([]map[string]string{
+			{"N": privateKey.PublicKey.N.String(), "E": fmt.Sprintf("%d", privateKey.PublicKey.E)},
+		})
+
 		if err != nil {
 			http.Error(w, "Error Marshalling data.", http.StatusInternalServerError)
 		}

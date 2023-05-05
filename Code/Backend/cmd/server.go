@@ -2,12 +2,14 @@ package main
 
 import (
 	"backend/constants"
+	"backend/cryptography"
 	"backend/endpoints/mobile"
 	"backend/endpoints/shared"
 	"backend/endpoints/web"
 	"backend/globals"
 	"backend/status"
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -77,6 +79,18 @@ func main() {
 	defer db.Close()
 	globals.DB = db
 
+	// TESTING
+	pe, _ := cryptography.FetchPrivateKey()
+
+	unique := "123"
+	uniqueEncrypted, _ := cryptography.Encrypt([]byte(unique), &pe.PublicKey) //cryptography.Encrypt([]byte(unique), &pe.PublicKey)
+
+	fmt.Println("bytes: ", []byte(unique))
+	fmt.Println("encrypted: ", uniqueEncrypted)
+
+	fmt.Println("E: ", pe.PublicKey.E)
+	fmt.Println("N: ", pe.PublicKey.N)
+
 	// Start session timer
 	globals.StartTime = time.Now()
 	// Context initialization
@@ -94,13 +108,14 @@ func main() {
 
 	// Route
 	routes := map[string]func(http.ResponseWriter, *http.Request){
-		constants.BASE_PATH:          shared.EndpointHandler,
-		constants.SHARED_CREATE_PATH: shared.CreateDataHandler,
-		constants.MOBILE_LOGIN_PATH:  mobile.HandlerMobileLogin,
-		constants.WEB_LOGIN_PATH:     web.HandlerWebLogin,
-		constants.WEB_PRIMARY_PATH:   web.HandlerWebDashboard,
-		constants.WEB_ADMIN_PATH:     web.HandlerAdmins,
-		constants.CRYPTOGRAPHY_PATH:  shared.CryptographyHandler,
+		constants.BASE_PATH:                shared.EndpointHandler,
+		constants.SHARED_CREATE_PATH:       shared.CreateDataHandler,
+		constants.MOBILE_LOGIN_PATH:        mobile.HandlerMobileLogin,
+		constants.WEB_LOGIN_PATH:           web.HandlerWebLogin,
+		constants.WEB_PRIMARY_PATH:         web.HandlerWebDashboard,
+		constants.WEB_ADMIN_PATH:           web.HandlerAdmins,
+		constants.CRYPTOGRAPHY_PATH:        shared.CryptographyHandler,
+		constants.MOBILE_VERIFICATION_PATH: mobile.HandlerMobileVerification,
 
 		constants.PUBLIC_STATUS_PATH: status.HandlerStatus,
 	}
