@@ -5,9 +5,11 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
+	"encoding/base64"
 	"errors"
 	"io"
 	"os"
+	"strings"
 )
 
 const KEY_BITS = 4096
@@ -135,4 +137,32 @@ func Decrypt(bytes []byte, privateKey ...*rsa.PrivateKey) ([]byte, error) {
 	}
 
 	return deciphered, nil
+}
+
+/**
+ *	Encodes a set of bytes using base64.
+ *	"\n" and "+" are replaced.
+ *
+ *	@param data - The data to encode.
+ *
+ *	@return The encoded data.
+ */
+func EncodeBase64(data []byte) string {
+	encoded := base64.URLEncoding.EncodeToString(data)
+	encoded_fixed := strings.ReplaceAll(encoded, "+", "{plus}")
+	encoded_fixed = strings.ReplaceAll(encoded_fixed, "\n", "{newline}")
+	return encoded_fixed
+}
+
+/**
+ *	Decodes a string using base64.
+ *
+ *	@param encoded - The encoded string.
+ *
+ *	@return The decoded string, and an error if something went wrong.
+ */
+func DecodeBase64(encoded string) ([]byte, error) {
+	encoded_fixed := strings.ReplaceAll(encoded, "{plus}", "+")
+	encoded_fixed = strings.ReplaceAll(encoded_fixed, "{newline}", "\n")
+	return base64.URLEncoding.DecodeString(encoded_fixed)
 }

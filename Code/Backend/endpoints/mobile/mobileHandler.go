@@ -4,7 +4,6 @@ import (
 	paths "backend/constants"
 	"backend/cryptography"
 	"crypto/rsa"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"math/big"
@@ -109,7 +108,7 @@ func HandlerMobileVerification(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Decode uniquenumber from base64
-		uniqueNumberEncryptedBytes, err := base64.StdEncoding.DecodeString(uniqueNumberEncrypted)
+		uniqueNumberEncryptedBytes, err := cryptography.DecodeBase64(uniqueNumberEncrypted)
 		if err != nil {
 			fmt.Println("e4: ", err)
 			http.Error(w, "Error decoding unique number from base64", http.StatusUnprocessableEntity)
@@ -134,8 +133,6 @@ func HandlerMobileVerification(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		fmt.Println("Decrypted: ", string(uniqueNumberBytes))
-
 		////////////////////////////////////////////////
 		// ...verification on web frontend happens... //
 		////////////////////////////////////////////////
@@ -151,8 +148,10 @@ func HandlerMobileVerification(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		resb64 := cryptography.EncodeBase64(res)
+
 		w.Header().Set("Content-Type", "application/json")
-		err = json.NewEncoder(w).Encode(res)
+		err = json.NewEncoder(w).Encode(resb64)
 		if err != nil {
 			fmt.Println("e6: ", err)
 			http.Error(w, "Error encoding data.", http.StatusInternalServerError)

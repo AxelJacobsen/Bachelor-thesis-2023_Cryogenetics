@@ -14,9 +14,7 @@ import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
 import cryogenetics.logistics.api.ApiUrl
 import cryogenetics.logistics.dataStore
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -33,6 +31,7 @@ import java.security.spec.RSAPublicKeySpec
 import java.security.spec.X509EncodedKeySpec
 import java.util.*
 import javax.crypto.Cipher
+import android.util.Base64
 
 class Functions {
     companion object {
@@ -305,8 +304,8 @@ class Functions {
 
             // Fetch keyPair and encode to string
             val keyPair = generateKeyPair(4096)
-            val privateKeyStr = String(Base64.getEncoder().encode(keyPair.private.encoded))
-            val publicKeyStr = String(Base64.getEncoder().encode(keyPair.public.encoded))
+            val privateKeyStr = encodeBase64(keyPair.private.encoded)
+            val publicKeyStr = encodeBase64(keyPair.public.encoded)
 
             // Write key strings to storage
             val privateKeyPrefKey = stringPreferencesKey("key_private_encoded")
@@ -341,8 +340,7 @@ class Functions {
                 if (privateKeyStr == "")
                     return@runBlocking null
 
-                val privateKeyBytes = Base64.getDecoder().decode(privateKeyStr.toByteArray())
-                //val privateKeySpec = X509EncodedKeySpec(privateKeyBytes)
+                val privateKeyBytes = decodeBase64(privateKeyStr)
                 val privateKeySpec = PKCS8EncodedKeySpec(privateKeyBytes)
                 return@runBlocking KeyFactory.getInstance("RSA").generatePrivate(privateKeySpec)
             }
@@ -366,7 +364,7 @@ class Functions {
                 if (publicKeyStr == "")
                     return@runBlocking null
 
-                val publicKeyBytes = Base64.getDecoder().decode(publicKeyStr.toByteArray())
+                val publicKeyBytes = decodeBase64(publicKeyStr)
                 val publicKeySpec = X509EncodedKeySpec(publicKeyBytes)
                 return@runBlocking KeyFactory.getInstance("RSA").generatePublic(publicKeySpec)
             }
@@ -383,6 +381,32 @@ class Functions {
             val keyPairGenerator = KeyPairGenerator.getInstance("RSA")
             keyPairGenerator.initialize(bits)
             return keyPairGenerator.generateKeyPair()
+        }
+
+        /**
+         *  Encodes a set of bytes to string using base64.
+         *  "\n" and "+" are replaced.
+         *
+         *  @param data - The data to encode.
+         *
+         *  @return The encoded data.
+         */
+        fun encodeBase64(data: ByteArray): String {
+            val encoded = Base64.encodeToString(data, Base64.URL_SAFE)
+            return encoded.replace("+", "{plus}").replace("\n", "{newline}")
+        }
+
+        /**
+         *  Decodes a string to a set of bytes using base64.
+         *  "{newline}" and "{plus}" are replaced.
+         *
+         *  @param encoded - The data to decode.
+         *
+         *  @return The decoded data.
+         */
+        fun decodeBase64(encoded: String): ByteArray {
+            val encodedFixed = encoded.replace("{plus}", "+").replace("{newline}", "\n")
+            return Base64.decode(encodedFixed, Base64.URL_SAFE)
         }
     }
 }

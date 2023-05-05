@@ -14,13 +14,20 @@ import androidx.datastore.preferences.core.*
 import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
 import cryogenetics.logistics.api.ApiUrl
+import cryogenetics.logistics.dataStore
 import cryogenetics.logistics.functions.Functions
 import cryogenetics.logistics.ui.host.HostFragment
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Unconfined
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import java.security.KeyFactory
 import java.security.interfaces.RSAPublicKey
+import java.security.spec.PKCS8EncodedKeySpec
 import java.util.*
-
+import android.util.Base64
+import java.nio.charset.StandardCharsets
 
 /**
  *  Possible errors from attempting to log in.
@@ -48,6 +55,10 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        GlobalScope.launch(Unconfined) {
+            val key = verifyDevice()
+            Log.d("key: ", key ?: "none")
+        }
 
         // Fetch components
         bLogin = view.findViewById(R.id.bLogin)
@@ -148,33 +159,63 @@ class LoginFragment : Fragment() {
         return Pair(LoginResponse.Success, employeeData)
     }
 
-    private fun verifyDevice() {
-        // TESTING
-        val pk = Functions.fetchDBPublicKey()
-        if (pk != null) {
-            GlobalScope.launch(Unconfined) {
-                val mKeyPair = Functions.fetchKeyPair(requireContext()) ?: return@launch
-                val n = (mKeyPair.public as RSAPublicKey).modulus
-                val e = (mKeyPair.public as RSAPublicKey).publicExponent
-                val unique = 123
-                val bytes = unique.toString().toByteArray()
-                val uniqueEncrypted = Functions.encrypt(bytes, pk.encoded)
-                val uniqueEncryptedStr = String(Base64.getEncoder().encode(uniqueEncrypted))
-
-                val dataSend = listOf(
-                    mapOf(  "public_key_E" to e.toString(),
-                        "public_key_N" to n.toString(),
-                        "unique_number" to uniqueEncryptedStr)
-                )
-
-                Log.d("sent: ", uniqueEncryptedStr)
-                Log.d("encodeTest: ", (Base64.getEncoder().encode("123".toByteArray()).toString()))
-
-                val url = "user/verification"
-                val response = Api.makeBackendRequestWithResponse(url, dataSend, "POST")
-                Log.d("responseCode: ", response.first.toString())
-                Log.d("response: ", response.second)
+    private suspend fun verifyDevice() : String? {
+        // Check if a key is already stored
+        val preferenceKey = stringPreferencesKey("key_verified")
+        val flow: Flow<String> = requireContext().dataStore.data
+            .map {
+                it[preferenceKey] ?: ""
             }
+        val key: String? = runBlocking (Dispatchers.IO) {
+            val keyFetched = flow.first()
+            if (keyFetched == "")
+                return@runBlocking null
+            return@runBlocking keyFetched
         }
+
+        if (key != null)
+            return key
+
+        // -- If the key was not found in storage, request one
+        // Fetch DB public key
+        val publicKeyDB = Functions.fetchDBPublicKey()
+        if (publicKeyDB == null) {
+            Log.e("Database error", "Could not fetch database public key")
+            return null
+        }
+
+        // Fetch our own public key
+        val mKeyPair = Functions.fetchKeyPair(requireContext())
+        val n = (mKeyPair.public as RSAPublicKey).modulus
+        val e = (mKeyPair.public as RSAPublicKey).publicExponent
+
+        // Set up data to send...
+        val unique = 123
+        val uniqueEncryptedBytes = Functions.encrypt(unique.toString().toByteArray(), publicKeyDB.encoded)
+        val uniqueEncryptedStr = Functions.encodeBase64(uniqueEncryptedBytes)
+
+        val dataSend = listOf(mapOf(
+            "public_key_E"  to e.toString(),
+            "public_key_N"  to n.toString(),
+            "unique_number" to uniqueEncryptedStr
+        ))
+
+        // ...and send it.
+        val response = Api.makeBackendRequestWithResponse("user/verification", dataSend, "POST")
+        if (response.second == "") {
+            Log.e("Database error", "No response when fetching verification key")
+            return null
+        }
+
+        // Decrypt the response
+        val responseBytes = Functions.decodeBase64(response.second)
+        val responseBytesDecrypted = Functions.decrypt(requireContext(), responseBytes, mKeyPair.private) ?: return null
+        val responseStr = String(responseBytesDecrypted)
+
+        // Store it to data/preferences and return
+        requireContext().dataStore.edit {
+            it[preferenceKey] = responseStr
+        }
+        return responseStr
     }
 }

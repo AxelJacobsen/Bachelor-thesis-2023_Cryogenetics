@@ -2,14 +2,12 @@ package main
 
 import (
 	"backend/constants"
-	"backend/cryptography"
 	"backend/endpoints/mobile"
 	"backend/endpoints/shared"
 	"backend/endpoints/web"
 	"backend/globals"
 	"backend/status"
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -78,18 +76,6 @@ func main() {
 	}
 	defer db.Close()
 	globals.DB = db
-
-	// TESTING
-	pe, _ := cryptography.FetchPrivateKey()
-
-	unique := "123"
-	uniqueEncrypted, _ := cryptography.Encrypt([]byte(unique), &pe.PublicKey) //cryptography.Encrypt([]byte(unique), &pe.PublicKey)
-
-	fmt.Println("bytes: ", []byte(unique))
-	fmt.Println("encrypted: ", uniqueEncrypted)
-
-	fmt.Println("E: ", pe.PublicKey.E)
-	fmt.Println("N: ", pe.PublicKey.N)
 
 	// Start session timer
 	globals.StartTime = time.Now()
