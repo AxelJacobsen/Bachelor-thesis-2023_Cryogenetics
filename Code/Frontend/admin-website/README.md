@@ -1,8 +1,12 @@
-# Getting Started with Create React App
+## How to run our directory
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+You need to install the following components using NPM:
 
-## Available Scripts
+@mui/material 
+@mui/icons-material 
+@emotion/react 
+@emotion/styled
+react-router-dom@6
 
 In the project directory, you can run:
 
