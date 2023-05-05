@@ -54,7 +54,7 @@ func HandlerMobileVerification(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("content-type", "application/json")
 
 	// Get escaped path without base URL and remove the first character if it's a "/"
-	escapedPath := r.URL.EscapedPath()[len(paths.SHARED_CREATE_PATH):]
+	escapedPath := r.URL.EscapedPath()[len(paths.MOBILE_VERIFICATION_PATH):]
 
 	if len(escapedPath) > 0 && escapedPath[0] == '/' {
 		escapedPath = escapedPath[1:]
@@ -124,10 +124,10 @@ func HandlerMobileVerification(w http.ResponseWriter, r *http.Request) {
 				w.Header().Set("Content-Type", "application/json")
 				err = json.NewEncoder(w).Encode("Key recognized")
 				if err != nil {
-					http.Error(w, "Error encoding OK message", http.StatusInternalServerError)
+					http.Error(w, "Error encoding OK message.", http.StatusInternalServerError)
 				}
 			} else {
-				http.Error(w, "Invalid .", http.StatusUnprocessableEntity)
+				http.Error(w, "Invalid unique number.", http.StatusUnprocessableEntity)
 			}
 			return
 
@@ -139,5 +139,10 @@ func HandlerMobileVerification(w http.ResponseWriter, r *http.Request) {
 			}
 			return
 		}
+
+	// Other methods
+	default:
+		http.Error(w, "Method not allowed, read the documentation for more information.", http.StatusMethodNotAllowed)
+		return
 	}
 }

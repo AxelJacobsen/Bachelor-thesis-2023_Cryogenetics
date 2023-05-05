@@ -102,6 +102,7 @@ func main() {
 		constants.WEB_ADMIN_PATH:           web.HandlerAdmins,
 		constants.CRYPTOGRAPHY_PATH:        shared.CryptographyHandler,
 		constants.MOBILE_VERIFICATION_PATH: mobile.HandlerMobileVerification,
+		constants.ADMIN_VERIFICATION_PATH:  web.HandlerVerification,
 
 		constants.PUBLIC_STATUS_PATH: status.HandlerStatus,
 	}

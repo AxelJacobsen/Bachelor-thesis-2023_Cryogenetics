@@ -29,6 +29,7 @@ const SHARED_CREATE_PATH = BASE_PATH + "/create"       // "/api/create/container
 const PUBLIC_STATUS_PATH = BASE_PATH + "/status"       // "/api/status"
 const CRYPTOGRAPHY_PATH = BASE_PATH + "/cryptography"
 const MOBILE_VERIFICATION_PATH = BASE_USER_PATH + "/verification"
+const ADMIN_VERIFICATION_PATH = BASE_PATH + "/admin/verification"
 
 // Database
 //const DB_PATH = "mongodb://localhost:27017"
