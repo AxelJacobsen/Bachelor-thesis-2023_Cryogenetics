@@ -47,6 +47,11 @@ export default function NavBar() {
                 color={activeButton === 6 ? 'primary' : 'inherit'}> 
                 Generate Report
         </Button>
+        <Button onClick={() => {navigate('/devices'); handleClick(7)}}
+                variant={activeButton === 7 ? 'contained' : 'text'}
+                color={activeButton === 7 ? 'primary' : 'inherit'}> 
+                Devices
+        </Button>
     </div>
     )
 }
