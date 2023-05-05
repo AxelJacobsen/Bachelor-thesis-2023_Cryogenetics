@@ -100,6 +100,7 @@ func main() {
 		constants.WEB_LOGIN_PATH:     web.HandlerWebLogin,
 		constants.WEB_PRIMARY_PATH:   web.HandlerWebDashboard,
 		constants.WEB_ADMIN_PATH:     web.HandlerAdmins,
+		constants.CRYPTOGRAPHY_PATH:  shared.CryptographyHandler,
 
 		constants.PUBLIC_STATUS_PATH: status.HandlerStatus,
 	}

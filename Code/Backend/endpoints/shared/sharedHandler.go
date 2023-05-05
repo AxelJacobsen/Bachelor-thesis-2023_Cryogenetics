@@ -3,6 +3,7 @@ package shared
 import (
 	"backend/constants"
 	paths "backend/constants"
+	"backend/cryptography"
 	"backend/globals"
 	"encoding/json"
 	"fmt"
@@ -267,4 +268,43 @@ func CreateDataHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+}
+
+/**
+ *	Handler for cryptography-related inquiries.
+ */
+func CryptographyHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("content-type", "application/json")
+
+	// Get escaped path without base URL and remove the first character if it's a "/"
+	escapedPath := r.URL.EscapedPath()[len(paths.SHARED_CREATE_PATH):]
+
+	if len(escapedPath) > 0 && escapedPath[0] == '/' {
+		escapedPath = escapedPath[1:]
+	}
+
+	//args := strings.Split(escapedPath, "/")
+
+	// Switch based on method
+	switch r.Method {
+
+	// GET method
+	case http.MethodGet:
+		// Fetch private key
+		privateKey, err := cryptography.FetchPrivateKey()
+		if err != nil {
+			http.Error(w, "Error fetching key.", http.StatusInternalServerError)
+			return
+		}
+
+		// Marshal data to JSON
+		responseJSON, err := json.Marshal(privateKey.PublicKey)
+		if err != nil {
+			http.Error(w, "Error Marshalling data.", http.StatusInternalServerError)
+		}
+
+		// Write response
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(responseJSON)
+	}
 }

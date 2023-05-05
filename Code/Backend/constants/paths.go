@@ -27,8 +27,12 @@ const WEB_PRIMARY_PATH = BASE_USER_PATH + "/admin"     // "/api/user/admin"
 const WEB_ADMIN_PATH = BASE_PATH + "/getAdmins"        // "/api/getAdmins"
 const SHARED_CREATE_PATH = BASE_PATH + "/create"       // "/api/create/container" or "/api/create/transactions" or "/api/create/employee"
 const PUBLIC_STATUS_PATH = BASE_PATH + "/status"       // "/api/status"
+const CRYPTOGRAPHY_PATH = BASE_PATH + "/cryptography"
 
 // Database
 //const DB_PATH = "mongodb://localhost:27017"
 
 // Outgoing URLs
+
+// File paths
+const KEY_FILEPATH = "./keyfile.txt"
