@@ -118,7 +118,7 @@ func HandlerMobileVerification(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// If we're just checking if the number is already verified...
-		if len(args) > 1 && args[1] == "check" {
+		if len(args) > 0 && args[0] == "check" {
 			if cryptography.VerifyUniqueNumber(globals.DB, string(uniqueNumberBytes)) {
 				// Writeback an OK message
 				w.Header().Set("Content-Type", "application/json")
