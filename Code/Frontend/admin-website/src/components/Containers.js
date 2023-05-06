@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Box, Button, FormControlLabel, IconButton, Paper, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel, Toolbar, Tooltip, Typography } from '@mui/material';
+import { Box, Button, FormControlLabel, IconButton, Paper, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel, Toolbar, Typography } from '@mui/material';
 import { TextField } from '@mui/material';
-import { FilterList as FilterListIcon, Print } from '@mui/icons-material';
+import { Print } from '@mui/icons-material';
 import { visuallyHidden } from '@mui/utils';
 import EditContainerModal from './popup/EditContainerModal';
 import AddContainerModal from './popup/AddContainerModal';
@@ -12,12 +12,12 @@ import './TableLayout.css';
 import { stableSort, getComparator } from '../globals/globalFunctions';
 import fetchData from '../globals/fetchData';
 
-const headCells = [
+const headCells = [ 
   {
     id: 'container_id', numeric: false, disablePadding: true, label: 'id',
   },
   {
-    id: 'container_sr_number', numeric: false, disablePadding: true, label: 'SerialNr',
+    id: 'container_sr_number', numeric: true, disablePadding: true, label: 'SerialNr',
   },
   {
     id: 'container_model_name', numeric: false, disablePadding: true, label: 'Model Name',
@@ -111,12 +111,6 @@ function EnhancedTableToolbar({ searchTerm, setSearchTerm }) {
         >
           Containers
         </Typography>
-
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip> 
       
         <TextField
         label="Search"

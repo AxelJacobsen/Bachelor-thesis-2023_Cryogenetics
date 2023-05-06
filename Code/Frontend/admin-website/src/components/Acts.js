@@ -15,14 +15,11 @@ import {
   Toolbar,
   Typography,
   Paper,
-  IconButton,
-  Tooltip,
   FormControlLabel,
   Switch,
   TextField,
 } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import AddActModal from './popup/AddActModal';
 import EditActModal from './popup/EditActModal';
 import DeleteActModal from './popup/DeleteActModal';
@@ -103,11 +100,6 @@ function EnhancedTableToolbar({ searchTerm, setSearchTerm }) {
           Act's
         </Typography>
 
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
         <TextField
         label="Search"
         value={searchTerm}
