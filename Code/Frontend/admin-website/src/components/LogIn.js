@@ -66,7 +66,7 @@ export default function LogIn({ setIsLoggedIn }) {
             alignItems: 'center',
           }}
         >
-            <img src={CryogeneticLogo} alt="Cryogenetics" width="30%"/>
+            <img src={CryogeneticLogo} alt="Cryogenetics" width="100%"/>
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>

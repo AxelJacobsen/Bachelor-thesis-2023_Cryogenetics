@@ -56,13 +56,17 @@ function App() {
   function handleLogOut() {
     setIsLoggedIn(false);
   }
+  const CryogeneticLogo = require('./Images/CryogeneticsLogoWhite.png'); //Fetch Image
+
 
   return (
     <Router>
     
     <nav>
     {isLoggedIn && //Hides navbar if not logged in
-      <><NavBar /><div className='navButtons'>
+      <>
+      <img src={CryogeneticLogo} alt="Cryogenetics" width="5%"/>
+      <NavBar /><div className='navButtons'>
             <Button onClick={handleLogOut} size='large' variant='contained' color='inherit'> Log Out </Button>
           </div></>
     }

@@ -16,7 +16,9 @@ export default function NavBar() {
     };
 
     return (
+
     <div className='navButtons'>
+
         <Button onClick={() => {navigate('/'); handleClick(1)}}
                 variant={activeButton === 1 ? 'contained' : 'text'} 
                 color={activeButton === 1 ? 'primary': 'inherit'}>
