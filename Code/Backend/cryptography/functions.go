@@ -2,7 +2,7 @@ package cryptography
 
 import (
 	"backend/constants"
-	"backend/globals"
+	"backend/request"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
@@ -183,7 +183,7 @@ func DecodeBase64(encoded string) ([]byte, error) {
 func VerifyUniqueNumber(db *sql.DB, uniqueNumber string) bool {
 	// Fetch matching uniqueNumbers from DB
 	w := httptest.NewRecorder()
-	data, err := globals.QueryJSON(db, "SELECT * FROM `valid_keys` WHERE keyvalue = ?", []interface{}{uniqueNumber}, w)
+	data, err := request.QueryJSON(db, "SELECT * FROM `valid_keys` WHERE keyvalue = ?", []interface{}{uniqueNumber}, w)
 	if err != nil {
 		return false
 	}
@@ -203,7 +203,7 @@ func VerifyUniqueNumber(db *sql.DB, uniqueNumber string) bool {
 func RequestVerification(db *sql.DB, uniqueNumber string) error {
 	// Fetch matching uniqueNumbers from DB
 	w := httptest.NewRecorder()
-	_, err := globals.QueryJSON(db, "INSERT INTO `requested_keys` (`keyvalue`) VALUES (?)", []interface{}{uniqueNumber}, w)
+	_, err := request.QueryJSON(db, "INSERT INTO `requested_keys` (`keyvalue`) VALUES (?)", []interface{}{uniqueNumber}, w)
 	if err != nil {
 		return err
 	}

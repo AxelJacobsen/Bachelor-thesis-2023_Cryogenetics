@@ -5,6 +5,7 @@ import (
 	paths "backend/constants"
 	"backend/cryptography"
 	"backend/globals"
+	"backend/request"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -72,7 +73,7 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 			sqlArgs := []interface{}{activeTable}
 
 			// Query
-			res, err := globals.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
+			res, err := request.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
 			if err != nil {
 				http.Error(w, "Error fetching columns for the given table "+err.Error(), http.StatusUnprocessableEntity)
 				return
@@ -107,7 +108,7 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		res, err := globals.QueryJSON(globals.DB, SQL, sqlArgs, w)
+		res, err := request.QueryJSON(globals.DB, SQL, sqlArgs, w)
 		if err != nil {
 			http.Error(w, "Error fetching data."+err.Error(), http.StatusInternalServerError)
 			return
@@ -127,7 +128,7 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Error in converting url to sql.", http.StatusUnprocessableEntity)
 		}
 
-		res, err := globals.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
+		res, err := request.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
 		if err != nil {
 			http.Error(w, "Error posting data."+err.Error(), http.StatusConflict)
 			return
@@ -151,7 +152,7 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		res, err := globals.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
+		res, err := request.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
 		if err != nil {
 			http.Error(w, "Error putting data.", http.StatusInternalServerError)
 			return
@@ -176,7 +177,7 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		res, err := globals.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
+		res, err := request.QueryJSON(globals.DB, sqlQuery, sqlArgs, w)
 		if err != nil {
 			http.Error(w, "Error deleting data.", http.StatusInternalServerError)
 			return
@@ -248,7 +249,7 @@ func CreateDataHandler(w http.ResponseWriter, r *http.Request) {
 
 			// define your query arguments as an empty slice of interface{}
 			queryArgs := []interface{}{}
-			sliceValue, err := globals.QueryJSON(globals.DB, query, queryArgs, w)
+			sliceValue, err := request.QueryJSON(globals.DB, query, queryArgs, w)
 			if err != nil {
 				http.Error(w, "Error fetching data.", http.StatusInternalServerError)
 			}

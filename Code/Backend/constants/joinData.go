@@ -1,27 +1,25 @@
 package constants
 
-/*
-*
-*	SetJoinData takes sets the specific data points for the joinData slice in order for SQL translation to include data from
-*	other data points
-*
-*	@param joinData: a map where the key is a string representing the table name and any foreign key references, and the value is a slice containing:
-  - the name of the table
-  - the name of the primary key for that table
-  - any data values requested from that table
-    @param keys: a slice of strings representing the keys in the joinData map
-    @param activeTable: The main table which data is being queried from
-
-*
-*
-*	Description of the joinData Slice
-*	"targetTableName" :	["tablename", "PrimaryKey",	"dataIWant", "moreDataIWant", etc...]
-*
-* 	targetTableName: Name of table we want "dataIWant" and such from
-*	tablename: Name of the table that shares the primary key value with target table
-*	PrimaryKey: Name of value that is the SQL Primary key on TargetTableName
-*	dataIWant: desired data we want SQL query to include
-*/
+/**
+ *
+ *	SetJoinData takes sets the specific data points for the joinData slice in order for SQL translation to include data from
+ *	other data points
+ *
+ *	@param joinData: a map where the key is a string representing the table name and any foreign key references, and the value is a slice containing:
+ * 		- the name of the table
+ * 		- the name of the primary key for that table
+ * 		- any data values requested from that table
+ *   @param keys: a slice of strings representing the keys in the joinData map
+ *   @param activeTable: The main table which data is being queried from
+ *
+ *	Description of the joinData Slice
+ *	"targetTableName" :	["tablename", "PrimaryKey",	"dataIWant", "moreDataIWant", etc...]
+ *
+ * 	targetTableName: Name of table we want "dataIWant" and such from
+ *	tablename: Name of the table that shares the primary key value with target table
+ *	PrimaryKey: Name of value that is the SQL Primary key on TargetTableName
+ *	dataIWant: desired data we want SQL query to include
+ */
 func SetJoinData(joinData map[string][]string, keys []string, activeTable string) (map[string][]string, []string) {
 	switch activeTable {
 	case "container":
