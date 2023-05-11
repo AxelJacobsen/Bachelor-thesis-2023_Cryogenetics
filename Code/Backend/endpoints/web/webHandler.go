@@ -3,6 +3,7 @@ package web
 import (
 	paths "backend/constants"
 	"backend/globals"
+	"backend/request"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
@@ -93,16 +94,13 @@ func HandlerVerification(w http.ResponseWriter, r *http.Request) {
 		escapedPath = escapedPath[1:]
 	}
 
-	//args := strings.Split(escapedPath, "/")
-	//urlData := r.URL.Query()
-
 	// Switch based on method
 	switch r.Method {
 
 	// GET method
 	case http.MethodGet:
 		// Fetch requests
-		data, err := globals.QueryJSON(globals.DB, "SELECT * FROM `requested_keys`", []interface{}{}, w)
+		data, err := request.QueryJSON(globals.DB, "SELECT * FROM `requested_keys`", []interface{}{}, w)
 		if err != nil {
 			http.Error(w, "Error fetching requested keys from database.", http.StatusInternalServerError)
 			return
@@ -160,7 +158,7 @@ func HandlerVerification(w http.ResponseWriter, r *http.Request) {
 		)
 
 		// Execute
-		res, err := globals.QueryJSON(globals.DB, sqlInsertQuery, insertArgs, w)
+		res, err := request.QueryJSON(globals.DB, sqlInsertQuery, insertArgs, w)
 		if err != nil {
 			fmt.Println("err: ", err)
 			http.Error(w, "Error inserting keys into database.", http.StatusInternalServerError)

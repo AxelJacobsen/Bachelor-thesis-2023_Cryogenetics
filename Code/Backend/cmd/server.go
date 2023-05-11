@@ -21,48 +21,6 @@ import (
 /// USING https://github.com/go-sql-driver/mysql ///
 ////////////////////////////////////////////////////
 
-/*
-(Trenger vi disse VV ?)
-Structs:
-	Admin
-	Client
-	Container
-	ContainerModel
-	ContainerStatus
-	Employee
-	Location
-	Transaction
-	TransactionAction
-
-Functions:
-	getAdmins(SC) ?
-	addAdmin(Admin)
-	getClients(SC)
-	addClient(Client)
-	getContainer(SC)
-	addContainer(Container)
-	getContainerModels()
-	addContainerModel(ContainerModel)
-	getContainerStatuses()
-	addContainerStatus(ContainerStatus)
-	getEmployees(SC)
-	addEmployee(Employee)
-	getLocations(SC)
-	addLocation(Location)
-	getTransactions(SC)
-	addTransaction(Transaction)
-	getTransactionActions()
-	addTransactionAction(TransactionAction)
-
-Glossary:
-	SC = Search Criteria
-
-
-DONE:
-	Can test url value aquisition with this
-	localhost:8080/api/user/login?id=alice&cake=yes&id=cool
-*/
-
 /**
  *	The main function.
  * 	Starts the server.
@@ -82,22 +40,10 @@ func main() {
 	// Context initialization
 	globals.Ctx = context.Background()
 
-	// Mongo initialization
-	//globals.Client = mongo.InstansiateMongoClient(constants.DB_PATH)
-	//mongo.ConnectContextToMongo(globals.Ctx, globals.Client)
-
-	// disconnect afterwards
-	//defer globals.Client.Disconnect(globals.Ctx)
-
-	// Start listening to socket connections (clients)
-	go globals.ListenForClients("0.0.0.0", "27015", "tcp")
-
 	// Route
 	routes := map[string]func(http.ResponseWriter, *http.Request){
-
 		constants.BASE_PATH:                shared.EndpointHandler,
 		constants.SHARED_CREATE_PATH:       shared.CreateDataHandler,
-		constants.MOBILE_LOGIN_PATH:        mobile.HandlerMobileLogin,
 		constants.WEB_LOGIN_PATH:           web.HandlerWebLogin,
 		constants.CRYPTOGRAPHY_PATH:        shared.CryptographyHandler,
 		constants.MOBILE_VERIFICATION_PATH: mobile.HandlerMobileVerification,
