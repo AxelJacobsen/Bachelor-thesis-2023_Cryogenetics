@@ -28,8 +28,8 @@ func parseAndVerifyUrl(rawURL string) *url.URL {
 	return u
 }
 
-/**
- *	Tester for the ConvertUrlToSql function.
+/*
+*	Tester for the ConvertUrlToSql function.
  */
 func TestConvertUrlToSql(t *testing.T) {
 	activeTable := "transaction"
@@ -60,7 +60,7 @@ func TestConvertUrlToSql(t *testing.T) {
 			},
 			joinData:         jd,
 			keys:             k,
-			expectedSqlQuery: "SELECT transaction.*, client.client_name, employee.employee_alias, location.location_name, container.temp_id, container_model.liter_capacity FROM transaction LEFT JOIN client ON transaction.client_id = client.client_id LEFT JOIN employee ON transaction.employee_id = employee.employee_id LEFT JOIN location ON transaction.location_id = location.location_id LEFT JOIN container ON transaction.container_sr_number = container.container_sr_number LEFT JOIN container_model ON container.container_model_name = container_model.container_model_name  ",
+			expectedSqlQuery: "SELECT transaction.*, client.client_name, employee.employee_alias, location.location_name, container.id, container.container_status_name, container_model.liter_capacity FROM transaction LEFT JOIN client ON transaction.client_id = client.client_id LEFT JOIN employee ON transaction.employee_id = employee.employee_id LEFT JOIN location ON transaction.location_id = location.location_id LEFT JOIN container ON transaction.container_sr_number = container.container_sr_number LEFT JOIN container_model ON container.container_model_name = container_model.container_model_name  ",
 			expectedSqlArgs:  []interface{}{},
 			expectedErr:      nil,
 		},
@@ -68,11 +68,11 @@ func TestConvertUrlToSql(t *testing.T) {
 			name: "valid queries",
 			r: &http.Request{
 				Method: "GET",
-				URL:    parseAndVerifyUrl("localhost:8080/api/transaction?liter_capacity=20&temp_id=12"),
+				URL:    parseAndVerifyUrl("localhost:8080/api/transaction?liter_capacity=20&id=12"),
 			},
 			joinData:         jd,
 			keys:             k,
-			expectedSqlQuery: "SELECT transaction.*, client.client_name, employee.employee_alias, location.location_name, container.temp_id, container_model.liter_capacity FROM transaction LEFT JOIN client ON transaction.client_id = client.client_id LEFT JOIN employee ON transaction.employee_id = employee.employee_id LEFT JOIN location ON transaction.location_id = location.location_id LEFT JOIN container ON transaction.container_sr_number = container.container_sr_number LEFT JOIN container_model ON container.container_model_name = container_model.container_model_name   WHERE  container_model.liter_capacity = ? OR container.temp_id = ?",
+			expectedSqlQuery: "SELECT transaction.*, client.client_name, employee.employee_alias, location.location_name, container.id, container.container_status_name, container_model.liter_capacity FROM transaction LEFT JOIN client ON transaction.client_id = client.client_id LEFT JOIN employee ON transaction.employee_id = employee.employee_id LEFT JOIN location ON transaction.location_id = location.location_id LEFT JOIN container ON transaction.container_sr_number = container.container_sr_number LEFT JOIN container_model ON container.container_model_name = container_model.container_model_name   WHERE  container.id = ? OR container_model.liter_capacity = ?",
 			expectedSqlArgs: []interface{}{
 				12,
 				20,
@@ -83,11 +83,11 @@ func TestConvertUrlToSql(t *testing.T) {
 			name: "queries of different types",
 			r: &http.Request{
 				Method: "GET",
-				URL:    parseAndVerifyUrl("localhost:8080/api/transaction?address=Test&temp_id=3"),
+				URL:    parseAndVerifyUrl("localhost:8080/api/transaction?address=Test&id=3&container_sr_number=null&start_date=01/02/2021&end_date=01/01/2024"),
 			},
 			joinData:         jd,
 			keys:             k,
-			expectedSqlQuery: "SELECT transaction.*, client.client_name, employee.employee_alias, location.location_name, container.temp_id, container_model.liter_capacity FROM transaction LEFT JOIN client ON transaction.client_id = client.client_id LEFT JOIN employee ON transaction.employee_id = employee.employee_id LEFT JOIN location ON transaction.location_id = location.location_id LEFT JOIN container ON transaction.container_sr_number = container.container_sr_number LEFT JOIN container_model ON container.container_model_name = container_model.container_model_name   WHERE  transaction.address = ? OR container.temp_id = ?",
+			expectedSqlQuery: "SELECT transaction.*, client.client_name, employee.employee_alias, location.location_name, container.id, container.container_status_name, container_model.liter_capacity FROM transaction LEFT JOIN client ON transaction.client_id = client.client_id LEFT JOIN employee ON transaction.employee_id = employee.employee_id LEFT JOIN location ON transaction.location_id = location.location_id LEFT JOIN container ON transaction.container_sr_number = container.container_sr_number LEFT JOIN container_model ON container.container_model_name = container_model.container_model_name   WHERE  transaction.address = ? OR container.container_sr_number IS NULL OR container.id = ? OR transaction.date BETWEEN '01/02/2021' AND '01/01/2024'",
 			expectedSqlArgs: []interface{}{
 				3,
 				"Test",
@@ -179,7 +179,7 @@ func TestConvertPostURLToSQL(t *testing.T) {
 						"location_id": 2,
 						"maintenance_needed": 0,
 						"production_date": "2023-03-15",
-						"temp_id": 1
+						"id": 1
 					},
 					{
 						"address": "47 Maple Street\r\nManchester, NH 03101",
@@ -194,11 +194,11 @@ func TestConvertPostURLToSQL(t *testing.T) {
 						"location_id": 101,
 						"maintenance_needed": 0,
 						"production_date": "2015-12-03",
-						"temp_id": 13
+						"id": 13
 					}
 				]`),
 			),
-			expectedSqlQuery: "INSERT INTO `` (address,client_id,comment,container_model_name,container_sr_number,container_status_name,country_iso3,invoice,last_filled,location_id,maintenance_needed,production_date,temp_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?), (?,?,NULL,?,?,?,?,?,?,?,?,?,?)",
+			expectedSqlQuery: "INSERT INTO `` (address,client_id,comment,container_model_name,container_sr_number,container_status_name,country_iso3,id,invoice,last_filled,location_id,maintenance_needed,production_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?), (?,?,NULL,?,?,?,?,?,?,?,?,?,?)",
 			expectedSqlArgs: []interface{}{
 				"verySmall60",
 				"At client",
@@ -335,7 +335,7 @@ func TestConvertPutURLToSQL(t *testing.T) {
 				"localhost:8080/api/container",
 				strings.NewReader(`[
 					{
-						"primary": "temp_id",
+						"primary": "id",
 						"address": "Test",
 						"client_id": 4,
 						"comment": "Leaking",
@@ -347,12 +347,12 @@ func TestConvertPutURLToSQL(t *testing.T) {
 						"location_id": 2,
 						"maintenance_needed": 0,
 						"production_date": "2023-03-15",
-						"temp_id": 1
+						"id": 1
 					}
 				]`),
 			),
 			kwargs:           make([]string, 0),
-			expectedSqlQuery: "UPDATE container LEFT JOIN client ON container.client_id = client.client_id LEFT JOIN location ON container.location_id = location.location_id LEFT JOIN container_model ON container.container_model_name = container_model.container_model_name  SET container.`address` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`client_id` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`comment` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`container_model_name` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`container_status_name` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`country_iso3` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`invoice` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`last_filled` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`location_id` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`maintenance_needed` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`production_date` = CASE WHEN container.`temp_id` = ? THEN ? END WHERE container.`temp_id` = '1';",
+			expectedSqlQuery: "UPDATE container LEFT JOIN client ON container.client_id = client.client_id LEFT JOIN location ON container.location_id = location.location_id LEFT JOIN container_model ON container.container_model_name = container_model.container_model_name  SET container.`address` = CASE WHEN container.`id` = ? THEN ? END, container.`client_id` = CASE WHEN container.`id` = ? THEN ? END, container.`comment` = CASE WHEN container.`id` = ? THEN ? END, container.`container_model_name` = CASE WHEN container.`id` = ? THEN ? END, container.`container_status_name` = CASE WHEN container.`id` = ? THEN ? END, container.`country_iso3` = CASE WHEN container.`id` = ? THEN ? END, container.`invoice` = CASE WHEN container.`id` = ? THEN ? END, container.`last_filled` = CASE WHEN container.`id` = ? THEN ? END, container.`location_id` = CASE WHEN container.`id` = ? THEN ? END, container.`maintenance_needed` = CASE WHEN container.`id` = ? THEN ? END, container.`production_date` = CASE WHEN container.`id` = ? THEN ? END WHERE container.`id` = '1';",
 			expectedSqlArgs: []interface{}{
 				1,
 				"2023-03-15",
@@ -386,7 +386,7 @@ func TestConvertPutURLToSQL(t *testing.T) {
 				"localhost:8080/api/container",
 				strings.NewReader(`[
 					{
-						"primary": "temp_id",
+						"primary": "id",
 						"address": "Test",
 						"client_id": 4,
 						"comment": "Leaking",
@@ -398,12 +398,12 @@ func TestConvertPutURLToSQL(t *testing.T) {
 						"location_id": 2,
 						"maintenance_needed": 0,
 						"production_date": "2023-03-15",
-						"temp_id": 1
+						"id": 1
 					}
 				]`),
 			),
 			kwargs:           []string{"alterForeignTables"},
-			expectedSqlQuery: "UPDATE container LEFT JOIN client ON container.client_id = client.client_id LEFT JOIN location ON container.location_id = location.location_id LEFT JOIN container_model ON container.container_model_name = container_model.container_model_name  SET container.`address` = CASE WHEN container.`temp_id` = ? THEN ? END, client.`client_id` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`comment` = CASE WHEN container.`temp_id` = ? THEN ? END, container_model.`container_model_name` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`container_status_name` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`country_iso3` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`invoice` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`last_filled` = CASE WHEN container.`temp_id` = ? THEN ? END, location.`location_id` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`maintenance_needed` = CASE WHEN container.`temp_id` = ? THEN ? END, container.`production_date` = CASE WHEN container.`temp_id` = ? THEN ? END WHERE container.`temp_id` = '1';",
+			expectedSqlQuery: "UPDATE container LEFT JOIN client ON container.client_id = client.client_id LEFT JOIN location ON container.location_id = location.location_id LEFT JOIN container_model ON container.container_model_name = container_model.container_model_name  SET container.`address` = CASE WHEN container.`id` = ? THEN ? END, client.`client_id` = CASE WHEN container.`id` = ? THEN ? END, container.`comment` = CASE WHEN container.`id` = ? THEN ? END, container_model.`container_model_name` = CASE WHEN container.`id` = ? THEN ? END, container.`container_status_name` = CASE WHEN container.`id` = ? THEN ? END, container.`country_iso3` = CASE WHEN container.`id` = ? THEN ? END, container.`invoice` = CASE WHEN container.`id` = ? THEN ? END, container.`last_filled` = CASE WHEN container.`id` = ? THEN ? END, location.`location_id` = CASE WHEN container.`id` = ? THEN ? END, container.`maintenance_needed` = CASE WHEN container.`id` = ? THEN ? END, container.`production_date` = CASE WHEN container.`id` = ? THEN ? END WHERE container.`id` = '1';",
 			expectedSqlArgs: []interface{}{
 				1,
 				"2023-03-15",
@@ -547,9 +547,9 @@ func TestConvertDeleteURLToSQL(t *testing.T) {
 			name: "valid queries",
 			r: &http.Request{
 				Method: "DELETE",
-				URL:    parseAndVerifyUrl("localhost:8080/api/transaction?liter_capacity=55&temp_id=0"),
+				URL:    parseAndVerifyUrl("localhost:8080/api/transaction?liter_capacity=55&id=0"),
 			},
-			expectedSqlQuery: "DELETE P FROM transaction P\nLEFT JOIN client ON P.client_id = client.client_id\nLEFT JOIN employee ON P.employee_id = employee.employee_id\nLEFT JOIN location ON P.location_id = location.location_id\nLEFT JOIN container ON P.container_sr_number = container.container_sr_number\nLEFT JOIN container_model ON container.container_model_name = container_model.container_model_name\nWHERE\n\tcontainer_model.liter_capacity = ? OR\n\tcontainer.temp_id = ?",
+			expectedSqlQuery: "DELETE P FROM transaction P\nLEFT JOIN client ON P.client_id = client.client_id\nLEFT JOIN employee ON P.employee_id = employee.employee_id\nLEFT JOIN location ON P.location_id = location.location_id\nLEFT JOIN container ON P.container_sr_number = container.container_sr_number\nLEFT JOIN container_model ON container.container_model_name = container_model.container_model_name\nWHERE\n\tcontainer.id = ? OR\n\tcontainer_model.liter_capacity = ?",
 			expectedSqlArgs: []interface{}{
 				55,
 				0,
@@ -560,9 +560,9 @@ func TestConvertDeleteURLToSQL(t *testing.T) {
 			name: "queries of different types",
 			r: &http.Request{
 				Method: "DELETE",
-				URL:    parseAndVerifyUrl("localhost:8080/api/transaction?address=thisisanaddress&temp_id=123456789"),
+				URL:    parseAndVerifyUrl("localhost:8080/api/transaction?address=thisisanaddress&id=123456789&start_date=01/02/2021&end_date=01/01/2024"),
 			},
-			expectedSqlQuery: "DELETE P FROM transaction P\nLEFT JOIN client ON P.client_id = client.client_id\nLEFT JOIN employee ON P.employee_id = employee.employee_id\nLEFT JOIN location ON P.location_id = location.location_id\nLEFT JOIN container ON P.container_sr_number = container.container_sr_number\nLEFT JOIN container_model ON container.container_model_name = container_model.container_model_name\nWHERE\n\tP.address = ? OR\n\tcontainer.temp_id = ?",
+			expectedSqlQuery: "DELETE P FROM transaction P\nLEFT JOIN client ON P.client_id = client.client_id\nLEFT JOIN employee ON P.employee_id = employee.employee_id\nLEFT JOIN location ON P.location_id = location.location_id\nLEFT JOIN container ON P.container_sr_number = container.container_sr_number\nLEFT JOIN container_model ON container.container_model_name = container_model.container_model_name\nWHERE\n\tP.address = ? OR\n\tcontainer.id = ? OR\n\tP.date BETWEEN '01/02/2021' AND '01/01/2024'",
 			expectedSqlArgs: []interface{}{
 				"thisisanaddress",
 				123456789,
