@@ -6,7 +6,6 @@ import (
 	"backend/endpoints/shared"
 	"backend/endpoints/web"
 	"backend/globals"
-	"backend/status"
 	"context"
 	"log"
 	"net/http"
@@ -26,7 +25,6 @@ import (
  * 	Starts the server.
  */
 func main() {
-
 	// Connect to database
 	db, err := sql.Open("mysql", "root@tcp(127.0.0.1:3306)/cryogenetics_database")
 	if err != nil {
@@ -48,7 +46,6 @@ func main() {
 		constants.CRYPTOGRAPHY_PATH:        shared.CryptographyHandler,
 		constants.MOBILE_VERIFICATION_PATH: mobile.HandlerMobileVerification,
 		constants.ADMIN_VERIFICATION_PATH:  web.HandlerVerification,
-		constants.PUBLIC_STATUS_PATH:       status.HandlerStatus,
 	}
 
 	for route, routeTo := range routes {
