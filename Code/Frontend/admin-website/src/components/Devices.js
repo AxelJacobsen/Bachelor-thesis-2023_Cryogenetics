@@ -9,26 +9,26 @@ import { Button } from '@mui/material';
 import fetchData from '../globals/fetchData';
 
 export default function Devices() {
-    const [rows, setRows] = React.useState([]);
-    const [checked, setChecked] = React.useState([]);
-    const [checkedKeys, setCheckedKeys] = React.useState([]);
+  const [rows, setRows] = React.useState([]);
+  const [checked, setChecked] = React.useState([]);
+  const [checkedKeys, setCheckedKeys] = React.useState([]);
 
-    const handleToggle = (value, keyvalue) => () => {
-        const currentIndex = checked.indexOf(value);
-        const newChecked = [...checked];
-        const newCheckedKeys = [...checkedKeys];
-      
-        if (currentIndex === -1) {
-          newChecked.push(value);
-          newCheckedKeys.push(keyvalue);
-        } else {
-          newChecked.splice(currentIndex, 1);
-          newCheckedKeys.splice(newCheckedKeys.indexOf(keyvalue), 1);
-        }
-      
-        setChecked(newChecked);
-        setCheckedKeys(newCheckedKeys);
-      };
+  const handleToggle = (value, keyvalue) => () => {
+      const currentIndex = checked.indexOf(value);
+      const newChecked = [...checked];
+      const newCheckedKeys = [...checkedKeys];
+    
+      if (currentIndex === -1) {
+        newChecked.push(value);
+        newCheckedKeys.push(keyvalue);
+      } else {
+        newChecked.splice(currentIndex, 1);
+        newCheckedKeys.splice(newCheckedKeys.indexOf(keyvalue), 1);
+      }
+    
+      setChecked(newChecked);
+      setCheckedKeys(newCheckedKeys);
+    };
 
     React.useEffect(() => {
     console.log(checkedKeys);
@@ -37,7 +37,7 @@ export default function Devices() {
   React.useEffect(() => {
     async function fetchRowData() {
       try {
-        const response = await fetchData('/api/admin/verification', 'GET');
+        const response = await fetchData('/api/user/admin/verification', 'GET');
         if (response == null){
           console.log('No data available.'); // Log error message instead of returning JSX
         }
@@ -53,10 +53,10 @@ export default function Devices() {
 
   const handleConfirm = async () => {
     try {
-    const response = await fetchData('/api/admin/verification', 'POST', checkedKeys.map(key => ({ keyvalue: key })));
+    const response = await fetchData('/api/user/admin/verification', 'POST', checkedKeys.map(key => ({ keyvalue: key })));
       console.log(response);
       // Call another GET after successful POST
-      const newResponse = await fetchData('/api/admin/verification', 'GET');
+      const newResponse = await fetchData('/api/user/admin/verification', 'GET');
       setRows(newResponse);
       setChecked([])
       setCheckedKeys([])

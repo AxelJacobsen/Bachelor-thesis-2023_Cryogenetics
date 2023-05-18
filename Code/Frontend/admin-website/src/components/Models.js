@@ -161,8 +161,8 @@ export default function Models() {
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
+    setOrder(isAsc ? 'desc' : 'asc'); //What way is the table sorted?
+    setOrderBy(property); //What are we sorting by?
   };
 
   const handleChangePage = (event, newPage) => {
