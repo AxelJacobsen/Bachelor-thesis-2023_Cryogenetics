@@ -3,15 +3,10 @@ package cryogenetics.logistics.cameraQR
 import android.Manifest
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.provider.MediaStore
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import cryogenetics.logistics.ui.tankfill.TankFillFragment
 
 
 

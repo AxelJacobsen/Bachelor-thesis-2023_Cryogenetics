@@ -35,7 +35,7 @@ func SetJoinData(joinData map[string][]string, keys []string, activeTable string
 		joinData["client"] = append(joinData["client"], "transaction", "client_id", "client_name")
 		joinData["employee"] = append(joinData["employee"], "transaction", "employee_id", "employee_alias")
 		joinData["location"] = append(joinData["location"], "transaction", "location_id", "location_name")
-		joinData["container"] = append(joinData["container"], "transaction", "container_sr_number", "id", "container_status_name")
+		joinData["container"] = append(joinData["container"], "transaction", "container_sr_number", "id")
 		joinData["container_model"] = append(joinData["container_model"], "container", "container_model_name", "liter_capacity")
 
 		//List of keys used in joinData. NEEDS TO BE IN THE SAME ORDER!

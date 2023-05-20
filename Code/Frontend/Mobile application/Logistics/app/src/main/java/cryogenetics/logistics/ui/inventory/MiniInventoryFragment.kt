@@ -1,6 +1,5 @@
-package cryogenetics.logistics.ui.inventory.mini
+package cryogenetics.logistics.ui.inventory
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,19 +12,14 @@ import cryogenetics.logistics.R
 import cryogenetics.logistics.api.ApiCalls
 import cryogenetics.logistics.databinding.FragmentMiniInventoryBinding
 import cryogenetics.logistics.functions.Functions
-import cryogenetics.logistics.ui.inventory.*
+import cryogenetics.logistics.functions.JsonAdapter
 
 class MiniInventoryFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = MiniInventoryFragment()
-    }
 
     private var _binding : FragmentMiniInventoryBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var inventoryList: RecyclerView
-    private lateinit var viewModel: MiniInventoryViewModel
     private lateinit var mProductListAdapter: JsonAdapter
 
     private val mOnProductClickListener =
@@ -70,7 +64,6 @@ class MiniInventoryFragment : Fragment() {
         for (model in ApiCalls.fetchInventoryData())
             itemList.add( if (model.isNotEmpty()) Functions.enforceNumberFormat(model) else model )
 
-
         //Create a list of references
         val viewIds = listOf(
             R.id.tvInventoryNr,
@@ -79,13 +72,7 @@ class MiniInventoryFragment : Fragment() {
             R.id.tvInventoryNoti
         )
         //Create adapter
-        binding.InventoryRecycler.adapter = MiniInventoryAdapter(itemList, viewIds)
-    }
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        viewModel = ViewModelProvider(this)[MiniInventoryViewModel::class.java]
-        // TODO: Use the ViewModel
+        binding.InventoryRecycler.adapter = JsonAdapter(itemList, viewIds, R.layout.mini_inventory_recycler_item)
     }
 
     override fun onDestroyView() {

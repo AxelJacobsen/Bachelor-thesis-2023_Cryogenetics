@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:id="@+id/MiniInventoryFragment"
     android:layout_margin="7dip"
-    tools:context=".ui.inventory.mini.MiniInventoryFragment">
+    tools:context=".ui.inventory.MiniInventoryFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/titleFilterSearchLayout"

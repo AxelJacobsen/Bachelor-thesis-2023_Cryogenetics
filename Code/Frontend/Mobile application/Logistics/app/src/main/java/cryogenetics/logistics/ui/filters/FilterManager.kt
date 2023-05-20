@@ -46,6 +46,7 @@ class FilterManager {
         // Add view to list of views
         when (view) {
             is RecyclerView -> {
+                val vi = view
                 shorthands[view] = name
                 val adapter = CheckboxAdapter(initialState[name]?.toList()?.map { it.first to (it.second=="true")} ?: emptyList())
                 adapters[view] = adapter
@@ -56,6 +57,7 @@ class FilterManager {
                 shorthands[view] = name
                 view.setText(initialState[name]?.get("text") ?: "")
             }
+
         }
     }
 

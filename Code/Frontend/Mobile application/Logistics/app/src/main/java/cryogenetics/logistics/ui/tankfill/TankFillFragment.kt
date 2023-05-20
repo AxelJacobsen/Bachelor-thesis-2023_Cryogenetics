@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import cryogenetics.logistics.R
 import cryogenetics.logistics.api.ApiCalls
@@ -16,19 +15,18 @@ import cryogenetics.logistics.cameraQR.CamAccess
 import cryogenetics.logistics.cameraQR.CameraFragment
 import cryogenetics.logistics.databinding.FragmentTankFillingBinding
 import cryogenetics.logistics.functions.Functions
+import cryogenetics.logistics.functions.JsonAdapter
 import cryogenetics.logistics.ui.confirm.ConfirmFragment
-import cryogenetics.logistics.ui.inventory.mini.MiniInventoryFragment
+import cryogenetics.logistics.ui.confirm.DetailsFragment
+import cryogenetics.logistics.ui.inventory.MiniInventoryFragment
 import cryogenetics.logistics.ui.tank.OnItemClickListener
-import cryogenetics.logistics.ui.tank.SearchAdapter
 
 class TankFillFragment : Fragment() {
 
-    private lateinit var viewModel: TankViewModel
     private lateinit var inventoryData: List<Map<String, Any>>
     private lateinit var camFrag: CameraFragment
     private lateinit var mAdapter: TankFillAdapter
     private lateinit var mListener: OnItemClickListener
-
 
     private val tankData: MutableList<Map<String, Any>> = mutableListOf()
     private var dList: MutableList<Map<String, Any>> = mutableListOf()
@@ -71,7 +69,7 @@ class TankFillFragment : Fragment() {
             )
             //Create adapter
             binding.recyclerSearchResult.adapter =
-                SearchAdapter(searchRes, viewIds, mOnFoundProductListener)
+                JsonAdapter(searchRes, viewIds, R.layout.mini_inventory_recycler_item, mOnFoundProductListener)
             binding.searchResult.visibility = View.VISIBLE
         }
 
@@ -177,6 +175,10 @@ class TankFillFragment : Fragment() {
                 println("onCommentClick bComment " + model)
             }
             "bDetails" -> {
+                childFragmentManager.beginTransaction()
+                    .replace(R.id.flConfirm, DetailsFragment(listOf( model ),
+                        "Dtai", mListener), "Dtai")
+                    .commit()
                 println("onCommentClick bDetails " + model)
             }
             else -> {}
@@ -218,24 +220,12 @@ class TankFillFragment : Fragment() {
                         dList.remove(map)
         }
 
-        override fun onCancelConfirm() {
-            val swipe = childFragmentManager.findFragmentByTag("Conf")
-                ?: throw RuntimeException("Could not find Tag")
+        override fun onCloseFragment(tag: String) {
+            val swipe = childFragmentManager.findFragmentByTag(tag)
+                ?: throw RuntimeException("Could not find Tag: $tag")
 
             childFragmentManager.beginTransaction()
                 .remove(swipe)
-                .commit()
-            childFragmentManager.popBackStack()
-        }
-
-        override fun displayActData() {
-            val swipe = childFragmentManager.findFragmentByTag("Conf")
-                ?: throw RuntimeException("Could not find Tag")
-
-            childFragmentManager.beginTransaction()
-                .remove(swipe)
-                .replace(R.id.flConfirm, ConfirmFragment(
-                    tankData, mListener, "PostData"), "post")
                 .commit()
             childFragmentManager.popBackStack()
         }
@@ -245,11 +235,4 @@ class TankFillFragment : Fragment() {
     private fun dataSetChange() {
         mAdapter.notifyDataSetChanged()
     }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(TankViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
-
 }

@@ -4,24 +4,28 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class TankData(
-    val address: String?,
-    val client_id: String?,
+    var address: String?,
+    var client_id: String?,
     val client_name: String?,
-    val comment: String?,
+    var comment: String?,
     val container_model_name: String?,
     val container_sr_number: String?,
-    val container_status_name: String?,
-    val invoice: String?,
-    val last_filled: String?,
+    var container_status_name: String?,
+    var invoice: String?,
+    var last_filled: String?,
     val liter_capacity: String?,
-    val location_id: String?,
+    var location_id: String?,
     val location_name: String?,
-    val maintenance_needed: String?,
+    var maintenance_needed: String?,
     val production_date: String?,
     val refill_interval: String?,
-    val id: String?
+    val id: String?,
+    var act: String? = "",
+    var comment_for_act: String? = ""
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readString(),
+        parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
@@ -57,6 +61,8 @@ data class TankData(
         parcel.writeString(production_date)
         parcel.writeString(refill_interval)
         parcel.writeString(id)
+        parcel.writeString(act)
+        parcel.writeString(comment_for_act)
     }
 
     override fun describeContents(): Int {

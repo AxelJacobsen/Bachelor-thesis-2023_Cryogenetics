@@ -9,7 +9,7 @@ interface OnItemClickListener {
     fun onStopCam() {}
     fun onChecked(map: Map<String, Any>, itemBool: Boolean) {}
     fun onClickTankFill(model: Map<String, Any>, ref: String) {}
-    fun onCancelConfirm() {}
-    fun displayActData() {}
+    fun onCloseFragment(tag: String) {}
+    fun displayActData(tag: String) {}
     fun updateTankData(tank: List<Map<String, Any>>) {}
 }

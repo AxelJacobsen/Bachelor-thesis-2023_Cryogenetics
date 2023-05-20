@@ -1,8 +1,6 @@
 package cryogenetics.logistics.ui.inventory
 
-import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,39 +8,26 @@ import android.widget.AdapterView
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
-import cryogenetics.logistics.api.ApiCalls
 import cryogenetics.logistics.api.ApiUrl
 import cryogenetics.logistics.databinding.FragmentInventoryBinding
 import cryogenetics.logistics.ui.filters.FilterManager
 import cryogenetics.logistics.functions.Functions.Companion.enforceNumberFormat
+import cryogenetics.logistics.functions.JsonAdapter
 
 class InventoryFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = InventoryFragment()
-    }
+    private lateinit var mInventoryFilterFragment: InventoryFilterFragment
+    private lateinit var mAdapter: JsonAdapter
 
     private var _binding: FragmentInventoryBinding? = null
     private val binding get() = _binding!!
-
-    private lateinit var inventoryList: RecyclerView
-    private lateinit var viewModel: InventoryViewModel
-    private lateinit var mProductListAdapter: JsonAdapter
-
-    private lateinit var bFilter: Button
-
     private var filterManager: FilterManager = FilterManager()
-    private lateinit var mInventoryFilterFragment: InventoryFilterFragment
-    private lateinit var mAdapter: InventoryAdapter
+    private var invFragInitialized = false
+    private var invData: String = ""
 
-    //private var modelToBeUpdated: Stack<InventoryDataModel> = Stack()
-
-    private val mOnProductClickListener =
+        private val mOnProductClickListener =
         AdapterView.OnItemClickListener { parent, view, position, id ->
 
             /*
@@ -72,15 +57,14 @@ class InventoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         // initialize the recyclerView
         binding.InventoryRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.InventoryRecycler.setHasFixedSize(true)
-        bFilter = view.findViewById(R.id.bFilter)
         fetchInventoryData()
 
         // Attach listener to filter button
-        bFilter.setOnClickListener {
+        binding.bFilter.setOnClickListener {
+            invData = ""
             // Create filter fragment with an initial filter state
             if (!::mInventoryFilterFragment.isInitialized) {
                 mInventoryFilterFragment = InventoryFilterFragment(
@@ -94,20 +78,22 @@ class InventoryFragment : Fragment() {
                     childFragmentManager.commit {
                         hide(mInventoryFilterFragment)
                     }
-
                     fetchInventoryData(filterManager.getUrl(ApiUrl.urlContainer))
                 }
 
                 childFragmentManager.commit {
                     setReorderingAllowed(true)
-                    add(R.id.inventoryFragment, mInventoryFilterFragment)
+                    add(R.id.inventoryFragment, mInventoryFilterFragment, "invF")
                 }
+                invFragInitialized = true
             } else {
                 childFragmentManager.commit {
                     setReorderingAllowed(true)
                     show(mInventoryFilterFragment)
                 }
             }
+            // Set invData back to empty for onPause
+            invData = ""
         }
     }
 
@@ -139,11 +125,58 @@ class InventoryFragment : Fragment() {
                 R.id.tvInventoryNoti,
                 R.id.tvInventoryStatus
             )
-            mAdapter = InventoryAdapter(itemList, viewIds)
+            mAdapter = JsonAdapter(itemList, viewIds, R.layout.inventory_recycler_item)
             binding.InventoryRecycler.adapter = mAdapter
             // Otherwise, update its data
         } else {
             mAdapter.updateData(itemList)
+        }
+    }
+
+    /**
+     * Handles a pause event, by storing data that would otherwise be lost.
+     */
+    override fun onPause() {
+        super.onPause()
+        if (invFragInitialized) { // Avoid risk of RuntimeException
+            // Find fragment by using the tag
+            mInventoryFilterFragment = (childFragmentManager.findFragmentByTag("invF")
+                ?: throw RuntimeException("Could not find Tag")) as InventoryFilterFragment
+            childFragmentManager.commit {
+                remove(mInventoryFilterFragment)
+            } // Remove Fragment to save resources
+            childFragmentManager.popBackStack()
+
+            if (invData == "") // If the user has changed the data, get the data from filterManager.
+                invData = filterManager.getUrl(ApiUrl.urlContainer)
+        }
+    }
+
+    /**
+     * Handles restoring values back to the state before user left the tab.
+     */
+    override fun onResume() {
+        super.onResume()
+        if (invFragInitialized) {
+            // If the invFrag has been initialized, we want to restore its state.
+            childFragmentManager.commit {
+                setReorderingAllowed(true)
+                add(R.id.inventoryFragment, mInventoryFilterFragment, "invF")
+            }
+
+            // Here we are reconfiguring onApply to call update data with the last state of the fragment.
+            // We also hide/close the fragment, which we just opened to restore its state.
+            mInventoryFilterFragment.onApply = {
+                childFragmentManager.commit {
+                    hide(mInventoryFilterFragment)
+                }
+                if (invData == "") // It should always be empty unless there is a tab open in users view.
+                    fetchInventoryData(filterManager.getUrl(ApiUrl.urlContainer)) // Normal fetch data with filter.
+                else
+                    fetchInventoryData(invData) // Restore the last state of the table.
+
+
+            }
         }
     }
 }

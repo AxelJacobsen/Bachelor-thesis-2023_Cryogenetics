@@ -25,6 +25,7 @@ class CheckboxAdapter(
     // Checkbox states
     private val checkboxStates = mutableMapOf<String, Boolean>()
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.checkbox_item, parent, false)
         return  ItemViewHolder(view)
