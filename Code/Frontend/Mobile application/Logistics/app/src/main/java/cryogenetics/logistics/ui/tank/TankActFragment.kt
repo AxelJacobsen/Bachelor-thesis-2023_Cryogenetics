@@ -382,7 +382,10 @@ class ActFragment(
         ))
     }
 
-
+    /**
+     * Posts right date in the format sql uses.
+     * @param inputString - Has to be a date or null.
+     */
     private fun postRightDate(inputString: String): String? {
         if (inputString == "0000-00-00" || inputString == "null") // Ensures that formatter doesn't fail if date = 00...
             return "null"
@@ -393,6 +396,14 @@ class ActFragment(
         return date.format(formatterDb)
     }
 
+    /**
+     * Fetches spinner and applies it to the spinner.
+     * @param url - The url of where to get the data for spinna.
+     * @param key_name - A reference to this the data we are get'in
+     * @param listNames - The names we will be looking for in the data.
+     * @param key_id - The id we will be looking for in the data.
+     * @param listIds - Ids of where the data should be applied.
+     */
     private fun fetchSpinnerData(
         url: String,
         key_name: String,
@@ -449,6 +460,7 @@ class ActFragment(
 
     /**
      * Common onDateSetListener body.
+     * @param listenerRef - The refrence of the listener
      */
     private fun datePickListener(listenerRef : String): DatePickerDialog.OnDateSetListener {
         val listener =
@@ -463,6 +475,7 @@ class ActFragment(
 
     /**
      * Updates date in textView
+     * @param listenerRef - The refrence of the listener
      */
     private fun updateDateInView(listenerRef : String) {
         val myFormat = "dd-MM-yyyy" // mention the format you need, needs to be big M, small d/y.

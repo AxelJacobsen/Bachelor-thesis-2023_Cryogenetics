@@ -79,6 +79,14 @@ class Functions {
             return outString
         }
 
+        /**
+         * Searches through data with given value
+         * @param context - The context of the application to send toast.
+         * @param fetchedData - The data which will be searched through.
+         * @param searchValue - The value which will be searched for.
+         *
+         * @return List of results found.
+         */
         fun searchContainer(
             context: Context,
             fetchedData: List<Map<String, Any>>,
@@ -100,6 +108,10 @@ class Functions {
             return searchResults
         }
 
+        /**
+         * Gets the data of the android device with time format "yyyy-MM-dd".
+         * @return The date in specified format.
+         */
         fun getDate(): String? {
             val myFormat = "yyyy-MM-dd"
             val dateFormat = SimpleDateFormat(myFormat, Locale.US)
@@ -107,20 +119,12 @@ class Functions {
             return dateFormat.format(date)
         }
 
-        fun getAlias(context: Context) : String {
-            var tvUsername = ""
-            // Set username text
-            val key = stringPreferencesKey("employee_alias")
-            val flow: Flow<String> = context.dataStore.data
-                .map {
-                    it[key] ?: "No name found"
-                }
-            runBlocking(Dispatchers.IO) {
-                return@runBlocking flow.first()
-            }
-            return ""
-        }
+        // Yes, both of these could be changed to one function with format as param. I just do not have time to test it.
 
+        /**
+         * Gets the data and time of the android device with time format "yyyy-MM-dd".
+         * @return The date in specified format.
+         */
         fun getDateTime(): String? {
             val myFormat = "yyyy-MM-dd HH:mm:ss"
             val dateFormat = SimpleDateFormat(myFormat, Locale.US)

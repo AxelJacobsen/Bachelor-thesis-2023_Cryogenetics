@@ -27,26 +27,6 @@ class InventoryFragment : Fragment() {
     private var invFragInitialized = false
     private var invData: String = ""
 
-        private val mOnProductClickListener =
-        AdapterView.OnItemClickListener { parent, view, position, id ->
-
-            /*
-            fun onUpdate(position: Int, model: InventoryDataModel) {
-                // Add model we want to update to modelToBeUpdated
-                modelToBeUpdated.add(model)
-
-                // Set the value of the clicked model in the edit text
-                binding.HeaderName?.setText(model.name)
-            }
-
-            fun onDelete(model: InventoryDataModel, checkd: Boolean) {
-                // We change the value of isChecked to prepare removal.
-                model.isChecked = checkd
-            }
-            */
-            // TODO("Not yet implemented")
-        }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,

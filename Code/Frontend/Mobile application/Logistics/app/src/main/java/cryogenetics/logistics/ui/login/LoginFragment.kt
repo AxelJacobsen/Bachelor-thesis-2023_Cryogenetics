@@ -62,14 +62,6 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // TODO: DELETE THIS WHEN DONE TESTING
-        /*GlobalScope.launch(Unconfined) {
-            val preferenceKey = stringPreferencesKey("key_verified")
-            requireContext().dataStore.edit {
-                it[preferenceKey] = ""
-            }
-        }*/
-
         // Fetch components
         bLogin = view.findViewById(R.id.bLogin)
         etLogin = view.findViewById(R.id.etLogin)
@@ -80,8 +72,8 @@ class LoginFragment : Fragment() {
         bLoginVerify = view.findViewById(R.id.bLoginVerify)
 
         // Check if the device is verified
-        //verifyPopup.visibility = View.VISIBLE
-        //afterVerify.visibility = View.GONE
+        verifyPopup.visibility = View.VISIBLE
+        afterVerify.visibility = View.GONE
         bLoginVerify.setOnClickListener {
             GlobalScope.launch(Unconfined) {
                 tvLoginUniqueNumber.text = Functions.fetchUniqueNumber(requireContext())

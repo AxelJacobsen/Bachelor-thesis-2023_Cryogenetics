@@ -93,9 +93,6 @@ class ConfirmFragment(
                 binding.tankFillPreview.visibility = View.GONE
                 binding.clRowFive.visibility = View.VISIBLE
             }
-            "Manual" -> {
-
-            }
         }
     }
 

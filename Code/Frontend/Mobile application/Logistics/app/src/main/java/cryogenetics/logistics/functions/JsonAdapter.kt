@@ -77,10 +77,18 @@ class JsonAdapter(
         }
     }
 
+    /**
+     * Gets item count by itemList.size instead of default.
+     * @return The nr of items in itemList
+     */
     override fun getItemCount(): Int {
         return itemList.size
     }
 
+    /**
+     * Updates data in the list.
+     * @param newData - The data of the new list.
+     */
     @SuppressLint("NotifyDataSetChanged")
     fun updateData(newData: List<Map<String, Any>>) {
         itemList = newData as MutableList<Map<String, Any>>

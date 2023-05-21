@@ -24,26 +24,6 @@ class MiniActLogFragment (
     private var _binding : FragmentMiniActLogBinding? = null
     private val binding get() = _binding!!
 
-    private val mOnProductClickListener =
-        AdapterView.OnItemClickListener { parent, view, position, id ->
-
-            /*
-            fun onUpdate(position: Int, model: ActLogDataModel) {
-                // Add model we want to update to modelToBeUpdated
-                modelToBeUpdated.add(model)
-
-                // Set the value of the clicked model in the edit text
-                binding.HeaderName?.setText(model.name)
-            }
-
-            fun onDelete(model: ActLogDataModel, checkd: Boolean) {
-                // We change the value of isChecked to prepare removal.
-                model.isChecked = checkd
-            }
-            */
-            // TODO("Not yet implemented")
-        }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

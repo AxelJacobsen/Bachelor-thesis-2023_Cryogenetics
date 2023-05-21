@@ -42,55 +42,42 @@ class DetailsFragment(
         binding.bClose.setOnClickListener {
             mOnProductClickListener?.onCloseFragment(fragTag)
         }
-        //binding.tvTitle.text = ""
-        //binding.tvDescription.text = ""
-        //binding.bConfirm.text = ""
-
-
 
         // initialize the recyclerView
         binding.inventoryRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.inventoryRecycler.setHasFixedSize(true)
 
-        val ref = "Details"
-        when (ref) {
-            "TankFillOverView" -> {
+        binding.clOpenTabsRow.visibility = View.VISIBLE
+        binding.clConfirmCancelRow.visibility = View.GONE
+        val serialNr = detailData[0].entries.find { it.key == "container_sr_number" }?.value.toString()
+        val tankId = detailData[0].entries.find { it.key == "id" }?.value.toString()
+        binding.tvTitle.text = "Details of $tankId"
+        binding.tvDescription.text = "A more detailed view, at tank $serialNr"
 
-            }
-            "Details" -> {
-                binding.clOpenTabsRow.visibility = View.VISIBLE
-                binding.clConfirmCancelRow.visibility = View.GONE
-                val serialNr = detailData[0].entries.find { it.key == "container_sr_number" }?.value.toString()
-                val tankId = detailData[0].entries.find { it.key == "id" }?.value.toString()
-                binding.tvTitle.text = "Details of $tankId"
-                binding.tvDescription.text = "A more detailed view, at tank $serialNr"
-
-                binding.bActLog.setOnClickListener {
-                    HostFragment.openAndAddFragment(HostFragment.returnHostFragment(), ActLogFragment(serialNr), "Log[$serialNr]", R.drawable.recent_transactions)
-                }
-
-                binding.bTankPage.setOnClickListener {
-                    HostFragment.openAndAddFragment(HostFragment.returnHostFragment(), TankFragment(detailData[0]), "Tank", R.drawable.tank)
-                }
-
-                //Create a list of references
-                val viewIds = listOf(
-                    R.id.tvInventoryNr,
-                    R.id.tvInventoryClient,
-                    R.id.tvInventoryLocation,
-                    R.id.tvInventoryInvoice,
-                    R.id.tvInventoryLastFill,
-                    R.id.tvInventorySerialNr,
-                    R.id.tvInventoryNoti,
-                    R.id.tvInventoryStatus
-                )
-                //Create adapter
-                binding.inventoryRecycler.adapter = JsonAdapter(
-                    detailData as MutableList<Map<String, Any>>, viewIds, R.layout.inventory_recycler_item_long)
-                binding.inventoryData.visibility = View.VISIBLE
-                binding.actLogData.visibility = View.GONE
-            }
+        binding.bActLog.setOnClickListener {
+            HostFragment.openAndAddFragment(HostFragment.returnHostFragment(), ActLogFragment(serialNr), "Log[$serialNr]", R.drawable.recent_transactions)
         }
+
+        binding.bTankPage.setOnClickListener {
+            HostFragment.openAndAddFragment(HostFragment.returnHostFragment(), TankFragment(detailData[0]), "Tank", R.drawable.tank)
+        }
+
+        //Create a list of references
+        val viewIds = listOf(
+            R.id.tvInventoryNr,
+            R.id.tvInventoryClient,
+            R.id.tvInventoryLocation,
+            R.id.tvInventoryInvoice,
+            R.id.tvInventoryLastFill,
+            R.id.tvInventorySerialNr,
+            R.id.tvInventoryNoti,
+            R.id.tvInventoryStatus
+        )
+        //Create adapter
+        binding.inventoryRecycler.adapter = JsonAdapter(
+            detailData as MutableList<Map<String, Any>>, viewIds, R.layout.inventory_recycler_item_long)
+        binding.inventoryData.visibility = View.VISIBLE
+        binding.actLogData.visibility = View.GONE
     }
 
     override fun onDestroyView() {

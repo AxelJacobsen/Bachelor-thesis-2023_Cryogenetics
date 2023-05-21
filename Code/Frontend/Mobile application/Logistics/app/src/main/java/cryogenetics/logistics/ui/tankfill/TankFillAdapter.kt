@@ -77,11 +77,6 @@ class TankFillAdapter(
         }
     }
 
-    fun updateData(model: Map<String, Any>) {
-        itemList.add(model)
-    }
-
-
     override fun getItemCount(): Int {
         return itemList.size
     }
