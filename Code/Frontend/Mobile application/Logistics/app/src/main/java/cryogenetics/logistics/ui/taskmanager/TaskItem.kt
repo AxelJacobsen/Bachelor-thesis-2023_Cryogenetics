@@ -1,8 +1,5 @@
 package cryogenetics.logistics.ui.taskmanager
 
-import android.graphics.drawable.Drawable
-import android.os.Parcel
-import android.os.Parcelable
 import androidx.fragment.app.Fragment
 
 /**

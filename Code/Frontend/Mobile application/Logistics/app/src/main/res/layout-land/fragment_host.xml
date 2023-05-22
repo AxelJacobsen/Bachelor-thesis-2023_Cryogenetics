@@ -258,7 +258,7 @@
             android:id="@+id/topbarTabs"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintWidth_percent="0.65"
+            app:layout_constraintWidth_percent="0.8"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">

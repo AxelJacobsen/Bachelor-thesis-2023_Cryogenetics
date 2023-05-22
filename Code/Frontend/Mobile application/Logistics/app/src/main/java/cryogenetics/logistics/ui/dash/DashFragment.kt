@@ -1,18 +1,15 @@
 package cryogenetics.logistics.ui.dash
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import cryogenetics.logistics.R
-import cryogenetics.logistics.ui.actLog.mini.MiniActLogFragment
-import cryogenetics.logistics.ui.inventory.mini.MiniInventoryFragment
+import cryogenetics.logistics.ui.actLog.MiniActLogFragment
+import cryogenetics.logistics.ui.inventory.MiniInventoryFragment
 
 class DashFragment : Fragment() {
-
-    private lateinit var viewModel: DashViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,14 +25,8 @@ class DashFragment : Fragment() {
             .replace(R.id.miniInventory, MiniInventoryFragment())
             .commit()
         childFragmentManager.beginTransaction()
-            .replace(R.id.miniLog, MiniActLogFragment(true))
+            .replace(R.id.miniLog, MiniActLogFragment(tvActLogRNrVisible = true))
             .commit()
 
     }
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(DashViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
-
 }

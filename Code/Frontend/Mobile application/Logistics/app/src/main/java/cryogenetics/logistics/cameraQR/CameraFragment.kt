@@ -104,12 +104,18 @@ class CameraFragment(
         )
     }
 
+    /**
+     * Custom onPause function, which will guarantee the camera stops.
+     */
     fun onPaus() {
         super.onPause()
         savedStateRegistry
         mCameraProvider!!.unbindAll() // Stops camera
     }
 
+    /**
+     * Custom onResume function, which will guarantee the camera is restarted.
+     */
     fun onRes(): Boolean {
         super.onResume()
         return if (mCameraProvider != null) {
@@ -117,7 +123,6 @@ class CameraFragment(
             true
         } else false
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

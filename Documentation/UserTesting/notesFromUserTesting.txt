@@ -1,0 +1,204 @@
+# Elin Bergsett
+* La merke til tankene først
+* "Tanknivået er ut ifra når den var fylt sist"
+	* Likte batterimoddelen, slipper å se på datoene, raskere å se
+* Prøvde å trykke på en spesifikk dunk
+	* Antok at man kan se historikken bak hver tank
+* Antok at man kan bla ned tankene i overblikk-siden (scroll/recycler-view)
+* Liker symbolene
+	* Ikke like selvforklarende: Link/Unlink
+* Antok at man kan søke etter dato på log
+	* Filtrere etter både kunde og lokasjon
+* Foretrekker dd/mm/åå, bekymret for misforståelse i USA og andre land
+	* Står "dato/måned/år som i dmy", vil ha det forklart et sted
+* Liker godt fargene og symbolene, synes det er oversiktlig
+* "Hvor nyttig er dashboard"
+	* Ikke klart at log og fylling er uavhengige tabeller, trodde comment var forrige handling på tank 1
+	* Spurte om maintenance merke og rødt utropstegn.
+* Trodde Internal transfer ikonet var shorthand for hjemaddressen til kunden
+* Forstod return symbolet
+* Dashboard rating 1-6: 5 (ledende?)
+* Ingen kommentar på ting å legge til/fjerne fra dashboard
+* Log: Skal være presist hvilket dato-format som brukes
+	* Passe mengde farger, likte fargene
+	* Log rating 1-6: 6
+* Inventory:
+	* "Går det an å ha fyllestatus her også (batteri-indikatoren), ellers synes jeg det ser veldig bra ut"
+	* "Alle tanker over en viss alder skal kontrolleres en gang i året, kanskje ha et varsel for visse eldre dunker"
+		* => Age variabel for tanker. Tanker over 8-10 år gamle burde få årlig service.
+		* Warning for de som er over alderen og skal godkjennes
+	* Inventory rating 1-6: 5
+* Tank filling:
+	* "Det er bra"
+	* Noen knapper som er overflødige?: "Vil tro at det er bruk for alle"
+	* Trodde man måtte hake av før cancel all. Klargjør? 
+	* Likte undo, "alltid kjekt med å kunne gå tilbake"
+	* Tank filling rating 1-6: 6
+* Likte nested menus måten å gjøre ting på "jeg liker at det er få valg til å begynne med"
+	* terningskast: 5
+* "Men ein ting her: At en ACT kanskje kunne ha tenkt meg den mellom time og location"
+	* "Status etter ACT"
+		* => time, location, act, status
+* Likte hvordan unlink og comment funker sammen
+* Discard or sell:
+	* Likte det
+* Manual act:
+	* Kan ikke se for seg når hun vil bruke det, "men sikkert fint med muligheten"
+	* "Ingen ting er mer frustrerende enn når man vil velge en meny men ikke får valgt det man skal"
+* Transaction menu:
+	* "Synes det ser fint ut"
+* Firkant-knapp-meny
+	* Ikonene: Skjønte fabrikken, "internal er jo cryo, kanskje kult å bruke logoen", 5/6 terningskast
+* Hele skissen:
+	* "Synes det ser veldig fint ut"
+	* 1-10: 9
+* Admin page:
+	* Foretrekker QR-koden med tallet til høyre uten null
+* Dunker som kommer fra kunde tomme burde stå tomme i 1 uke uten nitrogen
+	* Alltid 1 uke i kvarantene, litt usikker på om de klarer å holde det i gang selv
+
+# Arthur Zolothare
+* Førsteinntrykk
+	* "Det jeg liker veldig godt er at det er veldig enkelt, ikke for komplisert layout, og det er veldig oversiktlig"
+
+Dashboard: 5/6
+* Likte å kunne se hva som skal fylles først
+* "Hvordan skal selve invoice delen oppdateres"
+	* Viste mye bekymring for hvordan fakturering gjøres. F.eks. hvis tanken har vært hos kunde i bare 2 uker, men er fakturert for en måned.
+	* Likte hvordan månedlige rapporter kunne genereres
+		* Ville at man skal kunne selektere dato fra til for månedsrapport
+* "Liker ikke alt for flashy farger, så liker disse, fargene til cryogenics"
+	* Likte tekststørrelse, font, ikoner
+	* Vil at man skal kunne trykke på en comment for å utvide den og se hele samtidig
+* Lurte på: Hva er poenget med faner når man kan bytte meny på venstre-siden
+	* Multi-tasking feature: Virket ikke veldig positiv.
+		* Kan hende man vil se info om én tank i spesifikk imens man fyller for å se om den har begynt å lekke.
+* Vil at man skal ha forskjellige grader av advarsel, likt som en bil.
+	* Dårlig kapasitet -> gul, burde ikke sende til kunde i lange perioder
+	* Foreslår: Ikon av tank som viser hva som er galt.
+* Forventer ikke så mye av dashboardet , vil bare ha en generell oversikt
+
+Log: 5/6
+* "Hva er opper." -> kort for operator. "Hva er det?" -> hvem som har gjort aktiviteten. "Ja det er bra."
+* "I utgangspunktet er det nok info å begynne med, på loggen, så det er bra"
+* Ville ha fargekode på status
+	* Available -> grønn.
+* Istedenfor operasjon nr: Bruk initsialer
+	* => Navn/initsialer i databasen
+
+Inventory: 5/6
+* Det hadde gått an å dele skjermen i to: hamar og trondheim
+* Mange sendinger mellom hamar og trondheim, hadde likt om man kunne sveipet over skjermen raskt og lett, siden det bare er internal transfer
+* Invoice ikke nødvendig
+* "Hadde det vært mulig å ha vis/gjem kolonner"
+	* Ikke alltid man er interessert i å se noe annet enn tank nr og én ting til
+* Liker den enkle stilen
+* Ville likt farge på øverste rad
+* Serienr er ikke så nødvendig her, men veldig viktig på container details
+	* "Bare f.eks. hvis det skjer noe og man skal informere leverandøren om at tanken er ødelagt"
+* Kunne kalt nr for "tank ID, det er det jeg bruker når jeg snakker med kunde"
+* Bruker "tank", ikke "container"
+* "Går det an å på en måte bare spesifisere hva invoice betyr, om det er invoiced UNTIL eller noe annet"
+
+Tank filling menu for multiple containers: 5/6
+* "Det er kjempekult"
+* Ingen misforståelse med "cancel all" knappen her
+* Likte "more details" knappen godt
+* "Hvor kan man f.eks. se tank filling history for den spesifikke knappen?"
+	* F.eks. hvis de scanner tank 24 vil de se tank filling history for å se om det har blitt hoppet over. Kan hende noen glemte, da legger de merke til at de må fylle mer.
+	* Etter å ha blitt forklart hvordan det kan gjøres: "Det er OK da"
+* Tenker på human error:
+	* Hvis man f.eks. er lat og fyller først så scanner alle, det kan hende man har hoppet over en tank
+* Tolket at datoene på oversikten er sortert etter når de ble fylt (halvveis sant)
+	* Vil ha litt farge, ikonene på toppen mindre, gjøre bildene av batteriene større
+		* Eller erstatte med: En ekstra kolonne med nr(#), client, og "refill date"
+
+Container menu:
+* "Layouten er veldig bra"
+* ville at deadspacen skulle bli brukt
+* Manuel act er human error mode xD
+* "Icons er veldig fine"
+* "Hvordan er det når man får tanken tilbake, trykker på unlink client, affiliasjonen til tanken"
+	* "Går det an at når man logger inn, velger man affiliation hamar/trondheim"?
+
+Individual refill:
+* "Som sagt, alt er veldig enkelt å greit"
+* "Det viktige med refill er registrering av tank, tidspunkt, og evt. noen kommentarer om tanken er veldig tom, og se loggen av tanken"
+* Ville ikke ha feature for å fylle i går
+
+Discard and sell:
+* "Det som kunne vært alright er om man MÅ legge til hvem det er solgt til"
+* "Comment section er bra, da kan man skrive nødvendige ting der, det viktigste er hvem man har solgt det til"
+
+Maintenance needed:
+* "Eneste jeg kan tenke på er: Man får tanken tilbake av en kunde, har vært på anlegg med unik helsestatus der, disinfeksjon/vasking av tanken er veldig viktig"
+* "Produksjonsår er del av serienummer, typ 2022XYZ"
+	* Vil ha mulighet til å se production year for å sammenlikne med hvor fort nitrogenen fordamper
+
+Manual act:
+* Problem med human error? "Over alt. Kan skje hvor som helst, når som helst."
+
+Transaction: 5/6
+* Antok at man bruker det når man får tanken tilbake fra kunde
+* Viste bekymring for hvor man registrerer kunde, viste forvirring om link/unlink/send/recieve
+* "{om link/unlink} Det som kan skje, det vil ikke alltid være mulighet for å kjapt registrere en kunde, når man sender ut"
+	* Vil at det skal være mulig å registrere kunde imens man sender ut, uten å gå unlink->link først
+* Viste bekymring om kunde->kunde transfer
+* Internal transfer icon: Foretrekker cryogenetics logo, den andre ser ut som en "ukrainian bunker"
+
+Hele prototypen: 7/10 på farger, ikoner, meny, funksjoner. Enkelt å forstå
+
+# Inger og Anelene
+
+Log:
+* Vil at man skal kunne velge kategori(er) å se
+* Forvirret over "oper." loginkode, vil ha initsialer også
+
+Inventory: 6/6
+* Antok at inventory viser tankene på de forskjellige beholdningene
+	* Antok at man kan søke lokasjon: Hamar, så kommer kun Hamar opp
+		* Gjøre filtrering og søking til samme? Typ discord "channel:DnD Dolbus"
+* Fylling > Invoice, vis den tidligere
+* Snakk om testing av tanker for å sjekke om de lekker
+	* Hvert år? At man kan manuelt legge til at en tank burde sjekkes?
+* Vil ha batteri-ikonet her
+* Notification: Forskjell mellom fylling og fakturering; vil ha forskjellige ikoner
+	* Gjem fakturering litt fra appen, ikke av interesse for dem
+		* "Viktig at det som er rødt er krise"
+
+Tank filling: 
+* Vil at man skal kunne legge til kommentarer for både enkeltdunker og alle dunker under fylling
+	* => Tank comment? Vil ha for spesifikke tanker hvis de er sus
+* Vil at man skal kunne skrive kommentar på spesifikke dunker under "more details"
+* Vil at "man skal kunne gå rett tilbake til der man var"
+* Likte de fire knappene
+
+Dashboard: 
+* Tank nr -> tank ID
+* "Sånn det her har nå er det et lite utvalg av tanker, vi har mange fler"
+* Vurderte at det hadde vært bedre med å se én kategori om gangen på dashboard
+* Tenker at invoice er viktig, men det er ofte andre som gjør det enn de som fyller
+	* Flytt invoice vekk fra dashboardet
+	* Tenkte at de som bruker admin pagen kan gjøre det (ledende?)
+		* Faktureres ofte én gang i året per tank bare
+* "Kanskje hvis man hadde hatt at den loggen lå inne på inventory, ikke at det er to separate lister"
+* Litt "meh" om loggen på dashboard? "Det er viktig at den er der, men det er ikke det vi har fokus på på daglig drift liksom"
+* En "logg"-knapp på bunnen av inventory
+
+Container:
+* Syntes det var greit at "maintenance need, maintenance complete"
+* Antok at når man trykker unlink får faktorerings-folka beskjed om det
+* Vil ha varsling for tanker som er maintenance need men ikke maintenance complete, og at det skal ligge på dunk info.
+	* Vil ha grønn fargekode når den er fiksa, og viktigst at det er rød fargekode på venstre bunn når den ikke er vedlikeholdt
+
+Manuell act:
+* "Ser greit ut"
+
+* Vil ha rød varsling hvis man prøver å sende ut maintenance needed tank til kunde
+	* Samme med årlig checkup
+* Vil ha mulighet for å legge til maintenance varsel for dunker som ikke er riktig organisert på innsiden, slik at de ***må*** fikses før de sendes(linkes) til kunde
+	* Spesifikt 500-literne
+
+
+
+Få tak i Ashley? Hun har visstnok mest kunnskap

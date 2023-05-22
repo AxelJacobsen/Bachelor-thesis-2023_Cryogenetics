@@ -15,8 +15,7 @@ import cryogenetics.logistics.api.Api
 import cryogenetics.logistics.dataStore
 import cryogenetics.logistics.databinding.FragmentConfirmBinding
 import cryogenetics.logistics.functions.Functions
-import cryogenetics.logistics.ui.actLog.ActLogAdapter
-import cryogenetics.logistics.ui.inventory.JsonAdapter
+import cryogenetics.logistics.functions.JsonAdapter
 import cryogenetics.logistics.ui.tank.OnItemClickListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -66,7 +65,7 @@ class ConfirmFragment(
         }
 
         binding.bCancel.setOnClickListener {
-            mOnProductClickListener?.onCancelConfirm()
+            mOnProductClickListener?.onCloseFragment("Conf")
         }
 
         // initialize the recyclerView
@@ -89,13 +88,10 @@ class ConfirmFragment(
                 )
                 //Create adapter
                 binding.recyclerConfirm.adapter = JsonAdapter(
-                    confirmData as MutableList<Map<String, Any>>, viewIds)
+                    confirmData as MutableList<Map<String, Any>>, viewIds, R.layout.tank_fill_confirm_recycler)
                 binding.tankFillConfirm.visibility = View.VISIBLE
                 binding.tankFillPreview.visibility = View.GONE
-                binding.clRowFive?.visibility = View.VISIBLE
-            }
-            "Manual" -> {
-
+                binding.clRowFive.visibility = View.VISIBLE
             }
         }
     }
@@ -135,10 +131,10 @@ class ConfirmFragment(
 
         println("actDatas " + actDatas)
         //Create adapter
-        binding.recyclerPreview.adapter = ActLogAdapter(previewDatas, viewIds, true)
+        binding.recyclerPreview.adapter = JsonAdapter(previewDatas, viewIds, R.layout.act_log_recycler_item,tvActLogRNrVisible = true)
         binding.tankFillConfirm.visibility = View.GONE
         binding.tankFillPreview.visibility = View.VISIBLE
-        binding.clRowFive?.visibility = View.GONE
+        binding.clRowFive.visibility = View.GONE
     }
 
     private fun multipleRefill(refillData: List<Map<String, Any>> = mutableListOf()):

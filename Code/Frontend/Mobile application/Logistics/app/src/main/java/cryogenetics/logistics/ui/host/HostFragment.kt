@@ -1,5 +1,6 @@
 package cryogenetics.logistics.ui.host
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +9,6 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
 import cryogenetics.logistics.dataStore
@@ -31,12 +31,41 @@ class HostFragment : Fragment() {
 
     companion object {
         fun newInstance() = HostFragment()
+
+        /**
+         *  Opens a fragment by replacing the current one with it and adds to taskmanager.
+         *
+         *  @param fragment - The fragment.
+         *  @param name - The name to display on the tab.
+         */
+        fun openAndAddFragment(hostFragment: HostFragment, fragment: Fragment, name: String, picRef: Int) {
+            // Create the fragment and replace the current one with it
+            hostFragment.childFragmentManager.beginTransaction()
+                .replace(R.id.mainContent, fragment)
+                .commit()
+
+            // Add it to the list of fragments
+            val data = hostFragment.mAdapter.dataList.toMutableList()
+            data.add(TaskItem(name, fragment, picRef))
+            hostFragment.mAdapter.updateData(data)
+
+            /* IN CASE THE FRAGMENT MUST BE OPENED BY THE PARENT ACTIVITY
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(cryogenetics.logistics.R.id.hostFragment, childFragment)
+                ?.commit()*/
+        }
+        fun returnHostFragment (): HostFragment {
+            return xHostFragment
+        }
+
+        // We will allow this to have the option to open tabs like a complete act log of a tank.
+        @SuppressLint("StaticFieldLeak")
+        lateinit  var xHostFragment: HostFragment
     }
 
     private var _binding : FragmentHostBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: HostViewModel
     private lateinit var mAdapter: TaskManagerAdapter
     private lateinit var tvUsername: TextView
     private lateinit var ibLogout: ImageButton
@@ -52,6 +81,7 @@ class HostFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        xHostFragment = this
 
         // Fetch components
         tvUsername = view.findViewById(R.id.tvUsername)
@@ -73,7 +103,7 @@ class HostFragment : Fragment() {
         }
 
         // Set up adapter
-        var taskManagerData: List<TaskItem> = mutableListOf<TaskItem>()
+        val taskManagerData: List<TaskItem> = mutableListOf<TaskItem>()
 
         mAdapter = TaskManagerAdapter(taskManagerData,
             // OnClick
@@ -92,7 +122,7 @@ class HostFragment : Fragment() {
                     .commit()
 
                 // Remove fragment from data list
-                var data = mAdapter.dataList.toMutableList()
+                val data = mAdapter.dataList.toMutableList()
                 data.removeAt(index)
                 mAdapter.updateData(data)
             }
@@ -105,48 +135,19 @@ class HostFragment : Fragment() {
 
         // Set onclick listeners
         binding.clDashboard.setOnClickListener {
-            openAndAddFragment(DashFragment(), "Dashboard", R.drawable.dashboard)
+            Companion.openAndAddFragment(this, DashFragment(), "Dashboard", R.drawable.dashboard)
         }
         binding.clTank.setOnClickListener {
-            openAndAddFragment(TankFragment(), "Tank", R.drawable.tank)
+            Companion.openAndAddFragment(this, TankFragment(), "Tank", R.drawable.tank)
         }
         binding.clTankFilling.setOnClickListener {
-            openAndAddFragment(TankFillFragment(), "Tank Filling", R.drawable.fill)
+            Companion.openAndAddFragment(this, TankFillFragment(), "Tank Filling", R.drawable.fill)
         }
         binding.clLog.setOnClickListener {
-            openAndAddFragment(ActLogFragment(), "Log", R.drawable.recent_transactions)
+            Companion.openAndAddFragment(this, ActLogFragment(), "Log", R.drawable.recent_transactions)
         }
         binding.clInventory.setOnClickListener {
-            openAndAddFragment(InventoryFragment(), "Inventory", R.drawable.inventory)
+            Companion.openAndAddFragment(this, InventoryFragment(), "Inventory", R.drawable.inventory)
         }
     }
-
-    /**
-     *  Opens a fragment by replacing the current one with it and adds to taskmanager.
-     *
-     *  @param fragment - The fragment.
-     *  @param name - The name to display on the tab.
-     */
-    fun openAndAddFragment(fragment: Fragment, name: String, picRef: Int) {
-        // Create the fragment and replace the current one with it
-        childFragmentManager.beginTransaction()
-            .replace(R.id.mainContent, fragment)
-            .commit()
-
-        // Add it to the list of fragments
-        val data = mAdapter.dataList.toMutableList()
-        data.add(TaskItem(name, fragment, picRef))
-        mAdapter.updateData(data)
-
-        /* IN CASE THE FRAGMENT MUST BE OPENED BY THE PARENT ACTIVITY
-        activity?.supportFragmentManager?.beginTransaction()
-            ?.replace(cryogenetics.logistics.R.id.hostFragment, childFragment)
-            ?.commit()*/
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(HostViewModel::class.java)
-    }
-
 }

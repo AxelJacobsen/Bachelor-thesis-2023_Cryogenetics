@@ -6,7 +6,6 @@ import android.util.Log
 import org.json.JSONArray
 import org.json.JSONException
 import java.io.BufferedReader
-import java.io.ByteArrayOutputStream
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
@@ -173,6 +172,8 @@ class Api {
             if (jsonString.isEmpty()){
                 Log.e(TAG, "Couldn't construct json string")
             }
+
+            println("jsonStringx " + jsonString)
 
             // Open a connection to the endpoint URL
             val connection: HttpURLConnection = endpointUrl.openConnection() as HttpURLConnection

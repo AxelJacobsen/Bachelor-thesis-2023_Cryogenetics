@@ -11,8 +11,7 @@ import cryogenetics.logistics.R
  *  Adapter for filter lists mainly consisting of checkboxes.
  */
 class CheckboxAdapter(
-    var dataList: List<Pair<String, Boolean>>//,           // Initial list of tabs.
-    //val onClick: (String, Int) -> Unit,   // On click (each tab)
+    var dataList: List<Pair<String, Boolean>> // Initial list of tabs.
 ): RecyclerView.Adapter<CheckboxAdapter.ItemViewHolder>() {
     inner class ItemViewHolder(view: View): RecyclerView.ViewHolder(view){
         val mCheckBox: CheckBox
@@ -21,8 +20,6 @@ class CheckboxAdapter(
             mCheckBox = view.findViewById(R.id.cbFilterItem)
         }
     }
-
-    // Checkbox states
     private val checkboxStates = mutableMapOf<String, Boolean>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -43,6 +40,10 @@ class CheckboxAdapter(
         }
     }
 
+    /**
+     * Gets item count by dataList.size instead of default.
+     * @return The nr of items in dataList
+     */
     override fun getItemCount(): Int {
         return dataList.size
     }
