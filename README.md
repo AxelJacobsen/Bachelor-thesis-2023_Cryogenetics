@@ -37,4 +37,10 @@ From here you run the backend with the command: **go run \cmd\server.go**.<br>
 #### Web Instructions
 See [**/Code/Frontend/admin-website/**](Code/Frontend/admin-website/README.md) for running instructions.
 #### Mobile Instructions
-See [**/Code/Frontend/Mobile&nbsp;application/**](Code/Frontend/Mobile&nbsp;application/ReadMe.md) for running instructions.
+To run this project in a development enviorment please: <br>
+1. go to Android Studio's website and download the latest version. <br>
+2. open the Logistics folder in Android Studio.
+3. Create a virutal device, must have a defined camera and api 29 or higher for all features to work reliabily.
+4. Build gradle
+5. Install the application on the virtual device.
+
