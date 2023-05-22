@@ -37,4 +37,4 @@ From here you run the backend with the command: **go run \cmd\server.go**.<br>
 #### Web Instructions
 See [**/Code/Frontend/admin-website/**](Code/Frontend/admin-website/README.md) for running instructions.
 #### Mobile Instructions
-Install android studios, create emulator, run program
+See [**/Code/Frontend/Mobile&nbsp;application/**](Code/Frontend/Mobile&nbsp;application/ReadMe.md) for running instructions.
