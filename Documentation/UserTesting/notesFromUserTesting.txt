@@ -17,7 +17,7 @@
 	* Spurte om maintenance merke og rødt utropstegn.
 * Trodde Internal transfer ikonet var shorthand for hjemaddressen til kunden
 * Forstod return symbolet
-* Dashboard rating 1-6: 5 (ledende?)
+* Dashboard rating 1-6: 5
 * Ingen kommentar på ting å legge til/fjerne fra dashboard
 * Log: Skal være presist hvilket dato-format som brukes
 	* Passe mengde farger, likte fargene
@@ -179,7 +179,7 @@ Dashboard:
 * Vurderte at det hadde vært bedre med å se én kategori om gangen på dashboard
 * Tenker at invoice er viktig, men det er ofte andre som gjør det enn de som fyller
 	* Flytt invoice vekk fra dashboardet
-	* Tenkte at de som bruker admin pagen kan gjøre det (ledende?)
+	* Tenkte at de som bruker admin pagen kan gjøre det
 		* Faktureres ofte én gang i året per tank bare
 * "Kanskje hvis man hadde hatt at den loggen lå inne på inventory, ikke at det er to separate lister"
 * Litt "meh" om loggen på dashboard? "Det er viktig at den er der, men det er ikke det vi har fokus på på daglig drift liksom"
@@ -198,7 +198,5 @@ Manuell act:
 	* Samme med årlig checkup
 * Vil ha mulighet for å legge til maintenance varsel for dunker som ikke er riktig organisert på innsiden, slik at de ***må*** fikses før de sendes(linkes) til kunde
 	* Spesifikt 500-literne
-
-
 
 Få tak i Ashley? Hun har visstnok mest kunnskap
