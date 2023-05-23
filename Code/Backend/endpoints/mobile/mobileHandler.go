@@ -1,13 +1,11 @@
 package mobile
 
 import (
-	paths "backend/constants"
 	"backend/cryptography"
 	"backend/globals"
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strings"
 )
 
 /**
@@ -15,16 +13,6 @@ import (
  */
 func HandlerMobileVerification(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("content-type", "application/json")
-
-	// Get escaped path without base URL and remove the first character if it's a "/"
-	escapedPath := r.URL.EscapedPath()[len(paths.MOBILE_VERIFICATION_PATH):]
-
-	if len(escapedPath) > 0 && escapedPath[0] == '/' {
-		escapedPath = escapedPath[1:]
-	}
-
-	args := strings.Split(escapedPath, "/")
-	//urlData := r.URL.Query()
 
 	// Switch based on method
 	switch r.Method {
@@ -75,33 +63,30 @@ func HandlerMobileVerification(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		// If no data was given, return an error
 		if len(data) <= 0 {
 			http.Error(w, "No data in body", http.StatusUnprocessableEntity)
 			return
 		}
 
-		// If we're just checking if the number is already verified...
-		if len(args) > 0 && args[0] == "check" {
-			if cryptography.VerifyUniqueNumber(globals.DB, string(uniqueNumberBytes)) {
-				// Writeback an OK message
-				w.Header().Set("Content-Type", "application/json")
-				err = json.NewEncoder(w).Encode("Key recognized")
-				if err != nil {
-					http.Error(w, "Error encoding OK message.", http.StatusInternalServerError)
-				}
-			} else {
-				http.Error(w, "Invalid unique number.", http.StatusUnprocessableEntity)
-			}
-			return
-
-		} else {
-			// Request verification
-			err := cryptography.RequestVerification(globals.DB, string(uniqueNumberBytes))
+		// Check if the number has already been verified
+		if cryptography.VerifyUniqueNumber(globals.DB, string(uniqueNumberBytes)) {
+			// Writeback an OK message
+			w.Header().Set("Content-Type", "application/json")
+			err = json.NewEncoder(w).Encode("Key recognized")
 			if err != nil {
-				http.Error(w, "Error requesting access", http.StatusInternalServerError)
+				http.Error(w, "Error encoding OK message.", http.StatusInternalServerError)
 			}
 			return
 		}
+
+		// If it has not, request verification
+		if cryptography.RequestVerification(globals.DB, string(uniqueNumberBytes)) != nil {
+			http.Error(w, "Error requesting access", http.StatusInternalServerError)
+			return
+		}
+		http.Error(w, "Access requested.", http.StatusUnprocessableEntity)
+		return
 
 	// Other methods
 	default:

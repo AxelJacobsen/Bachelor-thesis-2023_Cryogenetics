@@ -76,7 +76,13 @@ class LoginFragment : Fragment() {
         afterVerify.visibility = View.GONE
         bLoginVerify.setOnClickListener {
             GlobalScope.launch(Unconfined) {
-                tvLoginUniqueNumber.text = Functions.fetchUniqueNumber(requireContext())
+                // Fetch unique number and display it
+                val uniqueNumber = Functions.fetchUniqueNumber(requireContext())
+                requireActivity().runOnUiThread {
+                    tvLoginUniqueNumber.text = uniqueNumber
+                }
+
+                // Verify device
                 val key = verifyDevice()
                 runBlocking {
                     if (key != null) {
@@ -186,19 +192,6 @@ class LoginFragment : Fragment() {
      *  @return The verification key.
      */
     private suspend fun verifyDevice() : String? {
-        // Check if a key is already stored
-        val preferenceKey = stringPreferencesKey("key_verified")
-        val flow: Flow<String> = requireContext().dataStore.data
-            .map {
-                it[preferenceKey] ?: ""
-            }
-        var key: String? = runBlocking (Dispatchers.IO) {
-            val keyFetched = flow.first()
-            if (keyFetched == "")
-                return@runBlocking null
-            return@runBlocking keyFetched
-        }
-
         // Fetch DB public key
         val publicKeyDB = Functions.fetchDBPublicKey()
         if (publicKeyDB == null) {
@@ -211,24 +204,8 @@ class LoginFragment : Fragment() {
         val n = (mKeyPair.public as RSAPublicKey).modulus
         val e = (mKeyPair.public as RSAPublicKey).publicExponent
 
-        // If key was found earlier, check it
-        if (key != null) {
-            val uniqueEncryptedBytes = Functions.encrypt(key.toByteArray(), publicKeyDB.encoded)
-            val uniqueEncryptedStr = Functions.encodeBase64(uniqueEncryptedBytes)
-
-            val dataSend = listOf(mapOf(
-                "public_key_E"  to e.toString(),
-                "public_key_N"  to n.toString(),
-                "unique_number" to uniqueEncryptedStr
-            ))
-
-            val response = Api.makeBackendRequestWithResponse("user/verification/check", dataSend, "POST")
-            if (response.first == 200)
-                return key
-        }
-
-        // Otherwise, request one
-        key = Functions.fetchUniqueNumber(requireContext())
+        // Fetch our unique number and verify it
+        val key = Functions.fetchUniqueNumber(requireContext())
         val uniqueEncryptedBytes = Functions.encrypt(key.toByteArray(), publicKeyDB.encoded)
         val uniqueEncryptedStr = Functions.encodeBase64(uniqueEncryptedBytes)
 
@@ -244,8 +221,10 @@ class LoginFragment : Fragment() {
             return null
         }
 
+        return key
+
         // Decrypt the response
-        val responseBytes = Functions.decodeBase64(response.second)
+        /*val responseBytes = Functions.decodeBase64(response.second)
         val responseBytesDecrypted = Functions.decrypt(requireContext(), responseBytes, mKeyPair.private) ?: return null
         val responseStr = String(responseBytesDecrypted)
 
@@ -253,6 +232,6 @@ class LoginFragment : Fragment() {
         requireContext().dataStore.edit {
             it[preferenceKey] = responseStr
         }
-        return responseStr
+        return responseStr*/
     }
 }
