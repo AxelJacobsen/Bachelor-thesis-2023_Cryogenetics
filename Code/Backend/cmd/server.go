@@ -1,9 +1,17 @@
 package main
 
 import (
-	"fmt"
+	"backend/constants"
+	"backend/endpoints/mobile"
+	"backend/endpoints/shared"
+	"backend/endpoints/web"
+	"backend/globals"
+	"context"
+	"database/sql"
+	"log"
 	"net/http"
 	"os"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -12,28 +20,10 @@ import (
 /// USING https://github.com/go-sql-driver/mysql ///
 ////////////////////////////////////////////////////
 
-func main() {
-	// Get port
-	port := os.Getenv("HTTP_PLATFORM_PORT")
-	if port == "" {
-		port = "8080"
-	}
-
-	http.HandleFunc("/", HelloServer)
-	http.ListenAndServe(":"+port, nil)
-}
-
-/**
- *	A simple handler
- */
-func HelloServer(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Current endpoint!, %s!", r.URL.Path[1:])
-}
-
 /**
  *	The main function.
  * 	Starts the server.
- *
+ */
 func main() {
 	// Connect to database
 	db, err := sql.Open("mysql", "root@tcp(127.0.0.1:3306)/cryogenetics_database")
@@ -64,6 +54,10 @@ func main() {
 	}
 
 	// Listen
-	log.Println("Listening on port " + constants.PORT)
-	log.Fatal(http.ListenAndServe(":"+constants.PORT, nil))
-}*/
+	port := os.Getenv("HTTP_PLATFORM_PORT")
+	if port == "" {
+		port = constants.PORT
+	}
+	log.Println("Listening on port " + port)
+	log.Fatal(http.ListenAndServe(":"+port, nil))
+}
