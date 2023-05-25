@@ -23,7 +23,7 @@ jobs:
 
     - name: Build
       run: |
-        cd Code/Backend/cmd
+        cd cmd
         go build -o ../build/go-app.exe -v
       
     - name: Deploy to Azure
