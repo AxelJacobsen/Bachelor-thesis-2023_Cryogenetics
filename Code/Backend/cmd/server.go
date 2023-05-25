@@ -24,7 +24,7 @@ func main() {
 }
 
 /**
- *	A simple handler.
+ *	A simple handler
  */
 func HelloServer(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Current endpoint!, %s!", r.URL.Path[1:])
