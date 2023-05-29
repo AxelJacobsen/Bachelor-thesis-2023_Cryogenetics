@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
+import android.util.Base64
 import android.util.Log
 import android.widget.Toast
 import androidx.datastore.preferences.core.edit
@@ -21,17 +22,12 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import java.lang.reflect.Modifier
 import java.math.BigInteger
-import java.security.KeyFactory
-import java.security.KeyPair
-import java.security.KeyPairGenerator
-import java.security.PrivateKey
-import java.security.PublicKey
+import java.security.*
 import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.RSAPublicKeySpec
 import java.security.spec.X509EncodedKeySpec
 import java.util.*
 import javax.crypto.Cipher
-import android.util.Base64
 
 class Functions {
     companion object {
@@ -454,6 +450,23 @@ class Functions {
             }
 
             return uniqueNumber
+        }
+
+
+        /**
+         *  Sorts data list by given value
+         *
+         *  @param key - The given Map field to sort by
+         *  @param inData - The data to be sorted
+         *
+         *  @return The sorted data list
+         */
+        fun sortDataByValue(key: String, inData: List<Map<String, Any>>, isSorted: Boolean): List<Map<String, Any>> {
+            return if (isSorted) {
+                inData.sortedByDescending { it[key]?.toString()}
+            } else {
+                inData.sortedBy { it[key]?.toString()}
+            }
         }
     }
 }

@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,9 +11,10 @@ import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
 import cryogenetics.logistics.api.ApiUrl
 import cryogenetics.logistics.databinding.FragmentInventoryBinding
-import cryogenetics.logistics.ui.filters.FilterManager
+import cryogenetics.logistics.functions.Functions
 import cryogenetics.logistics.functions.Functions.Companion.enforceNumberFormat
 import cryogenetics.logistics.functions.JsonAdapter
+import cryogenetics.logistics.ui.filters.FilterManager
 
 class InventoryFragment : Fragment() {
     private lateinit var mInventoryFilterFragment: InventoryFilterFragment
@@ -41,6 +40,16 @@ class InventoryFragment : Fragment() {
         binding.InventoryRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.InventoryRecycler.setHasFixedSize(true)
         fetchInventoryData()
+
+        binding.tvInventoryNr.setOnClickListener {
+            var copyTest = mAdapter.itemList as List<Map<String, Any>>
+            copyTest = Functions.sortDataByValue(binding.tvInventoryNr.tag as String, copyTest, false)
+            val isSorted = mAdapter.itemList as List<Map<String, Any>> == copyTest
+            if (isSorted) {
+                copyTest = Functions.sortDataByValue(binding.tvInventoryNr.tag as String, copyTest, isSorted)
+            }
+            mAdapter.updateData(copyTest)
+        }
 
         // Attach listener to filter button
         binding.bFilter.setOnClickListener {
@@ -111,6 +120,9 @@ class InventoryFragment : Fragment() {
         } else {
             mAdapter.updateData(itemList)
         }
+
+
+
     }
 
     /**
@@ -154,8 +166,6 @@ class InventoryFragment : Fragment() {
                     fetchInventoryData(filterManager.getUrl(ApiUrl.urlContainer)) // Normal fetch data with filter.
                 else
                     fetchInventoryData(invData) // Restore the last state of the table.
-
-
             }
         }
     }

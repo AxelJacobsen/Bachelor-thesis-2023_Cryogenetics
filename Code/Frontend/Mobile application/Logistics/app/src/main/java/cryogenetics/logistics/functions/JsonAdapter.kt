@@ -12,7 +12,7 @@ import cryogenetics.logistics.R
 import cryogenetics.logistics.ui.tank.OnItemClickListener
 
 class JsonAdapter(
-    private var itemList: MutableList<Map<String, Any>>,
+    var itemList: MutableList<Map<String, Any>>,
     private val viewIds: List<Int>,
     private val recyclerItem: Int,
     private val listener: OnItemClickListener? = null,
