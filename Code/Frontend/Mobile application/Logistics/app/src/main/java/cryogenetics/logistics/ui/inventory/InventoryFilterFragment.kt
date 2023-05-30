@@ -22,7 +22,6 @@ class InventoryFilterFragment(
     // Views and components
     private lateinit var bFilterReset: Button
     private lateinit var bFilterApply: Button
-
     private lateinit var rvFilterSize: RecyclerView
     private lateinit var rvFilterStatus: RecyclerView
     private lateinit var rvFilterClient: RecyclerView

@@ -102,6 +102,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/ivInventoryNr"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:padding="2dip"
+            android:src="@drawable/sort_angle"
+            android:tag="@string/id"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/tvInventoryNr"
+            app:layout_constraintEnd_toStartOf="@+id/tvInventoryLocation"
+            app:layout_constraintTop_toTopOf="@+id/tvInventoryNr" />
+
         <TextView
             android:id="@+id/tvInventoryLocation"
             android:tag="@string/adr"
@@ -123,6 +135,17 @@
             app:layout_constraintStart_toEndOf="@+id/tvInventoryNr"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/ivInventoryLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:padding="2dip"
+            android:src="@drawable/sort_angle"
+            android:tag="@string/adr"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/tvInventoryLocation"
+            app:layout_constraintEnd_toStartOf="@+id/tvInventoryClient"
+            app:layout_constraintTop_toTopOf="@+id/tvInventoryLocation" />
 
         <TextView
             android:id="@+id/tvInventoryClient"
@@ -145,6 +168,18 @@
             app:layout_constraintStart_toEndOf="@+id/tvInventoryLocation"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/ivInventoryClient"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:padding="2dip"
+            android:src="@drawable/sort_angle"
+            android:tag="@string/cli"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/tvInventoryClient"
+            app:layout_constraintEnd_toStartOf="@+id/tvInventoryLastFill"
+            app:layout_constraintTop_toTopOf="@+id/tvInventoryClient" />
+
         <TextView
             android:id="@+id/tvInventoryLastFill"
             android:tag="@string/lFi"
@@ -165,6 +200,18 @@
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toEndOf="@+id/tvInventoryClient"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivInventoryLastFill"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:padding="2dip"
+            android:src="@drawable/sort_angle"
+            android:tag="@string/lFi"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/tvInventoryLastFill"
+            app:layout_constraintEnd_toStartOf="@+id/tvInventoryStatus"
+            app:layout_constraintTop_toTopOf="@+id/tvInventoryLastFill" />
 
         <TextView
             android:id="@+id/tvInventoryStatus"
@@ -187,6 +234,18 @@
             app:layout_constraintStart_toEndOf="@+id/tvInventoryLastFill"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/ivInventoryStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:padding="2dip"
+            android:src="@drawable/sort_angle"
+            android:tag="@string/sta"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/tvInventoryStatus"
+            app:layout_constraintEnd_toStartOf="@+id/tvInventorySerialNr"
+            app:layout_constraintTop_toTopOf="@+id/tvInventoryStatus" />
+
         <TextView
             android:id="@+id/tvInventorySerialNr"
             android:tag="@string/serial"
@@ -207,6 +266,18 @@
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toEndOf="@+id/tvInventoryStatus"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivInventorySerialNr"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:padding="2dip"
+            android:src="@drawable/sort_angle"
+            android:tag="@string/serial"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/tvInventorySerialNr"
+            app:layout_constraintEnd_toStartOf="@+id/tvInventoryInvoice"
+            app:layout_constraintTop_toTopOf="@+id/tvInventorySerialNr" />
 
         <TextView
             android:id="@+id/tvInventoryInvoice"
@@ -229,6 +300,18 @@
             app:layout_constraintStart_toEndOf="@+id/tvInventorySerialNr"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/ivInventoryInvoice"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:padding="2dip"
+            android:src="@drawable/sort_angle"
+            android:tag="@string/ivo"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/tvInventoryInvoice"
+            app:layout_constraintEnd_toStartOf="@+id/tvInventoryNoti"
+            app:layout_constraintTop_toTopOf="@+id/tvInventoryInvoice" />
+
         <TextView
             android:id="@+id/tvInventoryNoti"
             android:tag="@string/maint"
@@ -248,6 +331,19 @@
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toEndOf="@+id/tvInventoryInvoice"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivInventoryNoti"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:padding="2dip"
+            android:src="@drawable/sort_angle"
+            android:tag="@string/maint"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/tvInventoryNoti"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvInventoryNoti" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView

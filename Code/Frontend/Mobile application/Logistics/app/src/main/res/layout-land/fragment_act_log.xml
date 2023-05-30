@@ -96,6 +96,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/ivActLogRNr"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:padding="2dip"
+            android:src="@drawable/sort_angle"
+            android:tag="@string/id"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/tvActLogRNr"
+            app:layout_constraintEnd_toStartOf="@+id/tvActLogRTime"
+            app:layout_constraintTop_toTopOf="@+id/tvActLogRNr" />
+
         <TextView
             android:id="@+id/tvActLogRTime"
             android:layout_width="0dp"
@@ -115,6 +127,18 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/tvActLogRNr"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivActLogRTime"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:padding="2dip"
+            android:src="@drawable/sort_angle"
+            android:tag="@string/date"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/tvActLogRTime"
+            app:layout_constraintEnd_toStartOf="@+id/tvActLogRClient"
+            app:layout_constraintTop_toTopOf="@+id/tvActLogRTime" />
 
         <TextView
             android:id="@+id/tvActLogRClient"
@@ -136,6 +160,18 @@
             app:layout_constraintStart_toEndOf="@+id/tvActLogRTime"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/ivActLogRClient"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:padding="2dip"
+            android:src="@drawable/sort_angle"
+            android:tag="@string/client"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/tvActLogRClient"
+            app:layout_constraintEnd_toStartOf="@+id/tvActLogRLocation"
+            app:layout_constraintTop_toTopOf="@+id/tvActLogRClient" />
+
         <TextView
             android:id="@+id/tvActLogRLocation"
             android:layout_width="0dp"
@@ -156,6 +192,18 @@
             app:layout_constraintStart_toEndOf="@+id/tvActLogRClient"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/ivActLogRLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:padding="2dip"
+            android:src="@drawable/sort_angle"
+            android:tag="@string/adr"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/tvActLogRLocation"
+            app:layout_constraintEnd_toStartOf="@+id/tvActLogRAct"
+            app:layout_constraintTop_toTopOf="@+id/tvActLogRLocation" />
+
         <TextView
             android:id="@+id/tvActLogRAct"
             android:layout_width="0dp"
@@ -167,7 +215,7 @@
             android:maxLines="1"
             android:padding="3dip"
             android:tag="@string/act"
-            android:text="@string/act"
+            android:text="@string/actCap"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -175,6 +223,18 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/tvActLogRLocation"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivActLogRAct"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:padding="2dip"
+            android:src="@drawable/sort_angle"
+            android:tag="@string/act"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/tvActLogRAct"
+            app:layout_constraintEnd_toStartOf="@+id/tvActLogRComment"
+            app:layout_constraintTop_toTopOf="@+id/tvActLogRAct" />
 
         <TextView
             android:id="@+id/tvActLogRComment"
@@ -196,6 +256,18 @@
             app:layout_constraintStart_toEndOf="@+id/tvActLogRAct"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/ivActLogRComment"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:padding="2dip"
+            android:src="@drawable/sort_angle"
+            android:tag="@string/cmt"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/tvActLogRComment"
+            app:layout_constraintEnd_toStartOf="@+id/tvActLogRSign"
+            app:layout_constraintTop_toTopOf="@+id/tvActLogRComment" />
+
         <TextView
             android:id="@+id/tvActLogRSign"
             android:layout_width="0dp"
@@ -216,6 +288,18 @@
             app:layout_constraintStart_toEndOf="@+id/tvActLogRComment"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/ivActLogRSign"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:padding="2dip"
+            android:src="@drawable/sort_angle"
+            android:tag="@string/alias"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/tvActLogRSign"
+            app:layout_constraintEnd_toStartOf="@+id/tvActLogRStatus"
+            app:layout_constraintTop_toTopOf="@+id/tvActLogRSign" />
+
         <TextView
             android:id="@+id/tvActLogRStatus"
             android:layout_width="0dp"
@@ -234,6 +318,18 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/tvActLogRSign"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivActLogRStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:padding="2dip"
+            android:src="@drawable/sort_angle"
+            android:tag="@string/sta"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/tvActLogRStatus"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvActLogRStatus" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

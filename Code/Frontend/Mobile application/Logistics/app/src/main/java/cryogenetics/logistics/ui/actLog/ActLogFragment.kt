@@ -2,8 +2,6 @@ package cryogenetics.logistics.ui.actLog
 
 import android.os.Bundle
 import android.view.*
-import android.widget.AdapterView
-import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,15 +10,26 @@ import cryogenetics.logistics.api.Api
 import cryogenetics.logistics.api.ApiUrl
 import cryogenetics.logistics.databinding.FragmentActLogBinding
 import cryogenetics.logistics.functions.Functions
+import cryogenetics.logistics.functions.Functions.Companion.sortChange
 import cryogenetics.logistics.functions.JsonAdapter
 import cryogenetics.logistics.ui.filters.FilterManager
-import cryogenetics.logistics.ui.inventory.InventoryFilterFragment
 
 class ActLogFragment(
     private val serialNr: String = "null"
 ) : Fragment() {
     private lateinit var mAdapter: JsonAdapter
     private lateinit var mActLogFilterFragment: ActLogFilterFragment
+
+    private val sortIVs = listOf(
+        R.id.ivActLogRNr,
+        R.id.ivActLogRTime,
+        R.id.ivActLogRClient,
+        R.id.ivActLogRLocation,
+        R.id.ivActLogRAct,
+        R.id.ivActLogRComment,
+        R.id.ivActLogRSign,
+        R.id.ivActLogRStatus
+    )
 
     private var _binding : FragmentActLogBinding? = null
     private val binding get() = _binding!!
@@ -38,6 +47,31 @@ class ActLogFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.tvActLogRNr.setOnClickListener {
+            sortChange(binding.tvActLogRNr, mAdapter, requireContext(), view, sortIVs)
+        }
+        binding.tvActLogRTime.setOnClickListener {
+            sortChange(binding.tvActLogRTime, mAdapter, requireContext(), view, sortIVs)
+        }
+        binding.tvActLogRClient.setOnClickListener {
+            sortChange(binding.tvActLogRClient, mAdapter, requireContext(), view, sortIVs)
+        }
+        binding.tvActLogRLocation.setOnClickListener {
+            sortChange(binding.tvActLogRLocation, mAdapter, requireContext(), view, sortIVs)
+        }
+        binding.tvActLogRAct.setOnClickListener {
+            sortChange(binding.tvActLogRAct, mAdapter, requireContext(), view, sortIVs)
+        }
+        binding.tvActLogRComment.setOnClickListener {
+            sortChange(binding.tvActLogRComment, mAdapter, requireContext(), view, sortIVs)
+        }
+        binding.tvActLogRSign.setOnClickListener {
+            sortChange(binding.tvActLogRSign, mAdapter, requireContext(), view, sortIVs)
+        }
+        binding.tvActLogRStatus.setOnClickListener {
+            sortChange(binding.tvActLogRStatus, mAdapter, requireContext(), view, sortIVs)
+        }
 
         // initialize the recyclerView
         binding.recyclerViewActLog.layoutManager = LinearLayoutManager(requireContext())

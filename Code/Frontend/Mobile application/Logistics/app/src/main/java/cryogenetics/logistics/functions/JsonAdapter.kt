@@ -47,7 +47,7 @@ class JsonAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = itemList[position]
+        val item = itemList[position].toMutableMap()
 
         // ItemList sends map of position when clicked.
         if (listener != null)
@@ -72,6 +72,7 @@ class JsonAdapter(
                 if (text == "" || text == "null") {
                     textView.text =
                         itemList[position].entries.find { it.key == "location_name" }?.value.toString()
+                    item[tTag] = textView.text
                 }
             }
         }

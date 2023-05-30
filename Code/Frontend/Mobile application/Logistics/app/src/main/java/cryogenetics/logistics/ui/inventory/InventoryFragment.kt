@@ -11,14 +11,25 @@ import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
 import cryogenetics.logistics.api.ApiUrl
 import cryogenetics.logistics.databinding.FragmentInventoryBinding
-import cryogenetics.logistics.functions.Functions
 import cryogenetics.logistics.functions.Functions.Companion.enforceNumberFormat
+import cryogenetics.logistics.functions.Functions.Companion.sortChange
 import cryogenetics.logistics.functions.JsonAdapter
 import cryogenetics.logistics.ui.filters.FilterManager
 
 class InventoryFragment : Fragment() {
     private lateinit var mInventoryFilterFragment: InventoryFilterFragment
     private lateinit var mAdapter: JsonAdapter
+
+    private val sortIVs = listOf(
+        R.id.ivInventoryNr,
+        R.id.ivInventoryClient,
+        R.id.ivInventoryLocation,
+        R.id.ivInventoryInvoice,
+        R.id.ivInventoryLastFill,
+        R.id.ivInventorySerialNr,
+        R.id.ivInventoryNoti,
+        R.id.ivInventoryStatus
+    )
 
     private var _binding: FragmentInventoryBinding? = null
     private val binding get() = _binding!!
@@ -42,13 +53,28 @@ class InventoryFragment : Fragment() {
         fetchInventoryData()
 
         binding.tvInventoryNr.setOnClickListener {
-            var copyTest = mAdapter.itemList as List<Map<String, Any>>
-            copyTest = Functions.sortDataByValue(binding.tvInventoryNr.tag as String, copyTest, false)
-            val isSorted = mAdapter.itemList as List<Map<String, Any>> == copyTest
-            if (isSorted) {
-                copyTest = Functions.sortDataByValue(binding.tvInventoryNr.tag as String, copyTest, isSorted)
-            }
-            mAdapter.updateData(copyTest)
+            sortChange(binding.tvInventoryNr, mAdapter, requireContext(), view, sortIVs)
+        }
+        binding.tvInventoryLocation.setOnClickListener {
+            sortChange(binding.tvInventoryLocation, mAdapter, requireContext(), view, sortIVs)
+        }
+        binding.tvInventoryClient.setOnClickListener {
+            sortChange(binding.tvInventoryClient, mAdapter, requireContext(), view, sortIVs)
+        }
+        binding.tvInventoryLastFill.setOnClickListener {
+            sortChange(binding.tvInventoryLastFill, mAdapter, requireContext(), view, sortIVs)
+        }
+        binding.tvInventoryStatus.setOnClickListener {
+            sortChange(binding.tvInventoryStatus, mAdapter, requireContext(), view, sortIVs)
+        }
+        binding.tvInventorySerialNr.setOnClickListener {
+            sortChange(binding.tvInventorySerialNr, mAdapter, requireContext(), view, sortIVs)
+        }
+        binding.tvInventoryInvoice.setOnClickListener {
+            sortChange(binding.tvInventoryInvoice, mAdapter, requireContext(), view, sortIVs)
+        }
+        binding.tvInventoryNoti.setOnClickListener {
+            sortChange(binding.tvInventoryNoti, mAdapter, requireContext(), view, sortIVs)
         }
 
         // Attach listener to filter button
@@ -93,14 +119,28 @@ class InventoryFragment : Fragment() {
      */
     private fun fetchInventoryData(forceUrl: String = "") {
         // Fetch and parse data
-        val url = if (forceUrl=="") ApiUrl.urlContainer else forceUrl
+        val url = if (forceUrl == "") ApiUrl.urlContainer else forceUrl
         val urlDataString = Api.fetchJsonData(url)
         val parsedData = Api.parseJsonArray(urlDataString)
 
         // Create a list out of it
         val itemList = mutableListOf<Map<String, Any>>()
-        for (model in parsedData)
-            itemList.add( if (model.isNotEmpty()) enforceNumberFormat(model) else model )
+        for (model in parsedData) {
+            val adr = model.entries.find { it.key == "address" }?.value.toString()
+            if (adr == "" || adr == "null") {
+
+                val newMod: MutableMap<String, Any> = mutableMapOf()
+                for (entry in model.entries) {
+                    if (entry.key == "address")
+                        newMod[entry.key] =
+                            model.entries.find { it.key == "location_name" }?.value.toString()
+                    else
+                        newMod[entry.key] = entry.value
+                }
+                itemList.add(if (newMod.isNotEmpty()) enforceNumberFormat(newMod) else newMod)
+            } else
+                itemList.add(if (model.isNotEmpty()) enforceNumberFormat(model) else model)
+        }
 
         // If the adapter doesn't exist, create it
         if (binding.InventoryRecycler.adapter == null) {
@@ -120,9 +160,6 @@ class InventoryFragment : Fragment() {
         } else {
             mAdapter.updateData(itemList)
         }
-
-
-
     }
 
     /**
