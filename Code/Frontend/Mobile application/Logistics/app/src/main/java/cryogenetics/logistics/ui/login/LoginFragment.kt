@@ -72,8 +72,8 @@ class LoginFragment : Fragment() {
         bLoginVerify = view.findViewById(R.id.bLoginVerify)
 
         // Check if the device is verified
-        verifyPopup.visibility = View.VISIBLE
-        afterVerify.visibility = View.GONE
+        //verifyPopup.visibility = View.VISIBLE
+        //afterVerify.visibility = View.GONE
         bLoginVerify.setOnClickListener {
             GlobalScope.launch(Unconfined) {
                 tvLoginUniqueNumber.text = Functions.fetchUniqueNumber(requireContext())
