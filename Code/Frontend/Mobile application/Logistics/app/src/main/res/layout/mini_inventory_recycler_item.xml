@@ -21,7 +21,8 @@
             android:id="@+id/tvInventoryNr"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="2dip"
+            android:layout_marginTop="2dip"
+            android:layout_marginEnd="2dip"
             android:background="@color/white"
             android:gravity="start"
             android:maxLines="1"
@@ -41,7 +42,8 @@
             android:id="@+id/tvInventoryClient"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="2dip"
+            android:layout_marginTop="2dip"
+            android:layout_marginEnd="2dip"
             android:background="@color/white"
             android:gravity="start"
             android:maxLines="1"
@@ -51,48 +53,88 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tvInventoryLastFill"
+            app:layout_constraintEnd_toStartOf="@+id/clInventoryLastFill"
             app:layout_constraintHorizontal_weight="0.5"
             app:layout_constraintStart_toEndOf="@+id/tvInventoryNr"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tvInventoryLastFill"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clInventoryLastFill"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dip"
+            android:layout_height="0dp"
+            android:layout_marginTop="2dip"
+            android:layout_marginEnd="2dip"
             android:background="@color/white"
             android:gravity="start"
-            android:maxLines="1"
-            android:padding="3dip"
             android:tag="@string/lFi"
             android:text="@string/last_filled"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tvInventoryNoti"
+            app:layout_constraintEnd_toStartOf="@+id/clInventoryNoti"
             app:layout_constraintHorizontal_weight="0.5"
             app:layout_constraintStart_toEndOf="@+id/tvInventoryClient"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/tvInventoryNoti"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dip"
+            <TextView
+                android:id="@+id/tvInventoryLastFill"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:gravity="start"
+                android:maxLines="1"
+                android:padding="3dip"
+                android:tag="@string/lFi"
+                android:text="@string/last_filled"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ivInventoryLastFill"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivInventoryLastFill"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@drawable/battery100"
+                android:layout_margin="2dip"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvInventoryLastFill"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clInventoryNoti"
+            android:layout_width="35dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="2dip"
             android:background="@color/white"
             android:gravity="start"
-            android:maxLines="1"
-            android:padding="3dip"
             android:tag="@string/maint"
             android:text="@string/notifcations"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_weight="0.5"
-            app:layout_constraintStart_toEndOf="@+id/tvInventoryLastFill"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/clInventoryLastFill"
+            app:layout_constraintTop_toTopOf="parent" >
+
+            <ImageView
+                android:id="@+id/ivNotific"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone"
+                android:src="@drawable/maintenance_warn"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 

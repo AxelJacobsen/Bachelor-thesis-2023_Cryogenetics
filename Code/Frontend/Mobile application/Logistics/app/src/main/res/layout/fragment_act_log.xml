@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/actLogFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/actLogFragment"
     android:layout_margin="7dip"
     tools:context=".ui.actLog.ActLogFragment"
     tools:ignore="MissingDefaultResource">
@@ -42,7 +41,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <View
             android:id="@+id/view2"
@@ -52,20 +51,19 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.35"/>
+            app:layout_constraintWidth_percent="0.35" />
 
         <SearchView
             android:id="@+id/searchView2"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_margin="5dp"
             android:background="@color/white"
             android:queryHint="Search"
-            android:layout_margin="5dp"
             app:layout_constraintBottom_toBottomOf="@+id/view2"
             app:layout_constraintEnd_toEndOf="@+id/view2"
             app:layout_constraintStart_toStartOf="@+id/view2"
-            app:layout_constraintTop_toTopOf="@+id/view2">
-        </SearchView>
+            app:layout_constraintTop_toTopOf="@+id/view2"></SearchView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -82,7 +80,8 @@
             android:id="@+id/tvActLogRNr"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="2dip"
+            android:layout_marginEnd="2dip"
+            android:layout_marginBottom="1dip"
             android:background="@color/white"
             android:gravity="start"
             android:maxLines="1"
@@ -101,7 +100,8 @@
             android:id="@+id/tvActLogRTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="2dip"
+            android:layout_marginEnd="2dip"
+            android:layout_marginBottom="1dip"
             android:background="@color/white"
             android:gravity="start"
             android:maxLines="1"
@@ -120,7 +120,8 @@
             android:id="@+id/tvActLogRClient"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="2dip"
+            android:layout_marginEnd="2dip"
+            android:layout_marginBottom="1dip"
             android:background="@color/white"
             android:gravity="start"
             android:maxLines="1"
@@ -139,7 +140,8 @@
             android:id="@+id/tvActLogRLocation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="2dip"
+            android:layout_marginEnd="2dip"
+            android:layout_marginBottom="1dip"
             android:background="@color/white"
             android:gravity="start"
             android:maxLines="1"
@@ -158,7 +160,8 @@
             android:id="@+id/tvActLogRAct"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="2dip"
+            android:layout_marginEnd="2dip"
+            android:layout_marginBottom="1dip"
             android:background="@color/white"
             android:gravity="start"
             android:maxLines="1"
@@ -177,7 +180,8 @@
             android:id="@+id/tvActLogRComment"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="2dip"
+            android:layout_marginEnd="2dip"
+            android:layout_marginBottom="1dip"
             android:background="@color/white"
             android:gravity="start"
             android:maxLines="1"
@@ -196,7 +200,8 @@
             android:id="@+id/tvActLogRSign"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="2dip"
+            android:layout_marginEnd="2dip"
+            android:layout_marginBottom="1dip"
             android:background="@color/white"
             android:gravity="start"
             android:maxLines="1"
@@ -215,7 +220,7 @@
             android:id="@+id/tvActLogRStatus"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="2dip"
+            android:layout_marginBottom="1dip"
             android:background="@color/white"
             android:gravity="start"
             android:maxLines="1"
