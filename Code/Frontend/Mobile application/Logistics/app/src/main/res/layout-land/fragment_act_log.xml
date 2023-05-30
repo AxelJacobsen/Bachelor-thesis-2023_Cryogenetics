@@ -166,7 +166,7 @@
             android:layout_height="0dp"
             android:padding="2dip"
             android:src="@drawable/sort_angle"
-            android:tag="@string/client"
+            android:tag="@string/cli"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/tvActLogRClient"
             app:layout_constraintEnd_toStartOf="@+id/tvActLogRLocation"
