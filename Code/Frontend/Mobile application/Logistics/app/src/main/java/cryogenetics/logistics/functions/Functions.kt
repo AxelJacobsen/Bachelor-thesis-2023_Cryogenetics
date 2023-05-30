@@ -93,7 +93,7 @@ class Functions {
                 for (model in fetchedData) {
                     for (value in model.values) {
                         if (value.toString().contains(searchValue)) {
-                            searchResults.add(model)
+                            searchResults.add( if (model.isNotEmpty()) Functions.enforceNumberFormat(model) else model )
                             break
                         }
                     }
