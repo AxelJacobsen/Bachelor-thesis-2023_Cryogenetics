@@ -34,7 +34,7 @@ export default function AddStatusModal({ open, setOpen, onClose }) {
         container_status_name: name
       }]; 
       console.log(data);
-      await fetchData("/api/container_status", 'POST', data);
+      await fetchData("https://cryogenetics-logistics-solution.azurewebsites.net/api/container_status", 'POST', data);
       handleCloseModal();
     } catch (error) {
       alert(`Error: ${error.message}`);

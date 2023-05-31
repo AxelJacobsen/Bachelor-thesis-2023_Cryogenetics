@@ -138,7 +138,7 @@ export default function Containers() {
 
   async function fetchRowData() {
     try {
-      const response = await fetchData('/api/container', 'GET');
+      const response = await fetchData('https://cryogenetics-logistics-solution.azurewebsites.net/api/container', 'GET');
       setRows(response);
     } catch (error) {
       console.error(error);

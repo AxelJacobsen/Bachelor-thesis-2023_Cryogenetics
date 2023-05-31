@@ -24,7 +24,7 @@ export default function AddLocationModal({ open, setOpen, onClose}) {
 
   async function fetchRowData() {
     try {
-      const response = await fetchData('/api/location', 'GET');
+      const response = await fetchData('https://cryogenetics-logistics-solution.azurewebsites.net/api/location', 'GET');
       setRows(response);
     } catch (error) {
       console.error(error);
@@ -52,7 +52,7 @@ export default function AddLocationModal({ open, setOpen, onClose}) {
         location_id: highestLocationId+1,
         location_name: name,
       }];      
-      await fetchData("/api/location", 'POST', data);
+      await fetchData("https://cryogenetics-logistics-solution.azurewebsites.net/api/location", 'POST', data);
       handleCloseModal()
     } catch (error) {
       alert(`Error: ${error.message}`);

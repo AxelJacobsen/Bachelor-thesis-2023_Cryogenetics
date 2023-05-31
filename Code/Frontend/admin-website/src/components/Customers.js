@@ -119,7 +119,7 @@ export default function Customers() {
 
   async function fetchRowData() {
     try {
-      const response = await fetchData('/api/client', 'GET');
+      const response = await fetchData('https://cryogenetics-logistics-solution.azurewebsites.net/api/client', 'GET');
       setRows(response);
     } catch (error) {
       console.error(error);

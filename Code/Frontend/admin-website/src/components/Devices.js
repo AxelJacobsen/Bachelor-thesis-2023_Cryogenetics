@@ -37,7 +37,7 @@ export default function Devices() {
   React.useEffect(() => {
     async function fetchRowData() {
       try {
-        const response = await fetchData('/api/user/admin/verification', 'GET');
+        const response = await fetchData('https://cryogenetics-logistics-solution.azurewebsites.net/api/user/admin/verification', 'GET');
         if (response == null){
           console.log('No data available.'); // Log error message instead of returning JSX
         }
@@ -53,10 +53,10 @@ export default function Devices() {
 
   const handleConfirm = async () => {
     try {
-    const response = await fetchData('/api/user/admin/verification', 'POST', checkedKeys.map(key => ({ keyvalue: key })));
+    const response = await fetchData('https://cryogenetics-logistics-solution.azurewebsites.net/api/user/admin/verification', 'POST', checkedKeys.map(key => ({ keyvalue: key })));
       console.log(response);
       // Call another GET after successful POST
-      const newResponse = await fetchData('/api/user/admin/verification', 'GET');
+      const newResponse = await fetchData('https://cryogenetics-logistics-solution.azurewebsites.net/api/user/admin/verification', 'GET');
       setRows(newResponse);
       setChecked([])
       setCheckedKeys([])

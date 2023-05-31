@@ -118,7 +118,7 @@ export default function Locations() {
 
   async function fetchRowData() {
     try {
-      const response = await fetchData('/api/location', 'GET');
+      const response = await fetchData('https://cryogenetics-logistics-solution.azurewebsites.net/api/location', 'GET');
       setRows(response);
     } catch (error) {
       console.error(error);

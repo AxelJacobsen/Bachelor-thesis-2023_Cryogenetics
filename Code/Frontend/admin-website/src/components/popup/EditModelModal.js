@@ -42,7 +42,7 @@ export default function EditModelModal(props) {
         refill_interval: refill,
         liter_capacity: liter
       }];      
-      await fetchData("/api/container_model", 'PUT', data);
+      await fetchData("https://cryogenetics-logistics-solution.azurewebsites.net/api/container_model", 'PUT', data);
       handleCloseModal()
     } catch (error) {
       alert(`Error: ${error.message}`);

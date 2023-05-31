@@ -41,7 +41,7 @@ export default function EditActModal(props) {
         description: actDescription || null,
         is_active: active
       }];      
-      await fetchData("/api/act", 'PUT', data);
+      await fetchData("https://cryogenetics-logistics-solution.azurewebsites.net/api/act", 'PUT', data);
       handleCloseModal()
     } catch (error) {
       alert(`Error: ${error.message}`);

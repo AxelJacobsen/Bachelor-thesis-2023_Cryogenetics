@@ -21,7 +21,7 @@ export default function AddCustomerModal({ open, setOpen, onClose }) {
 
   async function fetchRowData() {
     try {
-      const response = await fetchData('/api/client', 'GET');
+      const response = await fetchData('https://cryogenetics-logistics-solution.azurewebsites.net/api/client', 'GET');
       setRows(response);
     } catch (error) {
       console.error(error);
@@ -49,7 +49,7 @@ export default function AddCustomerModal({ open, setOpen, onClose }) {
         client_id: highestClientId+1,
         client_name: name,
       }];      
-      await fetchData("/api/client", 'POST', data);
+      await fetchData("https://cryogenetics-logistics-solution.azurewebsites.net/api/client", 'POST', data);
       handleCloseModal()
     } catch (error) {
       alert(`Error: ${error.message}`);

@@ -39,7 +39,7 @@ export default function AddModelModal({ open, setOpen, onClose }) {
         "refill_interval": refill
       }]; 
       console.log(data);
-      await fetchData("/api/container_model", 'POST', data);
+      await fetchData("https://cryogenetics-logistics-solution.azurewebsites.net/api/container_model", 'POST', data);
       handleCloseModal();
     } catch (error) {
       alert(`Error: ${error.message}`);

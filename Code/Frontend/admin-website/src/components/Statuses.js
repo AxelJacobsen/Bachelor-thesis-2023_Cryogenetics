@@ -117,7 +117,7 @@ export default function Statuses() {
 
   async function fetchRowData() {
     try {
-      const response = await fetchData('/api/container_status', 'GET');
+      const response = await fetchData('https://cryogenetics-logistics-solution.azurewebsites.net/api/container_status', 'GET');
       setRows(response);
     } catch (error) {
       console.error(error);

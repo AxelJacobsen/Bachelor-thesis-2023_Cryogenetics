@@ -51,7 +51,7 @@ export default function EditCustomerModal(props) {
   }
   async function fetchRowData() {
     try {
-      const response = await fetchData('/api/create/container', 'GET');
+      const response = await fetchData('https://cryogenetics-logistics-solution.azurewebsites.net/api/create/container', 'GET');
       setOptions(response);
     } catch (error) {
       console.error(error);
@@ -92,7 +92,7 @@ export default function EditCustomerModal(props) {
         production_date: productionDate,
       }]; 
       console.log(data);
-      await fetchData("/api/container", 'PUT', data);
+      await fetchData("https://cryogenetics-logistics-solution.azurewebsites.net/api/container", 'PUT', data);
       handleCloseModal();
     } catch (error) {
       alert(`Error: ${error.message}`);

@@ -41,7 +41,7 @@ export default function EditLocationModal(props) {
         location_id: props.selectedRow.location_id,
         location_name: name,
       }];      
-      await fetchData("/api/location", 'PUT', data);
+      await fetchData("https://cryogenetics-logistics-solution.azurewebsites.net/api/location", 'PUT', data);
       handleCloseModal()
     } catch (error) {
       alert(`Error: ${error.message}`);

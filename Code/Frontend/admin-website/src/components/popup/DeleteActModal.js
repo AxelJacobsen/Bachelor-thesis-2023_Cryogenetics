@@ -22,7 +22,7 @@ export default function DeleteActModal(props) {
 
   const handleConfirmModal = async () => {
     try {
-      const url = "/api/act?act_name="+props.selectedRow.act_name
+      const url = "https://cryogenetics-logistics-solution.azurewebsites.net/api/act?act_name="+props.selectedRow.act_name
       const data = [{
         act_name: props.selectedRow.act_name
       }];      

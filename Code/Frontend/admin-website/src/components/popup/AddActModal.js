@@ -31,7 +31,7 @@ export default function AddActModal({ open, setOpen, onClose }) {
         description: actDescription,
         is_active: 1
       }];      
-      await fetchData("/api/act", 'POST', data);
+      await fetchData("https://cryogenetics-logistics-solution.azurewebsites.net/api/act", 'POST', data);
       handleCloseModal()
     } catch (error) {
       alert(`Error: ${error.message}`);

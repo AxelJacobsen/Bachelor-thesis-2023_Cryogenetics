@@ -38,7 +38,7 @@ export default function EditCustomerModal(props) {
         client_id: props.selectedRow.client_id,
         client_name: name,
       }];      
-      await fetchData("/api/client", 'PUT', data);
+      await fetchData("https://cryogenetics-logistics-solution.azurewebsites.net/api/client", 'PUT', data);
       handleCloseModal()
     } catch (error) {
       alert(`Error: ${error.message}`);

@@ -166,7 +166,7 @@ export default function Transactions() {
   React.useEffect(() => {
     async function fetchRowData() {
       try {
-        const response = await fetchData('/api/transaction', 'GET');
+        const response = await fetchData('https://cryogenetics-logistics-solution.azurewebsites.net/api/transaction', 'GET');
         if (response == null){
           console.log('No data available.'); // Log error message instead of returning JSX
         }
@@ -204,7 +204,7 @@ export default function Transactions() {
       // Compare start and end dates
       if (startDateObj <= endDateObj) {
         try {
-          const response = await fetchData(`/api/transaction?start_date=${start}&end_date=${end}`, 'GET');
+          const response = await fetchData(`https://cryogenetics-logistics-solution.azurewebsites.net/api/transaction?start_date=${start}&end_date=${end}`, 'GET');
           if (response == null){
             alert("No data available for that time period.");
           }
@@ -220,7 +220,7 @@ export default function Transactions() {
       }
     } else {
       try {
-        const response = await fetchData('/api/transaction', 'GET');
+        const response = await fetchData('https://cryogenetics-logistics-solution.azurewebsites.net/api/transaction', 'GET');
         if (response == null){
           console.log('No data available.'); // Log error message instead of returning JSX
         }

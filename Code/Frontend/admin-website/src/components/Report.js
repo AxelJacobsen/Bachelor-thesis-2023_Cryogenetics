@@ -34,7 +34,7 @@ export default function Report() {
         return
     }
 
-    const url = `/api/transaction?start_date=${startDateString}&end_date=${endDateString}`;
+    const url = `https://cryogenetics-logistics-solution.azurewebsites.net/api/transaction?start_date=${startDateString}&end_date=${endDateString}`;
     try {
         const [filteredData] = await Promise.all([
             fetchData(url, 'GET').then(data => 

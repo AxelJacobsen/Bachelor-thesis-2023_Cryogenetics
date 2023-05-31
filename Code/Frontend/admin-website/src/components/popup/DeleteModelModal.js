@@ -23,7 +23,7 @@ export default function DeleteModelModal(props) {
 
   const handleConfirmModal = async () => {
     try {
-      const url = "/api/container_model?container_model_name="+props.selectedRow.container_model_name
+      const url = "https://cryogenetics-logistics-solution.azurewebsites.net/api/container_model?container_model_name="+props.selectedRow.container_model_name
       const data = [{
         container_model_name: props.selectedRow.container_model_name
       }];      

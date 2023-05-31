@@ -29,7 +29,7 @@ export default function EditUserModal(props) {
 
   async function fetchRowData() {
     try {
-      const response = await fetchData('/api/create/employee', 'GET');
+      const response = await fetchData('https://cryogenetics-logistics-solution.azurewebsites.net/api/create/employee', 'GET');
       setRows(response);
     } catch (error) {
       console.error(error);
@@ -62,7 +62,7 @@ export default function EditUserModal(props) {
         login_code: code,
         location_id: location
       }];      
-      await fetchData("/api/employee", 'PUT', data);
+      await fetchData("https://cryogenetics-logistics-solution.azurewebsites.net/api/employee", 'PUT', data);
       handleCloseModal()
     } catch (error) {
       alert(`Error: ${error.message}`);

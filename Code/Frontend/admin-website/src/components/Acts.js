@@ -125,7 +125,7 @@ export default function Acts() {
 
   async function fetchRowData() {
     try {
-      const response = await fetchData('/api/act', 'GET');
+      const response = await fetchData('https://cryogenetics-logistics-solution.azurewebsites.net/api/act', 'GET');
       setRows(response);
     } catch (error) {
       console.error(error);

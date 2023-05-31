@@ -123,7 +123,7 @@ export default function Models() {
 
   async function fetchRowData() {
     try {
-      const response = await fetchData('/api/container_model', 'GET');
+      const response = await fetchData('https://cryogenetics-logistics-solution.azurewebsites.net/api/container_model', 'GET');
       setRows(response);
     } catch (error) {
       console.error(error);
