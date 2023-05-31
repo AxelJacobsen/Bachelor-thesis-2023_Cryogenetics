@@ -100,7 +100,7 @@ func HandlerVerification(w http.ResponseWriter, r *http.Request) {
 	// GET method
 	case http.MethodGet:
 		// Fetch requests
-		data, err := request.QueryJSON(globals.DB, "SELECT * FROM `requested_keys`", []interface{}{}, w)
+		data, err := request.QueryJSON(globals.DB, "SELECT * FROM `requested_keys` WHERE keyvalue NOT IN (SELECT keyvalue FROM valid_keys)", []interface{}{}, w)
 		if err != nil {
 			http.Error(w, "Error fetching requested keys from database.", http.StatusInternalServerError)
 			return
