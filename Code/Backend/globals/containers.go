@@ -15,3 +15,4 @@ var Ctx context.Context
 // Database
 var DB *sql.DB
 var Port string
+var RecentErrs []string

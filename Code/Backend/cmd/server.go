@@ -51,12 +51,14 @@ func connectToDB() {
 	for !logged_in {
 		// Check for timeout
 		if time.Since(globals.StartTime).Seconds() > constants.DB_TIMEOUT {
+			globals.RecentErrs = append(globals.RecentErrs, "timeout while attempting to connect to database\n")
 			panic(errors.New("timeout while attempting to connect to database"))
 		}
 
 		// Try connecting to DB
-		db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s", constants.DB_USER, constants.DB_PSW, constants.DB_CONN, constants.DB_NAME))
+		db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", constants.DB_USER, constants.DB_PSW, constants.DB_CONN, constants.DB_PORT, constants.DB_NAME))
 		if err != nil {
+			globals.RecentErrs = append(globals.RecentErrs, "Error connecting: "+err.Error()+"\n")
 			fmt.Println("Error connecting: ", err)
 			continue
 		}
@@ -64,6 +66,7 @@ func connectToDB() {
 		// Try pinging
 		err = db.Ping()
 		if err != nil {
+			globals.RecentErrs = append(globals.RecentErrs, "Error pinging: "+err.Error()+"\n")
 			fmt.Println("Error pinging: ", err)
 			continue
 		}
@@ -100,5 +103,5 @@ func routeAndServe() {
  *	A simple handler.
  */
 func NoConnectionHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Database initializing or endpoint does not exist")
+	fmt.Fprint(w, "Database initializing or endpoint does not exist. Recent errors:\n"+fmt.Sprint(globals.RecentErrs))
 }
