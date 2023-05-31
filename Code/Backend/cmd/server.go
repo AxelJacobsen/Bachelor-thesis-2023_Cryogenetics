@@ -61,7 +61,7 @@ func connectToDB() {
 		}
 
 		// Try connecting to DB
-		db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s", constants.DB_USER, constants.DB_PSW, constants.DB_CONN, constants.DB_NAME))
+		db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", constants.DB_USER, constants.DB_PSW, constants.DB_CONN, constants.DB_PORT, constants.DB_NAME))
 		if err != nil {
 			globals.RecentErrs = append(globals.RecentErrs, "Error connecting: "+err.Error()+"\n")
 			fmt.Println("Error connecting: ", err)
