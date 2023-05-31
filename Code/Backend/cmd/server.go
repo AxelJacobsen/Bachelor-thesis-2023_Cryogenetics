@@ -10,17 +10,19 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/rs/cors"
 )
 
 ////////////////////////////////////////////////////
 /// USING https://github.com/go-sql-driver/mysql ///
 ////////////////////////////////////////////////////
+
+var mux *http.ServeMux
 
 /**
  *	The main function.
@@ -36,14 +38,19 @@ func main() {
 	// Context initialization
 	globals.Ctx = context.Background()
 
-	// Temporary no connection listener
+	// Get port
 	globals.Port = os.Getenv("HTTP_PLATFORM_PORT")
 	if globals.Port == "" {
 		globals.Port = constants.PORT
 	}
 
-	http.HandleFunc("/", NoConnectionHandler)
-	http.ListenAndServe(":"+globals.Port, nil)
+	// Set up mux and temporary no-connection handler
+	mux = http.NewServeMux()
+	mux.HandleFunc("/", NoConnectionHandler)
+
+	// Listen...
+	handler := cors.Default().Handler(mux)
+	http.ListenAndServe(":"+globals.Port, handler)
 }
 
 /**
@@ -59,7 +66,7 @@ func connectToDB() {
 		}
 
 		// Try connecting to DB
-		db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", constants.DB_USER, constants.DB_PSW, constants.DB_CONN, constants.DB_PORT, constants.DB_NAME))
+		db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s", constants.DB_USER, constants.DB_PSW, constants.DB_CONN, constants.DB_NAME))
 		if err != nil {
 			globals.RecentErrs = append(globals.RecentErrs, "Error connecting: "+err.Error()+"\n")
 			fmt.Println("Error connecting: ", err)
@@ -77,14 +84,14 @@ func connectToDB() {
 		// Logged in
 		logged_in = true
 		globals.DB = db
-		routeAndServe()
+		route()
 	}
 }
 
 /**
  *	Binds the appropriate endpoints to their respective handlers.
  */
-func routeAndServe() {
+func route() {
 	// Route
 	routes := map[string]func(http.ResponseWriter, *http.Request){
 		constants.BASE_PATH:                shared.EndpointHandler,
@@ -96,13 +103,9 @@ func routeAndServe() {
 	}
 
 	for route, routeTo := range routes {
-		http.HandleFunc(route, routeTo)
-		http.HandleFunc(route+"/", routeTo)
+		mux.HandleFunc(route, routeTo)
+		mux.HandleFunc(route+"/", routeTo)
 	}
-
-	// Listen
-	log.Println("Listening on port " + globals.Port)
-	//log.Fatal(http.ListenAndServe(":"+globals.Port, nil))
 }
 
 /**

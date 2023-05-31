@@ -1,7 +1,6 @@
 package mobile
 
 import (
-	"backend/constants"
 	"backend/cryptography"
 	"backend/globals"
 	"encoding/json"
@@ -14,7 +13,6 @@ import (
  */
 func HandlerMobileVerification(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("content-type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", constants.WEBAPP_URL)
 
 	// Switch based on method
 	switch r.Method {
