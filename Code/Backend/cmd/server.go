@@ -8,6 +8,8 @@ import (
 	"backend/globals"
 	"context"
 	"database/sql"
+	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -25,16 +27,37 @@ import (
  * 	Starts the server.
  */
 func main() {
-	// Connect to database
-	db, err := sql.Open("mysql", "azure:6#vWHD_$@tcp(127.0.0.1)/cryogenetics_database")
-	if err != nil {
-		panic(err.Error())
-	}
-	defer db.Close()
-	globals.DB = db
-
 	// Start session timer
 	globals.StartTime = time.Now()
+
+	// Connect to database
+	logged_in := false
+	for !logged_in {
+		// Check for timeout
+		if time.Since(globals.StartTime).Seconds() > constants.DB_TIMEOUT {
+			panic(errors.New("timeout while attempting to connect to database"))
+		}
+
+		// Try connecting to DB
+		db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s", constants.DB_USER, constants.DB_PSW, constants.DB_CONN, constants.DB_NAME))
+		if err != nil {
+			fmt.Println("Error connecting: ", err)
+			continue
+		}
+		defer db.Close()
+
+		// Try pinging
+		err = db.Ping()
+		if err != nil {
+			fmt.Println("Error pinging: ", err)
+			continue
+		}
+
+		// Logged in
+		logged_in = true
+		globals.DB = db
+	}
+
 	// Context initialization
 	globals.Ctx = context.Background()
 
