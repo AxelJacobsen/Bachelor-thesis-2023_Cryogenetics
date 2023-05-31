@@ -31,6 +31,22 @@ func main() {
 	globals.StartTime = time.Now()
 
 	// Connect to database
+	go connectToDB()
+
+	// Context initialization
+	globals.Ctx = context.Background()
+
+	// Temporary no connection listener
+	globals.Port = os.Getenv("HTTP_PLATFORM_PORT")
+	if globals.Port == "" {
+		globals.Port = constants.PORT
+	}
+
+	http.HandleFunc("/", NoConnectionHandler)
+	http.ListenAndServe(":"+globals.Port, nil)
+}
+
+func connectToDB() {
 	logged_in := false
 	for !logged_in {
 		// Check for timeout
@@ -44,7 +60,6 @@ func main() {
 			fmt.Println("Error connecting: ", err)
 			continue
 		}
-		defer db.Close()
 
 		// Try pinging
 		err = db.Ping()
@@ -56,11 +71,11 @@ func main() {
 		// Logged in
 		logged_in = true
 		globals.DB = db
+		routeAndServe()
 	}
+}
 
-	// Context initialization
-	globals.Ctx = context.Background()
-
+func routeAndServe() {
 	// Route
 	routes := map[string]func(http.ResponseWriter, *http.Request){
 		constants.BASE_PATH:                shared.EndpointHandler,
@@ -77,10 +92,13 @@ func main() {
 	}
 
 	// Listen
-	port := os.Getenv("HTTP_PLATFORM_PORT")
-	if port == "" {
-		port = constants.PORT
-	}
-	log.Println("Listening on port " + port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	log.Println("Listening on port " + globals.Port)
+	//log.Fatal(http.ListenAndServe(":"+globals.Port, nil))
+}
+
+/**
+ *	A simple handler.
+ */
+func NoConnectionHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprint(w, "Database initializing or endpoint does not exist")
 }
