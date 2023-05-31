@@ -46,6 +46,9 @@ func main() {
 	http.ListenAndServe(":"+globals.Port, nil)
 }
 
+/**
+ *	Attempts to connect to the database, timing out after a set amount of seconds.
+ */
 func connectToDB() {
 	logged_in := false
 	for !logged_in {
@@ -78,6 +81,9 @@ func connectToDB() {
 	}
 }
 
+/**
+ *	Binds the appropriate endpoints to their respective handlers.
+ */
 func routeAndServe() {
 	// Route
 	routes := map[string]func(http.ResponseWriter, *http.Request){
@@ -100,7 +106,7 @@ func routeAndServe() {
 }
 
 /**
- *	A simple handler.
+ *	A simple handler for returning errors.
  */
 func NoConnectionHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "Database initializing or endpoint does not exist. Recent errors:\n"+fmt.Sprint(globals.RecentErrs))

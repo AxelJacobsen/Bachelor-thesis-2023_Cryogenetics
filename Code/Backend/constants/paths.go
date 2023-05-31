@@ -30,3 +30,6 @@ const MOBILE_VERIFICATION_PATH = BASE_USER_PATH + "/verification"
 
 // File paths
 const KEY_FILEPATH = "./keyfile.txt"
+
+// Webapp paths
+const WEBAPP_URL = "https://cryostorageadmin.azurewebsites.net/"

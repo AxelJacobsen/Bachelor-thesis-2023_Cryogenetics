@@ -17,6 +17,8 @@ import (
  */
 func EndpointHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("content-type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", constants.WEBAPP_URL)
+
 	var tableNames []string
 	tableNames = append(tableNames, "transaction", "client", "container", "handler", "act", "container_model", "container_status", "employee", "location")
 	// Get escaped path without base URL and remove the first character if it's a "/"
@@ -204,6 +206,7 @@ func EndpointHandler(w http.ResponseWriter, r *http.Request) {
  */
 func CreateDataHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("content-type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", constants.WEBAPP_URL)
 
 	// Get escaped path without base URL and remove the first character if it's a "/"
 	escapedPath := r.URL.EscapedPath()[len(paths.SHARED_CREATE_PATH):]
@@ -275,6 +278,7 @@ func CreateDataHandler(w http.ResponseWriter, r *http.Request) {
  */
 func CryptographyHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("content-type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", constants.WEBAPP_URL)
 
 	// Get escaped path without base URL and remove the first character if it's a "/"
 	escapedPath := r.URL.EscapedPath()[len(paths.SHARED_CREATE_PATH):]

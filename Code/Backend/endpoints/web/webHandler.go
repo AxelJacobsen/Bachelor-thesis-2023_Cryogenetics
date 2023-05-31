@@ -1,6 +1,7 @@
 package web
 
 import (
+	"backend/constants"
 	paths "backend/constants"
 	"backend/globals"
 	"backend/request"
@@ -25,6 +26,7 @@ type Response struct {
  */
 func HandlerWebLogin(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("content-type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", constants.WEBAPP_URL)
 
 	// Get escaped path without base URL and remove the first character if it's a "/"
 	escapedPath := r.URL.EscapedPath()[len(paths.WEB_LOGIN_PATH):]
@@ -86,6 +88,7 @@ func HandlerWebLogin(w http.ResponseWriter, r *http.Request) {
  */
 func HandlerVerification(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("content-type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", constants.WEBAPP_URL)
 
 	// Get escaped path without base URL and remove the first character if it's a "/"
 	escapedPath := r.URL.EscapedPath()[len(paths.ADMIN_VERIFICATION_PATH):]
