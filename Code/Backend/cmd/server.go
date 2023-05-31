@@ -15,14 +15,11 @@ import (
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/rs/cors"
 )
 
 ////////////////////////////////////////////////////
 /// USING https://github.com/go-sql-driver/mysql ///
 ////////////////////////////////////////////////////
-
-var mux *http.ServeMux
 
 /**
  *	The main function.
@@ -45,12 +42,10 @@ func main() {
 	}
 
 	// Set up mux and temporary no-connection handler
-	mux = http.NewServeMux()
-	mux.HandleFunc("/", NoConnectionHandler)
+	http.HandleFunc("/", NoConnectionHandler)
 
 	// Listen...
-	handler := cors.Default().Handler(mux)
-	http.ListenAndServe(":"+globals.Port, handler)
+	http.ListenAndServe(":"+globals.Port, nil)
 }
 
 /**
@@ -103,8 +98,8 @@ func route() {
 	}
 
 	for route, routeTo := range routes {
-		mux.HandleFunc(route, routeTo)
-		mux.HandleFunc(route+"/", routeTo)
+		http.HandleFunc(route, routeTo)
+		http.HandleFunc(route+"/", routeTo)
 	}
 }
 
