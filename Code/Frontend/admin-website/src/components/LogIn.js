@@ -33,7 +33,7 @@ export default function LogIn({ setIsLoggedIn }) {
     const hashedPassword = await hashPassword(password);
 
     // Make the login request
-    const response = await fetch('/api/user/admin/login', {
+    const response = await fetch('https://cryogenetics-logistics-solution.azurewebsites.net/api/user/admin/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -45,10 +45,12 @@ export default function LogIn({ setIsLoggedIn }) {
     });
 
     if (response.ok) {
+      console.log(response)
       // The login was successful
       setIsLoggedIn(true);
       navigate('/');
     } else {
+      console.log(response)
       // The login failed
       alert('Incorrect email or password.');
     }
