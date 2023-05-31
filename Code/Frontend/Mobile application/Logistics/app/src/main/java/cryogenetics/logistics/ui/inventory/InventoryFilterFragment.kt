@@ -8,6 +8,7 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
+import cryogenetics.logistics.api.ApiUrl
 import cryogenetics.logistics.ui.filters.CheckboxAdapter
 import cryogenetics.logistics.ui.filters.FilterManager
 
@@ -50,25 +51,25 @@ class InventoryFilterFragment(
 
         // Add recyclerViews & attach adapters
         filterManager.addTableFromDB(
-            "http://10.0.2.2:8080/api/container_model",
+            "${ApiUrl.urlContainerModel}",
             "liter_capacity",
             rvFilterSize,
             listOf("liter_capacity")
         )
         filterManager.addTableFromDB(
-            "http://10.0.2.2:8080/api/container_status",
+            "${ApiUrl.urlStatus}",
             "container_status_name",
             rvFilterStatus,
             listOf("container_status_name")
         )
         filterManager.addTableFromDB(
-            "http://10.0.2.2:8080/api/client",
+            "${ApiUrl.urlClient}",
             "client_name",
             rvFilterClient,
             listOf("client_name")
         )
         filterManager.addTableFromDB(
-            "http://10.0.2.2:8080/api/location",
+            "${ApiUrl.urlLocation}",
             "location_name",
             rvFilterLocations,
             listOf("location_name")

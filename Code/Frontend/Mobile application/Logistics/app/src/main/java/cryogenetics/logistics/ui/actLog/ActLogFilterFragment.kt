@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
 import cryogenetics.logistics.R
+import cryogenetics.logistics.api.ApiUrl
 import cryogenetics.logistics.ui.filters.FilterManager
 
 /**
@@ -59,10 +60,10 @@ class ActLogFilterFragment (
         // Add recyclerViews & attach adapters
         filterManager.addTable("start_date", etDateStart)
         filterManager.addTable("end_date", etDateEnd)
-        filterManager.addTableFromDB("http://10.0.2.2:8080/api/container_status", "container_status_name", rvFilterStatus, listOf("container_status_name"))
-        filterManager.addTableFromDB("http://10.0.2.2:8080/api/act", "act", rvFilterAct, listOf("act_name"))
-        filterManager.addTableFromDB("http://10.0.2.2:8080/api/location", "location_name", rvFilterLocations, listOf("location_name"))
-        filterManager.addTableFromDB("http://10.0.2.2:8080/api/container_model", "liter_capacity", rvFilterSize, listOf("liter_capacity"))
+        filterManager.addTableFromDB("${ApiUrl.urlStatus}", "container_status_name", rvFilterStatus, listOf("container_status_name"))
+        filterManager.addTableFromDB("${ApiUrl.urlAct}", "act", rvFilterAct, listOf("act_name"))
+        filterManager.addTableFromDB("${ApiUrl.urlLocation}", "location_name", rvFilterLocations, listOf("location_name"))
+        filterManager.addTableFromDB("${ApiUrl.urlContainerModel}", "liter_capacity", rvFilterSize, listOf("liter_capacity"))
 
         // On reset
         bFilterReset.setOnClickListener {

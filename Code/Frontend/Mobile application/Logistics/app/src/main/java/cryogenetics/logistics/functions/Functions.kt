@@ -194,7 +194,7 @@ class Functions {
         private fun getColumns(table: String): List<Triple<String, String, String>> {
             var jsonRaw: String
             try {
-                jsonRaw = Api.fetchJsonData("http://10.0.2.2:8080/api/$table/columns")
+                jsonRaw = Api.fetchJsonData("${ApiUrl.urlBase}$table/columns")
             } catch (e: Exception) {
                 return emptyList()
             }
