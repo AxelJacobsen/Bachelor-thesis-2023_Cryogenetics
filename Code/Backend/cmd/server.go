@@ -26,7 +26,7 @@ import (
  */
 func main() {
 	// Connect to database
-	db, err := sql.Open("mysql", "azure@tcp(127.0.0.1)/cryogenetics_database")
+	db, err := sql.Open("mysql", "azure:6#vWHD_$@tcp(127.0.0.1)/cryogenetics_database")
 	if err != nil {
 		panic(err.Error())
 	}
