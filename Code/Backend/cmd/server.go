@@ -26,7 +26,7 @@ import (
  */
 func main() {
 	// Connect to database
-	db, err := sql.Open("mysql", "root@tcp(127.0.0.1:49645)/cryogenetics_database")
+	db, err := sql.Open("mysql", "root@localhost/cryogenetics_database")
 	if err != nil {
 		panic(err.Error())
 	}
