@@ -19,5 +19,11 @@ class ApiCalls {
             val urlDataString = Api.fetchJsonData(ApiUrl.urlTransaction)
             return Api.parseJsonArray(urlDataString)
         }
+
+        fun fetchContainerModel() :  List<Map<String, Any>>{
+            val urlDataString = Api.fetchJsonData(ApiUrl.urlContainerModel)
+            return Api.parseJsonArray(urlDataString)
+
+        }
     }
 }

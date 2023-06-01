@@ -43,27 +43,65 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <View
-            android:id="@+id/view2"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/searchViewActLog"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="#9DB5BF"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.35" />
+            app:layout_constraintWidth_percent="0.35">
 
-        <SearchView
-            android:id="@+id/searchView2"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="5dp"
-            android:background="@color/white"
-            android:queryHint="Search"
-            app:layout_constraintBottom_toBottomOf="@+id/view2"
-            app:layout_constraintEnd_toEndOf="@+id/view2"
-            app:layout_constraintStart_toStartOf="@+id/view2"
-            app:layout_constraintTop_toTopOf="@+id/view2"></SearchView>
+            <EditText
+                android:id="@+id/edSearchValue"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginBottom="3dp"
+                android:background="@drawable/rounded_textbox"
+                android:gravity="center_vertical"
+                android:hint="@string/write_here"
+                android:inputType="text"
+                android:paddingStart="5dp"
+                android:textColor="@color/black"
+                app:autoSizeMaxTextSize="100sp"
+                app:autoSizeMinTextSize="12sp"
+                app:autoSizeStepGranularity="2sp"
+                app:autoSizeTextType="uniform"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/bSearch"
+                app:layout_constraintHorizontal_weight="0.7"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/bSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginEnd="3dp"
+                android:backgroundTint="@color/softGrey"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@string/search"
+                android:textColor="@color/black"
+                app:autoSizeMaxTextSize="100sp"
+                app:autoSizeMinTextSize="12sp"
+                app:autoSizeStepGranularity="2sp"
+                app:autoSizeTextType="uniform"
+                app:layout_constraintBottom_toBottomOf="@+id/edSearchValue"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="0.3"
+                app:layout_constraintVertical_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/edSearchValue"
+                app:layout_constraintTop_toTopOf="@+id/edSearchValue"
+                app:strokeColor="@color/black"
+                app:strokeWidth="2dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -341,5 +379,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
+
+    <FrameLayout
+        android:id="@+id/flActLogDetails"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

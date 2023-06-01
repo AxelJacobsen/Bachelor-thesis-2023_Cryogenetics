@@ -5,16 +5,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.recyclerview.widget.LinearLayoutManager
 import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
 import cryogenetics.logistics.api.ApiCalls
 import cryogenetics.logistics.api.ApiUrl
+import cryogenetics.logistics.api.ContainerModel
 import cryogenetics.logistics.databinding.FragmentMiniActLogBinding
 import cryogenetics.logistics.functions.Functions
 import cryogenetics.logistics.functions.JsonAdapter
 import cryogenetics.logistics.ui.host.HostFragment
+
 
 class MiniActLogFragment (
     private val tvActLogRNrVisible: Boolean = false,
@@ -57,8 +58,9 @@ class MiniActLogFragment (
             for (model in Api.parseJsonArray(urlDataString))
                 itemList.add(if (model.isNotEmpty()) Functions.enforceNumberFormat(model) else model)
         }
-        //Create a list of references
 
+
+        //Create a list of references
         val viewIds = listOf(
             R.id.tvActLogRNr,
             R.id.tvActLogRTime,

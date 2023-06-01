@@ -23,9 +23,12 @@ import cryogenetics.logistics.ui.actLog.MiniActLogFragment
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
+import kotlin.concurrent.schedule
 
 class TankFragment(
-    private val paramModel: Map<String, Any>? = null
+    private var paramModel: Map<String, Any>? = null
 ) : Fragment() {
 
     private lateinit var inventoryData: List<Map<String, Any>>
@@ -74,7 +77,11 @@ class TankFragment(
 
         // When search button is pressed, search for input and display results.
         binding.bSearch.setOnClickListener {
-            searchAndUpdateSearchView(viewIds)
+            if (paramModel != null) { // This is bad solution to a weird issue :)
+                initTankData(paramModel!!)
+                paramModel = null
+            } else
+                searchAndUpdateSearchView(viewIds)
         }
 
         // When user makes an action which translates to 'I am done writing',
@@ -92,18 +99,21 @@ class TankFragment(
 
         // When cam-button is pressed, check camera permissions and start camFrag.
         binding.ibCamera.setOnClickListener {
-            if (CamAccess.checkCameraPermission(requireContext())) {
-                binding.flTankCameraFragment.visibility = View.VISIBLE
-                qrCodes.clear()
-                if (!camFrag.onRes()) {
-                    childFragmentManager.beginTransaction()
-                        .replace(R.id.flTankCameraFragment, camFrag)
-                        .commit()
-                }
-                println("checkCameraPermission success") // TODO: LOG.D
+            if (paramModel != null) { // This is bad solution to a weird issue :)
+                initTankData(paramModel!!)
+                paramModel = null
             } else {
-                println("checkCameraPermission fail") // TODO: LOG.D
-                CamAccess.requestCameraPermission(requireActivity())
+                if (CamAccess.checkCameraPermission(requireContext())) {
+                    binding.flTankCameraFragment.visibility = View.VISIBLE
+                    qrCodes.clear()
+                    if (!camFrag.onRes()) {
+                        childFragmentManager.beginTransaction()
+                            .replace(R.id.flTankCameraFragment, camFrag)
+                            .commit()
+                    }
+                } else {
+                    CamAccess.requestCameraPermission(requireActivity())
+                }
             }
         }
         binding.ibCancelSearch.setOnClickListener {
@@ -127,10 +137,6 @@ class TankFragment(
         binding.secondRowFourth.setOnClickListener {
             menuFunctionality("secondRowFourth")
         }
-
-        if (paramModel != null) {
-            initTankData(paramModel)
-        }
     }
 
     /**
@@ -143,7 +149,7 @@ class TankFragment(
         // Search for value
         val searchRes = Functions.searchContainer(
             requireContext(),
-            inventoryData, // or: ApiCalls.fetchInventoryData()
+            ApiCalls.fetchInventoryData(), // or: ApiCalls.fetchInventoryData()
             binding.edSearchValue.text.toString()
         )
         //Create adapter
@@ -366,6 +372,7 @@ class TankFragment(
      * @param tank - Map of data after searching after the tank.
      */
     private fun initTankData(tank: Map<String, Any>) {
+        println("tankxy " + tank)
         dTank = TankData(
             address = tank.entries.find { it.key == "address" }?.value.toString(),
             client_id = tank.entries.find { it.key == "client_id" }?.value.toString(),
@@ -401,6 +408,7 @@ class TankFragment(
                 .commit()
             initMiniActLog = true
         }
+        println("TankDatax " + dTank)
 
         // Change the tanks values in the UI.
         binding.tvTankId.text = dTank?.id

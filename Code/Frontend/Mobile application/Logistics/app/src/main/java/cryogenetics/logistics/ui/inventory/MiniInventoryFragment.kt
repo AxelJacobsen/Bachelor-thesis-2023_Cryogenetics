@@ -14,7 +14,9 @@ import cryogenetics.logistics.databinding.FragmentMiniInventoryBinding
 import cryogenetics.logistics.functions.Functions
 import cryogenetics.logistics.functions.JsonAdapter
 
-class MiniInventoryFragment : Fragment() {
+class MiniInventoryFragment(
+    private val tvInventoryClient: Boolean = false
+) : Fragment() {
 
     private var _binding : FragmentMiniInventoryBinding? = null
     private val binding get() = _binding!!
@@ -37,6 +39,8 @@ class MiniInventoryFragment : Fragment() {
         binding.InventoryRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.InventoryRecycler.setHasFixedSize(true)
 
+        if (tvInventoryClient) binding.tvInventoryClient.visibility = View.VISIBLE
+
         // initialize the recyclerView-adapter
         val itemList = mutableListOf<Map<String, Any>>()
         //Fetch json data and add to itemlist
@@ -52,7 +56,7 @@ class MiniInventoryFragment : Fragment() {
             R.id.tvInventoryNoti
         )
         //Create adapter
-        binding.InventoryRecycler.adapter = JsonAdapter(itemList, viewIds, R.layout.mini_inventory_recycler_item)
+        binding.InventoryRecycler.adapter = JsonAdapter(itemList, viewIds, R.layout.mini_inventory_recycler_item, tvInventoryClient = tvInventoryClient)
     }
 
     override fun onDestroyView() {
