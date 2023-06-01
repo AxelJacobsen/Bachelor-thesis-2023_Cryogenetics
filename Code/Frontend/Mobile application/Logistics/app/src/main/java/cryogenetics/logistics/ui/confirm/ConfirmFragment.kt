@@ -103,7 +103,10 @@ class ConfirmFragment(
     ) {
         binding.bConfirm.setOnClickListener {
             val result1 = Api.makeBackendRequest("transaction", actDatas, "POST")
-            val result2 = Api.makeBackendRequest("container", tankDatas, "PUT")
+            var result2 = 0
+            for (data in tankDatas) {
+                result2 = Api.makeBackendRequest("container", listOf( data ), "PUT")
+            }
 
             println("res1" + result1.toString() + "res2" + result2.toString())
             Toast.makeText(

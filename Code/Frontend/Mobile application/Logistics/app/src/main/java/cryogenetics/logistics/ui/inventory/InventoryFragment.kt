@@ -4,21 +4,27 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.recyclerview.widget.LinearLayoutManager
 import cryogenetics.logistics.R
 import cryogenetics.logistics.api.Api
+import cryogenetics.logistics.api.ApiCalls
 import cryogenetics.logistics.api.ApiUrl
 import cryogenetics.logistics.databinding.FragmentInventoryBinding
+import cryogenetics.logistics.functions.Functions
 import cryogenetics.logistics.functions.Functions.Companion.enforceNumberFormat
 import cryogenetics.logistics.functions.Functions.Companion.sortChange
 import cryogenetics.logistics.functions.JsonAdapter
+import cryogenetics.logistics.ui.confirm.DetailsFragment
 import cryogenetics.logistics.ui.filters.FilterManager
+import cryogenetics.logistics.ui.tank.OnItemClickListener
 
 class InventoryFragment : Fragment() {
     private lateinit var mInventoryFilterFragment: InventoryFilterFragment
     private lateinit var mAdapter: JsonAdapter
+    private lateinit var mListener: OnItemClickListener
 
     private val sortIVs = listOf(
         R.id.ivInventoryNr,
@@ -29,6 +35,17 @@ class InventoryFragment : Fragment() {
         R.id.ivInventorySerialNr,
         R.id.ivInventoryNoti,
         R.id.ivInventoryStatus
+    )
+
+    val tvIds = listOf(
+        R.id.tvInventoryNr,
+        R.id.tvInventoryClient,
+        R.id.tvInventoryLocation,
+        R.id.tvInventoryInvoice,
+        R.id.tvInventoryLastFill,
+        R.id.tvInventorySerialNr,
+        R.id.tvInventoryNoti,
+        R.id.tvInventoryStatus
     )
 
     private var _binding: FragmentInventoryBinding? = null
@@ -47,6 +64,8 @@ class InventoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mListener = mOnFoundProductListener
+
         // initialize the recyclerView
         binding.InventoryRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.InventoryRecycler.setHasFixedSize(true)
@@ -76,6 +95,15 @@ class InventoryFragment : Fragment() {
         binding.tvInventoryNoti.setOnClickListener {
             sortChange(binding.tvInventoryNoti, mAdapter, requireContext(), view, sortIVs)
         }
+        binding.bSearch.setOnClickListener {
+            val searchRes = Functions.searchContainer(
+                requireContext(),
+                ApiCalls.fetchInventoryData(),
+                binding.edSearchValue.text.toString()
+            )
+            mAdapter.updateData(searchRes)
+        }
+
 
         // Attach listener to filter button
         binding.bFilter.setOnClickListener {
@@ -144,21 +172,31 @@ class InventoryFragment : Fragment() {
 
         // If the adapter doesn't exist, create it
         if (binding.InventoryRecycler.adapter == null) {
-            val viewIds = listOf(
-                R.id.tvInventoryNr,
-                R.id.tvInventoryClient,
-                R.id.tvInventoryLocation,
-                R.id.tvInventoryInvoice,
-                R.id.tvInventoryLastFill,
-                R.id.tvInventorySerialNr,
-                R.id.tvInventoryNoti,
-                R.id.tvInventoryStatus
-            )
-            mAdapter = JsonAdapter(itemList, viewIds, R.layout.inventory_recycler_item)
+            mAdapter = JsonAdapter(itemList, tvIds, R.layout.inventory_recycler_item, listener = mListener)
             binding.InventoryRecycler.adapter = mAdapter
             // Otherwise, update its data
         } else {
             mAdapter.updateData(itemList)
+        }
+    }
+
+    private val mOnFoundProductListener = object : OnItemClickListener {
+        override fun onClick(model: Map<String, Any>) {
+            childFragmentManager.beginTransaction()
+                .replace(R.id.flInventoryDetails, DetailsFragment(listOf( model ),
+                    "Dtai", mListener), "Dtai")
+                .commit()
+            println("onCommentClick bDetails " + model)
+        }
+
+        override fun onCloseFragment(tag: String) {
+            val swipe = childFragmentManager.findFragmentByTag(tag)
+                ?: throw RuntimeException("Could not find Tag: $tag")
+
+            childFragmentManager.beginTransaction()
+                .remove(swipe)
+                .commit()
+            childFragmentManager.popBackStack()
         }
     }
 

@@ -97,7 +97,7 @@ class Functions {
             if (fetchedData.isNotEmpty() && searchValue != "") {
                 for (model in fetchedData) {
                     for (value in model.values) {
-                        if (value.toString().contains(searchValue)) {
+                        if (value.toString().uppercase().contains(searchValue.uppercase())) {
                             searchResults.add(
                                 if (model.isNotEmpty()) Functions.enforceNumberFormat(
                                     model

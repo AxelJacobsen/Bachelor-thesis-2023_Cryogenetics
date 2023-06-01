@@ -22,7 +22,7 @@ class DashFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         childFragmentManager.beginTransaction()
-            .replace(R.id.miniInventory, MiniInventoryFragment())
+            .replace(R.id.miniInventory, MiniInventoryFragment( tvInventoryClient = true ))
             .commit()
         childFragmentManager.beginTransaction()
             .replace(R.id.miniLog, MiniActLogFragment(tvActLogRNrVisible = true))

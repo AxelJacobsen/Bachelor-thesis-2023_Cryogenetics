@@ -11,4 +11,5 @@ object ApiUrl {
     const val urlContainer : String = "${urlBase}container"
     const val urlEmployee : String = "${urlBase}employee"
     const val urlCryptography : String = "${urlBase}cryptography"
+    const val urlContainerModel : String = "${urlBase}container_model"
 }
