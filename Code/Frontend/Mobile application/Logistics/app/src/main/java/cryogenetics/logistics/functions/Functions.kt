@@ -128,6 +128,13 @@ class Functions {
             return dateFormat.format(date)
         }
 
+        fun getDate2(): String? {
+            val myFormat = "dd-MM-yyyy"
+            val dateFormat = SimpleDateFormat(myFormat, Locale.US)
+            val date = Date()
+            return dateFormat.format(date)
+        }
+
         // Yes, both of these could be changed to one function with format as param. I just do not have time to test it.
 
         /**
