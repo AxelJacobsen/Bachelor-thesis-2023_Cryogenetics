@@ -52,7 +52,7 @@ class TankFillFragment : Fragment() {
         binding.bSearch.setOnClickListener {
             val searchRes = Functions.searchContainer(
                 requireContext(),
-                inventoryData,
+                ApiCalls.fetchInventoryData(),
                 binding.edSearchValue.text.toString()
             )
 

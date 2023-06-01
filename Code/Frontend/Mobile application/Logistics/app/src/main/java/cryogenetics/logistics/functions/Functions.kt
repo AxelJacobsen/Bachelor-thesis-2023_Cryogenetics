@@ -6,6 +6,11 @@ import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.util.Base64
 import android.util.Log
+import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.widget.Adapter
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
@@ -40,13 +45,13 @@ class Functions {
          * @return the json data in string format, send directly to parseJson
          */
         fun enforceNumberFormat(inData: Map<String, Any>): Map<String, Any> {
-            var editMap = mutableMapOf<String,Any>()
+            var editMap = mutableMapOf<String, Any>()
             editMap = inData as MutableMap<String, Any>
             val fieldNames = listOf<String>("id", "liter_capacity")
             editMap[fieldNames[0]] =
-                    (inData[fieldNames[1]].toString() +
-                    "-" +
-                    addZeros(inData[fieldNames[0]].toString()))
+                (inData[fieldNames[1]].toString() +
+                        "-" +
+                        addZeros(inData[fieldNames[0]].toString()))
             return editMap
         }
 
@@ -59,12 +64,12 @@ class Functions {
          * @param inString id from json data
          * @return id but withe more zeros
          */
-        fun addZeros(inString: String): String{
+        fun addZeros(inString: String): String {
             val totalChars = 4
             var outString = ""
-            if (inString.length < totalChars){
+            if (inString.length < totalChars) {
                 var i = 0
-                while (i < (totalChars-inString.length)){
+                while (i < (totalChars - inString.length)) {
                     outString += "0"
                     i++
                 }
@@ -86,20 +91,28 @@ class Functions {
         fun searchContainer(
             context: Context,
             fetchedData: List<Map<String, Any>>,
-            searchValue: String = ""
+            searchValue: String = "",
         ): MutableList<Map<String, Any>> {
             val searchResults = mutableListOf<Map<String, Any>>()
-            if (fetchedData.isNotEmpty() && searchValue != ""){
+            if (fetchedData.isNotEmpty() && searchValue != "") {
                 for (model in fetchedData) {
                     for (value in model.values) {
-                        if (value.toString().contains(searchValue)) {
-                            searchResults.add( if (model.isNotEmpty()) Functions.enforceNumberFormat(model) else model )
+                        if (value.toString().uppercase().contains(searchValue.uppercase())) {
+                            searchResults.add(
+                                if (model.isNotEmpty()) Functions.enforceNumberFormat(
+                                    model
+                                ) else model
+                            )
                             break
                         }
                     }
                 }
             } else {
-                Toast.makeText(context, "No search value entered, or no Tanks added!", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    "No search value entered, or no Tanks added!",
+                    Toast.LENGTH_LONG
+                ).show()
             }
             return searchResults
         }
@@ -110,6 +123,13 @@ class Functions {
          */
         fun getDate(): String? {
             val myFormat = "yyyy-MM-dd"
+            val dateFormat = SimpleDateFormat(myFormat, Locale.US)
+            val date = Date()
+            return dateFormat.format(date)
+        }
+
+        fun getDate2(): String? {
+            val myFormat = "dd-MM-yyyy"
             val dateFormat = SimpleDateFormat(myFormat, Locale.US)
             val date = Date()
             return dateFormat.format(date)
@@ -127,6 +147,7 @@ class Functions {
             val date = Date()
             return dateFormat.format(date)
         }
+
         /**
          *  Gets the value of a string resource by its name.
          *
@@ -134,7 +155,7 @@ class Functions {
          *
          *  @return The value of the string resource with the given name, i.e. "Logistics".
          */
-        fun GetStringByName(name: String, context: Context) : String {
+        fun GetStringByName(name: String, context: Context): String {
             val rID = context.resources.getIdentifier(name, "string", context.packageName)
             return context.getString(rID)
         }
@@ -146,7 +167,7 @@ class Functions {
          *
          *  @return The name of the string resource with the given value, i.e. "app_name".
          */
-        fun GetStringByValue(value: String, context: Context) : String {
+        fun GetStringByValue(value: String, context: Context): String {
             // Fetch and iterate all string resources ("fields")
             val allStrings = R.string::class.java.declaredFields
             for (str in allStrings) {
@@ -160,7 +181,9 @@ class Functions {
                         // If the correct string resource is found, return it
                         if (value == context.getString(str.getInt(null)))
                             return str.name
-                    } catch (e: Exception) { continue }
+                    } catch (e: Exception) {
+                        continue
+                    }
                 }
             }
 
@@ -175,19 +198,21 @@ class Functions {
          *
          *  @return All columns associated with the given table in the format (name, type, keytype).
          */
-        private fun getColumns(table: String) : List<Triple<String,String,String>> {
+        private fun getColumns(table: String): List<Triple<String, String, String>> {
             var jsonRaw: String
             try {
-                jsonRaw = Api.fetchJsonData("http://10.0.2.2:8080/api/$table/columns")
+                jsonRaw = Api.fetchJsonData("${ApiUrl.urlBase}$table/columns")
             } catch (e: Exception) {
                 return emptyList()
             }
             val jsonParsed = Api.parseJsonArray(jsonRaw)
-            return jsonParsed.map { Triple(
-                it["COLUMN_NAME"].toString(),
-                it["COLUMN_TYPE"].toString(),
-                it["COLUMN_KEY"].toString()
-            ) }
+            return jsonParsed.map {
+                Triple(
+                    it["COLUMN_NAME"].toString(),
+                    it["COLUMN_TYPE"].toString(),
+                    it["COLUMN_KEY"].toString()
+                )
+            }
         }
 
         /**
@@ -233,7 +258,7 @@ class Functions {
          *
          *  @return The public key. If none was found, returns null.
          */
-        fun fetchDBPublicKey() : PublicKey? {
+        fun fetchDBPublicKey(): PublicKey? {
             // Fetch from DB
             var data: String
             try {
@@ -249,7 +274,7 @@ class Functions {
 
             // Convert to PublicKey object
             val keyFactory = KeyFactory.getInstance("RSA")
-            val publicKeySpec = RSAPublicKeySpec (
+            val publicKeySpec = RSAPublicKeySpec(
                 BigInteger(dataParsed[0]["N"] as String),
                 BigInteger(dataParsed[0]["E"] as String)
             )
@@ -264,7 +289,7 @@ class Functions {
          *
          *  @return The encrypted bytes.
          */
-        fun encrypt(bytes: ByteArray, publicKey: ByteArray) : ByteArray {
+        fun encrypt(bytes: ByteArray, publicKey: ByteArray): ByteArray {
             // Parse public key
             val publicKeySpec = X509EncodedKeySpec(publicKey)
             val publicKeyParsed = KeyFactory.getInstance("RSA").generatePublic(publicKeySpec)
@@ -282,7 +307,11 @@ class Functions {
          *  @param bytes - The bytes to decrypt.
          *  @param privateKey - The private key to decrypt the bytes with. If none is given, uses ours.
          */
-        suspend fun decrypt(context: Context, bytes: ByteArray, privateKey: PrivateKey? = null) : ByteArray? {
+        suspend fun decrypt(
+            context: Context,
+            bytes: ByteArray,
+            privateKey: PrivateKey? = null,
+        ): ByteArray? {
             var privateKeyFinal = privateKey
 
             // If no private key is given, fetch one
@@ -305,14 +334,14 @@ class Functions {
          *
          *  @return The keypair.
          */
-        suspend fun fetchKeyPair(context: Context) : KeyPair {
+        suspend fun fetchKeyPair(context: Context): KeyPair {
             // Check data/preferences for existing keypair
             try {
-                val fetchedPrivateKey: PrivateKey?  = fetchPrivateKey(context)
-                val fetchedPublicKey: PublicKey?    = fetchPublicKey(context)
+                val fetchedPrivateKey: PrivateKey? = fetchPrivateKey(context)
+                val fetchedPublicKey: PublicKey? = fetchPublicKey(context)
                 if (fetchedPrivateKey != null && fetchedPublicKey != null)
                     return KeyPair(fetchedPublicKey, fetchedPrivateKey)
-            } catch(e: Exception) {
+            } catch (e: Exception) {
                 Log.d("Could not fetch keypair, creating new instead. Error: ", e.message ?: "none")
             }
 
@@ -343,13 +372,13 @@ class Functions {
          *
          *  @return The private key. If none was found, returns null.
          */
-        suspend fun fetchPrivateKey(context: Context) : PrivateKey? {
+        suspend fun fetchPrivateKey(context: Context): PrivateKey? {
             val key = stringPreferencesKey("key_private_encoded")
             val flow: Flow<String> = context.dataStore.data
                 .map {
                     it[key] ?: ""
                 }
-            return runBlocking (Dispatchers.IO) {
+            return runBlocking(Dispatchers.IO) {
                 val privateKeyStr = flow.first()
                 if (privateKeyStr == "")
                     return@runBlocking null
@@ -367,13 +396,13 @@ class Functions {
          *
          *  @return The public key. If none was found, returns null.
          */
-        suspend fun fetchPublicKey(context: Context) : PublicKey? {
+        suspend fun fetchPublicKey(context: Context): PublicKey? {
             val key = stringPreferencesKey("key_public_encoded")
             val flow: Flow<String> = context.dataStore.data
                 .map {
                     it[key] ?: ""
                 }
-            return runBlocking (Dispatchers.IO) {
+            return runBlocking(Dispatchers.IO) {
                 val publicKeyStr = flow.first()
                 if (publicKeyStr == "")
                     return@runBlocking null
@@ -391,7 +420,7 @@ class Functions {
          *
          *  @return The keypair.
          */
-        fun generateKeyPair(bits: Int) : KeyPair {
+        fun generateKeyPair(bits: Int): KeyPair {
             val keyPairGenerator = KeyPairGenerator.getInstance("RSA")
             keyPairGenerator.initialize(bits)
             return keyPairGenerator.generateKeyPair()
@@ -430,14 +459,14 @@ class Functions {
          *
          *  @return The unique number as a string.
          */
-        suspend fun fetchUniqueNumber(context: Context) : String {
+        suspend fun fetchUniqueNumber(context: Context): String {
             // Fetch unique number from data/preferences
             val key = stringPreferencesKey("unique_number")
             val flow: Flow<String> = context.dataStore.data
                 .map {
                     it[key] ?: ""
                 }
-            var uniqueNumber = runBlocking (Dispatchers.IO) {
+            var uniqueNumber = runBlocking(Dispatchers.IO) {
                 return@runBlocking flow.first()
             }
             if (uniqueNumber != "")
@@ -461,12 +490,92 @@ class Functions {
          *
          *  @return The sorted data list
          */
-        fun sortDataByValue(key: String, inData: List<Map<String, Any>>, isSorted: Boolean): List<Map<String, Any>> {
+        fun sortDataByValue(
+            key: String,
+            inData: List<Map<String, Any>>,
+            isSorted: Boolean,
+        ): List<Map<String, Any>> {
             return if (isSorted) {
-                inData.sortedByDescending { it[key]?.toString()}
+                inData.sortedByDescending { it[key]?.toString() }
             } else {
-                inData.sortedBy { it[key]?.toString()}
+                inData.sortedBy { it[key]?.toString() }
             }
+        }
+
+        /**
+         * Changes sorting based on a view's tag, if the tag is null it will make a toast instead.
+         *
+         * @param curView - The current view, which has a tag attached
+         */
+        fun sortChange(curView: View, adapter: JsonAdapter, context: Context, view: View, viewIds: List<Int>) {
+            if (curView.tag != null) {
+                var copyTest = sortDataByValue(
+                    curView.tag as String,
+                    adapter.itemList as List<Map<String, Any>>,
+                    false
+                )
+                val isSorted = adapter.itemList as List<Map<String, Any>> == copyTest
+                for (ids in viewIds) {
+                    val viewId = view.findViewById<ImageView>(ids)
+                    if (viewId?.tag as? String == curView.tag.toString()) {
+                        if (isSorted && viewId.visibility == View.VISIBLE) {
+                            copyTest = sortDataByValue(curView.tag as String, copyTest, true)
+                            changeSortIcon(curView.tag.toString(), context, view, viewIds, true)
+                            break
+                        } else {
+                            changeSortIcon(curView.tag.toString(), context, view, viewIds)
+                            break
+                        }
+                    }
+                }
+
+                adapter.updateData(copyTest)
+            } else
+                Toast.makeText(context, "Sorting could not be changed!", Toast.LENGTH_SHORT).show()
+        }
+
+        /**
+         * Changes sorting of icons based on the selctedTag, view's visibility and if reverseOrder.
+         * Also changes the corresponding icon accordingly.
+         *
+         * @param selectedTag - The tag we are sorting after.
+         * @param reverseOrder - True if the order is reversed.
+         */
+        private fun changeSortIcon(
+            selectedTag: String,
+            context: Context,
+            view: View,
+            viewIds: List<Int>,
+            reverseOrder: Boolean = false,
+        ) {
+            for (ids in viewIds) {
+                val viewId = view.findViewById<ImageView>(ids)
+                if (viewId?.tag as? String == selectedTag) {
+                    if (viewId.visibility == View.VISIBLE) { // If visible, rotate or reverse-rotate
+                        val rotation: Animation = if (reverseOrder)
+                            AnimationUtils.loadAnimation(context, R.anim.rotation) // rotate
+                        else
+                            AnimationUtils.loadAnimation(
+                                context,
+                                R.anim.rotation_two
+                            ) // reverse-rotate
+
+                        viewId.startAnimation(rotation)
+                    } else { // If gone, fade in animation
+                        viewId.visibility = View.VISIBLE // Set visibility
+                        viewId.startAnimation(
+                            AnimationUtils.loadAnimation(
+                                context,
+                                R.anim.fade_in
+                            )
+                        )
+                    }
+                } else {
+                    viewId?.animation = null
+                    viewId?.visibility = View.GONE // Set visibility
+                }
+            }
+
         }
     }
 }

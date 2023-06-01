@@ -265,7 +265,7 @@ class ActFragment(
             binding.bConfirm.setOnClickListener {
                 mTank.act = "Refilled"
                 mTank.comment_for_act = binding.etComment.text.toString() // COMMENT FROM USER
-                mTank.last_filled = Functions.getDate().toString()
+                mTank.last_filled = Functions.getDate2().toString()
 
                 if (postAndPushData())
                     Toast.makeText(requireContext(), "Successful upload", Toast.LENGTH_SHORT).show()
@@ -360,8 +360,7 @@ class ActFragment(
             "address" to mTank.address.toString(),
             "container_status_name" to mTank.container_status_name.toString(),
             "maintenance_needed" to mTank.maintenance_needed.toString(),
-            "last_filled" to mTank.last_filled.toString(),
-            "invoice" to mTank.invoice.toString(),
+            "last_filled" to postRightDate(mTank.last_filled.toString()).toString(),
         ))
     }
 

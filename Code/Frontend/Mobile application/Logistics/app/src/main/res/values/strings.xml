@@ -6,7 +6,7 @@
     <string name="sLog">Log</string>
     <string name="sInventory">Inventory</string>
     <string name="inventory">Inventory</string>
-    <string name="baseUrl">http://10.0.2.2:8080/api/</string>
+    <string name="baseUrl">https://cryogenetics-logistics-solution.azurewebsites.net/api/</string>
 
     <string name="usernamePlaceholder">Username Placeholder</string>
     <string name="hashNr">#Nr</string>
@@ -91,5 +91,6 @@
     <string name="login_id_loginError_message">Unregistered ID, contact an administrator</string>
 
     <string name="login_unverified_warning_message">This device has not been verified. Contact an administrator to verify the device.</string>
+    <string name="actCap">Act</string>
 
 </resources>

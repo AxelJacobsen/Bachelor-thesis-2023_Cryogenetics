@@ -8,29 +8,57 @@
     tools:context=".ui.dash.DashFragment"
     tools:ignore="MissingDefaultResource">
 
-    <FrameLayout
-        android:id="@+id/miniInventory"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clMiniInventory"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/softGrey"
+        android:background="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintHorizontal_weight="0.5"
-        app:layout_constraintEnd_toStartOf="@+id/miniLog"
+        app:layout_constraintHorizontal_weight="0.4"
+        app:layout_constraintEnd_toStartOf="@+id/clMiniLog"
         app:layout_constraintTop_toTopOf="parent">
-    </FrameLayout>
 
-    <FrameLayout
-        android:id="@+id/miniLog"
+        <FrameLayout
+            android:id="@+id/miniInventory"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="2dip"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clMiniLog"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/softGrey"
+        android:background="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_weight="0.5"
+        app:layout_constraintHorizontal_weight="0.55"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/miniInventory"
+        app:layout_constraintStart_toEndOf="@+id/clMiniInventory"
         app:layout_constraintTop_toTopOf="parent">
-    </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/miniLog"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="1dip"
+            android:layout_marginTop="2dip"
+            android:layout_marginBottom="2dip"
+            android:layout_marginEnd="2dip"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
