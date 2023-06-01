@@ -2,7 +2,7 @@
   "name": "admin-website",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:8080/",
+  "proxy": "https://cryogenetics-logistics-solution.azurewebsites.net/",
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
