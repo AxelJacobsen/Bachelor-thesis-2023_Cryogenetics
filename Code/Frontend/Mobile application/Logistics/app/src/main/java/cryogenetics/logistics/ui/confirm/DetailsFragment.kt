@@ -35,7 +35,6 @@ class DetailsFragment(
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.clComment.visibility = View.GONE
 
         binding.bCancel.setOnClickListener {

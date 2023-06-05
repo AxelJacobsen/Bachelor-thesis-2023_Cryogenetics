@@ -2,6 +2,8 @@ package cryogenetics.logistics.api
 
 object ApiUrl {
     const val urlBase : String = "https://cryogenetics-logistics-solution.azurewebsites.net/api/"
+    // http://10.0.2.2:8080/api/
+    // https://cryogenetics-logistics-solution.azurewebsites.net/api/
 
     const val urlLocation = "${urlBase}location"
     const val urlClient : String = "${urlBase}client"

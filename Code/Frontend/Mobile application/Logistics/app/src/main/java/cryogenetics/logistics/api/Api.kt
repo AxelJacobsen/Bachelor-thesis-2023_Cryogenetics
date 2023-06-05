@@ -96,6 +96,8 @@ class Api {
          * @param method Request method
          */
         fun makeBackendRequest(endpoint: String, dataList: List<Map<String, Any>>, method: String): Int {
+            // Clean data of NULLs
+            dataList.forEach { map -> map.filter { kvp -> kvp.value != "null" } }
             //Lists legal methods, can be expanded on if more methods following the same format are
             // accommodated for.
             val legalMethods = listOf<String>("POST", "PUT")

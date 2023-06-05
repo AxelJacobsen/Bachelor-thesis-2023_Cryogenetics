@@ -232,7 +232,7 @@ class ActFragment(
             binding.clRowFourOne.visibility = View.VISIBLE
             binding.clDisposeType.visibility = View.INVISIBLE
             binding.clMaintType.visibility = View.VISIBLE
-            binding.bConfirm.text = "Register Maintenance"
+            binding.bConfirm.text = "Register Act"
             binding.tvManualAct.text = "Manage Maintenance"
             binding.tvManualActDescription.text =
                 "Maintenance includes all actions which preserve the tank’s condition. " +
@@ -302,6 +302,9 @@ class ActFragment(
             binding.tvManualActDescription.text = "Manual Act should ONLY be used for cases where another act cannot be used," +
                     "when used please be cautious to avoid possible errors. All Manual Acts will be marked with [M]."
             binding.bConfirm.setOnClickListener {
+                println("invoice before" + binding.tvInvoiceDate.text.toString())
+                println("invoice after" + binding.tvInvoiceDate.text.toString())
+
                 mTank.act = binding.spinnerAct.selectedItem.toString()
                 mTank.comment_for_act = binding.etComment.text.toString() // COMMENT FROM USER
                 mTank.comment = binding.etNote.text.toString() // NOTE
@@ -310,8 +313,8 @@ class ActFragment(
                 mTank.address = binding.etAddress.text.toString()
                 mTank.container_status_name = binding.spinnerStatus.selectedItem.toString()
                 mTank.maintenance_needed = binding.spinnerMaintType.selectedItemPosition.toString()
-                mTank.last_filled = postRightDate(binding.tvLastFilled.text.toString()).toString()
-                mTank.invoice = postRightDate(binding.tvInvoiceDate.text.toString()).toString()
+                mTank.last_filled = binding.tvLastFilled.text.toString()
+                mTank.invoice = binding.tvInvoiceDate.text.toString()
 
                 if (postAndPushData())
                     Toast.makeText(requireContext(), "Successful upload", Toast.LENGTH_SHORT).show()
@@ -330,7 +333,7 @@ class ActFragment(
         val result1 = makeBackendRequest("transaction", getActData(), "POST")
         val result2 = makeBackendRequest("container", getTankData(), "PUT")
 
-        mOnProductClickListener?.updateTankData(getComplTankData())
+        //mOnProductClickListener?.updateTankData(getComplTankData())
         println("res1" + result1.toString() + "res2" + result2.toString())
 
         return result1 == 200 && result2 == 200
@@ -361,6 +364,7 @@ class ActFragment(
             "container_status_name" to mTank.container_status_name.toString(),
             "maintenance_needed" to mTank.maintenance_needed.toString(),
             "last_filled" to postRightDate(mTank.last_filled.toString()).toString(),
+            "invoice" to postRightDate(mTank.invoice.toString()).toString(),
         ))
     }
 
@@ -375,9 +379,8 @@ class ActFragment(
             "location_name" to binding.spinnerAffiliatedLab.selectedItem.toString(),
             "address" to binding.etAddress.text.toString(),
             "container_status_name" to binding.spinnerStatus.selectedItem.toString(),
-            "maintenance_needed" to (binding.spinnerMaintType.selectedItemPosition),
-            "last_filled" to postRightDate(binding.tvLastFilled.text.toString()).toString(),
-            "invoice" to postRightDate(binding.tvInvoiceDate.text.toString()).toString(),
+            "maintenance_needed" to binding.spinnerMaintType.selectedItemPosition,
+            "last_filled" to binding.tvLastFilled.text.toString(),
         ))
     }
 
@@ -393,6 +396,22 @@ class ActFragment(
         val formatterAndroid = DateTimeFormatter.ofPattern("dd-MM-yyyy")
         val date = LocalDate.parse(inputString, formatterAndroid)
         return date.format(formatterDb)
+    }
+
+    /**
+     * Translates/reformats dates from 'yyyy-MM-dd' to 'dd-MM-yyyy',
+     *
+     * @param inputString - The input in the format of the DB.
+     * @return The result of date-reformat.
+     */
+    private fun getRightDate(inputString: String): String? {
+        if (inputString == "0000-00-00" || inputString == "null") // Ensures that formatter doesn't fail if date = 00...
+            return "null"
+
+        val formatterDb = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val formatterAndroid = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+        val date = LocalDate.parse(inputString, formatterDb)
+        return date.format(formatterAndroid)
     }
 
     /**

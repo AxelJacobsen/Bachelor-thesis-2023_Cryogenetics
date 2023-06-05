@@ -432,6 +432,13 @@ class TankFragment(
         if (inputString == "0000-00-00" || inputString == "null") // Ensures that formatter doesn't fail if date = 00...
             return "null"
 
+        /*
+        try {
+
+        } catch (_: ) {
+
+        }*/
+
         val formatterDb = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val formatterAndroid = DateTimeFormatter.ofPattern("dd-MM-yyyy")
         val date = LocalDate.parse(inputString, formatterDb)

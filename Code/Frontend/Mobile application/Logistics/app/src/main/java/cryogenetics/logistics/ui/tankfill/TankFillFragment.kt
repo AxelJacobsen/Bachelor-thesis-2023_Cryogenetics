@@ -15,6 +15,7 @@ import cryogenetics.logistics.cameraQR.CamAccess
 import cryogenetics.logistics.cameraQR.CameraFragment
 import cryogenetics.logistics.databinding.FragmentTankFillingBinding
 import cryogenetics.logistics.functions.Functions
+import cryogenetics.logistics.functions.Functions.Companion.enforceNumberFormat
 import cryogenetics.logistics.functions.JsonAdapter
 import cryogenetics.logistics.ui.confirm.ConfirmFragment
 import cryogenetics.logistics.ui.confirm.DetailsFragment
@@ -192,7 +193,7 @@ class TankFillFragment : Fragment() {
             if (inventoryData.isNotEmpty()) {
                 for (model in inventoryData) {
                     if (model.values.toString().contains(serialNr)) {
-                        addTankToList(model)
+                        addTankToList(enforceNumberFormat(model))
                         
                         camFrag.onPaus()
                         break

@@ -59,7 +59,6 @@ class MiniActLogFragment (
                 itemList.add(if (model.isNotEmpty()) Functions.enforceNumberFormat(model) else model)
         }
 
-
         //Create a list of references
         val viewIds = listOf(
             R.id.tvActLogRNr,
@@ -71,6 +70,7 @@ class MiniActLogFragment (
             R.id.tvActLogRSign,
             R.id.tvActLogRStatus
         )
+
         itemList.reverse()
         //Create adapter
         binding.recyclerViewActLog.adapter = JsonAdapter(

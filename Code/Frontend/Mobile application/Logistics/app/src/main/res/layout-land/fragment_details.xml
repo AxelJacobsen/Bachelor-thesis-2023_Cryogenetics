@@ -561,7 +561,7 @@
                     android:layout_marginEnd="20dp"
                     android:background="@drawable/button_confirm"
                     android:gravity="center"
-                    android:text="Register manual act"
+                    android:text="Register Act"
                     android:textColor="@color/black"
                     app:autoSizeMaxTextSize="100sp"
                     app:autoSizeMinTextSize="12sp"
